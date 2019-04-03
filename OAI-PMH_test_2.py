@@ -2,6 +2,7 @@ import json
 import re
 import time
 from sickle import Sickle
+from pymarc import Record, Field
 import requests
 sickle = Sickle('https://www.e-periodica.ch/oai/dataprovider') # initialisiert Verbindung
 records_900 = sickle.ListIdentifiers(metadataPrefix='oai_dc', set='ddc:900') #sammelt Header
@@ -11,9 +12,9 @@ item_number=0
 record=0
 print(time.clock())
 for record in records_900:
-    if item_number > 9:
+    if item_number > 3:
         break
-    print(record)
+    #print(record)
     record_splitted=re.split('identifier',str(record))
     doi=record_splitted[1][1:-2]
     doi_list.append(doi)
@@ -24,29 +25,16 @@ record_number=1
 for doi in record_identifiers["records_900"]:
     sickle2 = Sickle('https://www.e-periodica.ch/oai/dataprovider')
     content_list=sickle2.GetRecord(identifier=doi, metadataPrefix = 'oai_dc')
-    print(type(content_list))
-    import xml.etree.ElementTree as ET
-
-    for child in content_list:
-        if child[1][0] is not None:
-            print(f"Element: {child[0]}, content: {child[1]}")
-
-    #filename='record_nr' + str(record_number) + '.xml'
-    #with open(filename, 'w') as file:
-        #file.write(text)
+    content_list=list(content_list)
+    print(content_list)
+    recent_record=Record()
+    if content_list[0][1][0]!=None:
+        for title in content_list[0][1]:
+            recent_record.add_field(Field(tag='245', indicators = ['0', '0'], subfields = ['a', title]))
+    filename='record'+str(record_number)+'.dat'
+    with open(filename, 'wb') as out:
+        out.write(recent_record.as_marc21())
     record_number+=1
-from pymarc import Record, Field
-record = Record()
-record.add_field(
-    Field(
-        tag = '245',
-        indicators = ['0','1'],
-        subfields = [
-            'a', 'The pragmatic programmer : ',
-            'b', 'from journeyman to master /',
-            'c', 'Andrew Hunt, David Thomas.'
-        ]))
-with open('file.dat', 'wb') as out:
-    out.write(record.as_marc())
+
 #https://www.loc.gov/marc/dccross.html Erklärung mapping dublin core auf MARC21
 #Erklärung zu MARC: http://www.loc.gov/marc/umb/ http://www.loc.gov/marc/marcdocz.html
