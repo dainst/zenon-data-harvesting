@@ -10,23 +10,19 @@ record_identifiers={}
 doi_list=[]
 item_number=0
 record=0
-print(time.clock())
 for record in records_900:
     if item_number > 3:
         break
-    #print(record)
     record_splitted=re.split('identifier',str(record))
     doi=record_splitted[1][1:-2]
     doi_list.append(doi)
     item_number+=1
     record_identifiers["records_900"] = doi_list
-print(time.clock())
 record_number=1
 for doi in record_identifiers["records_900"]:
     sickle2 = Sickle('https://www.e-periodica.ch/oai/dataprovider')
     content_list=sickle2.GetRecord(identifier=doi, metadataPrefix = 'oai_dc')
     content_list=list(content_list)
-    print(content_list)
     recent_record=Record()
     if content_list[0][1][0]!=None:
         for title in content_list[0][1]:
