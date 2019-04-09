@@ -66,6 +66,8 @@ Kommt jetzt 4500?
     creator_number=0
     for creator in content_list[1][1]:
         if creator not in [None,'[s.n.]']:
+            if '\u0153' in creator:
+                creator=creator.replace('œ', 'oe')
             creator_number+=1
             if creator_number==1:
                 recent_record.add_field(Field(tag='100', indicators = ['1', ' '], subfields = ['a', creator]))
@@ -73,7 +75,6 @@ Kommt jetzt 4500?
                 recent_record.add_field(Field(tag='700', indicators = ['1', ' '], subfields = ['a', creator]))
     nonfiling_characters=0
     if '\u0153' in title:
-        print('yes')
         title=title.replace('œ', 'oe')
     if lang in articles.keys():
         first_word=(title.split()[0]).lower()
@@ -95,8 +96,8 @@ Kommt jetzt 4500?
                                   subfields = ['u', 'https://doi.org/'+content_list[14][1][2][4:], 'z', 'Table of Contents']))
 
     filename='record'+str(record_number)+'.mrc'
-    #with open(filename, 'wb') as out:
-        #out.write(recent_record.as_marc21())
+    with open(filename, 'wb') as out:
+            out.write(recent_record.as_marc21())
     record_number+=1
 
 #https://www.loc.gov/marc/dccross.html Erklärung mapping dublin core auf MARC21
