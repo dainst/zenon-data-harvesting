@@ -17,7 +17,7 @@ doi_list=[]
 item_number=0
 record=0
 for record in records_900:
-    if item_number > 1:
+    if item_number > 70:
         break
     record_splitted=re.split('identifier',str(record))
     doi=record_splitted[1][1:-2]
@@ -47,7 +47,9 @@ Kommt jetzt 4500?
 20 - 22 füllt sich das automatisch?
 23
 '''
-    lang = str(detect(content_list[0][1][0]))
+    title=content_list[0][1][0]
+    lang = detect(title)
+    print(title, record_number)
     recent_record.leader = recent_record.leader[:5] + "ups" + recent_record.leader[8:]
     #print(recent_record.leader)
     recent_record.add_field(Field(tag='040', indicators = [' ', ' '], subfields = ['a', 'eperiodica', 'd', 'DE-2553']))
@@ -70,16 +72,18 @@ Kommt jetzt 4500?
             else:
                 recent_record.add_field(Field(tag='700', indicators = ['1', ' '], subfields = ['a', creator]))
     nonfiling_characters=0
-
+    if '\u0153' in title:
+        print('yes')
+        title=title.replace('œ', 'oe')
     if lang in articles.keys():
-        first_word=(content_list[0][1][0].split()[0]).lower()
+        first_word=(title.split()[0]).lower()
         if first_word in articles[lang]:
             nonfiling_characters=str(len(first_word)+1)
     if creator_number==0: #title
-        recent_record.add_field(Field(tag='245', indicators = ['0', nonfiling_characters], subfields = ['a', content_list[0][1][0]]))
+        recent_record.add_field(Field(tag='245', indicators = ['0', nonfiling_characters], subfields = ['a', title]))
         #weitere Bearbeitungen notwendig!!!
     else: #title
-        recent_record.add_field(Field(tag='245', indicators = ['1', nonfiling_characters], subfields = ['a', content_list[0][1][0]]))
+        recent_record.add_field(Field(tag='245', indicators = ['1', nonfiling_characters], subfields = ['a', title]))
     if content_list[4][1][0] not in [None,'[s.n.]'] and content_list:
         recent_record.add_field(Field(tag='260', indicators = [' ', ' '],
                                       subfields = ['b', content_list[4][1][0], 'c', content_list[6][1][0][:5]]))
@@ -91,8 +95,8 @@ Kommt jetzt 4500?
                                   subfields = ['u', 'https://doi.org/'+content_list[14][1][2][4:], 'z', 'Table of Contents']))
 
     filename='record'+str(record_number)+'.mrc'
-    with open(filename, 'wb') as out:
-        out.write(recent_record.as_marc21())
+    #with open(filename, 'wb') as out:
+        #out.write(recent_record.as_marc21())
     record_number+=1
 
 #https://www.loc.gov/marc/dccross.html Erklärung mapping dublin core auf MARC21
