@@ -29,7 +29,7 @@ def identify_dois():
     doi_list=[]
     item_number=0
     for record in records_930:
-        if item_number>=1:
+        if item_number>5:
             break
         record_splitted=re.split('identifier',str(record))
         doi=record_splitted[1][1:-2]
