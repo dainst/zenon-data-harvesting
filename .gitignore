@@ -9,3 +9,11 @@ records/
 
 # Datenpruefung
 datenpruefung/
+
+#
+find_ebooks.py
+frequent_words.txt
+test.jpg
+test.pdf
+test.txt
+eperiodica_journals.json
