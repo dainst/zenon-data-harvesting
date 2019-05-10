@@ -1,19 +1,3 @@
-journal_titles={#"akb-001": {"SYS":"001563083", "TIT":"Archäologie im Kanton Bern"} ,
-                "akb-002": {"SYS":"001563084", "TIT":"Archäologie Bern"} ,
-"ars-001": {"SYS":"001563085","TIT":"Archäologie der Schweiz"} , "ars-002": {"SYS":"001563086", "TIT":"Archäologie Schweiz : Mitteilungsblatt von Archäologie Schweiz "} ,
-"bat-001": {"SYS":"001563087", "TIT":"Bollettino dell'Associazione archeologica ticinese"} , "bpa-001": {"SYS":"001563088", "TIT":"Bulletin de l'Association Pro Aventico"} ,
-"bzg-001": {"SYS":"001563089", "TIT":"Beiträge zur vaterländischen Geschichte"} , "bzg-002": {"SYS":"001563090", "TIT":"Basler Zeitschrift für Geschichte und Altertumskunde"} ,
-"caf-001": {"SYS":"001563091", "TIT":"Chronique archéologique"} , "caf-002": {"SYS":"001563092", "TIT":"Cahiers d'archéologie fribourgeoise"} ,
-"gen-001": {"SYS":"001563093", "TIT":"Genava"}, "gpv-001": {"SYS":"001563094", "TIT":"Jahresbericht / Gesellschaft Pro Vindonissa"} ,
-"has-001": {"SYS":"001563095", "TIT":"Hefte des Archäologischen Seminars der Universität Bern"} , "jak-001": {"SYS":"001563096", "TIT":"Jahresberichte aus Augst und Kaiseraugst"} ,
-"jas-001": {"SYS":"001563097", "TIT":"Jahresbericht der Schweizerischen Gesellschaft für Urgeschichte"} , "jas-002": {"SYS":"001563098", "TIT":"Jahrbuch der Schweizerischen Gesellschaft für Urgeschichte"} ,
-"jas-003": {"SYS":"001563099", "TIT":"Jahrbuch der Schweizerischen Gesellschaft für Ur- und Frühgeschichte"} , "jas-004": {"SYS":"001563100", "TIT":"Jahrbuch Archäologie Schweiz"} ,
-"mhl-001": {"SYS":"001563101", "TIT":"Museum Helveticum"} , "oac-001": {"SYS":"001563102", "TIT":"Entretiens sur l'Antiquité classique"} ,
-"rhv-001": {"SYS":"001563103", "TIT":"Revue historique vaudoise"} , "smb-001": {"SYS":"001563104", "TIT":"Schweizer Münzblätter"} ,
-"snr-001": {"SYS":"001563105", "TIT":"Bulletin de la Société suisse de Numismatique"} , "snr-002": {"SYS":"001563106", "TIT":"Revue suisse de numismatique"} ,
-"snr-003": {"SYS":"001563107", "TIT":"Schweizerische numismatische Rundschau"} , "tug-001": {"SYS":"001563108", "TIT":"Tugium"} ,
-"zak-001": {"SYS":"001563109", "TIT":"Anzeiger für schweizerische Alterthumskunde"} , "zak-002": {"SYS":"001563110", "TIT":"Anzeiger für schweizerische Altertumskunde : Neue Folge"} ,
-"zak-003": {"SYS":"001563111", "TIT":"Zeitschrift für schweizerische Archäologie und Kunstgeschichte"}}
 articles={'eng': ['the','a', 'an'], 'fre':['la','le','les','un', 'une', 'l\'', 'il'], 'spa':['el','lo','la','las','los',
     'uno' 'un', 'unos', 'unas', 'una'], 'ger':['das', 'der', 'ein', 'eine', 'die'], 'ita':['gli', 'i','le', 'la', 'l\'',
     'lo', 'il', 'gl\'', 'l']}
@@ -22,6 +6,14 @@ from sickle import Sickle
 from pymarc import Record, Field
 from langdetect import detect
 import language_codes
+import json
+import arrow
+
+with open('last_harvesting_time.txt', 'r') as time_file:
+    last_harvesting_time=time_file.read()
+
+with open('eperiodica_journals.json', 'r') as journals:
+    eperiodica_journals=json.load(journals)
 
 def identify_dois():
     sickle = Sickle('https://www.e-periodica.ch/oai/dataprovider')
@@ -37,28 +29,29 @@ def identify_dois():
         item_number+=1
     return doi_list
 
-def check_journal_titles(doi_list, journal_titles):
+def update_journal_titles(doi_list, eperiodica_journals):
     output="Bitte geben Sie Informationen für die Journals mit den folgenden PIDs an oder legen Sie gegebenenfalls Aufnahmen an:\n\n"
+    output_per_journal=""
     pid_list=[]
     for doi in doi_list:
         if doi[13:20] not in pid_list:
             pid_list.append(doi[13:20])
-            if doi[13:20] not in journal_titles.keys():
+            if doi[13:20] not in eperiodica_journals.keys():
                 sickle2 = Sickle('https://www.e-periodica.ch/oai/dataprovider')
                 content_list=sickle2.GetRecord(identifier=doi, metadataPrefix = 'oai_dc')
                 content_list=list(content_list)
-                output+="PID: " + doi[13:20] + \
+                output_per_journal+="PID: " + doi[13:20] + \
                         "\nInformationen zum Journal finden Sie auf der folgenden Seite unter dem Reiter \"Detailed Information\":\n"\
                         + 'https://doi.org/'+content_list[14][1][2][4:]+"\n\n"
-    print(output)
-    print("Bitte geben Sie folgende Informationen zum Journal mit der PID "+ doi[13:20] + " an:\n")
-    journal_titles[doi[13:20]]={"SYS":input("Bitte geben Sie die Systemnummer des Journals an: "),
+                print(output, output_per_journal)
+                print("Bitte geben Sie folgende Informationen zum Journal mit der PID "+ doi[13:20] + " an:\n")
+                eperiodica_journals[doi[13:20]]={"SYS":input("Bitte geben Sie die Systemnummer des Journals an: "),
                                 "TIT":input("\nBitte geben Sie den Titel des Journals an: ")}
     #hier Checks einbauen! (z.B. Kriterien für Systemnummern. Sind diese numerisch oder alphanumerisch? immer gleiche Länge?
-    print(journal_titles)
+    with open('eperiodica_journals.json', 'w') as journals:
+        json.dump(eperiodica_journals, journals)
 
-
-check_journal_titles(identify_dois(), journal_titles)
+update_journal_titles(identify_dois(), eperiodica_journals)
 
 
 def create_records(doi_list, time):
@@ -143,21 +136,20 @@ def create_records(doi_list, time):
         year_of_volume=(content_list[14][1][0][51:].split("::")[0]).split(":")[0]
         if volume_nr!='0':
             recent_record.add_field(Field(tag='LKR', indicators = [' ', ' '],
-                                      subfields = ['a', 'ANA', 'b', journal_titles[journal_pid]['SYS'], 'l', 'DAI01',
-                                                   'm', titles[0][1], 'n', journal_titles[journal_pid]['TIT']+', '+
+                                      subfields = ['a', 'ANA', 'b', eperiodica_journals[journal_pid]['SYS'], 'l', 'DAI01',
+                                                   'm', titles[0][1], 'n', eperiodica_journals[journal_pid]['TIT']+', '+
                                                   volume_nr+' ('+year_of_volume+')']))
         else:
             recent_record.add_field(Field(tag='LKR', indicators = [' ', ' '],
-                                          subfields = ['a', 'ANA', 'b', journal_titles[journal_pid]['SYS'], 'l', 'DAI01',
-                                                       'm', titles[0][1], 'n', journal_titles[journal_pid]['TIT']+', '+year_of_volume]))
+                                          subfields = ['a', 'ANA', 'b', eperiodica_journals[journal_pid]['SYS'], 'l', 'DAI01',
+                                                       'm', titles[0][1], 'n', eperiodica_journals[journal_pid]['TIT']+', '+year_of_volume]))
         out.write(recent_record.as_marc21())
         article_number+=1
     print("Alle Records wurden erfolgreich erstellt.")
-#time=arrow.now().format('YYMMDD')
-#create_records(identify_dois(), time)
+    print("Die Zeit des letzten Harvestings wurde auf ", last_harvesting_time, " aktualisiert")
+time=arrow.now().format('YYMMDD')
+create_records(identify_dois(), time)
 
 #from-parameter einbauen!!!
 # wie soll das genau funktionieren? soll das Dictionary mit den ZS immer per Hand geupdatet werden?
 # Oder soll ich ein Programm schreiben, dass ausgibt, ob auf der Seite neue Zeitschriften dazugekommen sind?
-#https://www.loc.gov/marc/dccross.html Erklärung mapping dublin core auf MARC21
-#Erklärung zu MARC: http://www.loc.gov/marc/umb/ http://www.loc.gov/marc/marcdocz.html
