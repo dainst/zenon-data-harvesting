@@ -1,6 +1,3 @@
-articles={'eng': ['the','a', 'an'], 'fre':['la','le','les','un', 'une', 'l\'', 'il'], 'spa':['el','lo','la','las','los',
-    'uno' 'un', 'unos', 'unas', 'una'], 'ger':['das', 'der', 'ein', 'eine', 'die'], 'ita':['gli', 'i','le', 'la', 'l\'',
-    'lo', 'il', 'gl\'', 'l']}
 import re
 from sickle import Sickle
 from pymarc import Record, Field
@@ -8,9 +5,16 @@ from langdetect import detect
 import language_codes
 import json
 import arrow
+import urllib.parse, urllib.request
+from nltk.tokenize import RegexpTokenizer
+import ast
+articles = {'eng': ['the','a', 'an'], 'fre':['la','le','les','un', 'une', 'l\'', 'il'], 'spa':['el','lo','la','las','los',
+    'uno' 'un', 'unos', 'unas', 'una'], 'ger':['das', 'der', 'ein', 'eine', 'die'], 'ita':['gli', 'i','le', 'la', 'l\'',
+    'lo', 'il', 'gl\'', 'l']}
 
-with open('last_harvesting_time.txt', 'r') as time_file:
-    last_harvesting_time=time_file.read()
+
+#with open('last_harvesting_time.txt', 'r') as time_file:
+    #last_harvesting_time=time_file.read()
 
 with open('eperiodica_journals.json', 'r') as journals:
     eperiodica_journals=json.load(journals)
@@ -18,15 +22,15 @@ with open('eperiodica_journals.json', 'r') as journals:
 def identify_dois():
     sickle = Sickle('https://www.e-periodica.ch/oai/dataprovider')
     records_930 = sickle.ListIdentifiers(metadataPrefix='oai_dc', set='ddc:930')
-    doi_list=[]
-    item_number=0
+    doi_list = []
+    item_number = 0
     for record in records_930:
-        if item_number>5:
-            break
-        record_splitted=re.split('identifier',str(record))
-        doi=record_splitted[1][1:-2]
+        #if item_number==20: erster Record von akb, der eingespielt wurde
+            #break
+        record_splitted = re.split('identifier',str(record))
+        doi = record_splitted[1][1:-2]
         doi_list.append(doi)
-        item_number+=1
+        item_number += 1
     return doi_list
 
 def update_journal_titles(doi_list, eperiodica_journals):
@@ -51,14 +55,41 @@ def update_journal_titles(doi_list, eperiodica_journals):
     with open('eperiodica_journals.json', 'w') as journals:
         json.dump(eperiodica_journals, journals)
 
-update_journal_titles(identify_dois(), eperiodica_journals)
+#update_journal_titles(identify_dois(), eperiodica_journals)
+erkannte_dubletten=0
+def swagger_find_article(search_title, search_authors, year, content_list, erkannte_dubletten):
+    url=u'https://zenon.dainst.org/api/v1/search?lookfor=title%3A'+search_title+'%20AND%20author%3A'+search_authors+'%20AND%20publishDate%3A'+year+'&type=AllFields&sort=relevance&page=1&limit=20&prettyPrint=false&lng=de'
+    req = urllib.request.Request(url)
+    with urllib.request.urlopen(req) as response:
+        journal_page = response.read()
+    journal_page=journal_page.decode('utf-8')
+    resultcount=str(ast.literal_eval(str(journal_page))["resultCount"])
+    '''if resultcount=='0':
+        print(year)
+        print(search_title)
+        print(search_authors)
+        print(str(ast.literal_eval(str(journal_page))["records"][0]["title"]))
+        print(str(ast.literal_eval(str(journal_page))["records"][0]["authors"]))
+        print(str(ast.literal_eval(str(journal_page))["records"][0]["id"]))'''
+    if resultcount=='1':
+        erkannte_dubletten+=1
+        print("Titel: ", str(ast.literal_eval(str(journal_page))["records"][0]["title"]))
+        print("Autor: ", str(ast.literal_eval(str(journal_page))["records"][0]["authors"]["primary"]))
+        print("Systemnummer: ", str(ast.literal_eval(str(journal_page))["records"][0]["id"]))
+        print()
+    return resultcount, erkannte_dubletten
 
-
-def create_records(doi_list, time):
+def create_records(doi_list, time, eperiodica_journals, erkannte_dubletten):
     journal_pid=""
     article_number=0
     out=".mrc"
     for doi in doi_list:
+        if doi[13:20]!="snr-003":
+            continue
+        if doi[13:20]>"snr-003":
+            break
+        if doi[21:25]>'1971' and doi[13:20]=="snr-003":
+            break
         sickle2 = Sickle('https://www.e-periodica.ch/oai/dataprovider')
         content_list=sickle2.GetRecord(identifier=doi, metadataPrefix = 'oai_dc')
         content_list=list(content_list)
@@ -70,6 +101,63 @@ def create_records(doi_list, time):
             out=open('records/'+str(journal_pid+'_'+str(int(article_number/20))+'.mrc'), 'wb')
         recent_record=Record(force_utf8=True)
         title=content_list[0][1][0]
+        authors=content_list[1][1]
+        year=content_list[6][1][0][:5]
+        search_authors=""
+        for author in authors:
+            if author != "[s.n.]":
+                for name in author.split(", "):
+                    name=urllib.parse.quote(name, safe='')
+                    if "." not in name:
+                        search_authors=search_authors+"+"+name
+            else:
+                search_authors=""
+        search_authors=search_authors.strip("+")
+        search_title=""
+        word_nr=0
+        adjusted_title=title.split(" by ")[0]
+        adjusted_title=adjusted_title.replace("ed.", "").replace("(review)", "")
+        for word in RegexpTokenizer(r'\w+').tokenize(adjusted_title):
+            if (word not in ["ed", "by", "review"]) and (word_nr<8) and (len(word)>3):
+                word=urllib.parse.quote(word, safe='')
+                search_title=search_title+"+"+word
+                word_nr+=1
+        search_title=search_title.strip("+")
+        (result, erkannte_dubletten)=swagger_find_article(search_title, search_authors, year, content_list, erkannte_dubletten)
+        if result=='0':
+            author=content_list[1][1][0]
+            search_author=""
+            if author!=None:
+                if author!="[s.n.]":
+                    name = author.split(", ")[0]
+                    name=urllib.parse.quote(name, safe='')
+                    if "." not in name:
+                        search_author=search_author+"+"+name
+                else:
+                    search_author=""
+            search_authors=search_author.strip("+")
+            (result, erkannte_dubletten)=swagger_find_article(search_title, search_authors, year, content_list, erkannte_dubletten)
+        if result=='0':
+            search_title=""
+            word_nr=0
+            adjusted_title=title.split(".")[0].split(":")[0]
+            adjusted_title=adjusted_title.split(" by ")[0]
+            adjusted_title=adjusted_title.replace("ed.", "").replace("(review)", "")
+            for word in RegexpTokenizer(r'\w+').tokenize(adjusted_title):
+                word=urllib.parse.quote(word, safe='')
+                if (word not in ["ed", "by", "review"]) and (word_nr<8) and (len(word)>3):
+                    search_title=search_title+"+"+word
+                    word_nr+=1
+            search_title=search_title.strip("+")
+            (result, erkannte_dubletten) = swagger_find_article(search_title, search_authors, year, content_list, erkannte_dubletten)
+        if result=='0':
+            search_authors=""
+            for author in authors:
+                search_authors += urllib.parse.quote(author.split(", ")[0], safe='') + "+"
+            search_authors=search_authors.strip("+")
+            (result, erkannte_dubletten)=swagger_find_article(search_title, search_authors, year, content_list, erkannte_dubletten)
+        if result=='1':
+            continue
         titles=[]
         languages=[]
         parallel_title_nr=0
@@ -98,7 +186,7 @@ def create_records(doi_list, time):
         recent_record.add_field(Field(tag='006', indicators=None, subfields=None, data=u'm        u        '))
         recent_record.add_field(Field(tag='007', indicators=None, subfields=None, data=u'tu'))
         recent_record.add_field(Field(tag='024', indicators = ['7', ' '], subfields = ['a', content_list[14][1][2][4:], '2', 'doi']))
-        data_008=str(time)+'s'+ content_list[6][1][0][:5] + '    ' + 'sz' + '                  ' + languages[0] +' d'
+        data_008=str(time)+'s'+ content_list[6][1][0][:5] + '    ' + 'sz ' + ' |   o  |  |    |' + languages[0] +' d'
         recent_record.add_field(Field(tag='008', indicators=None, subfields=None, data=data_008))
         creator_number=0
         for creator in content_list[1][1]:
@@ -120,8 +208,7 @@ def create_records(doi_list, time):
             if parallel_title_nr==0:
                 recent_record.add_field(Field(tag='245', indicators = [str(creator_number), nonfiling_characters], subfields = parallel_title))
             else:
-                print(titles)
-                recent_record.add_field(Field(tag='246', indicators = [str(creator_number), nonfiling_characters], subfields = parallel_title))
+                recent_record.add_field(Field(tag='246', indicators = [str(creator_number), '3'], subfields = parallel_title))
             parallel_title_nr+=1
         if content_list[4][1][0] not in [None,'[s.n.]'] and content_list:
             recent_record.add_field(Field(tag='260', indicators = [' ', ' '],
@@ -146,10 +233,14 @@ def create_records(doi_list, time):
         out.write(recent_record.as_marc21())
         article_number+=1
     print("Alle Records wurden erfolgreich erstellt.")
-    print("Die Zeit des letzten Harvestings wurde auf ", last_harvesting_time, " aktualisiert")
+    print(erkannte_dubletten)
+    #print("Die Zeit des letzten Harvestings wurde auf ", last_harvesting_time, " aktualisiert")
 time=arrow.now().format('YYMMDD')
-create_records(identify_dois(), time)
-
+create_records(identify_dois(), time, eperiodica_journals, erkannte_dubletten)
 #from-parameter einbauen!!!
+'''records = sickle.ListRecords(
+...             **{'metadataPrefix': 'oai_dc',
+                   ...             'from': '2012-12-12'
+    ...            })'''
 # wie soll das genau funktionieren? soll das Dictionary mit den ZS immer per Hand geupdatet werden?
 # Oder soll ich ein Programm schreiben, dass ausgibt, ob auf der Seite neue Zeitschriften dazugekommen sind?
