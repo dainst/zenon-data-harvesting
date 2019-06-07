@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+ <record>
+  <leader>01833nam a2200529   4500</leader>
+  <controlfield tag="001">4004134</controlfield>
+  <controlfield tag="003">OLE</controlfield>
+  <controlfield tag="005">20171115095757.3</controlfield>
+  <controlfield tag="008">780317s1949    iluabe   b    000 0 eng  </controlfield>
+  <datafield tag="010" ind1=" " ind2=" ">
+   <subfield code="a">49010748</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(OCoLC)3725926</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+   <subfield code="a">DLC</subfield>
+   <subfield code="c">MST</subfield>
+   <subfield code="d">SER</subfield>
+   <subfield code="d">CGU</subfield>
+  </datafield>
+  <datafield tag="049" ind1=" " ind2=" ">
+   <subfield code="a">CGUA</subfield>
+  </datafield>
+  <datafield tag="050" ind1="0" ind2=" ">
+   <subfield code="a">CB251</subfield>
+   <subfield code="b">.C55 no. 25</subfield>
+  </datafield>
+  <datafield tag="082" ind1=" " ind2=" ">
+   <subfield code="a">913.358</subfield>
+  </datafield>
+  <datafield tag="100" ind1="1" ind2=" ">
+   <subfield code="a">Perkins, Ann Louise,</subfield>
+   <subfield code="d">1915-</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="4">
+   <subfield code="a">The comparative archeology of early Mesopotamia /</subfield>
+   <subfield code="c">by Ann Louise Perkins.</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+   <subfield code="a">Chicago :</subfield>
+   <subfield code="b">University of Chicago Press,</subfield>
+   <subfield code="c">c1949.</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+   <subfield code="a">xix, 200 p. :</subfield>
+   <subfield code="b">ill., fold. map, plans ;</subfield>
+   <subfield code="c">30 cm.</subfield>
+  </datafield>
+  <datafield tag="490" ind1="1" ind2=" ">
+   <subfield code="a">University of Chicago. Oriental Institute. Studies in ancient oriental civilization,</subfield>
+   <subfield code="v">no. 25</subfield>
+  </datafield>
+  <datafield tag="504" ind1=" " ind2=" ">
+   <subfield code="a">Includes bibliographical footnotes.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Excavations (Archaeology)</subfield>
+   <subfield code="z">Iraq</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">Iraq</subfield>
+   <subfield code="x">Antiquities</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Antiquities.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00810745</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Excavations (Archaeology)</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00917564</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+   <subfield code="a">Iraq.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01205757</subfield>
+  </datafield>
+  <datafield tag="830" ind1=" " ind2="0">
+   <subfield code="a">Studies in ancient oriental civilization</subfield>
+   <subfield code="v">no. 25.</subfield>
+  </datafield>
+  <datafield tag="903" ind1=" " ind2=" ">
+   <subfield code="a">ANALYTIC</subfield>
+  </datafield>
+  <datafield tag="903" ind1=" " ind2=" ">
+   <subfield code="a">UCPress</subfield>
+  </datafield>
+  <datafield tag="929" ind1=" " ind2=" ">
+   <subfield code="t">LCC</subfield>
+   <subfield code="c">UCPress</subfield>
+   <subfield code="b">f</subfield>
+   <subfield code="a">DS57.C5 no.25</subfield>
+   <subfield code="l">ASR</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">A12975036h</subfield>
+  </datafield>
+  <datafield tag="929" ind1=" " ind2=" ">
+   <subfield code="t">LCC</subfield>
+   <subfield code="c">Gen</subfield>
+   <subfield code="a">DS57.C5 no.25</subfield>
+   <subfield code="l">JRL</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">A12975036a</subfield>
+  </datafield>
+  <datafield tag="929" ind1=" " ind2=" ">
+   <subfield code="t">LCC</subfield>
+   <subfield code="c">Gen</subfield>
+   <subfield code="a">DS57.C5 no.25</subfield>
+   <subfield code="l">JRL</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">A12975036b</subfield>
+  </datafield>
+  <datafield tag="929" ind1=" " ind2=" ">
+   <subfield code="t">LCC</subfield>
+   <subfield code="c">Gen</subfield>
+   <subfield code="a">DS57.C5 no.25</subfield>
+   <subfield code="l">JRL</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">A12975036c</subfield>
+  </datafield>
+  <datafield tag="929" ind1=" " ind2=" ">
+   <subfield code="t">LCC</subfield>
+   <subfield code="c">Gen</subfield>
+   <subfield code="a">DS57.C5 no.25</subfield>
+   <subfield code="l">JRL</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">A12975036e</subfield>
+  </datafield>
+  <datafield tag="929" ind1=" " ind2=" ">
+   <subfield code="t">LCC</subfield>
+   <subfield code="c">Gen</subfield>
+   <subfield code="a">DS57.C5 no.25</subfield>
+   <subfield code="l">JRL</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">A12975036f</subfield>
+  </datafield>
+  <datafield tag="929" ind1=" " ind2=" ">
+   <subfield code="t">LCC</subfield>
+   <subfield code="c">Gen</subfield>
+   <subfield code="a">DS57.C5 no.25</subfield>
+   <subfield code="l">JRL</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">A12975036g</subfield>
+  </datafield>
+  <datafield tag="929" ind1=" " ind2=" ">
+   <subfield code="t">LCC</subfield>
+   <subfield code="c">Gen</subfield>
+   <subfield code="a">DS57.C5 no.25 1959</subfield>
+   <subfield code="l">JRL</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">H5840728a</subfield>
+  </datafield>
+  <datafield tag="929" ind1=" " ind2=" ">
+   <subfield code="t">LCC</subfield>
+   <subfield code="c">Gen</subfield>
+   <subfield code="a">DS57.C5 no.25 1959</subfield>
+   <subfield code="l">JRL</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">A12366084b</subfield>
+  </datafield>
+ </record>
+</collection>

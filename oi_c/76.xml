@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+ <record>
+  <leader>02210cam a2200457Ka 4500</leader>
+  <controlfield tag="001">8354985</controlfield>
+  <controlfield tag="005">20110328161300.0</controlfield>
+  <controlfield tag="006">m        d        </controlfield>
+  <controlfield tag="007">cr |||||||||||</controlfield>
+  <controlfield tag="008">110328s1967    ilua    ob    000 0 eng d</controlfield>
+  <controlfield tag="003">OLE</controlfield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(OCoLC)709625866</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">8354985</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+   <subfield code="a">CGU</subfield>
+   <subfield code="c">CGU</subfield>
+  </datafield>
+  <datafield tag="043" ind1=" " ind2=" ">
+   <subfield code="a">f-ua---</subfield>
+   <subfield code="a">f-sj---</subfield>
+  </datafield>
+  <datafield tag="049" ind1=" " ind2=" ">
+   <subfield code="a">CGUA</subfield>
+  </datafield>
+  <datafield tag="100" ind1="1" ind2=" ">
+   <subfield code="a">Ricke, Herbert.</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="4">
+   <subfield code="a">The Beit el-Wali temple of Rameses II</subfield>
+   <subfield code="h">[electronic resource] /</subfield>
+   <subfield code="c">by Herbert Ricke, George R. Hughes, and Edward F. Wente.</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+   <subfield code="a">Chicago :</subfield>
+   <subfield code="b">University of Chicago Press,</subfield>
+   <subfield code="c">1967.</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+   <subfield code="a">1 online resource (2 v. :</subfield>
+   <subfield code="b">ill. (some col.))</subfield>
+  </datafield>
+  <datafield tag="490" ind1="1" ind2=" ">
+   <subfield code="a">University of Chicago Oriental Institute Nubian Expedition</subfield>
+   <subfield code="v">v. 1</subfield>
+  </datafield>
+  <datafield tag="500" ind1=" " ind2=" ">
+   <subfield code="a">&quot;Campagne internationale pour la sauvegarde des monuments de la Nubie.&quot;</subfield>
+  </datafield>
+  <datafield tag="500" ind1=" " ind2=" ">
+   <subfield code="a">&quot;Joint expedition 1960/61 with the Schweizerisches Institut für Ägyptische Bauforschung und Altertumskunde in Kairo.&quot;</subfield>
+  </datafield>
+  <datafield tag="504" ind1=" " ind2=" ">
+   <subfield code="a">Includes bibliographical references.</subfield>
+  </datafield>
+  <datafield tag="505" ind1="0" ind2=" ">
+   <subfield code="a">[1] Plates -- [2] Text.</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">Nubia</subfield>
+   <subfield code="x">Antiquities.</subfield>
+  </datafield>
+  <datafield tag="600" ind1="0" ind2="7">
+   <subfield code="a">Ramses</subfield>
+   <subfield code="b">II,</subfield>
+   <subfield code="c">King of Egypt.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00018045</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Antiquities.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00810745</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Temples.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01147397</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+   <subfield code="a">Africa</subfield>
+   <subfield code="z">Nubia.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01215273</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Temples</subfield>
+   <subfield code="z">Nubia.</subfield>
+  </datafield>
+  <datafield tag="600" ind1="0" ind2="0">
+   <subfield code="a">Ramses</subfield>
+   <subfield code="b">II,</subfield>
+   <subfield code="c">King of Egypt.</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Hughes, George R.</subfield>
+   <subfield code="q">(George Robert),</subfield>
+   <subfield code="d">1907-1992</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Wente, Edward Frank,</subfield>
+   <subfield code="d">1930-</subfield>
+  </datafield>
+  <datafield tag="710" ind1="2" ind2=" ">
+   <subfield code="a">Schweizerisches Institut für Ägyptische Bauforschung und Altertumskunde in Kairo.</subfield>
+  </datafield>
+  <datafield tag="710" ind1="2" ind2=" ">
+   <subfield code="a">University of Chicago.</subfield>
+   <subfield code="b">Oriental Institute.</subfield>
+  </datafield>
+  <datafield tag="776" ind1="0" ind2="8">
+   <subfield code="i">Print version:</subfield>
+   <subfield code="a">Ricke, Herbert.</subfield>
+   <subfield code="t">Beit el-Wali temple of Rameses II.</subfield>
+   <subfield code="d">Chicago : University of Chicago Press, 1967</subfield>
+   <subfield code="w">(OCoLC)28784421</subfield>
+   <subfield code="w">(ICU)812095</subfield>
+  </datafield>
+  <datafield tag="810" ind1="2" ind2=" ">
+   <subfield code="a">University of Chicago.</subfield>
+   <subfield code="b">Oriental Institute.</subfield>
+   <subfield code="b">Nubian Expedition.</subfield>
+   <subfield code="t">University of Chicago Oriental Institute Nubian Expedition ;</subfield>
+   <subfield code="v">v.1.</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="0">
+   <subfield code="3">v.1-2</subfield>
+   <subfield code="u">http://bibpurl.oclc.org/web/42217</subfield>
+  </datafield>
+  <datafield tag="903" ind1=" " ind2=" ">
+   <subfield code="a">UCPress</subfield>
+  </datafield>
+  <datafield tag="928" ind1=" " ind2=" ">
+   <subfield code="u">http://bibpurl.oclc.org/web/42217</subfield>
+   <subfield code="p">v.1-2</subfield>
+   <subfield code="c">FullText</subfield>
+   <subfield code="l">Online</subfield>
+   <subfield code="t">LCC</subfield>
+   <subfield code="a">DT135.N8C53</subfield>
+  </datafield>
+ </record>
+</collection>

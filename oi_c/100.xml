@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+ <record>
+  <leader>01593cam a2200397 a 4500</leader>
+  <controlfield tag="001">1928935</controlfield>
+  <controlfield tag="005">20081113095400.0</controlfield>
+  <controlfield tag="008">800605s1940    iluaf    b   s001 0 eng  </controlfield>
+  <controlfield tag="003">OLE</controlfield>
+  <datafield tag="010" ind1=" " ind2=" ">
+   <subfield code="a">   40014639</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(OCoLC)6390235</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+   <subfield code="a">DLC</subfield>
+   <subfield code="c">ICU</subfield>
+   <subfield code="d">ICU</subfield>
+   <subfield code="d">CGU</subfield>
+  </datafield>
+  <datafield tag="049" ind1=" " ind2=" ">
+   <subfield code="a">CGUA</subfield>
+  </datafield>
+  <datafield tag="050" ind1="0" ind2=" ">
+   <subfield code="a">DS70.5.E7</subfield>
+   <subfield code="b">F68</subfield>
+  </datafield>
+  <datafield tag="100" ind1="1" ind2=" ">
+   <subfield code="a">Frankfort, Henri,</subfield>
+   <subfield code="d">1897-1954</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="4">
+   <subfield code="a">The Gimilsin temple and the palace of the rulers at Tell Asmar /</subfield>
+   <subfield code="c">by Henri Frankfort, Seton Lloyd and Thorkild Jacobsen, with a chapter by Günter Martiny.</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+   <subfield code="a">Chicago :</subfield>
+   <subfield code="b">University of Chicago Press,</subfield>
+   <subfield code="c">[c1940]</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+   <subfield code="a">xviii, 271 p. :</subfield>
+   <subfield code="b">ill., plates ;</subfield>
+   <subfield code="c">30 cm.</subfield>
+  </datafield>
+  <datafield tag="440" ind1=" " ind2="0">
+   <subfield code="a">University of Chicago Oriental Institute publications</subfield>
+   <subfield code="v">v. 43</subfield>
+  </datafield>
+  <datafield tag="500" ind1=" " ind2=" ">
+   <subfield code="a">&quot;This volume is one of a group planned to present as a whole the work of the Oriental Institute's Iraq expedition in the Diyālā region.&quot;</subfield>
+  </datafield>
+  <datafield tag="500" ind1=" " ind2=" ">
+   <subfield code="a">Erratum slip inserted at p. 170.</subfield>
+  </datafield>
+  <datafield tag="504" ind1=" " ind2=" ">
+   <subfield code="a">Bibliographical foot-notes.</subfield>
+  </datafield>
+  <datafield tag="610" ind1="1" ind2="0">
+   <subfield code="a">Tell Asmar, Iraq.</subfield>
+   <subfield code="b">Temple of Gimilsin.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Architecture, Assyro-Babylonian</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Cuneiform inscriptions</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">Tell Asmar (Iraq)</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Architecture, Assyro-Babylonian.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00813619</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Cuneiform inscriptions.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00885195</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Lloyd, Seton</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Jacobsen, Thorkild,</subfield>
+   <subfield code="d">1904-1993</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Martiny, Günter,</subfield>
+   <subfield code="d">1903-</subfield>
+  </datafield>
+  <datafield tag="903" ind1=" " ind2=" ">
+   <subfield code="a">UCPress</subfield>
+  </datafield>
+  <datafield tag="929" ind1=" " ind2=" ">
+   <subfield code="t">LCC</subfield>
+   <subfield code="c">Gen</subfield>
+   <subfield code="b">f</subfield>
+   <subfield code="a">DS70.F78</subfield>
+   <subfield code="l">JRL</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">29604419</subfield>
+  </datafield>
+  <datafield tag="929" ind1=" " ind2=" ">
+   <subfield code="t">LCC</subfield>
+   <subfield code="c">Gen</subfield>
+   <subfield code="b">f</subfield>
+   <subfield code="a">DS70.F78</subfield>
+   <subfield code="l">JRL</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">18264994</subfield>
+  </datafield>
+ </record>
+</collection>

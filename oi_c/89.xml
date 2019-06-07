@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+ <record>
+  <leader>01606cam a2200457 a 4500</leader>
+  <controlfield tag="001">1942429</controlfield>
+  <controlfield tag="005">20040601202100.0</controlfield>
+  <controlfield tag="008">910731m19349999ilu           000 0 eng d</controlfield>
+  <controlfield tag="003">OLE</controlfield>
+  <datafield tag="010" ind1=" " ind2=" ">
+   <subfield code="a">   35038539 //r58</subfield>
+  </datafield>
+  <datafield tag="019" ind1=" " ind2=" ">
+   <subfield code="a">2060136</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(OCoLC)27794184</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+   <subfield code="a">NAM</subfield>
+   <subfield code="c">NAM</subfield>
+   <subfield code="d">WLU</subfield>
+   <subfield code="d">CGU</subfield>
+  </datafield>
+  <datafield tag="049" ind1=" " ind2=" ">
+   <subfield code="a">CGUA</subfield>
+  </datafield>
+  <datafield tag="050" ind1="0" ind2=" ">
+   <subfield code="a">DT73.M3</subfield>
+   <subfield code="b">C43</subfield>
+  </datafield>
+  <datafield tag="110" ind1="2" ind2=" ">
+   <subfield code="a">University of Chicago.</subfield>
+   <subfield code="b">Oriental Institute.</subfield>
+   <subfield code="b">Architectural Survey</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="4">
+   <subfield code="a">The excavation of Medinet Habu.</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+   <subfield code="a">Chicago :</subfield>
+   <subfield code="b">University of Chicago Press,</subfield>
+   <subfield code="c">[1934-1954].</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+   <subfield code="a">5 v. :</subfield>
+   <subfield code="b">plates (part col.) plans ;</subfield>
+   <subfield code="c">41 cm. (v. 1: 61 cm.).</subfield>
+  </datafield>
+  <datafield tag="440" ind1=" " ind2="0">
+   <subfield code="a">University of Chicago Oriental Institute publications</subfield>
+   <subfield code="v">v. 21, 41, 54-55, 66</subfield>
+  </datafield>
+  <datafield tag="500" ind1=" " ind2=" ">
+   <subfield code="a">Text by Uvo Hölscher with contributions by Ruldoph Anthes; translated by Mrs. Keith C. Steele and Elizabeth B. Hauser.</subfield>
+  </datafield>
+  <datafield tag="505" ind1="0" ind2=" ">
+   <subfield code="a">v. 1. General plans and views -- v. 2. The temples of the eighteenth dynasty -- v. 3-4. The mortuary temple of Ramses III, pt. 1-2 -- v. 5. Post-Ramessid remains.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Architecture</subfield>
+   <subfield code="z">Egypt</subfield>
+   <subfield code="z">Medinet-Abu.</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">Medinet Habu Site (Egypt)</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Hölscher, Uvo,</subfield>
+   <subfield code="d">1873-1963</subfield>
+  </datafield>
+  <datafield tag="903" ind1=" " ind2=" ">
+   <subfield code="a">UCPress</subfield>
+  </datafield>
+  <datafield tag="929" ind1=" " ind2=" ">
+   <subfield code="t">LCC</subfield>
+   <subfield code="c">JRLASR</subfield>
+   <subfield code="b">xf</subfield>
+   <subfield code="a">DT73.M3C46</subfield>
+   <subfield code="l">ASR</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">10389021</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">10389076</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">10389045</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">10389052</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">15815826</subfield>
+  </datafield>
+  <datafield tag="929" ind1=" " ind2=" ">
+   <subfield code="t">LCC</subfield>
+   <subfield code="c">JRLASR</subfield>
+   <subfield code="b">xf</subfield>
+   <subfield code="a">DT73.M3C46</subfield>
+   <subfield code="l">ASR</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">10389069</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">17020003</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">10389038</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">10473119</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">10473126</subfield>
+  </datafield>
+  <datafield tag="929" ind1=" " ind2=" ">
+   <subfield code="t">LCC</subfield>
+   <subfield code="c">UCPress</subfield>
+   <subfield code="a">DT73.M3C46</subfield>
+   <subfield code="l">ASR</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">81847581</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">81847687</subfield>
+  </datafield>
+ </record>
+</collection>

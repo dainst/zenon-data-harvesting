@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+ <record>
+  <leader>03134cam a2200589K  4500</leader>
+  <controlfield tag="001">8352495</controlfield>
+  <controlfield tag="005">20140619140200.0</controlfield>
+  <controlfield tag="006">m        d        </controlfield>
+  <controlfield tag="007">cr bn||||||abp</controlfield>
+  <controlfield tag="007">cr bn||||||ada</controlfield>
+  <controlfield tag="008">100406s1935    iluaef  o     000 0 eng d</controlfield>
+  <controlfield tag="003">OLE</controlfield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(OCoLC)603122623</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">8352495</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+   <subfield code="a">OCLCE</subfield>
+   <subfield code="b">eng</subfield>
+   <subfield code="c">OCLCE</subfield>
+   <subfield code="d">OCLCQ</subfield>
+   <subfield code="d">CGU</subfield>
+  </datafield>
+  <datafield tag="042" ind1=" " ind2=" ">
+   <subfield code="a">dlr</subfield>
+  </datafield>
+  <datafield tag="043" ind1=" " ind2=" ">
+   <subfield code="a">a-is---</subfield>
+  </datafield>
+  <datafield tag="049" ind1=" " ind2=" ">
+   <subfield code="a">CGUA</subfield>
+  </datafield>
+  <datafield tag="050" ind1=" " ind2="4">
+   <subfield code="a">DS110.M4</subfield>
+   <subfield code="b">M3</subfield>
+  </datafield>
+  <datafield tag="082" ind1="0" ind2="4">
+   <subfield code="a">913.33</subfield>
+  </datafield>
+  <datafield tag="084" ind1=" " ind2=" ">
+   <subfield code="a">11.35</subfield>
+   <subfield code="2">bcl</subfield>
+  </datafield>
+  <datafield tag="100" ind1="1" ind2=" ">
+   <subfield code="a">May, Herbert G.</subfield>
+   <subfield code="q">(Herbert Gordon),</subfield>
+   <subfield code="d">1904-1977.</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="0">
+   <subfield code="a">Material remains of the Megiddo cult</subfield>
+   <subfield code="h">[electronic resource]</subfield>
+   <subfield code="c">by Herbert Gordon May; with a chapter by Robert M. Engberg.</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+   <subfield code="a">Chicago, Ill.,</subfield>
+   <subfield code="b">University of Chicago Press</subfield>
+   <subfield code="c">[1935]</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+   <subfield code="a">1 online resource (xiv, 51 p.)</subfield>
+   <subfield code="b">illus., XLI pl. (incl. plans)</subfield>
+  </datafield>
+  <datafield tag="490" ind1="1" ind2=" ">
+   <subfield code="a">University of Chicago Oriental Institute publications,</subfield>
+   <subfield code="v">vol. XXVI</subfield>
+  </datafield>
+  <datafield tag="500" ind1=" " ind2=" ">
+   <subfield code="a">&quot;List of abbreviations&quot;: p. xiii-xiv.</subfield>
+  </datafield>
+  <datafield tag="506" ind1=" " ind2=" ">
+   <subfield code="3">Use copy</subfield>
+   <subfield code="f">Restrictions unspecified</subfield>
+   <subfield code="2">star</subfield>
+   <subfield code="5">MiAaHDL</subfield>
+  </datafield>
+  <datafield tag="533" ind1=" " ind2=" ">
+   <subfield code="a">Electronic reproduction.</subfield>
+   <subfield code="b">[S.l.] :</subfield>
+   <subfield code="c">HathiTrust Digital Library,</subfield>
+   <subfield code="d">2010.</subfield>
+   <subfield code="5">MiAaHDL</subfield>
+  </datafield>
+  <datafield tag="538" ind1=" " ind2=" ">
+   <subfield code="a">Master and use copy. Digital master created according to Benchmark for Faithful Digital Reproductions of Monographs and Serials, Version 1. Digital Library Federation, December 2002.</subfield>
+   <subfield code="u">http://purl.oclc.org/DLF/benchrepro0212</subfield>
+   <subfield code="5">MiAaHDL</subfield>
+  </datafield>
+  <datafield tag="583" ind1="1" ind2=" ">
+   <subfield code="a">digitized</subfield>
+   <subfield code="c">2010</subfield>
+   <subfield code="h">HathiTrust Digital Library</subfield>
+   <subfield code="l">committed to preserve</subfield>
+   <subfield code="2">pda</subfield>
+   <subfield code="5">MiAaHDL</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">Palestine</subfield>
+   <subfield code="x">Antiquities.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Jews</subfield>
+   <subfield code="x">Antiquities.</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">Megiddo (Extinct city)</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Worship in the Bible.</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">Palestine</subfield>
+   <subfield code="x">Religion.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Antiquities.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00810745</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Jews</subfield>
+   <subfield code="x">Antiquities.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00983140</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Religion.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01093763</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Worship in the Bible.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01181466</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+   <subfield code="a">Israel</subfield>
+   <subfield code="z">Megiddo (Extinct city)</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01896865</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+   <subfield code="a">Middle East</subfield>
+   <subfield code="z">Palestine.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01207534</subfield>
+  </datafield>
+  <datafield tag="650" ind1="1" ind2="7">
+   <subfield code="a">Opgravingen.</subfield>
+   <subfield code="2">gtt</subfield>
+  </datafield>
+  <datafield tag="650" ind1="1" ind2="7">
+   <subfield code="a">Materiële cultuur.</subfield>
+   <subfield code="2">gtt</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Engberg, Robert M.</subfield>
+   <subfield code="q">(Robert Martin),</subfield>
+   <subfield code="d">1906-</subfield>
+  </datafield>
+  <datafield tag="776" ind1="0" ind2="8">
+   <subfield code="i">Print version:</subfield>
+   <subfield code="a">May, Herbert G. (Herbert Gordon), 1904-1977.</subfield>
+   <subfield code="t">Material remains of the Megiddo cult.</subfield>
+   <subfield code="d">Chicago, Ill., University of Chicago Press [1935]</subfield>
+   <subfield code="w">(DLC) 36003487</subfield>
+   <subfield code="w">(OCoLC)01190136</subfield>
+   <subfield code="w">(ICU)1855964</subfield>
+  </datafield>
+  <datafield tag="830" ind1=" " ind2="0">
+   <subfield code="a">University of Chicago Oriental Institute publications ;</subfield>
+   <subfield code="v">vol. XXVI.</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="0">
+   <subfield code="u">http://bibpurl.oclc.org/web/42122</subfield>
+   <subfield code="z">(lick on the icon to the left of 'Terms of Use')</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="0">
+   <subfield code="u">http://oi.uchicago.edu/research/pubs/catalog/oip/oip52.html</subfield>
+   <subfield code="z">(Click on the icon to the left of 'Terms of Use')</subfield>
+  </datafield>
+  <datafield tag="903" ind1=" " ind2=" ">
+   <subfield code="a">UCPress</subfield>
+  </datafield>
+  <datafield tag="928" ind1=" " ind2=" ">
+   <subfield code="u">http://oi.uchicago.edu/research/pubs/catalog/oip/oip52.html</subfield>
+   <subfield code="p">(Click on the icon to the left of 'Terms of Use')</subfield>
+   <subfield code="c">FullText</subfield>
+   <subfield code="l">Online</subfield>
+   <subfield code="t">LCC</subfield>
+   <subfield code="a">BL1640.M46</subfield>
+  </datafield>
+  <datafield tag="928" ind1=" " ind2=" ">
+   <subfield code="u">http://bibpurl.oclc.org/web/42122</subfield>
+   <subfield code="p">(lick on the icon to the left of 'Terms of Use')</subfield>
+   <subfield code="c">FullText</subfield>
+   <subfield code="l">Online</subfield>
+   <subfield code="t">LCC</subfield>
+   <subfield code="a">BL1640.M46</subfield>
+  </datafield>
+ </record>
+</collection>

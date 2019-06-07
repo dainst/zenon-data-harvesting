@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+ <record>
+  <leader>03316cam a2200613Ka 4500</leader>
+  <controlfield tag="001">8355982</controlfield>
+  <controlfield tag="005">20110330114400.0</controlfield>
+  <controlfield tag="006">m        d        </controlfield>
+  <controlfield tag="007">cr |||||||||||</controlfield>
+  <controlfield tag="008">110330m19321936ilua    ob    000 0 eng d</controlfield>
+  <controlfield tag="003">OLE</controlfield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(OCoLC)709903291</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">8355982</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+   <subfield code="a">CGU</subfield>
+   <subfield code="c">CGU</subfield>
+  </datafield>
+  <datafield tag="043" ind1=" " ind2=" ">
+   <subfield code="a">a-iq---</subfield>
+  </datafield>
+  <datafield tag="049" ind1=" " ind2=" ">
+   <subfield code="a">CGUA</subfield>
+  </datafield>
+  <datafield tag="050" ind1="1" ind2="4">
+   <subfield code="a">DS41</subfield>
+   <subfield code="b">.C5 no.13, etc.</subfield>
+  </datafield>
+  <datafield tag="100" ind1="1" ind2=" ">
+   <subfield code="a">Frankfort, Henri,</subfield>
+   <subfield code="d">1897-1954.</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="0">
+   <subfield code="a">Tell Asmar and Khafaje</subfield>
+   <subfield code="h">[electronic resource] :</subfield>
+   <subfield code="b">the first[-fifth] season's work in Eshnunna, 1930/31 /</subfield>
+   <subfield code="c">by Henri Frankfort, Thorkild Jacobsen and Conrad Preusser.</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+   <subfield code="a">Chicago, Ill. :</subfield>
+   <subfield code="b">University of Chicago Press,</subfield>
+   <subfield code="c">c1932-c1936.</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+   <subfield code="a">1 online resource (5 v. :</subfield>
+   <subfield code="b">ill.)</subfield>
+  </datafield>
+  <datafield tag="490" ind1="1" ind2=" ">
+   <subfield code="a">Oriental Institute communications / the Oriental Institute of the University of Chicago ;</subfield>
+   <subfield code="v">no. 13, 16, 17, 19, 20</subfield>
+  </datafield>
+  <datafield tag="500" ind1=" " ind2=" ">
+   <subfield code="a">Vol. 2 has title: Tell Asmar, Khafaje and Khorsabad.</subfield>
+  </datafield>
+  <datafield tag="500" ind1=" " ind2=" ">
+   <subfield code="a">Vol. 3 has title: Iraq excavations of the Oriental Institute, 1932/33.</subfield>
+  </datafield>
+  <datafield tag="500" ind1=" " ind2=" ">
+   <subfield code="a">Vol. 4 has title: Oriental Institute discoveries in Iraq, 1933/34.</subfield>
+  </datafield>
+  <datafield tag="500" ind1=" " ind2=" ">
+   <subfield code="a">Vol. 5 has title: Progress of the work of the Oriental Institute in Iraq, 1934-35.</subfield>
+  </datafield>
+  <datafield tag="504" ind1=" " ind2=" ">
+   <subfield code="a">Includes bibliographical references.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Civilization, Assyro-Babylonian.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Excavations (Archaeology)</subfield>
+   <subfield code="z">Iraq.</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">Tel Asmar (Iraq)</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">Khafaje (Iraq)</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Civilization, Assyro-Babylonian.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00862983</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Excavations (Archaeology)</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00917564</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+   <subfield code="a">Iraq.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01205757</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+   <subfield code="a">Iraq</subfield>
+   <subfield code="z">Khafājah (Extinct city)</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01985559</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Jacobsen, Thorkild,</subfield>
+   <subfield code="d">1904-1993.</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Preusser, Conrad.</subfield>
+  </datafield>
+  <datafield tag="740" ind1="0" ind2=" ">
+   <subfield code="a">Tell Asmar, Khafaje and Khorsabad.</subfield>
+  </datafield>
+  <datafield tag="740" ind1="0" ind2=" ">
+   <subfield code="a">Iraq excavations of the Oriental Institute, 1932/33.</subfield>
+  </datafield>
+  <datafield tag="740" ind1="0" ind2=" ">
+   <subfield code="a">Oriental Institute discoveries in Iraq, 1933/34.</subfield>
+  </datafield>
+  <datafield tag="740" ind1="0" ind2=" ">
+   <subfield code="a">Progress of the work of the Oriental Institute in Iraq, 1934/35.</subfield>
+  </datafield>
+  <datafield tag="776" ind1="0" ind2="8">
+   <subfield code="i">Print version:</subfield>
+   <subfield code="a">Frankfort, Henri, 1897-1954.</subfield>
+   <subfield code="t">Tell Asmar and Khafaje.</subfield>
+   <subfield code="d">Chicago, Ill. : University of Chicago Press, c1932-c1936</subfield>
+   <subfield code="w">(OCoLC)198510636</subfield>
+  </datafield>
+  <datafield tag="830" ind1=" " ind2="0">
+   <subfield code="a">Oriental Institute communications ;</subfield>
+   <subfield code="v">no. 13, 16, 17, 19, 20.</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="0">
+   <subfield code="3">v.1</subfield>
+   <subfield code="u">http://bibpurl.oclc.org/web/42241</subfield>
+   <subfield code="z">(no. 13 of series)</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="0">
+   <subfield code="3">v.2</subfield>
+   <subfield code="u">http://bibpurl.oclc.org/web/42242</subfield>
+   <subfield code="z">(no. 16 of series)</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="0">
+   <subfield code="3">v.3</subfield>
+   <subfield code="u">http://bibpurl.oclc.org/web/42243</subfield>
+   <subfield code="z">(no. 17 of series)</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="0">
+   <subfield code="3">v.4</subfield>
+   <subfield code="u">http://bibpurl.oclc.org/web/42244</subfield>
+   <subfield code="z">(no. 19 of series)</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="0">
+   <subfield code="3">v.5</subfield>
+   <subfield code="u">http://bibpurl.oclc.org/web/42245</subfield>
+   <subfield code="z">(no. 20 of series)</subfield>
+  </datafield>
+  <datafield tag="903" ind1=" " ind2=" ">
+   <subfield code="a">UCPress</subfield>
+  </datafield>
+  <datafield tag="928" ind1=" " ind2=" ">
+   <subfield code="u">http://bibpurl.oclc.org/web/42241</subfield>
+   <subfield code="p">v.1</subfield>
+   <subfield code="p">(no. 13 of series)</subfield>
+   <subfield code="c">FullText</subfield>
+   <subfield code="l">Online</subfield>
+   <subfield code="t">LCC</subfield>
+   <subfield code="a">DS70.7.F726 1932</subfield>
+  </datafield>
+  <datafield tag="928" ind1=" " ind2=" ">
+   <subfield code="u">http://bibpurl.oclc.org/web/42242</subfield>
+   <subfield code="p">v.2</subfield>
+   <subfield code="p">(no. 16 of series)</subfield>
+   <subfield code="c">FullText</subfield>
+   <subfield code="l">Online</subfield>
+   <subfield code="t">LCC</subfield>
+   <subfield code="a">DS70.7.F726 1932</subfield>
+  </datafield>
+  <datafield tag="928" ind1=" " ind2=" ">
+   <subfield code="u">http://bibpurl.oclc.org/web/42244</subfield>
+   <subfield code="p">v.4</subfield>
+   <subfield code="p">(no. 19 of series)</subfield>
+   <subfield code="c">FullText</subfield>
+   <subfield code="l">Online</subfield>
+   <subfield code="t">LCC</subfield>
+   <subfield code="a">DS70.7.F726 1932</subfield>
+  </datafield>
+  <datafield tag="928" ind1=" " ind2=" ">
+   <subfield code="u">http://bibpurl.oclc.org/web/42245</subfield>
+   <subfield code="p">v.5</subfield>
+   <subfield code="p">(no. 20 of series)</subfield>
+   <subfield code="c">FullText</subfield>
+   <subfield code="l">Online</subfield>
+   <subfield code="t">LCC</subfield>
+   <subfield code="a">DS70.7.F726 1932</subfield>
+  </datafield>
+  <datafield tag="928" ind1=" " ind2=" ">
+   <subfield code="u">http://bibpurl.oclc.org/web/42243</subfield>
+   <subfield code="p">v.3</subfield>
+   <subfield code="p">(no. 17 of series)</subfield>
+   <subfield code="c">FullText</subfield>
+   <subfield code="l">Online</subfield>
+   <subfield code="t">LCC</subfield>
+   <subfield code="a">DS70.7.F726 1932</subfield>
+  </datafield>
+ </record>
+</collection>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+ <record>
+  <leader>01502cam a2200361 a 4500</leader>
+  <controlfield tag="001">1928926</controlfield>
+  <controlfield tag="005">20131014142000.0</controlfield>
+  <controlfield tag="008">791025s1940    iluacef  b    000 0 eng  </controlfield>
+  <controlfield tag="003">ICU</controlfield>
+  <datafield tag="010" ind1=" " ind2=" ">
+   <subfield code="a">   40014640</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(OCoLC)5585226</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+   <subfield code="a">DLC</subfield>
+   <subfield code="c">ICU</subfield>
+   <subfield code="d">ICU</subfield>
+   <subfield code="d">CGU</subfield>
+  </datafield>
+  <datafield tag="049" ind1=" " ind2=" ">
+   <subfield code="a">CGUA</subfield>
+  </datafield>
+  <datafield tag="050" ind1=" " ind2=" ">
+   <subfield code="a">DS70.5.K43</subfield>
+   <subfield code="b">D4</subfield>
+  </datafield>
+  <datafield tag="100" ind1="1" ind2=" ">
+   <subfield code="a">Delougaz, Pinhas</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="4">
+   <subfield code="a">The temple oval at Khafājah /</subfield>
+   <subfield code="c">by Pinhas Delougaz, with a chapter by Thorkild Jacobsen.</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+   <subfield code="a">Chicago :</subfield>
+   <subfield code="b">University of Chicago Press,</subfield>
+   <subfield code="c">[c1940]</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+   <subfield code="a">xix, 175 p. :</subfield>
+   <subfield code="b">ill., 12 fold. plates (incl. maps, plans) ;</subfield>
+   <subfield code="c">31 cm.</subfield>
+  </datafield>
+  <datafield tag="440" ind1=" " ind2="0">
+   <subfield code="a">University of Chicago Oriental Institute publications</subfield>
+   <subfield code="v">v. 53</subfield>
+  </datafield>
+  <datafield tag="500" ind1=" " ind2=" ">
+   <subfield code="a">&quot;This volume is one of a group planned to present as a whole the work of the Oriental Institute's Iraq expedition in the Diyālā Region.&quot;</subfield>
+  </datafield>
+  <datafield tag="504" ind1=" " ind2=" ">
+   <subfield code="a">Includes bibliographical references.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Architecture, Assyro-Babylonian</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Cuneiform inscriptions</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">Khafaje, Iraq. Temple.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Architecture, Assyro-Babylonian.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00813619</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Cuneiform inscriptions.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00885195</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+   <subfield code="a">Iraq</subfield>
+   <subfield code="z">Khafājah (Extinct city)</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01985559</subfield>
+  </datafield>
+  <datafield tag="700" ind1="0" ind2="0">
+   <subfield code="a">Jacobsen, Thorkild,</subfield>
+   <subfield code="d">1904-1993.</subfield>
+   <subfield code="t">Temple oval at Khafajah.</subfield>
+  </datafield>
+  <datafield tag="903" ind1=" " ind2=" ">
+   <subfield code="a">UCPress</subfield>
+  </datafield>
+  <datafield tag="929" ind1=" " ind2=" ">
+   <subfield code="t">LCC</subfield>
+   <subfield code="c">Gen</subfield>
+   <subfield code="b">f</subfield>
+   <subfield code="a">DS70.D37</subfield>
+   <subfield code="l">JRL</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">17150248</subfield>
+  </datafield>
+  <datafield tag="929" ind1=" " ind2=" ">
+   <subfield code="t">LCC</subfield>
+   <subfield code="c">Gen</subfield>
+   <subfield code="b">f</subfield>
+   <subfield code="a">DS70.D37</subfield>
+   <subfield code="l">JRL</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">12582324</subfield>
+  </datafield>
+ </record>
+</collection>

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+ <record>
+  <leader>02101cam a2200505 a 4500</leader>
+  <controlfield tag="001">8055595</controlfield>
+  <controlfield tag="005">20101111161500.0</controlfield>
+  <controlfield tag="008">061011s2006    iluab    b    001 0 eng  </controlfield>
+  <datafield tag="010" ind1=" " ind2=" ">
+   <subfield code="a">  2006936403</subfield>
+  </datafield>
+  <datafield tag="015" ind1=" " ind2=" ">
+   <subfield code="a">GBA855352</subfield>
+   <subfield code="2">bnb</subfield>
+  </datafield>
+  <datafield tag="016" ind1="7" ind2=" ">
+   <subfield code="a">013733172</subfield>
+   <subfield code="2">Uk</subfield>
+  </datafield>
+  <datafield tag="019" ind1=" " ind2=" ">
+   <subfield code="a">173365798</subfield>
+  </datafield>
+  <datafield tag="020" ind1=" " ind2=" ">
+   <subfield code="a">1885923384 (alk. paper)</subfield>
+  </datafield>
+  <datafield tag="020" ind1=" " ind2=" ">
+   <subfield code="a">9781885923387 (alk. paper)</subfield>
+  </datafield>
+  <datafield tag="029" ind1="1" ind2=" ">
+   <subfield code="a">YDXCP</subfield>
+   <subfield code="b">2231629</subfield>
+  </datafield>
+  <datafield tag="029" ind1="1" ind2=" ">
+   <subfield code="a">AU@</subfield>
+   <subfield code="b">000042234238</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(OCoLC)86080869</subfield>
+   <subfield code="z">(OCoLC)173365798</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+   <subfield code="a">DLC</subfield>
+   <subfield code="c">DLC</subfield>
+   <subfield code="d">LRU</subfield>
+   <subfield code="d">YDXCP</subfield>
+   <subfield code="d">BAKER</subfield>
+   <subfield code="d">BTCTA</subfield>
+   <subfield code="d">LVB</subfield>
+   <subfield code="d">IAY</subfield>
+   <subfield code="d">UKM</subfield>
+   <subfield code="d">IXA</subfield>
+   <subfield code="d">UtOrBLW</subfield>
+  </datafield>
+  <datafield tag="043" ind1=" " ind2=" ">
+   <subfield code="a">a-iq---</subfield>
+  </datafield>
+  <datafield tag="049" ind1=" " ind2=" ">
+   <subfield code="a">CGUA</subfield>
+  </datafield>
+  <datafield tag="050" ind1="0" ind2="0">
+   <subfield code="a">DS70.5.N5</subfield>
+   <subfield code="b">M36 2006</subfield>
+  </datafield>
+  <datafield tag="082" ind1="0" ind2="0">
+   <subfield code="a">935</subfield>
+   <subfield code="2">22</subfield>
+  </datafield>
+  <datafield tag="100" ind1="1" ind2=" ">
+   <subfield code="a">McMahon, Augusta.</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="0">
+   <subfield code="a">Nippur V :</subfield>
+   <subfield code="b">the early dynastic to Akkadian transition : the area WF sounding at Nippur /</subfield>
+   <subfield code="c">by Augusta McMahon ; with contributions by McGuire Gibson ... [et al.].</subfield>
+  </datafield>
+  <datafield tag="246" ind1="3" ind2=" ">
+   <subfield code="a">Nippur Five</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+   <subfield code="a">Chicago, Ill. :</subfield>
+   <subfield code="b">Oriental Institute of the University of Chicago,</subfield>
+   <subfield code="c">2006.</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+   <subfield code="a">xxxii, 173 p., 193 leaves of plates :</subfield>
+   <subfield code="b">ill., maps ;</subfield>
+   <subfield code="c">31 cm.</subfield>
+  </datafield>
+  <datafield tag="490" ind1="1" ind2=" ">
+   <subfield code="a">The University of Chicago Oriental Institute publications,</subfield>
+   <subfield code="x">0069-3367 ;</subfield>
+   <subfield code="v">v.129</subfield>
+  </datafield>
+  <datafield tag="490" ind1="1" ind2=" ">
+   <subfield code="a">Excavations at Nippur</subfield>
+  </datafield>
+  <datafield tag="504" ind1=" " ind2=" ">
+   <subfield code="a">Includes bibliographical references (p. xxiii-[xxxiii]) and index.</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">Nippur (Extinct city)</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Excavations (Archaeology)</subfield>
+   <subfield code="z">Iraq</subfield>
+   <subfield code="z">Nippur.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="6">
+   <subfield code="a">Fouilles (Archéologie)</subfield>
+   <subfield code="z">Irak</subfield>
+   <subfield code="z">Nippour (Ville ancienne)</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="6">
+   <subfield code="a">Kassites.</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="6">
+   <subfield code="a">Irak</subfield>
+   <subfield code="x">Antiquités.</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="6">
+   <subfield code="a">Nippour (Ville ancienne)</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Excavations (Archaeology)</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00917564</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+   <subfield code="a">Iraq</subfield>
+   <subfield code="z">Nippur (Extinct city)</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01896887</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Gibson, McGuire.</subfield>
+  </datafield>
+  <datafield tag="776" ind1="0" ind2="8">
+   <subfield code="i">Online version:</subfield>
+   <subfield code="a">McMahon, Augusta.</subfield>
+   <subfield code="t">Nippur V.</subfield>
+   <subfield code="d">Chicago, Ill. : Oriental Institute of the University of Chicago, 2006</subfield>
+   <subfield code="w">(OCoLC)608524534</subfield>
+  </datafield>
+  <datafield tag="830" ind1=" " ind2="0">
+   <subfield code="a">University of Chicago Oriental Institute publications ;</subfield>
+   <subfield code="v">v.129.</subfield>
+  </datafield>
+  <datafield tag="830" ind1=" " ind2="0">
+   <subfield code="a">Excavations at Nippur.</subfield>
+  </datafield>
+  <datafield tag="903" ind1=" " ind2=" ">
+   <subfield code="a">MARS</subfield>
+  </datafield>
+  <datafield tag="929" ind1=" " ind2=" ">
+   <subfield code="t">LCC</subfield>
+   <subfield code="c">Gen</subfield>
+   <subfield code="b">f</subfield>
+   <subfield code="a">DS70.5.N5 M36 2006</subfield>
+   <subfield code="l">JRL</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">56764999</subfield>
+  </datafield>
+ </record>
+</collection>

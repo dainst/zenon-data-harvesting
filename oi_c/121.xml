@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+ <record>
+  <leader>01270cam a2200349I  4500</leader>
+  <controlfield tag="001">ocm01673971 </controlfield>
+  <controlfield tag="003">OCoLC</controlfield>
+  <controlfield tag="005">20091016104331.0</controlfield>
+  <controlfield tag="008">751003s1934    iluabf   b    001 0 eng  </controlfield>
+  <datafield tag="010" ind1=" " ind2=" ">
+   <subfield code="a">   35002041 </subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+   <subfield code="a">DLC</subfield>
+   <subfield code="c">AKR</subfield>
+   <subfield code="d">SER</subfield>
+   <subfield code="d">OCL</subfield>
+   <subfield code="d">BOS</subfield>
+   <subfield code="d">OCLCQ</subfield>
+   <subfield code="d">OCLCG</subfield>
+   <subfield code="d">STF</subfield>
+  </datafield>
+  <datafield tag="029" ind1="1" ind2=" ">
+   <subfield code="a">NLGGC</subfield>
+   <subfield code="b">054799937</subfield>
+  </datafield>
+  <datafield tag="029" ind1="1" ind2=" ">
+   <subfield code="a">NZ1</subfield>
+   <subfield code="b">4569558</subfield>
+  </datafield>
+  <datafield tag="029" ind1="1" ind2=" ">
+   <subfield code="a">AU@</subfield>
+   <subfield code="b">000022965495</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(OCoLC)1673971</subfield>
+  </datafield>
+  <datafield tag="043" ind1=" " ind2=" ">
+   <subfield code="a">f-ua---</subfield>
+   <subfield code="a">fl-----</subfield>
+  </datafield>
+  <datafield tag="050" ind1="0" ind2="4">
+   <subfield code="a">GN865.E3</subfield>
+   <subfield code="b">S375</subfield>
+  </datafield>
+  <datafield tag="082" ind1=" " ind2="4">
+   <subfield code="a">571.0962</subfield>
+  </datafield>
+  <datafield tag="049" ind1=" " ind2=" ">
+   <subfield code="a">CGUA</subfield>
+  </datafield>
+  <datafield tag="100" ind1="1" ind2=" ">
+   <subfield code="a">Sandford, K. S.</subfield>
+   <subfield code="q">(Kenneth Stuart),</subfield>
+   <subfield code="d">1899-</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="0">
+   <subfield code="a">Paleolithic man and the Nile Valley in Upper and Middle Egypt;</subfield>
+   <subfield code="b">a study of the region during Pliocene and Pleistocene times,</subfield>
+   <subfield code="c">by K.S. Sandford.</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+   <subfield code="a">Chicago, Ill.,</subfield>
+   <subfield code="b">University of Chicago Press</subfield>
+   <subfield code="c">[1934]</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+   <subfield code="a">xxi, 131 p.</subfield>
+   <subfield code="b">maps (1 fold.) 39 plates.</subfield>
+   <subfield code="c">31 cm.</subfield>
+  </datafield>
+  <datafield tag="440" ind1=" " ind2="4">
+   <subfield code="a">The University of Chicago Oriental Institute publications,</subfield>
+   <subfield code="v">v. 18</subfield>
+  </datafield>
+  <datafield tag="440" ind1=" " ind2="0">
+   <subfield code="a">Prehistoric survey of Egypt and Western Asia,</subfield>
+   <subfield code="v">v. 3</subfield>
+  </datafield>
+  <datafield tag="504" ind1=" " ind2=" ">
+   <subfield code="a">&quot;List of abbreviations&quot;: p. xv.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Prehistoric peoples</subfield>
+   <subfield code="z">Egypt.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Geology</subfield>
+   <subfield code="z">Nile River Valley.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Geology</subfield>
+   <subfield code="z">Egypt.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Geology, Stratigraphic</subfield>
+   <subfield code="y">Pliocene.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Geology, Stratigraphic</subfield>
+   <subfield code="y">Pleistocene.</subfield>
+  </datafield>
+  <datafield tag="994" ind1=" " ind2=" ">
+   <subfield code="a">C0</subfield>
+   <subfield code="b">CGU</subfield>
+  </datafield>
+ </record>
+</collection>

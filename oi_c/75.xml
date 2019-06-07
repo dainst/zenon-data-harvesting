@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+ <record>
+  <leader>01985cam a2200397I  4500</leader>
+  <controlfield tag="001">8354979</controlfield>
+  <controlfield tag="005">20110328154600.0</controlfield>
+  <controlfield tag="006">m        d        </controlfield>
+  <controlfield tag="007">cr |||||||||||</controlfield>
+  <controlfield tag="008">110328s1967    iluabef ob    000 0 ger c</controlfield>
+  <controlfield tag="003">OLE</controlfield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(OCoLC)709624081</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">8354979</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+   <subfield code="a">CGU</subfield>
+   <subfield code="c">CGU</subfield>
+  </datafield>
+  <datafield tag="041" ind1="0" ind2=" ">
+   <subfield code="a">gereng</subfield>
+  </datafield>
+  <datafield tag="049" ind1=" " ind2=" ">
+   <subfield code="a">CGUA</subfield>
+  </datafield>
+  <datafield tag="050" ind1="0" ind2="0">
+   <subfield code="a">DT135.N8</subfield>
+   <subfield code="b">U54 vol. 2</subfield>
+  </datafield>
+  <datafield tag="100" ind1="1" ind2=" ">
+   <subfield code="a">Ricke, Herbert.</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="0">
+   <subfield code="a">Ausgrabungen von Khor-Dehmit bis Bet el-Wali</subfield>
+   <subfield code="h">[electronic resource],</subfield>
+   <subfield code="c">von Herbert Ricke mit Beiträgen von Carl Fingerhuth, Labib Habachi und Louis V. Zabkar.</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+   <subfield code="a">Chicago,</subfield>
+   <subfield code="b">University of Chicago Press</subfield>
+   <subfield code="c">[1967]</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+   <subfield code="a">1 online resource (xv, 70 p.</subfield>
+   <subfield code="b">illus., maps, plans (incl. 3 fold.), 30 plates)</subfield>
+  </datafield>
+  <datafield tag="490" ind1="1" ind2=" ">
+   <subfield code="a">University of Chicago Oriental Institute Nubian Expedition</subfield>
+   <subfield code="v">v.2</subfield>
+  </datafield>
+  <datafield tag="500" ind1=" " ind2=" ">
+   <subfield code="a">At head of title: Campagne internationale pour la sauvegarde des monuments de la Nubie ... Joint Expedition 1960/61 with the Schweizerisches Institut für Ägyptische Bauforschung und Altertumskunde in Kairo.</subfield>
+  </datafield>
+  <datafield tag="500" ind1=" " ind2=" ">
+   <subfield code="a">Director's pref. and contribution by L.V. Zabkar in English.</subfield>
+  </datafield>
+  <datafield tag="504" ind1=" " ind2=" ">
+   <subfield code="a">Includes bibliographical references.</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">Nubia</subfield>
+   <subfield code="x">Antiquities.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Antiquities.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00810745</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+   <subfield code="a">Africa</subfield>
+   <subfield code="z">Nubia.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01215273</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Fingerhuth, Carl.</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Habachi, Labib,</subfield>
+   <subfield code="d">1906-1984.</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Žabkar, Louis V.</subfield>
+   <subfield code="q">(Louis Vico),</subfield>
+   <subfield code="d">1914-</subfield>
+  </datafield>
+  <datafield tag="776" ind1="0" ind2="8">
+   <subfield code="i">Print version:</subfield>
+   <subfield code="a">Ricke, Herbert.</subfield>
+   <subfield code="t">Ausgrabungen von Khor-Dehmit bis Bet el-Wali.</subfield>
+   <subfield code="d">Chicago, University of Chicago Press [1967]</subfield>
+   <subfield code="w">(DLC) 68015933</subfield>
+   <subfield code="w">(OCoLC)00813647</subfield>
+   <subfield code="w">(ICU)812077</subfield>
+  </datafield>
+  <datafield tag="810" ind1="2" ind2=" ">
+   <subfield code="a">University of Chicago.</subfield>
+   <subfield code="b">Oriental Institute.</subfield>
+   <subfield code="b">Nubian Expedition.</subfield>
+   <subfield code="t">University of Chicago Oriental Institute Nubian Expedition.</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="0">
+   <subfield code="u">http://bibpurl.oclc.org/web/42216</subfield>
+  </datafield>
+  <datafield tag="903" ind1=" " ind2=" ">
+   <subfield code="a">UCPress</subfield>
+  </datafield>
+  <datafield tag="928" ind1=" " ind2=" ">
+   <subfield code="u">http://bibpurl.oclc.org/web/42216</subfield>
+   <subfield code="c">FullText</subfield>
+   <subfield code="l">Online</subfield>
+   <subfield code="t">LCC</subfield>
+   <subfield code="a">DT135.N8U54 vol. 2</subfield>
+  </datafield>
+ </record>
+</collection>

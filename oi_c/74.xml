@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+ <record>
+  <leader>01505cam a2200409 a 4500</leader>
+  <controlfield tag="001">491495</controlfield>
+  <controlfield tag="005">20080902095200.0</controlfield>
+  <controlfield tag="008">740705m19531970ilu           000 0 eng c</controlfield>
+  <controlfield tag="003">ICU</controlfield>
+  <datafield tag="010" ind1=" " ind2=" ">
+   <subfield code="a">   53004329</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(OCoLC)936515</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+   <subfield code="a">SNN</subfield>
+   <subfield code="c">SNN</subfield>
+   <subfield code="d">CGU</subfield>
+  </datafield>
+  <datafield tag="049" ind1=" " ind2=" ">
+   <subfield code="a">CGUA</subfield>
+  </datafield>
+  <datafield tag="050" ind1=" " ind2=" ">
+   <subfield code="a">DS325.P4</subfield>
+   <subfield code="b">S27</subfield>
+  </datafield>
+  <datafield tag="082" ind1=" " ind2=" ">
+   <subfield code="a">913.35</subfield>
+  </datafield>
+  <datafield tag="100" ind1="1" ind2=" ">
+   <subfield code="a">Schmidt, Erich Friedrich,</subfield>
+   <subfield code="d">1897-1964.</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="0">
+   <subfield code="a">Persepolis.</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+   <subfield code="a">Chicago :</subfield>
+   <subfield code="b">University of Chicago Press,</subfield>
+   <subfield code="c">[1953-1970]</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+   <subfield code="a">3 v. :</subfield>
+   <subfield code="b">ill., maps (part fold.), plans (part fold.,1 in pocket of v.1) ;</subfield>
+   <subfield code="c">41 cm.</subfield>
+  </datafield>
+  <datafield tag="490" ind1="1" ind2=" ">
+   <subfield code="a">The University of Chicago Oriental Institute publications,</subfield>
+   <subfield code="v">v.68-70</subfield>
+  </datafield>
+  <datafield tag="440" ind1="2" ind2=" ">
+   <subfield code="a">University of Chicago Oriental Institute publications.</subfield>
+   <subfield code="v">68-70.</subfield>
+  </datafield>
+  <datafield tag="504" ind1=" " ind2=" ">
+   <subfield code="a">Includes bibliographical references.</subfield>
+  </datafield>
+  <datafield tag="505" ind1="0" ind2=" ">
+   <subfield code="a">1. Structures, reliefs, inscriptions -- 2. Contents of the Treasury and other discoveries -- 3. The royal tombs and other monuments.</subfield>
+  </datafield>
+  <datafield tag="590" ind1=" " ind2=" ">
+   <subfield code="a">University of Chicago Library's copy 3 has original dust jacket.</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">Persepolis (Iran)</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+   <subfield code="a">Iran</subfield>
+   <subfield code="z">Persepolis.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01208784</subfield>
+  </datafield>
+  <datafield tag="903" ind1=" " ind2=" ">
+   <subfield code="a">UCPress</subfield>
+  </datafield>
+  <datafield tag="929" ind1=" " ind2=" ">
+   <subfield code="t">LCC</subfield>
+   <subfield code="c">Gen</subfield>
+   <subfield code="b">xf</subfield>
+   <subfield code="a">DS325.P4S35</subfield>
+   <subfield code="l">JRL</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="c">JRLASR</subfield>
+   <subfield code="b">17510908</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="c">JRLASR</subfield>
+   <subfield code="b">15396811</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="c">JRLASR</subfield>
+   <subfield code="b">56699479</subfield>
+  </datafield>
+  <datafield tag="929" ind1=" " ind2=" ">
+   <subfield code="t">LCC</subfield>
+   <subfield code="c">Gen</subfield>
+   <subfield code="b">xf</subfield>
+   <subfield code="a">DS325.P4S35</subfield>
+   <subfield code="l">JRL</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="c">JRLASR</subfield>
+   <subfield code="b">63161453</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="c">JRLASR</subfield>
+   <subfield code="b">56699462</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="c">JRLASR</subfield>
+   <subfield code="b">56699455</subfield>
+  </datafield>
+  <datafield tag="929" ind1=" " ind2=" ">
+   <subfield code="t">LCC</subfield>
+   <subfield code="c">UCPress</subfield>
+   <subfield code="b">f</subfield>
+   <subfield code="a">DS325.P4S35</subfield>
+   <subfield code="l">ASR</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">81855763</subfield>
+  </datafield>
+ </record>
+</collection>

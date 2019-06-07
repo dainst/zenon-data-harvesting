@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+ <record>
+  <leader>02563cam a2200529 a 4500</leader>
+  <controlfield tag="001">7908047</controlfield>
+  <controlfield tag="005">20100720162500.0</controlfield>
+  <controlfield tag="008">090903s2009    iluabef  b    001 0 eng c</controlfield>
+  <datafield tag="020" ind1=" " ind2=" ">
+   <subfield code="a">9781885923622 (hbk.)</subfield>
+  </datafield>
+  <datafield tag="020" ind1=" " ind2=" ">
+   <subfield code="a">1885923627 (hbk.)</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(OCoLC)435654210</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+   <subfield code="a">CUT</subfield>
+   <subfield code="c">CUT</subfield>
+   <subfield code="d">YDXCP</subfield>
+   <subfield code="d">TOZ</subfield>
+   <subfield code="d">IXA</subfield>
+   <subfield code="d">UtOrBLW</subfield>
+  </datafield>
+  <datafield tag="042" ind1=" " ind2=" ">
+   <subfield code="a">pcc</subfield>
+  </datafield>
+  <datafield tag="043" ind1=" " ind2=" ">
+   <subfield code="a">a-ai---</subfield>
+  </datafield>
+  <datafield tag="049" ind1=" " ind2=" ">
+   <subfield code="a">CGUA</subfield>
+  </datafield>
+  <datafield tag="050" ind1=" " ind2="4">
+   <subfield code="a">GN780.22.A76</subfield>
+   <subfield code="b">S65 2009</subfield>
+  </datafield>
+  <datafield tag="100" ind1="1" ind2=" ">
+   <subfield code="a">Smith, Adam T.</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="4">
+   <subfield code="a">The foundations of research and regional survey in the Tsaghkahovit Plain, Armenia / by Adam T. Smith, Ruben S. Badalyan, and Pavel Avetisyan ; with contributions by Alan Greene and Leah Minc.</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+   <subfield code="a">[Chicago] :</subfield>
+   <subfield code="b">Oriental Institute of the University of Chicago,</subfield>
+   <subfield code="c">c2009.</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+   <subfield code="a">xlvi, 410 p., 82 p. of plates :</subfield>
+   <subfield code="b">ill. (some col.), maps (some col.), plans ;</subfield>
+   <subfield code="c">31 cm.</subfield>
+  </datafield>
+  <datafield tag="490" ind1="1" ind2=" ">
+   <subfield code="a">The archaeology and geography of ancient Transcaucasian societies ;</subfield>
+   <subfield code="v">v. 1</subfield>
+  </datafield>
+  <datafield tag="490" ind1="1" ind2=" ">
+   <subfield code="a">Oriental Institute publications,</subfield>
+   <subfield code="x">0069-3367 ;</subfield>
+   <subfield code="v">v. 134</subfield>
+  </datafield>
+  <datafield tag="504" ind1=" " ind2=" ">
+   <subfield code="a">Includes bibliographical references (p. xxi-xlvi) and index.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Iron age</subfield>
+   <subfield code="z">Armenia (Republic)</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Bronze age</subfield>
+   <subfield code="z">Armenia (Republic)</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Archaeological surveying</subfield>
+   <subfield code="z">Armenia (Republic)</subfield>
+   <subfield code="z">Tsaghkahovit Plain.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Social archaeology</subfield>
+   <subfield code="z">Armenia (Republic)</subfield>
+   <subfield code="z">Tsaghkahovit Plain.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Excavations (Archaeology)</subfield>
+   <subfield code="z">Armenia (Republic)</subfield>
+   <subfield code="z">Tsaghkahovit Plain.</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">Tsaghkahovit Plain (Armenia)</subfield>
+   <subfield code="x">Antiquities.</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">Armenia (Republic)</subfield>
+   <subfield code="x">Antiquities.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Antiquities.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00810745</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Archaeological surveying.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00812919</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Bronze age.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00839439</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Excavations (Archaeology)</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00917564</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Iron age.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00979145</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Social archaeology.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01122274</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+   <subfield code="a">Armenia (Republic)</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01262063</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+   <subfield code="a">Armenia (Republic)</subfield>
+   <subfield code="z">Tsaghkahovit Plain.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01880995</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Badalian, Rouben S.</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Avetisi͡an, Parkev.</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Greene, Alan.</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Minc, Leah.</subfield>
+  </datafield>
+  <datafield tag="830" ind1=" " ind2="0">
+   <subfield code="a">Archaeology and geography of ancient Transcaucasian societies ;</subfield>
+   <subfield code="v">v. 1.</subfield>
+  </datafield>
+  <datafield tag="830" ind1=" " ind2="0">
+   <subfield code="a">University of Chicago Oriental Institute publications ;</subfield>
+   <subfield code="v">v. 134.</subfield>
+  </datafield>
+  <datafield tag="903" ind1=" " ind2=" ">
+   <subfield code="a">MARS</subfield>
+  </datafield>
+  <datafield tag="929" ind1=" " ind2=" ">
+   <subfield code="t">LCC</subfield>
+   <subfield code="c">Gen</subfield>
+   <subfield code="b">f</subfield>
+   <subfield code="a">GN780.22.A76S65 2009</subfield>
+   <subfield code="l">JRL</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">092310239</subfield>
+  </datafield>
+ </record>
+</collection>

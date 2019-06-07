@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+ <record>
+  <leader>02265cam a2200505Ka 4500</leader>
+  <controlfield tag="001">8361606</controlfield>
+  <controlfield tag="005">20160809103240.5</controlfield>
+  <controlfield tag="006">m        d        </controlfield>
+  <controlfield tag="007">cr un||||a|a||</controlfield>
+  <controlfield tag="008">100420m19819999iluabe  ob    000 0 eng d</controlfield>
+  <controlfield tag="003">OLE</controlfield>
+  <datafield tag="020" ind1=" " ind2=" ">
+   <subfield code="z">8750020315 (Denmark : vol. 1)</subfield>
+  </datafield>
+  <datafield tag="020" ind1=" " ind2=" ">
+   <subfield code="z">9788750020318 (Denmark : vol. 1)</subfield>
+  </datafield>
+  <datafield tag="020" ind1=" " ind2=" ">
+   <subfield code="z">0918986346 (USA : vol. 1)</subfield>
+  </datafield>
+  <datafield tag="020" ind1=" " ind2=" ">
+   <subfield code="z">9780918986344 (USA : vol. 1)</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">8361606</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(OCoLC)608375434</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+   <subfield code="a">OCLCE</subfield>
+   <subfield code="b">eng</subfield>
+   <subfield code="c">OCLCE</subfield>
+   <subfield code="d">OCLCQ</subfield>
+   <subfield code="d">CGU</subfield>
+   <subfield code="d">UtOrBLW</subfield>
+  </datafield>
+  <datafield tag="043" ind1=" " ind2=" ">
+   <subfield code="a">a-iq---</subfield>
+  </datafield>
+  <datafield tag="049" ind1=" " ind2=" ">
+   <subfield code="a">CGUA</subfield>
+  </datafield>
+  <datafield tag="050" ind1=" " ind2="4">
+   <subfield code="a">DS70.5.U24</subfield>
+   <subfield code="b">U2 1981</subfield>
+  </datafield>
+  <datafield tag="082" ind1="0" ind2="4">
+   <subfield code="a">935</subfield>
+   <subfield code="b">U17</subfield>
+  </datafield>
+  <datafield tag="245" ind1="0" ind2="0">
+   <subfield code="a">Uch Tepe</subfield>
+   <subfield code="h">[electronic resource] /</subfield>
+   <subfield code="c">Chicago-Copenhagen Expedition to the Hamrin.</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+   <subfield code="a">Chicago :</subfield>
+   <subfield code="b">University of Chicago, Oriental Institute ;</subfield>
+   <subfield code="a">Copenhagen :</subfield>
+   <subfield code="b">University of Copenhagen,</subfield>
+   <subfield code="c">1981-</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+   <subfield code="a">1 online resource (v. :</subfield>
+   <subfield code="b">ill., maps, plans)</subfield>
+  </datafield>
+  <datafield tag="490" ind1="1" ind2=" ">
+   <subfield code="a">Hamrin report ;</subfield>
+   <subfield code="v">10</subfield>
+  </datafield>
+  <datafield tag="500" ind1=" " ind2=" ">
+   <subfield code="a">At head of added series t.p.: The State Organization of Antiquities and Heritage, Baghdad.</subfield>
+  </datafield>
+  <datafield tag="504" ind1=" " ind2=" ">
+   <subfield code="a">Includes bibliographical references.</subfield>
+  </datafield>
+  <datafield tag="505" ind1="1" ind2=" ">
+   <subfield code="a">1. Tell Razuk, Tell Ahmed al-Mughir, Tell Ajamat -- 2. Technical reports</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Excavations (Archaeology)</subfield>
+   <subfield code="z">Iraq</subfield>
+   <subfield code="z">Uch Tepe Site.</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">Iraq</subfield>
+   <subfield code="x">Antiquities.</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">Hamrin Basin (Iraq)</subfield>
+   <subfield code="x">Antiquities.</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">Uch Tepe Site (Iraq)</subfield>
+   <subfield code="x">Antiquities.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Antiquities.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00810745</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Excavations (Archaeology)</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00917564</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+   <subfield code="a">Iraq.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01205757</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+   <subfield code="a">Iraq</subfield>
+   <subfield code="z">Hamrin Basin.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01247222</subfield>
+  </datafield>
+  <datafield tag="710" ind1="2" ind2=" ">
+   <subfield code="a">Chicago-Copenhagen Expedition to the Hamrin.</subfield>
+  </datafield>
+  <datafield tag="776" ind1="0" ind2="8">
+   <subfield code="i">Print version:</subfield>
+   <subfield code="t">Uch Tepe.</subfield>
+   <subfield code="d">Chicago : University of Chicago, Oriental Institute ; Copenhagen : University of Copenhagen, 1981-</subfield>
+   <subfield code="w">(OCoLC)16109717</subfield>
+  </datafield>
+  <datafield tag="830" ind1=" " ind2="0">
+   <subfield code="a">Hamrin report ;</subfield>
+   <subfield code="v">10-</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="0">
+   <subfield code="3">v.1</subfield>
+   <subfield code="u">http://bibpurl.oclc.org/web/42382</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="0">
+   <subfield code="3">v.2</subfield>
+   <subfield code="u">http://bibpurl.oclc.org/web/42383</subfield>
+  </datafield>
+  <datafield tag="903" ind1=" " ind2=" ">
+   <subfield code="a">MARS</subfield>
+  </datafield>
+  <datafield tag="928" ind1=" " ind2=" ">
+   <subfield code="u">http://bibpurl.oclc.org/web/42382</subfield>
+   <subfield code="p">v.1</subfield>
+   <subfield code="c">FullText</subfield>
+   <subfield code="l">Online</subfield>
+   <subfield code="t">LCC</subfield>
+   <subfield code="a">DS70.5.U34U658 1981</subfield>
+  </datafield>
+  <datafield tag="928" ind1=" " ind2=" ">
+   <subfield code="u">http://bibpurl.oclc.org/web/42383</subfield>
+   <subfield code="p">v.2</subfield>
+   <subfield code="c">FullText</subfield>
+   <subfield code="l">Online</subfield>
+   <subfield code="t">LCC</subfield>
+   <subfield code="a">DS70.5.U34U658 1981</subfield>
+  </datafield>
+ </record>
+</collection>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+ <record>
+  <leader>01560nam a2200397 a 4500</leader>
+  <controlfield tag="001">7138319</controlfield>
+  <controlfield tag="005">20081028135700.0</controlfield>
+  <controlfield tag="008">061120s2006    iluab    b    000 0 eng  </controlfield>
+  <datafield tag="010" ind1=" " ind2=" ">
+   <subfield code="a">  2006938967</subfield>
+  </datafield>
+  <datafield tag="020" ind1=" " ind2=" ">
+   <subfield code="a">1885923333</subfield>
+  </datafield>
+  <datafield tag="020" ind1=" " ind2=" ">
+   <subfield code="a">9781885923332</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(OCoLC)173509257</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+   <subfield code="a">DLC</subfield>
+   <subfield code="c">DLC</subfield>
+   <subfield code="d">BAKER</subfield>
+   <subfield code="d">UtOrBLW</subfield>
+  </datafield>
+  <datafield tag="043" ind1=" " ind2=" ">
+   <subfield code="a">a-sy---</subfield>
+  </datafield>
+  <datafield tag="049" ind1=" " ind2=" ">
+   <subfield code="a">CGUA</subfield>
+  </datafield>
+  <datafield tag="090" ind1=" " ind2=" ">
+   <subfield code="a">DS99.S9</subfield>
+   <subfield code="b">H65 2006</subfield>
+  </datafield>
+  <datafield tag="100" ind1="1" ind2=" ">
+   <subfield code="a">Holland, Thomas A.</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="0">
+   <subfield code="a">Archaeology of the Bronze Age, Hellenistic, and Roman remains at an ancient town on the Euphrates River /</subfield>
+   <subfield code="c">Thomas A. Holland.</subfield>
+  </datafield>
+  <datafield tag="250" ind1=" " ind2=" ">
+   <subfield code="a">1st ed.</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+   <subfield code="a">Chicago, Ill. :</subfield>
+   <subfield code="b">Oriental Institute of the University of Chicago,</subfield>
+   <subfield code="c">2006.</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+   <subfield code="a">2 v. :</subfield>
+   <subfield code="b">ill., maps, 3 folded plans ;</subfield>
+   <subfield code="c">31 cm.</subfield>
+  </datafield>
+  <datafield tag="440" ind1=" " ind2="0">
+   <subfield code="a">Excavations at Tell es-Sweyhat, Syria ;</subfield>
+   <subfield code="v">v. 2</subfield>
+  </datafield>
+  <datafield tag="490" ind1="1" ind2=" ">
+   <subfield code="a">Oriental Institute publications,</subfield>
+   <subfield code="x">0069-3367 ;</subfield>
+   <subfield code="v">v. 125</subfield>
+  </datafield>
+  <datafield tag="500" ind1=" " ind2=" ">
+   <subfield code="a">Three folded plans in pocket (vol. 2).</subfield>
+  </datafield>
+  <datafield tag="504" ind1=" " ind2=" ">
+   <subfield code="a">Includes bibliographical rerefences (v. 1, p.xxi-Ix).</subfield>
+  </datafield>
+  <datafield tag="505" ind1="0" ind2=" ">
+   <subfield code="a">Pt. 1. Text -- pt. 2. Figures and plates.</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">Sweyhat, Tell (Syria)</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Excavations (Archaeology)</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00917564</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+   <subfield code="a">Syria.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01208757</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+   <subfield code="a">Syria</subfield>
+   <subfield code="z">Tell Sweyhat.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01337723</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Excavations (Archaeology)</subfield>
+   <subfield code="z">Syria.</subfield>
+  </datafield>
+  <datafield tag="830" ind1=" " ind2="0">
+   <subfield code="a">University of Chicago Oriental Institute publications ;</subfield>
+   <subfield code="v">125.</subfield>
+  </datafield>
+  <datafield tag="903" ind1=" " ind2=" ">
+   <subfield code="a">MARS</subfield>
+  </datafield>
+  <datafield tag="929" ind1=" " ind2=" ">
+   <subfield code="t">LCC</subfield>
+   <subfield code="c">Gen</subfield>
+   <subfield code="a">DS99.S9H65 2006</subfield>
+   <subfield code="l">JRL</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">80674371</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">80674302</subfield>
+  </datafield>
+ </record>
+</collection>

@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+ <record>
+  <leader>02233cam a2200469Ii 4500</leader>
+  <controlfield tag="001">10398735</controlfield>
+  <controlfield tag="003">OLE</controlfield>
+  <controlfield tag="005">20151222024938.0</controlfield>
+  <controlfield tag="008">150702s2015    wj a     b    000 0 eng d</controlfield>
+  <datafield tag="010" ind1=" " ind2=" ">
+   <subfield code="a">  2015940021</subfield>
+  </datafield>
+  <datafield tag="019" ind1=" " ind2=" ">
+   <subfield code="a">913058193</subfield>
+  </datafield>
+  <datafield tag="020" ind1=" " ind2=" ">
+   <subfield code="a">9781614910046</subfield>
+  </datafield>
+  <datafield tag="020" ind1=" " ind2=" ">
+   <subfield code="a">1614910049</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(OCoLC)913332459</subfield>
+   <subfield code="z">(OCoLC)913058193</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+   <subfield code="a">BTCTA</subfield>
+   <subfield code="b">eng</subfield>
+   <subfield code="c">BTCTA</subfield>
+   <subfield code="d">YDXCP</subfield>
+   <subfield code="e">rda</subfield>
+   <subfield code="d">BNG</subfield>
+   <subfield code="d">WVU</subfield>
+   <subfield code="d">OCLCF</subfield>
+   <subfield code="d">MEAUC</subfield>
+   <subfield code="d">LML</subfield>
+   <subfield code="d">CGU</subfield>
+  </datafield>
+  <datafield tag="043" ind1=" " ind2=" ">
+   <subfield code="a">a-is---</subfield>
+   <subfield code="a">awba---</subfield>
+   <subfield code="a">awgz---</subfield>
+  </datafield>
+  <datafield tag="049" ind1=" " ind2=" ">
+   <subfield code="a">CGUA</subfield>
+  </datafield>
+  <datafield tag="090" ind1=" " ind2=" ">
+   <subfield code="a">NA3760</subfield>
+   <subfield code="b">.T343 2015</subfield>
+  </datafield>
+  <datafield tag="100" ind1="1" ind2=" ">
+   <subfield code="a">Ṭāhā, Ḥamdān,</subfield>
+   <subfield code="e">author.</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="4">
+   <subfield code="a">The Mosaics of Khirbet el-Mafjar :</subfield>
+   <subfield code="b">Hisham's Palace /</subfield>
+   <subfield code="c">ḤamdānṬāhā and Donald Whitcomb.</subfield>
+  </datafield>
+  <datafield tag="264" ind1=" " ind2="1">
+   <subfield code="a">Ramallah :</subfield>
+   <subfield code="b">Palestinian Department of Antiquities and Cultural Heritage,</subfield>
+   <subfield code="c">2014 ;</subfield>
+   <subfield code="a">Chicago :</subfield>
+   <subfield code="b">Oriental Institute of the University of Chicago,</subfield>
+   <subfield code="c">2015.</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+   <subfield code="a">127 pages :</subfield>
+   <subfield code="b">mostly colored illustrations ;</subfield>
+   <subfield code="c">28 cm.</subfield>
+  </datafield>
+  <datafield tag="336" ind1=" " ind2=" ">
+   <subfield code="a">text</subfield>
+   <subfield code="b">txt</subfield>
+   <subfield code="2">rdacontent</subfield>
+  </datafield>
+  <datafield tag="337" ind1=" " ind2=" ">
+   <subfield code="a">unmediated</subfield>
+   <subfield code="b">n</subfield>
+   <subfield code="2">rdamedia</subfield>
+  </datafield>
+  <datafield tag="338" ind1=" " ind2=" ">
+   <subfield code="a">volume</subfield>
+   <subfield code="b">nc</subfield>
+   <subfield code="2">rdacarrier</subfield>
+  </datafield>
+  <datafield tag="500" ind1=" " ind2=" ">
+   <subfield code="a">&quot;Joint publication; Palestinian Department of Antiquities and Cultural Heritage, The Oriental Institute of the University of Chicago, Ramallah 2014 and Chicago 2015&quot;</subfield>
+  </datafield>
+  <datafield tag="504" ind1=" " ind2=" ">
+   <subfield code="a">Includes bibliographical references (pages 32-33).</subfield>
+  </datafield>
+  <datafield tag="600" ind1="0" ind2="0">
+   <subfield code="a">Hishām ibn ʻAbd al-Malik,</subfield>
+   <subfield code="c">Caliph,</subfield>
+   <subfield code="d">691-743</subfield>
+   <subfield code="x">Palaces</subfield>
+   <subfield code="z">Palestine.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Mosaics, Ancient</subfield>
+   <subfield code="z">Palestine.</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">Mafjar Site (West Bank)</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">Palestine</subfield>
+   <subfield code="x">Antiquities.</subfield>
+  </datafield>
+  <datafield tag="600" ind1="0" ind2="7">
+   <subfield code="a">Hishām ibn ʻAbd al-Malik,</subfield>
+   <subfield code="c">Caliph,</subfield>
+   <subfield code="d">691-743</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00347565</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Antiquities.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00810745</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Islamic mosaics.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01730351</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Mosaic floors.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01026684</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Palaces.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01051243</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+   <subfield code="a">West Bank.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01243256</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+   <subfield code="a">West Bank</subfield>
+   <subfield code="z">Mafjar Site.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01890958</subfield>
+  </datafield>
+  <datafield tag="655" ind1=" " ind2="7">
+   <subfield code="a">Pictorial works.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01423874</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Whitcomb, Donald,</subfield>
+   <subfield code="e">author.</subfield>
+  </datafield>
+  <datafield tag="929" ind1=" " ind2=" ">
+   <subfield code="t">LCC</subfield>
+   <subfield code="c">Gen</subfield>
+   <subfield code="b">f</subfield>
+   <subfield code="a">NA3760.T343 2015</subfield>
+   <subfield code="l">JRL</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">111830671</subfield>
+  </datafield>
+ </record>
+</collection>

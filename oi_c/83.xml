@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+ <record>
+  <leader>01294cam a2200361 a 4500</leader>
+  <controlfield tag="001">1359245</controlfield>
+  <controlfield tag="005">20160526140726.4</controlfield>
+  <controlfield tag="008">920817s1959    iluf     b    000 0 eng u</controlfield>
+  <controlfield tag="003">OLE</controlfield>
+  <datafield tag="010" ind1=" " ind2=" ">
+   <subfield code="a">59014285</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(OCoLC)325207</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+   <subfield code="a">unknown</subfield>
+   <subfield code="c">AKR</subfield>
+   <subfield code="d">m.c.</subfield>
+   <subfield code="d">ICU</subfield>
+  </datafield>
+  <datafield tag="041" ind1="0" ind2=" ">
+   <subfield code="a">eng</subfield>
+  </datafield>
+  <datafield tag="043" ind1=" " ind2=" ">
+   <subfield code="a">f-ua---</subfield>
+  </datafield>
+  <datafield tag="050" ind1=" " ind2=" ">
+   <subfield code="a">PJ1565</subfield>
+   <subfield code="b">.S44 1959</subfield>
+  </datafield>
+  <datafield tag="100" ind1="1" ind2=" ">
+   <subfield code="a">Seele, Keith C.</subfield>
+   <subfield code="q">(Keith Cedric),</subfield>
+   <subfield code="d">1898-1971.</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="4">
+   <subfield code="a">The tomb of Tjanefer at Thebes.</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+   <subfield code="a">Chicago :</subfield>
+   <subfield code="b">University of Chicago Press,</subfield>
+   <subfield code="c">[1959]</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+   <subfield code="a">x, 10 p. :</subfield>
+   <subfield code="b">41 plates ;</subfield>
+   <subfield code="c">41 cm.</subfield>
+  </datafield>
+  <datafield tag="440" ind1=" " ind2="0">
+   <subfield code="a">University of Chicago Oriental Institute publications.</subfield>
+   <subfield code="v">v. 86</subfield>
+  </datafield>
+  <datafield tag="500" ind1=" " ind2=" ">
+   <subfield code="a">First ed. published in 1939 under title: The tomb of Canefer at Thebes.</subfield>
+  </datafield>
+  <datafield tag="504" ind1=" " ind2=" ">
+   <subfield code="a">Includes bibliographical footnotes.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Tombs</subfield>
+   <subfield code="z">Egypt</subfield>
+   <subfield code="z">Thebes (Extinct city)</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Inscriptions, Egyptian</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Inscriptions, Egyptian.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01199431</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Tombs.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01152439</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+   <subfield code="a">Egypt</subfield>
+   <subfield code="z">Thebes (Extinct city)</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01897333</subfield>
+  </datafield>
+  <datafield tag="903" ind1=" " ind2=" ">
+   <subfield code="a">RECON/ICU</subfield>
+  </datafield>
+  <datafield tag="903" ind1=" " ind2=" ">
+   <subfield code="a">UCPress</subfield>
+  </datafield>
+  <datafield tag="929" ind1=" " ind2=" ">
+   <subfield code="t">LCC</subfield>
+   <subfield code="c">JRLASR</subfield>
+   <subfield code="b">xf</subfield>
+   <subfield code="a">PJ1565.S45</subfield>
+   <subfield code="l">ASR</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">36282281</subfield>
+  </datafield>
+  <datafield tag="929" ind1=" " ind2=" ">
+   <subfield code="t">LCC</subfield>
+   <subfield code="c">JRLASR</subfield>
+   <subfield code="b">xf</subfield>
+   <subfield code="a">PJ1565.S45</subfield>
+   <subfield code="l">ASR</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">15441408</subfield>
+  </datafield>
+ </record>
+</collection>

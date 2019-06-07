@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+ <record>
+  <leader>01418cam a2200349I  4500</leader>
+  <controlfield tag="001">8353633</controlfield>
+  <controlfield tag="005">20130314122900.0</controlfield>
+  <controlfield tag="006">m        d        </controlfield>
+  <controlfield tag="007">cr |||||||||||</controlfield>
+  <controlfield tag="008">110324s1950    iluaf   sb    000 0 eng  </controlfield>
+  <controlfield tag="003">OLE</controlfield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(OCoLC)708417420</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">8353633</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+   <subfield code="a">CGU</subfield>
+   <subfield code="c">CGU</subfield>
+  </datafield>
+  <datafield tag="049" ind1=" " ind2=" ">
+   <subfield code="a">CGUA</subfield>
+  </datafield>
+  <datafield tag="050" ind1="0" ind2="0">
+   <subfield code="a">CB251</subfield>
+   <subfield code="b">.C55 no.26</subfield>
+  </datafield>
+  <datafield tag="050" ind1=" " ind2="4">
+   <subfield code="a">CE29</subfield>
+   <subfield code="b">.P37 1950</subfield>
+  </datafield>
+  <datafield tag="100" ind1="1" ind2=" ">
+   <subfield code="a">Parker, Richard A.</subfield>
+   <subfield code="q">(Richard Anthony),</subfield>
+   <subfield code="d">1905-1993</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="4">
+   <subfield code="a">The calendars of ancient Egypt</subfield>
+   <subfield code="h">[electronic resource].</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+   <subfield code="a">Chicago,</subfield>
+   <subfield code="b">University of Chicago Press,</subfield>
+   <subfield code="c">[1950]</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+   <subfield code="a">1 (xii, 83 p.</subfield>
+   <subfield code="b">illus., 6 plates)</subfield>
+  </datafield>
+  <datafield tag="490" ind1="1" ind2=" ">
+   <subfield code="a">Oriental Institute of the University of Chicago. Studies in ancient Oriental civilization,</subfield>
+   <subfield code="v">no. 26</subfield>
+  </datafield>
+  <datafield tag="504" ind1=" " ind2=" ">
+   <subfield code="a">Bibliography: p. 70-83.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Calendar, Egyptian.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Calendriers</subfield>
+   <subfield code="x">Antiquités.</subfield>
+   <subfield code="2">ram</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+   <subfield code="a">Egypte</subfield>
+   <subfield code="x">Civilisation.</subfield>
+   <subfield code="2">ram</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Calendar, Egyptian.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00844188</subfield>
+  </datafield>
+  <datafield tag="776" ind1="0" ind2="8">
+   <subfield code="i">Print version:</subfield>
+   <subfield code="a">Parker, Richard A. (Richard Anthony), 1905-1993.</subfield>
+   <subfield code="t">calendars of ancient Egypt.</subfield>
+   <subfield code="d">Chicago, University of Chicago Press, [1950]</subfield>
+   <subfield code="w">(DLC) 51009451</subfield>
+   <subfield code="w">(OCoLC)02077978</subfield>
+   <subfield code="w">(ICU)4004140</subfield>
+  </datafield>
+  <datafield tag="830" ind1=" " ind2="0">
+   <subfield code="a">Studies in ancient oriental civilization ;</subfield>
+   <subfield code="v">no. 26.</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="0">
+   <subfield code="u">http://bibpurl.oclc.org/web/42185</subfield>
+  </datafield>
+  <datafield tag="903" ind1=" " ind2=" ">
+   <subfield code="a">UCPress</subfield>
+  </datafield>
+  <datafield tag="928" ind1=" " ind2=" ">
+   <subfield code="u">http://bibpurl.oclc.org/web/42185</subfield>
+   <subfield code="c">FullText</subfield>
+   <subfield code="l">Online</subfield>
+   <subfield code="t">LCC</subfield>
+   <subfield code="a">CE29.P37 1950</subfield>
+  </datafield>
+ </record>
+</collection>

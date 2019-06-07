@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+ <record>
+  <leader>02055cam a2200409Ia 4500</leader>
+  <controlfield tag="001">8963044</controlfield>
+  <controlfield tag="005">20130218163900.0</controlfield>
+  <controlfield tag="006">m     |  d        </controlfield>
+  <controlfield tag="007">cr |||||||||||</controlfield>
+  <controlfield tag="008">130206s1994    iluabe  o     000 0 eng d</controlfield>
+  <datafield tag="020" ind1=" " ind2=" ">
+   <subfield code="z">0918986974</subfield>
+  </datafield>
+  <datafield tag="020" ind1=" " ind2=" ">
+   <subfield code="z">9780918986979</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(OCoLC)826868893</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">8963044</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+   <subfield code="a">CGU</subfield>
+   <subfield code="c">CGU</subfield>
+  </datafield>
+  <datafield tag="049" ind1=" " ind2=" ">
+   <subfield code="a">CGUA</subfield>
+  </datafield>
+  <datafield tag="090" ind1=" " ind2=" ">
+   <subfield code="a">DS110.E47</subfield>
+   <subfield code="b">W55 1994</subfield>
+  </datafield>
+  <datafield tag="100" ind1="1" ind2=" ">
+   <subfield code="a">Whitcomb, Donald S.</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="0">
+   <subfield code="a">Ayla</subfield>
+   <subfield code="h">[electronic resource] :</subfield>
+   <subfield code="b">art and industry in the Islamic port of Aqaba /</subfield>
+   <subfield code="c">by Donald Whitcomb.</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+   <subfield code="a">Chicago :</subfield>
+   <subfield code="b">Oriental Institute of the University of Chicago,</subfield>
+   <subfield code="c">1994.</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+   <subfield code="a">1 online resource (32 p.) :</subfield>
+   <subfield code="b">ill., maps, plans</subfield>
+  </datafield>
+  <datafield tag="490" ind1="1" ind2=" ">
+   <subfield code="a">Oriental Institute Museum publications</subfield>
+  </datafield>
+  <datafield tag="500" ind1=" " ind2=" ">
+   <subfield code="a">&quot;Published in conjunction with an exhibition at the Oriental Institute Museum, November 1994-February 1995&quot;--T.p. verso.</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">Elat (Israel)</subfield>
+   <subfield code="x">History.</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">ʻAqabah (Jordan)</subfield>
+   <subfield code="x">History.</subfield>
+  </datafield>
+  <datafield tag="650" ind1="0" ind2="7">
+   <subfield code="a">Archäologie.</subfield>
+   <subfield code="2">swd</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+   <subfield code="a">Akaba.</subfield>
+   <subfield code="2">swd</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+   <subfield code="a">Israel</subfield>
+   <subfield code="z">Elat.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01219485</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+   <subfield code="a">Jordan</subfield>
+   <subfield code="z">ʻAqabah.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01208793</subfield>
+  </datafield>
+  <datafield tag="655" ind1=" " ind2="7">
+   <subfield code="a">History.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01411628</subfield>
+  </datafield>
+  <datafield tag="648" ind1=" " ind2="7">
+   <subfield code="a">Geschichte 650-1116.</subfield>
+   <subfield code="2">swd</subfield>
+  </datafield>
+  <datafield tag="776" ind1="0" ind2="8">
+   <subfield code="i">Print version:</subfield>
+   <subfield code="a">Whitcomb, Donald S.</subfield>
+   <subfield code="t">Ayla.</subfield>
+   <subfield code="d">Chicago : Oriental Institute of the University of Chicago, 1994</subfield>
+   <subfield code="z">0918986974</subfield>
+   <subfield code="w">(OCoLC)31706047</subfield>
+   <subfield code="w">(ICU)1690503</subfield>
+  </datafield>
+  <datafield tag="830" ind1=" " ind2="0">
+   <subfield code="a">Oriental Institute Museum publications.</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="0">
+   <subfield code="u">http://bibpurl.oclc.org/web/48221</subfield>
+   <subfield code="z">(Click on the icon to the left of 'Terms of Use')</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="0">
+   <subfield code="u">http://oi.uchicago.edu/research/pubs/catalog/misc/ayla.html</subfield>
+   <subfield code="z">(Click on the icon to the left of 'Terms of Use')</subfield>
+  </datafield>
+  <datafield tag="928" ind1=" " ind2=" ">
+   <subfield code="u">http://bibpurl.oclc.org/web/48221</subfield>
+   <subfield code="p">(Click on the icon to the left of 'Terms of Use')</subfield>
+   <subfield code="c">FullText</subfield>
+   <subfield code="l">Online</subfield>
+   <subfield code="t">LCC</subfield>
+   <subfield code="a">DS110.E47W55 1994</subfield>
+  </datafield>
+  <datafield tag="928" ind1=" " ind2=" ">
+   <subfield code="u">http://oi.uchicago.edu/research/pubs/catalog/misc/ayla.html</subfield>
+   <subfield code="p">(Click on the icon to the left of 'Terms of Use')</subfield>
+   <subfield code="c">FullText</subfield>
+   <subfield code="l">Online</subfield>
+   <subfield code="t">LCC</subfield>
+   <subfield code="a">DS110.E47W55 1994</subfield>
+  </datafield>
+ </record>
+</collection>

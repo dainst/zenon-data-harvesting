@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+ <record>
+  <leader>01967cam a22004334a 4500</leader>
+  <controlfield tag="001">6370929</controlfield>
+  <controlfield tag="005">20071024175000.0</controlfield>
+  <controlfield tag="008">060830s2007    cauab    b   s011 0 eng  </controlfield>
+  <datafield tag="010" ind1=" " ind2=" ">
+   <subfield code="a">  2006028966</subfield>
+  </datafield>
+  <datafield tag="020" ind1=" " ind2=" ">
+   <subfield code="a">1931745331 (cloth : alk. paper)</subfield>
+  </datafield>
+  <datafield tag="020" ind1=" " ind2=" ">
+   <subfield code="a">9781931745338 (cloth : alk. paper)</subfield>
+  </datafield>
+  <datafield tag="020" ind1=" " ind2=" ">
+   <subfield code="a">1931745323 (pbk. : alk. paper)</subfield>
+  </datafield>
+  <datafield tag="020" ind1=" " ind2=" ">
+   <subfield code="a">9781931745321 (pbk. : alk. paper)</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">2006028966</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+   <subfield code="a">DLC</subfield>
+   <subfield code="c">DLC</subfield>
+   <subfield code="d">BAKER</subfield>
+   <subfield code="d">C#P</subfield>
+   <subfield code="d">YDXCP</subfield>
+   <subfield code="d">UtOrBLW</subfield>
+  </datafield>
+  <datafield tag="043" ind1=" " ind2=" ">
+   <subfield code="a">aw-----</subfield>
+  </datafield>
+  <datafield tag="050" ind1="0" ind2="0">
+   <subfield code="a">DS56</subfield>
+   <subfield code="b">.S43 2007</subfield>
+  </datafield>
+  <datafield tag="082" ind1="0" ind2="0">
+   <subfield code="a">939/.4</subfield>
+   <subfield code="2">22</subfield>
+  </datafield>
+  <datafield tag="245" ind1="0" ind2="0">
+   <subfield code="a">Settlement and society :</subfield>
+   <subfield code="b">essays dedicated to Robert McCormick Adams /</subfield>
+   <subfield code="c">edited by Elizabeth C. Stone.</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+   <subfield code="a">Los Angeles :</subfield>
+   <subfield code="b">Cotsen Institute of Archaeology, University of California ;</subfield>
+   <subfield code="a">[Chicago] :</subfield>
+   <subfield code="b">Oriental Institute of the University of Chicago,</subfield>
+   <subfield code="c">2007.</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+   <subfield code="a">xxii, 490 p. :</subfield>
+   <subfield code="b">ill., maps ;</subfield>
+   <subfield code="c">24 cm.</subfield>
+  </datafield>
+  <datafield tag="440" ind1=" " ind2="0">
+   <subfield code="a">Ideas, debates, and perspectives ;</subfield>
+   <subfield code="v">v. 3</subfield>
+  </datafield>
+  <datafield tag="504" ind1=" " ind2=" ">
+   <subfield code="a">Includes bibliographical references (p. 387-464) and index.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Archaeology</subfield>
+   <subfield code="z">Middle East</subfield>
+   <subfield code="x">History.</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">Middle East</subfield>
+   <subfield code="x">Antiquities.</subfield>
+  </datafield>
+  <datafield tag="600" ind1="1" ind2="7">
+   <subfield code="a">Adams, Robert McC.</subfield>
+   <subfield code="q">(Robert McCormick),</subfield>
+   <subfield code="d">1926-2018</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01942912</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Antiquities.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00810745</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Archaeology.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00812938</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Human settlements.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00963433</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Social archaeology.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01122274</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Urbanization.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01162722</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+   <subfield code="a">Middle East.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01241586</subfield>
+  </datafield>
+  <datafield tag="655" ind1=" " ind2="7">
+   <subfield code="a">History.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01411628</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Stone, Elizabeth Caecilia,</subfield>
+   <subfield code="d">1949-</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Adams, Robert McC,</subfield>
+   <subfield code="q">(Robert McCormick),</subfield>
+   <subfield code="d">1926-</subfield>
+  </datafield>
+  <datafield tag="903" ind1=" " ind2=" ">
+   <subfield code="a">MARS</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(OCoLC)71241967</subfield>
+  </datafield>
+  <datafield tag="929" ind1=" " ind2=" ">
+   <subfield code="t">LCC</subfield>
+   <subfield code="c">Gen</subfield>
+   <subfield code="a">DS56 .S43 2007</subfield>
+   <subfield code="l">JRL</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">76342395</subfield>
+  </datafield>
+ </record>
+</collection>

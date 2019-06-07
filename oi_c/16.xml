@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+ <record>
+  <leader>02525cam a2200529Ia 4500</leader>
+  <controlfield tag="001">8355302</controlfield>
+  <controlfield tag="005">20110329100900.0</controlfield>
+  <controlfield tag="006">m        d        </controlfield>
+  <controlfield tag="007">cr mn|||||||||</controlfield>
+  <controlfield tag="008">101023s2010    iluab   obc   000 0 eng d</controlfield>
+  <datafield tag="010" ind1=" " ind2=" ">
+   <subfield code="z">2010932119</subfield>
+  </datafield>
+  <datafield tag="020" ind1=" " ind2=" ">
+   <subfield code="z">9781885923769</subfield>
+  </datafield>
+  <datafield tag="020" ind1=" " ind2=" ">
+   <subfield code="z">1885923767</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(OCoLC)671531840</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">8355302</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+   <subfield code="a">WAU</subfield>
+   <subfield code="b">eng</subfield>
+   <subfield code="c">WAU</subfield>
+   <subfield code="d">CUS</subfield>
+   <subfield code="d">CGU</subfield>
+  </datafield>
+  <datafield tag="043" ind1=" " ind2=" ">
+   <subfield code="a">aw-----</subfield>
+  </datafield>
+  <datafield tag="049" ind1=" " ind2=" ">
+   <subfield code="a">CGUA</subfield>
+  </datafield>
+  <datafield tag="050" ind1=" " ind2="4">
+   <subfield code="a">P211.3.M628</subfield>
+   <subfield code="b">V57 2010</subfield>
+  </datafield>
+  <datafield tag="245" ind1="0" ind2="0">
+   <subfield code="a">Visible language</subfield>
+   <subfield code="h">[electronic resource] :</subfield>
+   <subfield code="b">inventions of writing in the ancient Middle East and beyond /</subfield>
+   <subfield code="c">edited by Christopher Woods with the assistance of Geoff Emberling &amp; Emily Teeter.</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+   <subfield code="a">Chicago, Ill. :</subfield>
+   <subfield code="b">Oriental Institute of the University of Chicago,</subfield>
+   <subfield code="c">2010.</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+   <subfield code="a">1 online resource (240 p.) :</subfield>
+   <subfield code="b">ill. (some col.), col. maps.</subfield>
+  </datafield>
+  <datafield tag="490" ind1="1" ind2=" ">
+   <subfield code="a">Oriental Institute Museum publications ;</subfield>
+   <subfield code="v">no. 32</subfield>
+  </datafield>
+  <datafield tag="500" ind1=" " ind2=" ">
+   <subfield code="a">Exhibition catalog.</subfield>
+  </datafield>
+  <datafield tag="504" ind1=" " ind2=" ">
+   <subfield code="a">Includes bibliographical references.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Writing</subfield>
+   <subfield code="z">Middle East</subfield>
+   <subfield code="x">History</subfield>
+   <subfield code="v">Exhibitions.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Egyptian language</subfield>
+   <subfield code="x">Writing</subfield>
+   <subfield code="x">History</subfield>
+   <subfield code="v">Exhibitions.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Cuneiform writing</subfield>
+   <subfield code="x">History</subfield>
+   <subfield code="v">Exhibitions.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Picture-writing</subfield>
+   <subfield code="x">History</subfield>
+   <subfield code="v">Exhibitions.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Writing</subfield>
+   <subfield code="x">History</subfield>
+   <subfield code="v">Exhibitions.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Cuneiform writing.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00885203</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Egyptian language</subfield>
+   <subfield code="x">Writing.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00903957</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Picture-writing.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01063814</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Writing.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01181638</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+   <subfield code="a">Middle East.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01241586</subfield>
+  </datafield>
+  <datafield tag="655" ind1=" " ind2="7">
+   <subfield code="a">Exhibition catalogs.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01424028</subfield>
+  </datafield>
+  <datafield tag="655" ind1=" " ind2="7">
+   <subfield code="a">History.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01411628</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Woods, Christopher,</subfield>
+   <subfield code="d">1968-</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Emberling, Geoff.</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Teeter, Emily.</subfield>
+  </datafield>
+  <datafield tag="710" ind1="2" ind2=" ">
+   <subfield code="a">University of Chicago.</subfield>
+   <subfield code="b">Oriental Institute.</subfield>
+  </datafield>
+  <datafield tag="776" ind1="0" ind2="8">
+   <subfield code="i">Print version:</subfield>
+   <subfield code="t">Visible language.</subfield>
+   <subfield code="d">Chicago, Ill. : Oriental Institute of the University of Chicago, 2010</subfield>
+   <subfield code="z">9781885923769</subfield>
+   <subfield code="w">(DLC) 2010932119</subfield>
+   <subfield code="w">(OCoLC)664327312</subfield>
+   <subfield code="w">(ICU)8157107</subfield>
+  </datafield>
+  <datafield tag="830" ind1=" " ind2="0">
+   <subfield code="a">Oriental Institute Museum publications ;</subfield>
+   <subfield code="v">no. 32.</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="0">
+   <subfield code="u">http://bibpurl.oclc.org/web/42222</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="0">
+   <subfield code="u">http://bibpurl.oclc.org/web/40885</subfield>
+  </datafield>
+  <datafield tag="928" ind1=" " ind2=" ">
+   <subfield code="u">http://bibpurl.oclc.org/web/42222</subfield>
+   <subfield code="c">FullText</subfield>
+   <subfield code="l">Online</subfield>
+   <subfield code="t">LCC</subfield>
+   <subfield code="a">P211.3.M628V575 2010</subfield>
+  </datafield>
+  <datafield tag="928" ind1=" " ind2=" ">
+   <subfield code="u">http://bibpurl.oclc.org/web/40885</subfield>
+   <subfield code="c">FullText</subfield>
+   <subfield code="l">Online</subfield>
+   <subfield code="t">LCC</subfield>
+   <subfield code="a">P211.3.M628V575 2010</subfield>
+  </datafield>
+ </record>
+</collection>

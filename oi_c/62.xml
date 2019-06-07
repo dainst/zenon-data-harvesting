@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+ <record>
+  <leader>01802cas a2200373K  4500</leader>
+  <controlfield tag="001">7798787</controlfield>
+  <controlfield tag="005">20091001125100.0</controlfield>
+  <controlfield tag="006">m        |        </controlfield>
+  <controlfield tag="007">cr |||||||||||</controlfield>
+  <controlfield tag="008">091001c19369999iluuu m s     0    0eng d</controlfield>
+  <controlfield tag="003">OLE</controlfield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(OCoLC)443090070</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+   <subfield code="a">CGU</subfield>
+   <subfield code="c">CGU</subfield>
+  </datafield>
+  <datafield tag="041" ind1="0" ind2=" ">
+   <subfield code="a">eng</subfield>
+  </datafield>
+  <datafield tag="049" ind1=" " ind2=" ">
+   <subfield code="a">CGUA</subfield>
+  </datafield>
+  <datafield tag="110" ind1="2" ind2=" ">
+   <subfield code="a">University of Chicago.</subfield>
+   <subfield code="b">Oriental Institute.</subfield>
+   <subfield code="b">Epigraphic Survey.</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="0">
+   <subfield code="a">Reliefs and inscriptions at Karnak ...</subfield>
+   <subfield code="h">[electronic resource] /</subfield>
+   <subfield code="c">by the Epigraphic Survey; field director Harold Hayden Nelson ...</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+   <subfield code="a">Chicago, Ill. :</subfield>
+   <subfield code="b">University of Chicago Press,</subfield>
+   <subfield code="c">[1936]-</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+   <subfield code="a">1 online resource (v.) :</subfield>
+   <subfield code="b">ill.</subfield>
+  </datafield>
+  <datafield tag="490" ind1="1" ind2=" ">
+   <subfield code="a">University of Chicago Oriental Institute publications</subfield>
+   <subfield code="v">vol. 25, 35</subfield>
+  </datafield>
+  <datafield tag="500" ind1=" " ind2=" ">
+   <subfield code="a">Description based on print version record.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Inscriptions, Egyptian.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Architecture</subfield>
+   <subfield code="z">Egypt</subfield>
+   <subfield code="z">Karnak.</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">Karnak (Egypt)</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Architecture.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00813346</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Inscriptions, Egyptian.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01199431</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+   <subfield code="a">Egypt</subfield>
+   <subfield code="z">Karnak.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01209775</subfield>
+  </datafield>
+  <datafield tag="776" ind1="0" ind2="8">
+   <subfield code="i">Print version:</subfield>
+   <subfield code="a">University of Chicago. Oriental Institute. Epigraphic Survey.</subfield>
+   <subfield code="t">Reliefs and inscriptions at Karnak</subfield>
+   <subfield code="w">(DLC) 36011240</subfield>
+   <subfield code="w">(OCoLC)191254918</subfield>
+   <subfield code="w">(ICU)829937</subfield>
+  </datafield>
+  <datafield tag="830" ind1=" " ind2="0">
+   <subfield code="a">University of Chicago Oriental Institute publications</subfield>
+   <subfield code="v">vol. 25, 35</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="0">
+   <subfield code="3">v.3</subfield>
+   <subfield code="u">http://oi.uchicago.edu/research/pubs/catalog/oip/oip74.html</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="0">
+   <subfield code="3">v.6</subfield>
+   <subfield code="u">http://oi.uchicago.edu/research/pubs/catalog/oip/oip107.html</subfield>
+  </datafield>
+  <datafield tag="903" ind1=" " ind2=" ">
+   <subfield code="a">UCPress</subfield>
+  </datafield>
+  <datafield tag="928" ind1=" " ind2=" ">
+   <subfield code="u">http://oi.uchicago.edu/research/pubs/catalog/oip/oip74.html</subfield>
+   <subfield code="p">v.3</subfield>
+   <subfield code="c">FullText</subfield>
+   <subfield code="l">Online</subfield>
+   <subfield code="t">LCC</subfield>
+  </datafield>
+  <datafield tag="928" ind1=" " ind2=" ">
+   <subfield code="u">http://oi.uchicago.edu/research/pubs/catalog/oip/oip107.html</subfield>
+   <subfield code="p">v.6</subfield>
+   <subfield code="c">FullText</subfield>
+   <subfield code="l">Online</subfield>
+   <subfield code="t">LCC</subfield>
+  </datafield>
+ </record>
+</collection>

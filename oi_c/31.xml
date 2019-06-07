@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+ <record>
+  <leader>03003cam a22005174a 4500</leader>
+  <controlfield tag="001">5571672</controlfield>
+  <controlfield tag="005">20120807131000.0</controlfield>
+  <controlfield tag="008">050208s2004    iluab    b    001 0 eng c</controlfield>
+  <datafield tag="020" ind1=" " ind2=" ">
+   <subfield code="a">1885923295</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(OCoLC)57587239</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+   <subfield code="a">CGU</subfield>
+   <subfield code="c">CGU</subfield>
+   <subfield code="d">UtOrBLW</subfield>
+   <subfield code="d">OrLoB-B</subfield>
+   <subfield code="d">ICU</subfield>
+  </datafield>
+  <datafield tag="042" ind1=" " ind2=" ">
+   <subfield code="a">pcc</subfield>
+  </datafield>
+  <datafield tag="049" ind1=" " ind2=" ">
+   <subfield code="a">CGUA</subfield>
+  </datafield>
+  <datafield tag="050" ind1=" " ind2="4">
+   <subfield code="a">DS99.S9</subfield>
+   <subfield code="b">W55 2004</subfield>
+  </datafield>
+  <datafield tag="100" ind1="1" ind2=" ">
+   <subfield code="a">Wilkinson, T. J.</subfield>
+   <subfield code="q">(Tony J.)</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="0">
+   <subfield code="a">On the margin of the Euphrates :</subfield>
+   <subfield code="b">settlement and land use at Tell es-Sweyhat and in the upper Lake Assad area, Syria /</subfield>
+   <subfield code="c">by Tony J. Wilkinson ; with contributions by Naomi F. Miller, Clemens D. Reichel and Donald Whitcomb.</subfield>
+  </datafield>
+  <datafield tag="246" ind1="3" ind2=" ">
+   <subfield code="a">On the margin of the Euphrates</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+   <subfield code="a">Chicago :</subfield>
+   <subfield code="b">Oriental Institute of the University of Chicago,</subfield>
+   <subfield code="c">2004.</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+   <subfield code="a">lii, 276 p., 16 p. of plates :</subfield>
+   <subfield code="b">ill., maps ;</subfield>
+   <subfield code="c">31 cm.</subfield>
+  </datafield>
+  <datafield tag="440" ind1=" " ind2="0">
+   <subfield code="a">Excavations at Tell es-Sweyhat, Syria</subfield>
+   <subfield code="v">v. 1</subfield>
+  </datafield>
+  <datafield tag="490" ind1="1" ind2=" ">
+   <subfield code="a">Oriental Institute publications ;</subfield>
+   <subfield code="v">v. 124</subfield>
+  </datafield>
+  <datafield tag="504" ind1=" " ind2=" ">
+   <subfield code="a">Includes bibliographical references (p. xxiii-lii) and index.</subfield>
+  </datafield>
+  <datafield tag="505" ind1="0" ind2="0">
+   <subfield code="g">1.</subfield>
+   <subfield code="t">Introduction --</subfield>
+   <subfield code="g">2.</subfield>
+   <subfield code="t">The physical environment --</subfield>
+   <subfield code="g">3.</subfield>
+   <subfield code="t">Land use and the agricultural economy --</subfield>
+   <subfield code="g">4.</subfield>
+   <subfield code="t">The archaeological landscape I --</subfield>
+   <subfield code="g">5.</subfield>
+   <subfield code="t">The archaeological landscape II : wine presses, quarries, tombs, and linear hollows --</subfield>
+   <subfield code="g">6.</subfield>
+   <subfield code="t">The ceramic sequence from surveyed sites /</subfield>
+   <subfield code="r">Jons J. Wilkinson and Donald Whitcomb --</subfield>
+   <subfield code="g">7.</subfield>
+   <subfield code="t">The evolution of the settlement pattern around tell ES-Sweyhat --</subfield>
+   <subfield code="g">8.</subfield>
+   <subfield code="t">The ancient agricultural economy : biological remains --</subfield>
+   <subfield code="g">9.</subfield>
+   <subfield code="t">Tells ES-Sweyhat in its regional context --</subfield>
+   <subfield code="g">App. A.</subfield>
+   <subfield code="t">Sweyhat survey site catalog --</subfield>
+   <subfield code="g">App. B.</subfield>
+   <subfield code="t">Site gazetteer /</subfield>
+   <subfield code="r">Clemens D. Reichel --</subfield>
+   <subfield code="g">App. C.</subfield>
+   <subfield code="t">Selected soil and sediment descriptions.</subfield>
+  </datafield>
+  <datafield tag="530" ind1=" " ind2=" ">
+   <subfield code="a">Also available on the Internet.</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">Sweyhat, Tell (Syria)</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Excavations (Archaeology)</subfield>
+   <subfield code="z">Syria</subfield>
+   <subfield code="z">Sweyhat, Tell.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Excavations (Archaeology)</subfield>
+   <subfield code="z">Syria.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Human settlements</subfield>
+   <subfield code="z">Syria</subfield>
+   <subfield code="x">History.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Land use</subfield>
+   <subfield code="z">Syria</subfield>
+   <subfield code="x">History.</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">Sweyhat, Tell (Syria)</subfield>
+   <subfield code="x">Antiquities.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Excavations (Archaeology)</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00917564</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Human settlements.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00963433</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Land use.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00991472</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+   <subfield code="a">Syria.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01208757</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+   <subfield code="a">Syria</subfield>
+   <subfield code="z">Tell Sweyhat.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01337723</subfield>
+  </datafield>
+  <datafield tag="655" ind1=" " ind2="7">
+   <subfield code="a">History.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01411628</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Miller, Naomi Frances.</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Reichel, Clemens D.</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Whitcomb, Donald S.</subfield>
+  </datafield>
+  <datafield tag="710" ind1="2" ind2=" ">
+   <subfield code="a">University of Chicago.</subfield>
+   <subfield code="b">Oriental Institute.</subfield>
+  </datafield>
+  <datafield tag="830" ind1=" " ind2="0">
+   <subfield code="a">University of Chicago Oriental Institute publications</subfield>
+   <subfield code="v">v. 124.</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="1">
+   <subfield code="u">http://oi.uchicago.edu/research/pubs/catalog/oip/oip124.html</subfield>
+  </datafield>
+  <datafield tag="903" ind1=" " ind2=" ">
+   <subfield code="a">MARS</subfield>
+  </datafield>
+  <datafield tag="929" ind1=" " ind2=" ">
+   <subfield code="t">LCC</subfield>
+   <subfield code="c">Gen</subfield>
+   <subfield code="b">f</subfield>
+   <subfield code="a">DS99.S9W55 2004</subfield>
+   <subfield code="l">JRL</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">69919055</subfield>
+  </datafield>
+  <datafield tag="928" ind1=" " ind2=" ">
+   <subfield code="u">http://oi.uchicago.edu/research/pubs/catalog/oip/oip124.html</subfield>
+   <subfield code="c">FullText</subfield>
+   <subfield code="l">Online</subfield>
+   <subfield code="t">LCC</subfield>
+   <subfield code="a">DS99.S9W55 2004</subfield>
+  </datafield>
+ </record>
+</collection>

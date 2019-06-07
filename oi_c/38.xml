@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+ <record>
+  <leader>02629cam a2200481Ia 4500</leader>
+  <controlfield tag="001">8355428</controlfield>
+  <controlfield tag="005">20110329161800.0</controlfield>
+  <controlfield tag="006">m        d        </controlfield>
+  <controlfield tag="007">cr |||||||||||</controlfield>
+  <controlfield tag="008">110329s1995    iluaef  obc   000 0 eng  </controlfield>
+  <datafield tag="020" ind1=" " ind2=" ">
+   <subfield code="a">0918986982 (pbk.)</subfield>
+  </datafield>
+  <datafield tag="020" ind1=" " ind2=" ">
+   <subfield code="a">9780918986986 (pbk.)</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(OCoLC)709782623</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">8355428</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+   <subfield code="a">CGU</subfield>
+   <subfield code="c">CGU</subfield>
+  </datafield>
+  <datafield tag="043" ind1=" " ind2=" ">
+   <subfield code="a">f-ua---</subfield>
+   <subfield code="a">n-us-il</subfield>
+  </datafield>
+  <datafield tag="049" ind1=" " ind2=" ">
+   <subfield code="a">CGUA</subfield>
+  </datafield>
+  <datafield tag="050" ind1="0" ind2="0">
+   <subfield code="a">DT68.8</subfield>
+   <subfield code="b">.U55 1995</subfield>
+  </datafield>
+  <datafield tag="050" ind1="1" ind2="4">
+   <subfield code="a">DS42</subfield>
+   <subfield code="b">.C43o no.27</subfield>
+  </datafield>
+  <datafield tag="110" ind1="2" ind2=" ">
+   <subfield code="a">University of Chicago.</subfield>
+   <subfield code="b">Oriental Institute.</subfield>
+   <subfield code="b">Epigraphic Survey.</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="4">
+   <subfield code="a">The registry of the photographic archives of the Epigraphic Survey</subfield>
+   <subfield code="h">[electronic resource] /</subfield>
+   <subfield code="c">by the Epigraphic Survey ; with plates from key plans showing locations of Theban Temple decorations by Harold H. Nelson.</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+   <subfield code="a">Chicago, Ill. :</subfield>
+   <subfield code="b">Oriental Institute of the University of Chicago,</subfield>
+   <subfield code="c">c1995.</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+   <subfield code="a">1 online resource (xvii, 189 p., 38 p. of plates :</subfield>
+   <subfield code="b">ill., plans)</subfield>
+  </datafield>
+  <datafield tag="490" ind1="1" ind2=" ">
+   <subfield code="a">Oriental Institute communications,</subfield>
+   <subfield code="x">0146-678X ;</subfield>
+   <subfield code="v">no. 27</subfield>
+  </datafield>
+  <datafield tag="500" ind1=" " ind2=" ">
+   <subfield code="a">&quot;Published with the assistance of the Getty Grant Program.&quot;</subfield>
+  </datafield>
+  <datafield tag="504" ind1=" " ind2=" ">
+   <subfield code="a">Includes bibliographical references (p. xvii).</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Temples</subfield>
+   <subfield code="z">Egypt</subfield>
+   <subfield code="v">Photographs</subfield>
+   <subfield code="v">Catalogs.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Bas-relief</subfield>
+   <subfield code="z">Egypt</subfield>
+   <subfield code="v">Photographs</subfield>
+   <subfield code="v">Catalogs.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Inscriptions, Egyptian</subfield>
+   <subfield code="v">Photographs</subfield>
+   <subfield code="v">Catalogs.</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">Egypt</subfield>
+   <subfield code="x">Antiquities</subfield>
+   <subfield code="v">Photographs</subfield>
+   <subfield code="v">Catalogs.</subfield>
+  </datafield>
+  <datafield tag="610" ind1="2" ind2="7">
+   <subfield code="a">University of Chicago.</subfield>
+   <subfield code="b">Oriental Institute.</subfield>
+   <subfield code="b">Epigraphic Survey.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00539486</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Antiquities.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00810745</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Bas-relief.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00827871</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Inscriptions, Egyptian.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01199431</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Photograph collections.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01061600</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Temples.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01147397</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+   <subfield code="a">Egypt.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01208755</subfield>
+  </datafield>
+  <datafield tag="610" ind1="2" ind2="0">
+   <subfield code="a">University of Chicago.</subfield>
+   <subfield code="b">Oriental Institute.</subfield>
+   <subfield code="b">Epigraphic Survey</subfield>
+   <subfield code="x">Photograph collections.</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Nelson, Harold Hayden,</subfield>
+   <subfield code="d">1878-1954.</subfield>
+  </datafield>
+  <datafield tag="776" ind1="0" ind2="8">
+   <subfield code="i">Print version:</subfield>
+   <subfield code="a">University of Chicago. Oriental Institute. Epigraphic Survey.</subfield>
+   <subfield code="t">Registry of the photographic archives of the Epigraphic Survey.</subfield>
+   <subfield code="d">Chicago, Ill. : Oriental Institute of the University of Chicago, c1995</subfield>
+   <subfield code="z">0918986982</subfield>
+   <subfield code="w">(DLC) 94069120</subfield>
+   <subfield code="w">(OCoLC)32924569</subfield>
+   <subfield code="w">(ICU)7992163</subfield>
+  </datafield>
+  <datafield tag="830" ind1=" " ind2="0">
+   <subfield code="a">Oriental Institute communications ;</subfield>
+   <subfield code="v">no. 27.</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="0">
+   <subfield code="u">http://bibpurl.oclc.org/web/42236</subfield>
+  </datafield>
+  <datafield tag="928" ind1=" " ind2=" ">
+   <subfield code="u">http://bibpurl.oclc.org/web/42236</subfield>
+   <subfield code="c">FullText</subfield>
+   <subfield code="l">Online</subfield>
+   <subfield code="t">LCC</subfield>
+   <subfield code="a">DT68.8.U55 1995</subfield>
+  </datafield>
+ </record>
+</collection>

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+ <record>
+  <leader>03170nam a2200505 a 4500</leader>
+  <controlfield tag="001">5724150</controlfield>
+  <controlfield tag="005">20090827100300.0</controlfield>
+  <controlfield tag="007">co mg---------</controlfield>
+  <controlfield tag="008">050504s2004    iluabf   b    000 0 eng c</controlfield>
+  <datafield tag="010" ind1=" " ind2=" ">
+   <subfield code="a">  2004114432</subfield>
+  </datafield>
+  <datafield tag="020" ind1=" " ind2=" ">
+   <subfield code="a">1885923317</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+   <subfield code="a">EMT</subfield>
+   <subfield code="c">EMT</subfield>
+   <subfield code="d">LRU</subfield>
+   <subfield code="d">OCL</subfield>
+   <subfield code="d">UtOrBLW</subfield>
+   <subfield code="d">OrLoB-B</subfield>
+  </datafield>
+  <datafield tag="042" ind1=" " ind2=" ">
+   <subfield code="a">pcc</subfield>
+  </datafield>
+  <datafield tag="043" ind1=" " ind2=" ">
+   <subfield code="a">a-is---</subfield>
+  </datafield>
+  <datafield tag="049" ind1=" " ind2=" ">
+   <subfield code="a">CGUA</subfield>
+  </datafield>
+  <datafield tag="050" ind1=" " ind2="4">
+   <subfield code="a">DS110.M4</subfield>
+   <subfield code="b">H37 2004</subfield>
+  </datafield>
+  <datafield tag="100" ind1="1" ind2=" ">
+   <subfield code="a">Harrison, Timothy.</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="0">
+   <subfield code="a">Megiddo 3 :</subfield>
+   <subfield code="b">final report on the stratum VI excavations /</subfield>
+   <subfield code="c">by Timothy P. Harrison ; with contributions by Douglas L. Esse ... [et al.].</subfield>
+  </datafield>
+  <datafield tag="246" ind1="1" ind2=" ">
+   <subfield code="i">Title on CD-ROM:</subfield>
+   <subfield code="a">OIP 127 Appendix D</subfield>
+  </datafield>
+  <datafield tag="246" ind1="3" ind2=" ">
+   <subfield code="a">Megiddo III</subfield>
+  </datafield>
+  <datafield tag="246" ind1="3" ind2=" ">
+   <subfield code="a">Megiddo Three</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+   <subfield code="a">Chicago, Ill. :</subfield>
+   <subfield code="b">Oriental Institute of the University of Chicago,</subfield>
+   <subfield code="c">2004.</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+   <subfield code="a">xxxii, 255 p., [80] p. of plates :</subfield>
+   <subfield code="b">ill., maps (some col.) ;</subfield>
+   <subfield code="c">31 x 24 cm. +</subfield>
+   <subfield code="e">1 CD-ROM (4 3/4 in.).</subfield>
+  </datafield>
+  <datafield tag="490" ind1="1" ind2=" ">
+   <subfield code="a">The University of Chicago Oriental Institute publications,</subfield>
+   <subfield code="x">0069-3367 ;</subfield>
+   <subfield code="v">v. 127</subfield>
+  </datafield>
+  <datafield tag="500" ind1=" " ind2=" ">
+   <subfield code="a">Accompanying CD-ROM: &quot;Appendix D is a digital archive formatted on a hybrid format CD containing electronic copies of the primary field records, field photographs, and the artifact database. Shape files created in ArcView GIS have also been stored on the CD. For those without licensed access, it is still possible to examine (though not edit) the GIS data using the viewing program ArcExplorer. Some data can be viewed using a Web broweser in Windows or Mac OSX&quot;--P. 175.</subfield>
+  </datafield>
+  <datafield tag="504" ind1=" " ind2=" ">
+   <subfield code="a">Includes bibliographical references (p. xxiii-xxxii).</subfield>
+  </datafield>
+  <datafield tag="505" ind1="0" ind2="0">
+   <subfield code="t">Foreword /</subfield>
+   <subfield code="r">Lawrence E. Stager --</subfield>
+   <subfield code="g">Ch. 1.</subfield>
+   <subfield code="t">History of excavations /</subfield>
+   <subfield code="r">Douglas L. Esse and Timothy P. Harrison --</subfield>
+   <subfield code="g">Ch. 2.</subfield>
+   <subfield code="t">Stratigraphy and chronology --</subfield>
+   <subfield code="g">Ch. 3.</subfield>
+   <subfield code="t">The architecture --</subfield>
+   <subfield code="g">Ch. 4.</subfield>
+   <subfield code="t">The pottery --</subfield>
+   <subfield code="g">Ch. 5.</subfield>
+   <subfield code="t">Elemental analysis of the stratum VI pottery /</subfield>
+   <subfield code="r">Ronald G. V. Hancock and Timothy P. Harrison --</subfield>
+   <subfield code="g">Ch. 6.</subfield>
+   <subfield code="t">The small finds /</subfield>
+   <subfield code="r">Patricia Paice --</subfield>
+   <subfield code="g">Ch. 7.</subfield>
+   <subfield code="t">Cultural and historical synthesis --</subfield>
+   <subfield code="g">App. A.</subfield>
+   <subfield code="t">Locus index --</subfield>
+   <subfield code="g">App. B.</subfield>
+   <subfield code="t">Pottery register --</subfield>
+   <subfield code="g">App. C.</subfield>
+   <subfield code="t">Small finds register --</subfield>
+   <subfield code="g">App. D.</subfield>
+   <subfield code="t">Digital archive (CD in back cover) /</subfield>
+   <subfield code="r">Andrew Graham.</subfield>
+  </datafield>
+  <datafield tag="538" ind1=" " ind2=" ">
+   <subfield code="a">System requirements for accompanying disc: CD-ROM drive to view image files, Web browser, ArcView GIS or ArcExplorer.</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">Megiddo.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Bronze age.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00839439</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Excavations (Archaeology)</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00917564</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Iron age.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00979145</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+   <subfield code="a">Israel.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01204236</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+   <subfield code="a">Israel</subfield>
+   <subfield code="z">Megiddo (Extinct city)</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01896865</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Iron age</subfield>
+   <subfield code="z">Israel</subfield>
+   <subfield code="z">Megiddo (Extinct city)</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Excavations (Archaeology)</subfield>
+   <subfield code="z">Israel</subfield>
+   <subfield code="z">Megiddo (Extinct city)</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Esse, Douglas L.,</subfield>
+   <subfield code="d">1949-</subfield>
+  </datafield>
+  <datafield tag="710" ind1="2" ind2=" ">
+   <subfield code="a">University of Chicago.</subfield>
+   <subfield code="b">Oriental Institute.</subfield>
+  </datafield>
+  <datafield tag="830" ind1=" " ind2="0">
+   <subfield code="a">University of Chicago Oriental Institute publications ;</subfield>
+   <subfield code="v">v. 127.</subfield>
+  </datafield>
+  <datafield tag="903" ind1=" " ind2=" ">
+   <subfield code="a">MARS</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(OCoLC)61253697</subfield>
+  </datafield>
+  <datafield tag="929" ind1=" " ind2=" ">
+   <subfield code="t">LCC</subfield>
+   <subfield code="c">JRLASR</subfield>
+   <subfield code="a">DS110.M4H37 2004</subfield>
+   <subfield code="l">ASR</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">43571382</subfield>
+  </datafield>
+  <datafield tag="929" ind1=" " ind2=" ">
+   <subfield code="t">LCC</subfield>
+   <subfield code="c">Gen</subfield>
+   <subfield code="b">f</subfield>
+   <subfield code="a">DS110.M4H37 2004</subfield>
+   <subfield code="l">JRL</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">70591503</subfield>
+  </datafield>
+ </record>
+</collection>

@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+ <record>
+  <leader>     cam a22     4  4500</leader>
+  <controlfield tag="001">330638386</controlfield>
+  <controlfield tag="003">CHVBK</controlfield>
+  <controlfield tag="005">20190309220823.0</controlfield>
+  <controlfield tag="008">150219s2014    xxu           10    eng|d</controlfield>
+  <datafield tag="020" ind1=" " ind2=" ">
+   <subfield code="a">978-1-61491-024-4</subfield>
+  </datafield>
+  <datafield tag="020" ind1=" " ind2=" ">
+   <subfield code="a">1-61491-024-3</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(IDSBB)006313751</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(RERO)R008037920</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(OCoLC)893451577</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+   <subfield code="a">BTCTA</subfield>
+   <subfield code="d">SzZuIDS BS/BE A110</subfield>
+   <subfield code="e">kids</subfield>
+  </datafield>
+  <datafield tag="050" ind1=" " ind2="4">
+   <subfield code="a">DT87.15</subfield>
+   <subfield code="b">.T44 2010</subfield>
+  </datafield>
+  <datafield tag="072" ind1=" " ind2="7">
+   <subfield code="a">s1ar</subfield>
+   <subfield code="2">rero</subfield>
+  </datafield>
+  <datafield tag="082" ind1="1" ind2=" ">
+   <subfield code="a">930</subfield>
+   <subfield code="2">15</subfield>
+  </datafield>
+  <datafield tag="082" ind1="0" ind2="4">
+   <subfield code="a">932/.014</subfield>
+   <subfield code="2">23</subfield>
+  </datafield>
+  <datafield tag="245" ind1="0" ind2="0">
+   <subfield code="a">Creativity and Innovation in the Reign of Hatshepsut</subfield>
+   <subfield code="b">Papers from the Theban Workshop 2010</subfield>
+   <subfield code="c">edited by José M. Galán ... [et al.]</subfield>
+  </datafield>
+  <datafield tag="264" ind1=" " ind2="1">
+   <subfield code="a">Chicago</subfield>
+   <subfield code="b">Oriental Institute of the University of Chicago</subfield>
+   <subfield code="c">2014</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+   <subfield code="a">441 S.</subfield>
+   <subfield code="b">Ill.</subfield>
+  </datafield>
+  <datafield tag="490" ind1="1" ind2=" ">
+   <subfield code="a">Studies in ancient Oriental civilization</subfield>
+   <subfield code="v">No. 69</subfield>
+   <subfield code="i">69</subfield>
+   <subfield code="w">(IDSBB)000107167</subfield>
+   <subfield code="9">110378474</subfield>
+  </datafield>
+  <datafield tag="500" ind1=" " ind2=" ">
+   <subfield code="a">Occasional Proceedings of the Theban Workshop</subfield>
+  </datafield>
+  <datafield tag="504" ind1=" " ind2=" ">
+   <subfield code="a">Includes bibliographical references.</subfield>
+  </datafield>
+  <datafield tag="600" ind1="0" ind2="0">
+   <subfield code="a">Hatshepsut</subfield>
+   <subfield code="c">Queen of Egypt</subfield>
+  </datafield>
+  <datafield tag="600" ind1="0" ind2="7">
+   <subfield code="a">Hatshepsout</subfield>
+   <subfield code="0">(RERO)A009996152</subfield>
+   <subfield code="2">rero</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Creative ability</subfield>
+   <subfield code="z">Egypt</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">Egypt</subfield>
+   <subfield code="x">Civilization</subfield>
+   <subfield code="y">To 332 B.C</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">Egypt</subfield>
+   <subfield code="x">History</subfield>
+   <subfield code="y">Eighteenth dynasty, ca. 1570-1320 B.C</subfield>
+  </datafield>
+  <datafield tag="655" ind1=" " ind2="7">
+   <subfield code="a">Konferenzschrift</subfield>
+   <subfield code="z">Granada</subfield>
+   <subfield code="y">2010</subfield>
+   <subfield code="2">gnd-content</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Galán</subfield>
+   <subfield code="D">José M.</subfield>
+   <subfield code="d">1963-</subfield>
+   <subfield code="0">(DE-588)1066213879</subfield>
+  </datafield>
+  <datafield tag="711" ind1="2" ind2=" ">
+   <subfield code="a">Theban Workshop</subfield>
+   <subfield code="0">(DE-588)1091784477</subfield>
+  </datafield>
+  <datafield tag="830" ind1=" " ind2="0">
+   <subfield code="a">Studies in Ancient Oriental Civilization</subfield>
+   <subfield code="v">69</subfield>
+  </datafield>
+  <datafield tag="912" ind1=" " ind2="7">
+   <subfield code="a">ae</subfield>
+   <subfield code="2">SzZuIDS BS/BE</subfield>
+  </datafield>
+  <datafield tag="950" ind1=" " ind2=" ">
+   <subfield code="B">IDSBB</subfield>
+   <subfield code="P">490</subfield>
+   <subfield code="E">0-</subfield>
+   <subfield code="a">Studies in ancient Oriental civilization</subfield>
+   <subfield code="v">No. 69</subfield>
+   <subfield code="i">69</subfield>
+   <subfield code="w">(IDSBB)000107167</subfield>
+   <subfield code="9">110378474</subfield>
+  </datafield>
+  <datafield tag="950" ind1=" " ind2=" ">
+   <subfield code="B">IDSBB</subfield>
+   <subfield code="P">700</subfield>
+   <subfield code="E">1-</subfield>
+   <subfield code="a">Galán</subfield>
+   <subfield code="D">José M.</subfield>
+   <subfield code="d">1963-</subfield>
+   <subfield code="0">(DE-588)1066213879</subfield>
+  </datafield>
+  <datafield tag="950" ind1=" " ind2=" ">
+   <subfield code="B">IDSBB</subfield>
+   <subfield code="P">711</subfield>
+   <subfield code="E">2-</subfield>
+   <subfield code="a">Theban Workshop</subfield>
+   <subfield code="0">(DE-588)1091784477</subfield>
+  </datafield>
+  <datafield tag="950" ind1=" " ind2=" ">
+   <subfield code="B">RERO</subfield>
+   <subfield code="P">490</subfield>
+   <subfield code="E">1-</subfield>
+   <subfield code="a">Studies in ancient oriental civilization</subfield>
+   <subfield code="v">Nbr 69</subfield>
+  </datafield>
+  <datafield tag="950" ind1=" " ind2=" ">
+   <subfield code="B">RERO</subfield>
+   <subfield code="P">700</subfield>
+   <subfield code="E">1-</subfield>
+   <subfield code="a">Bryan</subfield>
+   <subfield code="D">Betsy Morrell</subfield>
+   <subfield code="0">(RERO)A003052081</subfield>
+  </datafield>
+  <datafield tag="950" ind1=" " ind2=" ">
+   <subfield code="B">RERO</subfield>
+   <subfield code="P">700</subfield>
+   <subfield code="E">1-</subfield>
+   <subfield code="a">Dorman</subfield>
+   <subfield code="D">Peter F.</subfield>
+   <subfield code="0">(RERO)A003187699</subfield>
+  </datafield>
+  <datafield tag="950" ind1=" " ind2=" ">
+   <subfield code="B">RERO</subfield>
+   <subfield code="P">700</subfield>
+   <subfield code="E">1-</subfield>
+   <subfield code="a">Galán</subfield>
+   <subfield code="D">José M.</subfield>
+   <subfield code="0">(RERO)A011669400</subfield>
+  </datafield>
+  <datafield tag="950" ind1=" " ind2=" ">
+   <subfield code="B">RERO</subfield>
+   <subfield code="P">711</subfield>
+   <subfield code="E">2-</subfield>
+   <subfield code="a">Theban Workshop</subfield>
+   <subfield code="d">(2010</subfield>
+   <subfield code="c">Granada)</subfield>
+   <subfield code="0">(RERO)A024996817</subfield>
+  </datafield>
+  <datafield tag="950" ind1=" " ind2=" ">
+   <subfield code="B">RERO</subfield>
+   <subfield code="P">830</subfield>
+   <subfield code="E">--</subfield>
+   <subfield code="a">Studies in Ancient Oriental Civilization</subfield>
+   <subfield code="v">69</subfield>
+  </datafield>
+  <datafield tag="900" ind1=" " ind2="7">
+   <subfield code="a">Metadata rights reserved</subfield>
+   <subfield code="2">rero</subfield>
+  </datafield>
+  <datafield tag="986" ind1=" " ind2=" ">
+   <subfield code="a">SWISSBIB</subfield>
+   <subfield code="b">330638386</subfield>
+  </datafield>
+  <datafield tag="898" ind1=" " ind2=" ">
+   <subfield code="a">BK020800</subfield>
+   <subfield code="b">XK020000</subfield>
+   <subfield code="c">XK020000</subfield>
+  </datafield>
+  <datafield tag="949" ind1=" " ind2=" ">
+   <subfield code="B">RERO</subfield>
+   <subfield code="F">RE61034</subfield>
+   <subfield code="b">RE61034</subfield>
+   <subfield code="c">RE610340003</subfield>
+   <subfield code="j">EG:Coll*SAOC</subfield>
+   <subfield code="s">BGE Ga 5024/69</subfield>
+  </datafield>
+  <datafield tag="949" ind1=" " ind2=" ">
+   <subfield code="B">IDSBB</subfield>
+   <subfield code="F">A130</subfield>
+   <subfield code="b">A131</subfield>
+   <subfield code="c">131FM</subfield>
+   <subfield code="j">AEG S Galá (2014)</subfield>
+   <subfield code="x">NELA1311502</subfield>
+  </datafield>
+ </record>
+</collection>

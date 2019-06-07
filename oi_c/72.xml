@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+ <record>
+  <leader>02675cam a2200529Ia 4500</leader>
+  <controlfield tag="001">1942430</controlfield>
+  <controlfield tag="005">20100420141100.0</controlfield>
+  <controlfield tag="008">790604m19309999iluaef        000 0 eng d</controlfield>
+  <controlfield tag="003">OLE</controlfield>
+  <datafield tag="010" ind1=" " ind2=" ">
+   <subfield code="a">   30022837 </subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(OCoLC)5034158</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+   <subfield code="a">COO</subfield>
+   <subfield code="c">COO</subfield>
+   <subfield code="d">ITC</subfield>
+   <subfield code="d">OCLCQ</subfield>
+   <subfield code="d">OCLCG</subfield>
+   <subfield code="d">CGU</subfield>
+   <subfield code="d">UtOrBLW</subfield>
+  </datafield>
+  <datafield tag="049" ind1=" " ind2=" ">
+   <subfield code="a">CGUA</subfield>
+  </datafield>
+  <datafield tag="050" ind1=" " ind2="4">
+   <subfield code="a">DT73.M3</subfield>
+   <subfield code="b">C42</subfield>
+  </datafield>
+  <datafield tag="110" ind1="2" ind2=" ">
+   <subfield code="a">University of Chicago.</subfield>
+   <subfield code="b">Oriental Institute.</subfield>
+   <subfield code="b">Epigraphic Survey.</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="0">
+   <subfield code="a">Medinet Habu /</subfield>
+   <subfield code="c">[field director, Harold Hayden Nelson].</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+   <subfield code="a">Chicago, IL :</subfield>
+   <subfield code="b">University of Chicago Press,</subfield>
+   <subfield code="c">1930-</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+   <subfield code="a">v. :</subfield>
+   <subfield code="b">ill., plans, plates (part double, some col.) ;</subfield>
+   <subfield code="c">61 cm.</subfield>
+  </datafield>
+  <datafield tag="440" ind1=" " ind2="0">
+   <subfield code="a">University of Chicago Oriental Institute publications ;</subfield>
+   <subfield code="v">v. 8-9, 23, 51, 83-84, 93-94, 136</subfield>
+  </datafield>
+  <datafield tag="505" ind1="1" ind2=" ">
+   <subfield code="a">1. Earlier historical records of Ramses III -- 2. Later historical records of Ramses III -- 3. The Calendar, the &quot;slaughter house,&quot; and minor records of Ramses III -- 4. Festival scenes of Ramses III -- 5. The Temple proper : pt. 1 : The portico, the treasury, and chapels adjoining the first hypostyle hall with marginal material from the forecourts -- 6. The Temple proper : pt. 2 : The Re chapel, the royal mortuary complex and adjacent rooms with miscellaneous materials from the pylons, the forecourts, and the first hypostyle hall -- 7. The Temple proper : pt. 3 : The third hypostyle hall and all rooms accessible from it with friezes of scenes from the roof terrances and exterior walls of the temple -- 8. The Eastern high gate, with translations of texts ; plates 591-660 -- 9. The Eighteenth Dynasty temple. Part I. The inner sanctuaries, with translations of texts, commentary, and glossary.</subfield>
+  </datafield>
+  <datafield tag="600" ind1="0" ind2="0">
+   <subfield code="a">Ramses</subfield>
+   <subfield code="b">III,</subfield>
+   <subfield code="c">King of Egypt.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Inscriptions, Egyptian.</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">Medinet Habu Site (Egypt)</subfield>
+  </datafield>
+  <datafield tag="600" ind1="0" ind2="7">
+   <subfield code="a">Ramses</subfield>
+   <subfield code="b">III,</subfield>
+   <subfield code="c">King of Egypt.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00194099</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Inscriptions, Egyptian.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01199431</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Nelson, Harold Hayden,</subfield>
+   <subfield code="d">1878-1954.</subfield>
+  </datafield>
+  <datafield tag="776" ind1="0" ind2="8">
+   <subfield code="i">Online version:</subfield>
+   <subfield code="a">University of Chicago. Oriental Institute. Epigraphic Survey.</subfield>
+   <subfield code="t">Medinet Habu</subfield>
+   <subfield code="w">(OCoLC)443076275</subfield>
+   <subfield code="w">(ICU)7798784</subfield>
+  </datafield>
+  <datafield tag="903" ind1=" " ind2=" ">
+   <subfield code="a">MARS</subfield>
+  </datafield>
+  <datafield tag="903" ind1=" " ind2=" ">
+   <subfield code="a">UCPress</subfield>
+  </datafield>
+  <datafield tag="929" ind1=" " ind2=" ">
+   <subfield code="t">LCC</subfield>
+   <subfield code="c">JRLASR</subfield>
+   <subfield code="b">xf</subfield>
+   <subfield code="a">DT73.M3C5</subfield>
+   <subfield code="l">ASR</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">27790887</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">21449014</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">74138404</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">16192831</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">15797363</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">15734460</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">42577140</subfield>
+  </datafield>
+  <datafield tag="929" ind1=" " ind2=" ">
+   <subfield code="t">LCC</subfield>
+   <subfield code="c">JRLASR</subfield>
+   <subfield code="b">xf</subfield>
+   <subfield code="a">DT73.M3C5</subfield>
+   <subfield code="l">ASR</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">19857919</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">21428826</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">27792647</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">74138411</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">27789984</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">092119243</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">44483823</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">16570900</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">21428908</subfield>
+  </datafield>
+ </record>
+</collection>

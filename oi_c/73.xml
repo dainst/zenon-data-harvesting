@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+ <record>
+  <leader>02777cam a2200529Ka 4500</leader>
+  <controlfield tag="001">8352493</controlfield>
+  <controlfield tag="005">20140619135400.0</controlfield>
+  <controlfield tag="006">m        d        </controlfield>
+  <controlfield tag="007">cr bn||||||abp</controlfield>
+  <controlfield tag="007">cr bn||||||ada</controlfield>
+  <controlfield tag="008">100318m19601971iluab   ob    001 0 eng d</controlfield>
+  <controlfield tag="003">OLE</controlfield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(OCoLC)561352277</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">8352493</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+   <subfield code="a">OCLCE</subfield>
+   <subfield code="b">eng</subfield>
+   <subfield code="c">OCLCE</subfield>
+   <subfield code="d">OCLCQ</subfield>
+   <subfield code="d">CGU</subfield>
+  </datafield>
+  <datafield tag="042" ind1=" " ind2=" ">
+   <subfield code="a">dlr</subfield>
+  </datafield>
+  <datafield tag="043" ind1=" " ind2=" ">
+   <subfield code="a">a-tu---</subfield>
+  </datafield>
+  <datafield tag="049" ind1=" " ind2=" ">
+   <subfield code="a">CGUA</subfield>
+  </datafield>
+  <datafield tag="050" ind1=" " ind2="4">
+   <subfield code="a">DS99.A6</subfield>
+   <subfield code="b">E9</subfield>
+  </datafield>
+  <datafield tag="050" ind1=" " ind2="4">
+   <subfield code="a">GN855.T82</subfield>
+   <subfield code="b">B73</subfield>
+  </datafield>
+  <datafield tag="082" ind1="0" ind2="4">
+   <subfield code="a">913.39/4</subfield>
+  </datafield>
+  <datafield tag="245" ind1="0" ind2="0">
+   <subfield code="a">Excavations in the Plain of Antioch</subfield>
+   <subfield code="h">[electronic resource].</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+   <subfield code="a">Chicago :</subfield>
+   <subfield code="b">University of Chicago Press,</subfield>
+   <subfield code="c">1960-1971.</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+   <subfield code="a">1 online resource (2 v.) :</subfield>
+   <subfield code="b">ill. (some col.), maps</subfield>
+  </datafield>
+  <datafield tag="490" ind1="1" ind2=" ">
+   <subfield code="a">University of Chicago Oriental Institute publications ;</subfield>
+   <subfield code="v">v. 61</subfield>
+  </datafield>
+  <datafield tag="500" ind1=" " ind2=" ">
+   <subfield code="a">Pagination: v. 1: xxvii, 601 p., 89 plates; v. 2: xiv, 66 p., 118 plates.</subfield>
+  </datafield>
+  <datafield tag="504" ind1=" " ind2=" ">
+   <subfield code="a">Includes bibliographical references and index.</subfield>
+  </datafield>
+  <datafield tag="505" ind1="0" ind2=" ">
+   <subfield code="a">1. The earlier assemblages, phases A-J / by Robert J. Braidwood and Linda S. Braidwood, with appendixes by Joan Crowfoot Payne and Hans Helbaek, and technical notes by Frederick R. Matson and other specialists -- 2. The structural remains of the later phases, Chatal Hüyük, Tell Al-Judaidah, and Tell Taʻyinat / by Richard C. Haines.</subfield>
+  </datafield>
+  <datafield tag="506" ind1=" " ind2=" ">
+   <subfield code="3">Use copy</subfield>
+   <subfield code="f">Restrictions unspecified</subfield>
+   <subfield code="2">star</subfield>
+   <subfield code="5">MiAaHDL</subfield>
+  </datafield>
+  <datafield tag="533" ind1=" " ind2=" ">
+   <subfield code="a">Electronic reproduction.</subfield>
+   <subfield code="b">[S.l.] :</subfield>
+   <subfield code="c">HathiTrust Digital Library,</subfield>
+   <subfield code="d">2010.</subfield>
+   <subfield code="5">MiAaHDL</subfield>
+  </datafield>
+  <datafield tag="538" ind1=" " ind2=" ">
+   <subfield code="a">Master and use copy. Digital master created according to Benchmark for Faithful Digital Reproductions of Monographs and Serials, Version 1. Digital Library Federation, December 2002.</subfield>
+   <subfield code="u">http://purl.oclc.org/DLF/benchrepro0212</subfield>
+   <subfield code="5">MiAaHDL</subfield>
+  </datafield>
+  <datafield tag="583" ind1="1" ind2=" ">
+   <subfield code="a">digitized</subfield>
+   <subfield code="c">2010</subfield>
+   <subfield code="h">HathiTrust Digital Library</subfield>
+   <subfield code="l">committed to preserve</subfield>
+   <subfield code="2">pda</subfield>
+   <subfield code="5">MiAaHDL</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">Antioch (Turkey)</subfield>
+  </datafield>
+  <datafield tag="610" ind1="2" ind2="0">
+   <subfield code="a">University of Chicago.</subfield>
+   <subfield code="b">Oriental Institute.</subfield>
+   <subfield code="b">Syrian-Hittite Expedition</subfield>
+   <subfield code="d">(1932-1938)</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Excavations (Archaeology)</subfield>
+   <subfield code="z">Turkey</subfield>
+   <subfield code="z">Antioch.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="6">
+   <subfield code="a">Fouilles (Archéologie)</subfield>
+   <subfield code="z">Antioche.</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="6">
+   <subfield code="a">Antioche.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Excavations (Archaeology)</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00917564</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+   <subfield code="a">Turkey</subfield>
+   <subfield code="z">Antioch.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01216199</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Braidwood, Robert J.</subfield>
+   <subfield code="q">(Robert John),</subfield>
+   <subfield code="d">1907-2003.</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Braidwood, Linda S.</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Haines, Richard C.</subfield>
+  </datafield>
+  <datafield tag="776" ind1="0" ind2="8">
+   <subfield code="i">Print version:</subfield>
+   <subfield code="t">Excavations in the Plain of Antioch.</subfield>
+   <subfield code="d">Chicago : University of Chicago Press, 1960-1971</subfield>
+   <subfield code="w">(DLC) 57012749</subfield>
+   <subfield code="w">(OCoLC)00404358</subfield>
+   <subfield code="w">(ICU)1929420</subfield>
+  </datafield>
+  <datafield tag="830" ind1=" " ind2="0">
+   <subfield code="a">University of Chicago Oriental Institute publications ;</subfield>
+   <subfield code="v">v. 61.</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="0">
+   <subfield code="3">v.1</subfield>
+   <subfield code="u">http://bibpurl.oclc.org/web/42121</subfield>
+  </datafield>
+  <datafield tag="903" ind1=" " ind2=" ">
+   <subfield code="a">UCPress</subfield>
+  </datafield>
+  <datafield tag="928" ind1=" " ind2=" ">
+   <subfield code="u">http://bibpurl.oclc.org/web/42121</subfield>
+   <subfield code="p">v.1</subfield>
+   <subfield code="c">FullText</subfield>
+   <subfield code="l">Online</subfield>
+   <subfield code="t">LCC</subfield>
+   <subfield code="a">DS99.A6C5</subfield>
+  </datafield>
+ </record>
+</collection>

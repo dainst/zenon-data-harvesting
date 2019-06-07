@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+ <record>
+  <leader>01734cam a2200349Ii 4500</leader>
+  <controlfield tag="001">8838515</controlfield>
+  <controlfield tag="005">20140604171200.0</controlfield>
+  <controlfield tag="008">120629s2010    iluaf   ob    001 0 eng d</controlfield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(OCoLC)797213463</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">8838515</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+   <subfield code="a">CGU</subfield>
+   <subfield code="c">CGU</subfield>
+   <subfield code="d">CGU</subfield>
+  </datafield>
+  <datafield tag="049" ind1=" " ind2=" ">
+   <subfield code="a">CGUA</subfield>
+  </datafield>
+  <datafield tag="090" ind1=" " ind2=" ">
+   <subfield code="a">DT73.M3</subfield>
+   <subfield code="b">.T44 2010</subfield>
+  </datafield>
+  <datafield tag="100" ind1="1" ind2=" ">
+   <subfield code="a">Teeter, Emily.</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="0">
+   <subfield code="a">Baked clay figurines and votive beds from Medinet Habu /</subfield>
+   <subfield code="c">by Emily Teeter ; based on field notes of Uvo Hölscher and Rudolf Anthes.</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+   <subfield code="a">Chicago :</subfield>
+   <subfield code="b">Oriental Institute of the University of Chicago,</subfield>
+   <subfield code="c">2010.</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+   <subfield code="a">1 online resource (xxxiii, 213 pages, 131 pages of plates) :</subfield>
+   <subfield code="b">illustrations (some color)</subfield>
+  </datafield>
+  <datafield tag="336" ind1=" " ind2=" ">
+   <subfield code="a">text</subfield>
+   <subfield code="2">rdacontent</subfield>
+  </datafield>
+  <datafield tag="337" ind1=" " ind2=" ">
+   <subfield code="a">computer</subfield>
+   <subfield code="2">rdamedia</subfield>
+  </datafield>
+  <datafield tag="338" ind1=" " ind2=" ">
+   <subfield code="a">online resource</subfield>
+   <subfield code="2">rdacarrier</subfield>
+  </datafield>
+  <datafield tag="490" ind1="1" ind2=" ">
+   <subfield code="a">Oriental Institute publications,</subfield>
+   <subfield code="x">0069-3367 ;</subfield>
+   <subfield code="v">volume 133</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Figurines, Ancient</subfield>
+   <subfield code="z">Egypt</subfield>
+   <subfield code="z">Medinet Habu Site.</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">Medinet Habu Site (Egypt)</subfield>
+   <subfield code="x">Antiquities.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Antiquities.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00810745</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Figurines, Ancient.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01202360</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+   <subfield code="a">Egypt</subfield>
+   <subfield code="z">Medinet Habu Site.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01303423</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Hölscher, Uvo,</subfield>
+   <subfield code="d">1873-1963.</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Anthes, Rudolf.</subfield>
+  </datafield>
+  <datafield tag="776" ind1="0" ind2="8">
+   <subfield code="i">Print version:</subfield>
+   <subfield code="a">Teeter, Emily.</subfield>
+   <subfield code="t">Baked clay figurines and votive beds from Medinet Habu.</subfield>
+   <subfield code="d">Chicago : Oriental Institute of the University of Chicago, 2010</subfield>
+   <subfield code="z">9781885923585</subfield>
+   <subfield code="w">(DLC) 2009921715</subfield>
+   <subfield code="w">(OCoLC)263985452</subfield>
+   <subfield code="w">(ICU)8383960</subfield>
+  </datafield>
+  <datafield tag="830" ind1=" " ind2="0">
+   <subfield code="a">University of Chicago Oriental Institute publications ;</subfield>
+   <subfield code="v">v. 133.</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="0">
+   <subfield code="u">https://oi.uchicago.edu/pdf/oip133.pdf</subfield>
+  </datafield>
+  <datafield tag="928" ind1=" " ind2=" ">
+   <subfield code="u">https://oi.uchicago.edu/pdf/oip133.pdf</subfield>
+   <subfield code="c">FullText</subfield>
+   <subfield code="l">Online</subfield>
+   <subfield code="t">LCC</subfield>
+   <subfield code="a">DT73.M3T44 2010</subfield>
+  </datafield>
+ </record>
+</collection>

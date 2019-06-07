@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+ <record>
+  <leader>     cam a22     2  4500</leader>
+  <controlfield tag="001">314994831</controlfield>
+  <controlfield tag="003">CHVBK</controlfield>
+  <controlfield tag="005">20190304085728.0</controlfield>
+  <controlfield tag="008">140430s1939    xxu           00    eng|d</controlfield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(NEBIS)010135277</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(RERO)R263053160</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(RERO)vtls002630531</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+   <subfield code="a">RERO gevbpu</subfield>
+   <subfield code="d">SzZuIDS NEBIS SNM</subfield>
+  </datafield>
+  <datafield tag="072" ind1=" " ind2="7">
+   <subfield code="a">s1ar</subfield>
+   <subfield code="2">rero</subfield>
+  </datafield>
+  <datafield tag="100" ind1="1" ind2=" ">
+   <subfield code="a">Sandford</subfield>
+   <subfield code="D">Kenneth Stuart</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="0">
+   <subfield code="a">Paleolithic man and the Nile valley in Lower Egypt</subfield>
+   <subfield code="b">with some notes upon a part of the Red Sea littoral : a study of the regions during Pliocene and Pleistocene times</subfield>
+   <subfield code="c">by K.S. Sandford and W.J. Arkell</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+   <subfield code="a">Chicago (Ill.)</subfield>
+   <subfield code="b">The University of Chicago Press</subfield>
+   <subfield code="c">1939</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+   <subfield code="a">XIX, 105 p., XXX f. de pl.</subfield>
+   <subfield code="c">31 cm</subfield>
+  </datafield>
+  <datafield tag="490" ind1="1" ind2=" ">
+   <subfield code="a">Prehistoric survey of Egypt and Western Asia</subfield>
+   <subfield code="v">4</subfield>
+   <subfield code="i">4</subfield>
+   <subfield code="w">(NEBIS)006080243</subfield>
+   <subfield code="9">267611919</subfield>
+  </datafield>
+  <datafield tag="490" ind1="1" ind2=" ">
+   <subfield code="a">University of Chicago Oriental Institute publications</subfield>
+   <subfield code="v">46</subfield>
+   <subfield code="i">46</subfield>
+   <subfield code="w">(NEBIS)000990501</subfield>
+   <subfield code="9">266165907</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Arkell</subfield>
+   <subfield code="D">William Joscellyn</subfield>
+  </datafield>
+  <datafield tag="830" ind1=" " ind2="0">
+   <subfield code="a">Prehistoric survey of Egypt and Western Asia</subfield>
+   <subfield code="v">4</subfield>
+  </datafield>
+  <datafield tag="830" ind1=" " ind2="0">
+   <subfield code="a">Oriental Institute publications</subfield>
+   <subfield code="v">46</subfield>
+  </datafield>
+  <datafield tag="909" ind1=" " ind2="7">
+   <subfield code="a">MedeaSNM</subfield>
+   <subfield code="2">nebis ER</subfield>
+  </datafield>
+  <datafield tag="950" ind1=" " ind2=" ">
+   <subfield code="B">NEBIS</subfield>
+   <subfield code="P">100</subfield>
+   <subfield code="E">1-</subfield>
+   <subfield code="a">Sandford</subfield>
+   <subfield code="D">Kenneth Stuart</subfield>
+  </datafield>
+  <datafield tag="950" ind1=" " ind2=" ">
+   <subfield code="B">NEBIS</subfield>
+   <subfield code="P">490</subfield>
+   <subfield code="E">--</subfield>
+   <subfield code="a">Prehistoric survey of Egypt and Western Asia</subfield>
+   <subfield code="v">4</subfield>
+   <subfield code="i">4</subfield>
+   <subfield code="w">(NEBIS)006080243</subfield>
+   <subfield code="9">267611919</subfield>
+  </datafield>
+  <datafield tag="950" ind1=" " ind2=" ">
+   <subfield code="B">NEBIS</subfield>
+   <subfield code="P">490</subfield>
+   <subfield code="E">--</subfield>
+   <subfield code="a">University of Chicago Oriental Institute publications</subfield>
+   <subfield code="v">46</subfield>
+   <subfield code="i">46</subfield>
+   <subfield code="w">(NEBIS)000990501</subfield>
+   <subfield code="9">266165907</subfield>
+  </datafield>
+  <datafield tag="950" ind1=" " ind2=" ">
+   <subfield code="B">NEBIS</subfield>
+   <subfield code="P">700</subfield>
+   <subfield code="E">1-</subfield>
+   <subfield code="a">Arkell</subfield>
+   <subfield code="D">William Joscellyn</subfield>
+  </datafield>
+  <datafield tag="950" ind1=" " ind2=" ">
+   <subfield code="B">RERO</subfield>
+   <subfield code="P">100</subfield>
+   <subfield code="E">1-</subfield>
+   <subfield code="a">Sandford</subfield>
+   <subfield code="D">Kenneth Stuart</subfield>
+   <subfield code="0">(RERO)A005822495</subfield>
+   <subfield code="4">cre</subfield>
+  </datafield>
+  <datafield tag="950" ind1=" " ind2=" ">
+   <subfield code="B">RERO</subfield>
+   <subfield code="P">490</subfield>
+   <subfield code="E">1-</subfield>
+   <subfield code="a">Prehistoric survey of Egypt and Western Asia</subfield>
+   <subfield code="v">4</subfield>
+  </datafield>
+  <datafield tag="950" ind1=" " ind2=" ">
+   <subfield code="B">RERO</subfield>
+   <subfield code="P">490</subfield>
+   <subfield code="E">1-</subfield>
+   <subfield code="a">University of Chicago Oriental Institute publications</subfield>
+   <subfield code="v">46</subfield>
+  </datafield>
+  <datafield tag="950" ind1=" " ind2=" ">
+   <subfield code="B">RERO</subfield>
+   <subfield code="P">700</subfield>
+   <subfield code="E">1-</subfield>
+   <subfield code="a">Arkell</subfield>
+   <subfield code="D">William Joscelyn</subfield>
+   <subfield code="0">(RERO)A005822497</subfield>
+  </datafield>
+  <datafield tag="950" ind1=" " ind2=" ">
+   <subfield code="B">RERO</subfield>
+   <subfield code="P">830</subfield>
+   <subfield code="E">--</subfield>
+   <subfield code="a">Prehistoric survey of Egypt and Western Asia</subfield>
+   <subfield code="v">4</subfield>
+  </datafield>
+  <datafield tag="950" ind1=" " ind2=" ">
+   <subfield code="B">RERO</subfield>
+   <subfield code="P">830</subfield>
+   <subfield code="E">--</subfield>
+   <subfield code="a">Oriental Institute publications</subfield>
+   <subfield code="v">46</subfield>
+  </datafield>
+  <datafield tag="986" ind1=" " ind2=" ">
+   <subfield code="a">SWISSBIB</subfield>
+   <subfield code="b">294501568</subfield>
+  </datafield>
+  <datafield tag="898" ind1=" " ind2=" ">
+   <subfield code="a">BK020000</subfield>
+   <subfield code="b">XK020000</subfield>
+   <subfield code="c">XK020000</subfield>
+  </datafield>
+  <datafield tag="949" ind1=" " ind2=" ">
+   <subfield code="B">NEBIS</subfield>
+   <subfield code="F">E32</subfield>
+   <subfield code="b">E32</subfield>
+   <subfield code="c">E32MA</subfield>
+   <subfield code="j">Fr 94</subfield>
+  </datafield>
+  <datafield tag="949" ind1=" " ind2=" ">
+   <subfield code="B">RERO</subfield>
+   <subfield code="F">RE61034</subfield>
+   <subfield code="b">RE61034</subfield>
+   <subfield code="c">RE610340003</subfield>
+   <subfield code="j">EG:Coll*OIP</subfield>
+   <subfield code="s">BGE Ga 5006/46</subfield>
+  </datafield>
+ </record>
+</collection>

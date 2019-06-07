@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+ <record>
+  <leader>01853cam a2200385Ia 4500</leader>
+  <controlfield tag="001">8361213</controlfield>
+  <controlfield tag="005">20110411151100.0</controlfield>
+  <controlfield tag="006">m        d        </controlfield>
+  <controlfield tag="007">cr |||||||||||</controlfield>
+  <controlfield tag="008">110411r20091943iluabf  ob    001 0 eng  </controlfield>
+  <datafield tag="020" ind1=" " ind2=" ">
+   <subfield code="a">1885923678 (alk. paper)</subfield>
+  </datafield>
+  <datafield tag="020" ind1=" " ind2=" ">
+   <subfield code="a">9781885923677 (alk. paper)</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(OCoLC)712067913</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">8361213</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+   <subfield code="a">CGU</subfield>
+   <subfield code="c">CGU</subfield>
+  </datafield>
+  <datafield tag="049" ind1=" " ind2=" ">
+   <subfield code="a">CGUA</subfield>
+  </datafield>
+  <datafield tag="050" ind1="0" ind2="0">
+   <subfield code="a">D15.B67</subfield>
+   <subfield code="b">B7 2009</subfield>
+  </datafield>
+  <datafield tag="100" ind1="1" ind2=" ">
+   <subfield code="a">Breasted, Charles,</subfield>
+   <subfield code="d">1897-1980.</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="0">
+   <subfield code="a">Pioneer to the past</subfield>
+   <subfield code="h">[electronic resource] :</subfield>
+   <subfield code="b">the story of James Henry Breasted, archaeologist /</subfield>
+   <subfield code="c">told by his son Charles Breasted.</subfield>
+  </datafield>
+  <datafield tag="246" ind1="3" ind2=" ">
+   <subfield code="a">Story of James Henry Breasted, archaeologist</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+   <subfield code="a">Chicago :</subfield>
+   <subfield code="b">Oriental Institute of the University of Chicago,</subfield>
+   <subfield code="c">2009.</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+   <subfield code="a">1 online resource (x, 436 p. [16] p. of plates :</subfield>
+   <subfield code="b">ill., map)</subfield>
+  </datafield>
+  <datafield tag="500" ind1=" " ind2=" ">
+   <subfield code="a">&quot;Reprint of the Charles Scribner's Sons 1943 edition with new foreword and photographs.&quot;</subfield>
+  </datafield>
+  <datafield tag="504" ind1=" " ind2=" ">
+   <subfield code="a">Includes bibliographical references and index.</subfield>
+  </datafield>
+  <datafield tag="600" ind1="1" ind2="0">
+   <subfield code="a">Breasted, James Henry,</subfield>
+   <subfield code="d">1865-1935.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Egyptologists</subfield>
+   <subfield code="v">Biography.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Archaeologists</subfield>
+   <subfield code="v">Biography.</subfield>
+  </datafield>
+  <datafield tag="600" ind1="1" ind2="7">
+   <subfield code="a">Breasted, James Henry,</subfield>
+   <subfield code="d">1865-1935.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00053874</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Archaeologists.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00812929</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Egyptologists.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00903998</subfield>
+  </datafield>
+  <datafield tag="655" ind1=" " ind2="7">
+   <subfield code="a">Biography.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01423686</subfield>
+  </datafield>
+  <datafield tag="710" ind1="2" ind2=" ">
+   <subfield code="a">University of Chicago.</subfield>
+   <subfield code="b">Oriental Institute.</subfield>
+  </datafield>
+  <datafield tag="776" ind1="0" ind2="8">
+   <subfield code="i">Print version:</subfield>
+   <subfield code="a">Breasted, Charles, 1897-1980.</subfield>
+   <subfield code="t">Pioneer to the past.</subfield>
+   <subfield code="d">Chicago : Oriental Institute of the University of Chicago, 2009</subfield>
+   <subfield code="z">9781885923677</subfield>
+   <subfield code="w">(DLC) 2009939965</subfield>
+   <subfield code="w">(OCoLC)535164029</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="0">
+   <subfield code="u">http://bibpurl.oclc.org/web/42366</subfield>
+  </datafield>
+  <datafield tag="928" ind1=" " ind2=" ">
+   <subfield code="u">http://bibpurl.oclc.org/web/42366</subfield>
+   <subfield code="c">FullText</subfield>
+   <subfield code="l">Online</subfield>
+   <subfield code="t">LCC</subfield>
+   <subfield code="a">D15.B8B82 2009</subfield>
+  </datafield>
+ </record>
+</collection>

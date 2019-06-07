@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+ <record>
+  <leader>01899cam a2200361Ia 4500</leader>
+  <controlfield tag="001">8963039</controlfield>
+  <controlfield tag="005">20130218163900.0</controlfield>
+  <controlfield tag="006">m     |  d        </controlfield>
+  <controlfield tag="007">cr |||||||||||</controlfield>
+  <controlfield tag="008">130206s1988    jo a    o     000 0 eng d</controlfield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(OCoLC)826867708</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">8963039</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+   <subfield code="a">CGU</subfield>
+   <subfield code="c">CGU</subfield>
+  </datafield>
+  <datafield tag="049" ind1=" " ind2=" ">
+   <subfield code="a">CGUA</subfield>
+  </datafield>
+  <datafield tag="090" ind1=" " ind2=" ">
+   <subfield code="a">DS154.9.A6</subfield>
+   <subfield code="b">W495 1988</subfield>
+  </datafield>
+  <datafield tag="092" ind1=" " ind2=" ">
+   <subfield code="a">956.95</subfield>
+   <subfield code="b">W581</subfield>
+  </datafield>
+  <datafield tag="100" ind1="1" ind2=" ">
+   <subfield code="a">Whitcomb, Donald S.</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="0">
+   <subfield code="a">Aqaba</subfield>
+   <subfield code="h">[electronic resource] :</subfield>
+   <subfield code="b">port of Palestine on the China Sea /</subfield>
+   <subfield code="c">Donald Whitcomb.</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+   <subfield code="a">Aman, Jordan :</subfield>
+   <subfield code="b">Al Kutba,</subfield>
+   <subfield code="c">c1988.</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+   <subfield code="a">1 online resource (28 p.) :</subfield>
+   <subfield code="b">ill.</subfield>
+  </datafield>
+  <datafield tag="500" ind1=" " ind2=" ">
+   <subfield code="a">&quot;This booklet was first published in conjunction with an exhibition at the Oriental Institute, University of Chicago, January, 1988.&quot;</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">ʻAqabah (Jordan)</subfield>
+   <subfield code="x">Antiquities.</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">ʻAqabag (Jordan)</subfield>
+   <subfield code="x">Description and travel.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Antiquities.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00810745</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Excavations (Archaeology)</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00917564</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Travel.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01155558</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+   <subfield code="a">Jordan</subfield>
+   <subfield code="z">ʻAqabah.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01208793</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Excavations (Archaeology)</subfield>
+   <subfield code="z">Jordan</subfield>
+   <subfield code="z">ʻAqabah.</subfield>
+  </datafield>
+  <datafield tag="776" ind1="0" ind2="8">
+   <subfield code="i">Print version:</subfield>
+   <subfield code="a">Whitcomb, Donald S.</subfield>
+   <subfield code="t">Aqaba.</subfield>
+   <subfield code="d">Aman, Jordan : Al Kutba, c1988</subfield>
+   <subfield code="w">(OCoLC)27980278</subfield>
+   <subfield code="w">(ICU)1616972</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="0">
+   <subfield code="u">http://bibpurl.oclc.org/web/48219</subfield>
+   <subfield code="z">(Click on the icon to the left of 'Terms of Use')</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="0">
+   <subfield code="u">http://oi.uchicago.edu/research/pubs/catalog/misc/aqaba.html</subfield>
+   <subfield code="z">(Click on the icon to the left of 'Terms of Use')</subfield>
+  </datafield>
+  <datafield tag="928" ind1=" " ind2=" ">
+   <subfield code="u">http://bibpurl.oclc.org/web/48219</subfield>
+   <subfield code="p">(Click on the icon to the left of 'Terms of Use')</subfield>
+   <subfield code="c">FullText</subfield>
+   <subfield code="l">Online</subfield>
+   <subfield code="t">LCC</subfield>
+   <subfield code="a">DS154.9.A6W495 1988</subfield>
+  </datafield>
+  <datafield tag="928" ind1=" " ind2=" ">
+   <subfield code="u">http://oi.uchicago.edu/research/pubs/catalog/misc/aqaba.html</subfield>
+   <subfield code="p">(Click on the icon to the left of 'Terms of Use')</subfield>
+   <subfield code="c">FullText</subfield>
+   <subfield code="l">Online</subfield>
+   <subfield code="t">LCC</subfield>
+   <subfield code="a">DS154.9.A6W495 1988</subfield>
+  </datafield>
+ </record>
+</collection>

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+ <record>
+  <leader>02014cam a2200457Ka 4500</leader>
+  <controlfield tag="001">8368612</controlfield>
+  <controlfield tag="005">20160809105324.7</controlfield>
+  <controlfield tag="006">m        d        </controlfield>
+  <controlfield tag="007">cr bn||||||abp</controlfield>
+  <controlfield tag="007">cr bn||||||ada</controlfield>
+  <controlfield tag="008">100317s1982    caua    ob    000 0 eng d</controlfield>
+  <controlfield tag="003">OLE</controlfield>
+  <datafield tag="020" ind1=" " ind2=" ">
+   <subfield code="z">0890031134</subfield>
+  </datafield>
+  <datafield tag="020" ind1=" " ind2=" ">
+   <subfield code="z">9780890031131</subfield>
+  </datafield>
+  <datafield tag="020" ind1=" " ind2=" ">
+   <subfield code="z">0890031126 (pbk.)</subfield>
+  </datafield>
+  <datafield tag="020" ind1=" " ind2=" ">
+   <subfield code="z">9780890031124 (pbk.)</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(OCoLC)557653345</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">8368612</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+   <subfield code="a">OCLCE</subfield>
+   <subfield code="b">eng</subfield>
+   <subfield code="c">OCLCE</subfield>
+   <subfield code="d">OCLCQ</subfield>
+   <subfield code="d">ICU</subfield>
+  </datafield>
+  <datafield tag="042" ind1=" " ind2=" ">
+   <subfield code="a">dlr</subfield>
+  </datafield>
+  <datafield tag="043" ind1=" " ind2=" ">
+   <subfield code="a">f-ua---</subfield>
+  </datafield>
+  <datafield tag="049" ind1=" " ind2=" ">
+   <subfield code="a">CGUA</subfield>
+  </datafield>
+  <datafield tag="050" ind1=" " ind2="4">
+   <subfield code="a">DT73.Q77</subfield>
+   <subfield code="b">Q78 1982</subfield>
+  </datafield>
+  <datafield tag="082" ind1="0" ind2="4">
+   <subfield code="a">932</subfield>
+   <subfield code="2">19</subfield>
+  </datafield>
+  <datafield tag="245" ind1="0" ind2="0">
+   <subfield code="a">Quseir al-Qadim 1980</subfield>
+   <subfield code="h">[electronic resource] :</subfield>
+   <subfield code="b">preliminary report /</subfield>
+   <subfield code="c">by Donald S. Whitcomb and Janet H. Johnson.</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+   <subfield code="a">Malibu :</subfield>
+   <subfield code="b">Undena Publications,</subfield>
+   <subfield code="c">1982.</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+   <subfield code="a">1 online resource (x, 406 p.) :</subfield>
+   <subfield code="b">ill.</subfield>
+  </datafield>
+  <datafield tag="490" ind1="1" ind2=" ">
+   <subfield code="a">American Research Center in Egypt reports ;</subfield>
+   <subfield code="v">v. 7</subfield>
+  </datafield>
+  <datafield tag="504" ind1=" " ind2=" ">
+   <subfield code="a">Includes bibliographical references.</subfield>
+  </datafield>
+  <datafield tag="506" ind1=" " ind2=" ">
+   <subfield code="3">Use copy</subfield>
+   <subfield code="f">Restrictions unspecified</subfield>
+   <subfield code="2">star</subfield>
+   <subfield code="5">MiAaHDL</subfield>
+  </datafield>
+  <datafield tag="533" ind1=" " ind2=" ">
+   <subfield code="a">Electronic reproduction.</subfield>
+   <subfield code="b">[S.l.] :</subfield>
+   <subfield code="c">HathiTrust Digital Library,</subfield>
+   <subfield code="d">2010.</subfield>
+   <subfield code="5">MiAaHDL</subfield>
+  </datafield>
+  <datafield tag="538" ind1=" " ind2=" ">
+   <subfield code="a">Master and use copy. Digital master created according to Benchmark for Faithful Digital Reproductions of Monographs and Serials, Version 1. Digital Library Federation, December 2002.</subfield>
+   <subfield code="u">http://purl.oclc.org/DLF/benchrepro0212</subfield>
+   <subfield code="5">MiAaHDL</subfield>
+  </datafield>
+  <datafield tag="583" ind1="1" ind2=" ">
+   <subfield code="a">digitized</subfield>
+   <subfield code="c">2010</subfield>
+   <subfield code="h">HathiTrust Digital Library</subfield>
+   <subfield code="l">committed to preserve</subfield>
+   <subfield code="2">pda</subfield>
+   <subfield code="5">MiAaHDL</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">Qusayr al-Qadīm (Extinct city)</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+   <subfield code="a">Egypt</subfield>
+   <subfield code="z">Qusayr al-Qadīm (Extinct city)</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01896827</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Whitcomb, Donald S.</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Johnson, Janet H.</subfield>
+  </datafield>
+  <datafield tag="776" ind1="0" ind2="8">
+   <subfield code="i">Print version:</subfield>
+   <subfield code="t">Quseir al-Qadim 1980.</subfield>
+   <subfield code="d">Malibu : Undena Publications, 1982</subfield>
+   <subfield code="w">(DLC) 81072088</subfield>
+   <subfield code="w">(OCoLC)09556347</subfield>
+   <subfield code="w">(ICU)53653</subfield>
+  </datafield>
+  <datafield tag="830" ind1=" " ind2="0">
+   <subfield code="a">American Research Center in Egypt reports ;</subfield>
+   <subfield code="v">v. 7.</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="0">
+   <subfield code="u">http://bibpurl.oclc.org/web/42562</subfield>
+  </datafield>
+  <datafield tag="928" ind1=" " ind2=" ">
+   <subfield code="u">http://bibpurl.oclc.org/web/42562</subfield>
+   <subfield code="c">FullText</subfield>
+   <subfield code="l">Online</subfield>
+   <subfield code="t">LCC</subfield>
+   <subfield code="a">DT73.Q77Q780 1982</subfield>
+  </datafield>
+ </record>
+</collection>

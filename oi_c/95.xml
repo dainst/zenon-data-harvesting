@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+ <record>
+  <leader>01018cam a2200301I  4500</leader>
+  <controlfield tag="001">1932622</controlfield>
+  <controlfield tag="005">19981115105000.0</controlfield>
+  <controlfield tag="008">790928s1942    iluae    b    000 0 eng  </controlfield>
+  <controlfield tag="003">OLE</controlfield>
+  <datafield tag="010" ind1=" " ind2=" ">
+   <subfield code="a">   42016461</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(OCoLC)5434800</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+   <subfield code="a">DLC</subfield>
+   <subfield code="c">ICU</subfield>
+   <subfield code="d">CGU</subfield>
+  </datafield>
+  <datafield tag="049" ind1=" " ind2=" ">
+   <subfield code="a">CGUA</subfield>
+  </datafield>
+  <datafield tag="050" ind1="0" ind2=" ">
+   <subfield code="a">DS325.T25</subfield>
+   <subfield code="b">L3</subfield>
+  </datafield>
+  <datafield tag="082" ind1=" " ind2=" ">
+   <subfield code="a">913.355</subfield>
+  </datafield>
+  <datafield tag="100" ind1="1" ind2=" ">
+   <subfield code="a">Langsdorff, Alexander,</subfield>
+   <subfield code="d">1898-</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="0">
+   <subfield code="a">Tall-i-Bakun A,</subfield>
+   <subfield code="b">season of 1932,</subfield>
+   <subfield code="c">by Alexander Langsdorff and Donald E. McCown.</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+   <subfield code="a">Chicago, Ill.,</subfield>
+   <subfield code="b">The University of Chicago press</subfield>
+   <subfield code="c">[1942]</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+   <subfield code="a">xi, 80 p., 2 l.</subfield>
+   <subfield code="b">incl. illus., tab. 85 pl., plans (1 fold.)</subfield>
+   <subfield code="c">31 x 24 cm.</subfield>
+  </datafield>
+  <datafield tag="490" ind1="0" ind2=" ">
+   <subfield code="a">The University of Chicago. Oriental institute publications, vol. LIX)</subfield>
+  </datafield>
+  <datafield tag="500" ind1=" " ind2=" ">
+   <subfield code="a">Descriptive letterpress on verso preceding each plate.</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">Tall-i-Bakun A (Iran)</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">McCown, Donald Eugene,</subfield>
+   <subfield code="d">1910-</subfield>
+  </datafield>
+  <datafield tag="903" ind1=" " ind2=" ">
+   <subfield code="a">UCPress</subfield>
+  </datafield>
+  <datafield tag="929" ind1=" " ind2=" ">
+   <subfield code="t">LCC</subfield>
+   <subfield code="c">Gen</subfield>
+   <subfield code="b">f</subfield>
+   <subfield code="a">DS325.T17L3</subfield>
+   <subfield code="l">JRL</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">11281900</subfield>
+  </datafield>
+  <datafield tag="929" ind1=" " ind2=" ">
+   <subfield code="t">LCC</subfield>
+   <subfield code="c">Gen</subfield>
+   <subfield code="b">f</subfield>
+   <subfield code="a">DS325.T17L3</subfield>
+   <subfield code="l">JRL</subfield>
+  </datafield>
+  <datafield tag="927" ind1=" " ind2=" ">
+   <subfield code="b">16843724</subfield>
+  </datafield>
+ </record>
+</collection>

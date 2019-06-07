@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+ <record>
+  <leader>02271nam a2200469Ki 4500</leader>
+  <controlfield tag="001">10074651</controlfield>
+  <controlfield tag="003">OCoLC</controlfield>
+  <controlfield tag="005">20140826085818.9</controlfield>
+  <controlfield tag="006">m     |  d        </controlfield>
+  <controlfield tag="007">cr |||||||||||</controlfield>
+  <controlfield tag="008">140825s2014    iluab   ob    000 0 eng d</controlfield>
+  <datafield tag="020" ind1=" " ind2=" ">
+   <subfield code="a">1614910189</subfield>
+  </datafield>
+  <datafield tag="020" ind1=" " ind2=" ">
+   <subfield code="a">9781614910183</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(OCoLC)889085163</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+   <subfield code="a">CGU</subfield>
+   <subfield code="b">eng</subfield>
+   <subfield code="e">rda</subfield>
+   <subfield code="e">pn</subfield>
+   <subfield code="c">CGU</subfield>
+  </datafield>
+  <datafield tag="049" ind1=" " ind2=" ">
+   <subfield code="a">CGUA</subfield>
+  </datafield>
+  <datafield tag="050" ind1=" " ind2="4">
+   <subfield code="a">NK3820</subfield>
+   <subfield code="b">.A76 2014</subfield>
+  </datafield>
+  <datafield tag="100" ind1="1" ind2=" ">
+   <subfield code="a">Armstrong, James Alan,</subfield>
+   <subfield code="d">1953-</subfield>
+   <subfield code="e">author.</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="0">
+   <subfield code="a">Mesopotamian pottery :</subfield>
+   <subfield code="b">a guide to the Babylonian tradition in the second millennium B.C. /</subfield>
+   <subfield code="c">by James A. Armstrong and Hermann Gasche ; with contributions by Steven W. Cole, Abraham Van As, and Loe Jacobs.</subfield>
+  </datafield>
+  <datafield tag="264" ind1=" " ind2="1">
+   <subfield code="a">Chicago :</subfield>
+   <subfield code="b">Oriental Institute of the University of Chicago,</subfield>
+   <subfield code="c">2014.</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+   <subfield code="a">1 online resource (xix, 102 pages, 136, [9] plates) :</subfield>
+   <subfield code="b">illustrations (some color), maps</subfield>
+  </datafield>
+  <datafield tag="336" ind1=" " ind2=" ">
+   <subfield code="a">text</subfield>
+   <subfield code="b">txt</subfield>
+   <subfield code="2">rdacontent</subfield>
+  </datafield>
+  <datafield tag="337" ind1=" " ind2=" ">
+   <subfield code="a">computer</subfield>
+   <subfield code="b">c</subfield>
+   <subfield code="2">rdamedia</subfield>
+  </datafield>
+  <datafield tag="338" ind1=" " ind2=" ">
+   <subfield code="a">online resource</subfield>
+   <subfield code="b">cr</subfield>
+   <subfield code="2">rdacarrier</subfield>
+  </datafield>
+  <datafield tag="490" ind1="1" ind2=" ">
+   <subfield code="a">Mesopotamian history and environment series. Series II, Memoirs ;</subfield>
+   <subfield code="v">vi</subfield>
+  </datafield>
+  <datafield tag="504" ind1=" " ind2=" ">
+   <subfield code="a">Includes bibliographical references.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Pottery, Assyro-Babylonian.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Pottery dating</subfield>
+   <subfield code="z">Iraq.</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">Iraq</subfield>
+   <subfield code="x">Antiquities.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Antiquities.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00810745</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Pottery, Assyro-Babylonian.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01910059</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Pottery dating.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01073628</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+   <subfield code="a">Iraq.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01205757</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Gasche, H.</subfield>
+   <subfield code="q">(Hermann),</subfield>
+   <subfield code="e">author.</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Cole, Steven William,</subfield>
+   <subfield code="d">1954-</subfield>
+   <subfield code="e">author.</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">As, A. van,</subfield>
+   <subfield code="e">author.</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Jacobs, Loe,</subfield>
+   <subfield code="e">author.</subfield>
+  </datafield>
+  <datafield tag="776" ind1="0" ind2="8">
+   <subfield code="i">Print version: a As, A. van.</subfield>
+   <subfield code="t">Mesopotamian pottery.</subfield>
+   <subfield code="d">Chicago : Oriental Institute of the University of Chicago, 2014</subfield>
+   <subfield code="z">9781614910183</subfield>
+   <subfield code="w">(OCoLC)883870619</subfield>
+  </datafield>
+  <datafield tag="830" ind1=" " ind2="0">
+   <subfield code="a">Mesopotamian history and environment.</subfield>
+   <subfield code="n">Series II,</subfield>
+   <subfield code="p">Memoirs ;</subfield>
+   <subfield code="v">6.</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="0">
+   <subfield code="u">http://bibpurl.oclc.org/web/69971</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="0">
+   <subfield code="u">http://oi.uchicago.edu/research/publications/misc/mesopotamian-pottery</subfield>
+  </datafield>
+  <datafield tag="928" ind1=" " ind2=" ">
+   <subfield code="u">http://bibpurl.oclc.org/web/69971</subfield>
+   <subfield code="u">http://oi.uchicago.edu/research/publications/misc/mesopotamian-pottery</subfield>
+   <subfield code="c">FullText</subfield>
+   <subfield code="l">Online</subfield>
+   <subfield code="t">LCC</subfield>
+   <subfield code="a">NK3820.A76 2014</subfield>
+  </datafield>
+ </record>
+</collection>

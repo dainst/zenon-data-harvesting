@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+ <record>
+  <leader>01614cam a2200361I  4500</leader>
+  <controlfield tag="001">8353609</controlfield>
+  <controlfield tag="005">20110324133300.0</controlfield>
+  <controlfield tag="006">m        d        </controlfield>
+  <controlfield tag="007">cr |||||||||||</controlfield>
+  <controlfield tag="008">110324s1960    iluabf  ob    000 0 eng  </controlfield>
+  <controlfield tag="003">OLE</controlfield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(OCoLC)708396727</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">8353609</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+   <subfield code="a">CGU</subfield>
+   <subfield code="c">CGU</subfield>
+  </datafield>
+  <datafield tag="043" ind1=" " ind2=" ">
+   <subfield code="a">a-iq---</subfield>
+  </datafield>
+  <datafield tag="049" ind1=" " ind2=" ">
+   <subfield code="a">CGUA</subfield>
+  </datafield>
+  <datafield tag="050" ind1="0" ind2="0">
+   <subfield code="a">CB251</subfield>
+   <subfield code="b">.C55 no. 31</subfield>
+  </datafield>
+  <datafield tag="050" ind1="1" ind2="4">
+   <subfield code="a">GN855.I7</subfield>
+   <subfield code="b">B72</subfield>
+  </datafield>
+  <datafield tag="100" ind1="1" ind2=" ">
+   <subfield code="a">Braidwood, Robert J.</subfield>
+   <subfield code="q">(Robert John),</subfield>
+   <subfield code="d">1907-2003.</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="0">
+   <subfield code="a">Prehistoric investigations in Iraqi Kurdistan</subfield>
+   <subfield code="h">[electronic resource],</subfield>
+   <subfield code="c">by Robert J. Braidwood and Bruce Howe. With contributions by Hans Helbaek ... [et al.].</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+   <subfield code="a">Chicago,</subfield>
+   <subfield code="b">University of Chicago Press</subfield>
+   <subfield code="c">[1960]</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+   <subfield code="a">1 online resource (xxviii, 184 p.</subfield>
+   <subfield code="b">illus., 29 plates, 5 maps)</subfield>
+  </datafield>
+  <datafield tag="490" ind1="1" ind2=" ">
+   <subfield code="a">Oriental Institute of the University of Chicago. Studies in ancient Oriental civilization,</subfield>
+   <subfield code="v">no. 31</subfield>
+  </datafield>
+  <datafield tag="504" ind1=" " ind2=" ">
+   <subfield code="a">Bibliography: p. xiii-xxviii.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+   <subfield code="a">Stone age</subfield>
+   <subfield code="z">Iraq.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Stone age.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01133823</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+   <subfield code="a">Iraq.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01205757</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Howe, Bruce,</subfield>
+   <subfield code="d">1912-</subfield>
+   <subfield code="e">joint author.</subfield>
+  </datafield>
+  <datafield tag="776" ind1="0" ind2="8">
+   <subfield code="i">Print version:</subfield>
+   <subfield code="a">Braidwood, Robert J. (Robert John), 1907-2003.</subfield>
+   <subfield code="t">Prehistoric investigations in Iraqi Kurdistan.</subfield>
+   <subfield code="d">Chicago, University of Chicago Press [1960]</subfield>
+   <subfield code="w">(DLC) 60008969</subfield>
+   <subfield code="w">(OCoLC)00395172</subfield>
+   <subfield code="w">(ICU)4004154</subfield>
+  </datafield>
+  <datafield tag="830" ind1=" " ind2="0">
+   <subfield code="a">Studies in ancient oriental civilization ;</subfield>
+   <subfield code="v">no. 31.</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="0">
+   <subfield code="u">http://bibpurl.oclc.org/web/42181</subfield>
+  </datafield>
+  <datafield tag="903" ind1=" " ind2=" ">
+   <subfield code="a">UCPress</subfield>
+  </datafield>
+  <datafield tag="928" ind1=" " ind2=" ">
+   <subfield code="u">http://bibpurl.oclc.org/web/42181</subfield>
+   <subfield code="c">FullText</subfield>
+   <subfield code="l">Online</subfield>
+   <subfield code="t">LCC</subfield>
+   <subfield code="a">GN855.I7B72 1960</subfield>
+  </datafield>
+ </record>
+</collection>

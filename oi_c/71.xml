@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+ <record>
+  <leader>02488cam a2200409Ia 4500</leader>
+  <controlfield tag="001">8362719</controlfield>
+  <controlfield tag="005">20110412131100.0</controlfield>
+  <controlfield tag="006">m        d        </controlfield>
+  <controlfield tag="007">cr un|||||||||</controlfield>
+  <controlfield tag="008">071207s1972    ilua    o     001 0 eng d</controlfield>
+  <controlfield tag="003">OLE</controlfield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(OCoLC)183017275</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">8362719</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+   <subfield code="a">TJC</subfield>
+   <subfield code="c">TJC</subfield>
+   <subfield code="d">OCLCA</subfield>
+   <subfield code="d">CGU</subfield>
+  </datafield>
+  <datafield tag="043" ind1=" " ind2=" ">
+   <subfield code="a">a-iq---</subfield>
+  </datafield>
+  <datafield tag="049" ind1=" " ind2=" ">
+   <subfield code="a">CGUA</subfield>
+  </datafield>
+  <datafield tag="090" ind1=" " ind2=" ">
+   <subfield code="a">DS79.9W27</subfield>
+   <subfield code="b">A64 1972e</subfield>
+  </datafield>
+  <datafield tag="100" ind1="1" ind2=" ">
+   <subfield code="a">Adams, Robert McC</subfield>
+   <subfield code="q">(Robert McCormick),</subfield>
+   <subfield code="d">1926-</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="4">
+   <subfield code="a">The Uruk countryside</subfield>
+   <subfield code="h">[electronic resource] ;</subfield>
+   <subfield code="b">the natural setting of urban societies /</subfield>
+   <subfield code="c">[by] Robert McC. Adams and Hans J. Nissen.</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+   <subfield code="a">Chicago :</subfield>
+   <subfield code="b">University of Chicago Press,</subfield>
+   <subfield code="c">[1972]</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+   <subfield code="a">x, 241 p. :</subfield>
+   <subfield code="b">illus. ;</subfield>
+   <subfield code="c">29 cm.</subfield>
+  </datafield>
+  <datafield tag="504" ind1=" " ind2=" ">
+   <subfield code="a">Includes bibliographical references.</subfield>
+  </datafield>
+  <datafield tag="505" ind1="0" ind2=" ">
+   <subfield code="a">Configurations of settlement. Physiographic characteristics and problems ; Spatial and temporal patterns of early urbanization ; Continuity and change in early historic settlements and watercourses / Robert McC. Adams -- Historical and topographical notes : Ur III-Old babylonian periods / Hans J. Nissen -- Configurations of settlement. Resettlement and abandonment in later antiquity ; Recent life and settlement ; The Uruk/Warka region in historic and comparative perspective / Robert McC. Adams -- Analysis of archaeological surface collections. Typological dating criteria ; Surface collections / Hans J. Nissen -- Appendix : Catalog of surveyed sites / Robert McC. Adams.</subfield>
+  </datafield>
+  <datafield tag="530" ind1=" " ind2=" ">
+   <subfield code="a">Also available in print.</subfield>
+  </datafield>
+  <datafield tag="533" ind1=" " ind2=" ">
+   <subfield code="a">Electronic reproduction.</subfield>
+   <subfield code="b">La Crosse, WI :</subfield>
+   <subfield code="c">ETANA,</subfield>
+   <subfield code="d">2006.</subfield>
+   <subfield code="n">Mode of access: World Wide Web.</subfield>
+   <subfield code="n">System requirements: Adobe Acrobat reader.</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">Erech (Extinct city)</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="0">
+   <subfield code="a">Iraq</subfield>
+   <subfield code="x">Antiquities.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="7">
+   <subfield code="a">Antiquities.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst00810745</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+   <subfield code="a">Iraq.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01205757</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="7">
+   <subfield code="a">Iraq</subfield>
+   <subfield code="z">Erech (Extinct city)</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01896941</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+   <subfield code="a">Nissen, Hans Jörg,</subfield>
+   <subfield code="e">joint author.</subfield>
+  </datafield>
+  <datafield tag="776" ind1="0" ind2="8">
+   <subfield code="i">Print version:</subfield>
+   <subfield code="a">Adams, Robert McC. (Robert McCormick), 1926-</subfield>
+   <subfield code="t">Uruk countryside.</subfield>
+   <subfield code="d">Chicago : University of Chicago Press, c1972</subfield>
+   <subfield code="z">0226005003</subfield>
+   <subfield code="w">(DLC) 78179489</subfield>
+   <subfield code="w">(OCoLC)483580</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="0">
+   <subfield code="u">http://bibpurl.oclc.org/web/42392</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="0">
+   <subfield code="u">http://purl.oclc.org/etana/20309.html</subfield>
+  </datafield>
+  <datafield tag="903" ind1=" " ind2=" ">
+   <subfield code="a">UCPress</subfield>
+  </datafield>
+  <datafield tag="928" ind1=" " ind2=" ">
+   <subfield code="u">http://bibpurl.oclc.org/web/42392</subfield>
+   <subfield code="c">FullText</subfield>
+   <subfield code="l">Online</subfield>
+   <subfield code="t">LCC</subfield>
+   <subfield code="a">DS79.9.W27A62</subfield>
+  </datafield>
+  <datafield tag="928" ind1=" " ind2=" ">
+   <subfield code="u">http://purl.oclc.org/etana/20309.html</subfield>
+   <subfield code="c">FullText</subfield>
+   <subfield code="l">Online</subfield>
+   <subfield code="t">LCC</subfield>
+   <subfield code="a">DS79.9.W27A62</subfield>
+  </datafield>
+ </record>
+</collection>

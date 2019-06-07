@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+ <record>
+  <leader>01889cam a2200433K  4500</leader>
+  <controlfield tag="001">8353628</controlfield>
+  <controlfield tag="005">20180105085517.1</controlfield>
+  <controlfield tag="006">m        d        </controlfield>
+  <controlfield tag="007">cr |||||||||||</controlfield>
+  <controlfield tag="008">110324s1950    ilu     obdi  000 0 eng  </controlfield>
+  <controlfield tag="003">OLE</controlfield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">8353628</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+   <subfield code="a">(OCoLC)708417318</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+   <subfield code="a">CGU</subfield>
+   <subfield code="c">CGU</subfield>
+   <subfield code="d">CGU</subfield>
+   <subfield code="d">UtOrBLW</subfield>
+  </datafield>
+  <datafield tag="049" ind1=" " ind2=" ">
+   <subfield code="a">CGUA</subfield>
+  </datafield>
+  <datafield tag="050" ind1="0" ind2="0">
+   <subfield code="a">CB251</subfield>
+   <subfield code="b">.C55 no. 27</subfield>
+  </datafield>
+  <datafield tag="090" ind1=" " ind2=" ">
+   <subfield code="a">PJ1553</subfield>
+   <subfield code="b">.A63 1950</subfield>
+  </datafield>
+  <datafield tag="100" ind1="1" ind2=" ">
+   <subfield code="a">Allen, Thomas George,</subfield>
+   <subfield code="d">1885-</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="0">
+   <subfield code="a">Occurrences of pyramid texts, with cross indexes of these and other Egyptian mortuary texts</subfield>
+   <subfield code="h">[electronic resource].</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+   <subfield code="a">Chicago :</subfield>
+   <subfield code="b">University of Chicago Press,</subfield>
+   <subfield code="c">[1950]</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+   <subfield code="a">1 online resource (vii, 149 p.)</subfield>
+  </datafield>
+  <datafield tag="490" ind1="1" ind2=" ">
+   <subfield code="a">Oriental Institute of the University of Chicago. Studies in ancient Oriental civilization,</subfield>
+   <subfield code="v">no. 27</subfield>
+  </datafield>
+  <datafield tag="504" ind1=" " ind2=" ">
+   <subfield code="a">Bibliography: p. 7-9.</subfield>
+  </datafield>
+  <datafield tag="630" ind1="0" ind2="0">
+   <subfield code="a">Pyramid texts</subfield>
+   <subfield code="v">Dictionaries.</subfield>
+  </datafield>
+  <datafield tag="630" ind1="0" ind2="0">
+   <subfield code="a">Pyramid texts</subfield>
+   <subfield code="v">Indexes.</subfield>
+  </datafield>
+  <datafield tag="630" ind1="0" ind2="0">
+   <subfield code="a">Coffin texts</subfield>
+   <subfield code="v">Dictionaries.</subfield>
+  </datafield>
+  <datafield tag="630" ind1="0" ind2="0">
+   <subfield code="a">Coffin texts</subfield>
+   <subfield code="v">Indexes.</subfield>
+  </datafield>
+  <datafield tag="630" ind1="0" ind2="0">
+   <subfield code="a">Book of the dead</subfield>
+   <subfield code="v">Dictionaries.</subfield>
+  </datafield>
+  <datafield tag="630" ind1="0" ind2="0">
+   <subfield code="a">Book of the dead</subfield>
+   <subfield code="v">Indexes.</subfield>
+  </datafield>
+  <datafield tag="630" ind1="0" ind2="7">
+   <subfield code="a">Book of the dead.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01357356</subfield>
+  </datafield>
+  <datafield tag="630" ind1="0" ind2="7">
+   <subfield code="a">Coffin texts.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01359107</subfield>
+  </datafield>
+  <datafield tag="630" ind1="0" ind2="7">
+   <subfield code="a">Pyramid texts.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01359009</subfield>
+  </datafield>
+  <datafield tag="655" ind1=" " ind2="7">
+   <subfield code="a">Dictionaries.</subfield>
+   <subfield code="2">fast</subfield>
+   <subfield code="0">http://id.worldcat.org/fast/fst01423826</subfield>
+  </datafield>
+  <datafield tag="776" ind1="0" ind2="8">
+   <subfield code="i">Print version:</subfield>
+   <subfield code="a">Allen, Thomas George, b. 1885.</subfield>
+   <subfield code="t">Occurrences of pyramid texts, with cross indexes of these and other Egyptian mortuary texts.</subfield>
+   <subfield code="d">Chicago, University of Chicago Press [1950]</subfield>
+   <subfield code="w">(DLC) 50009024</subfield>
+   <subfield code="w">(OCoLC)5054508</subfield>
+  </datafield>
+  <datafield tag="830" ind1=" " ind2="0">
+   <subfield code="a">Studies in ancient oriental civilization ;</subfield>
+   <subfield code="v">no. 27.</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="0">
+   <subfield code="u">http://bibpurl.oclc.org/web/42184</subfield>
+  </datafield>
+  <datafield tag="903" ind1=" " ind2=" ">
+   <subfield code="a">MARS</subfield>
+  </datafield>
+  <datafield tag="903" ind1=" " ind2=" ">
+   <subfield code="a">UCPress</subfield>
+  </datafield>
+  <datafield tag="928" ind1=" " ind2=" ">
+   <subfield code="u">http://bibpurl.oclc.org/web/42184</subfield>
+   <subfield code="c">FullText</subfield>
+   <subfield code="l">Online</subfield>
+   <subfield code="t">LCC</subfield>
+   <subfield code="a">PJ1553.A63 1950</subfield>
+  </datafield>
+ </record>
+</collection>
