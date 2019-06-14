@@ -14,7 +14,15 @@ from langdetect import detect
 import spacy
 from scipy import spatial
 import unicodedata
-import nltk
+from nltk.corpus import stopwords
+import itertools
+
+stopwords_de=stopwords.words('german')
+stopwords_en=stopwords.words('english')
+stopwords_fr=stopwords.words('french')
+stopwords_es=stopwords.words('spanish')
+stopwords_it=stopwords.words('italian')
+stopwords_nl=stopwords.words('dutch')
 
 def remove_accents(word_list):
     new_word_list=[]
@@ -57,26 +65,38 @@ def calculate_cosine_similarity(title, found_title):
     [title_list, found_title_list] = [lower_list(a) for a in [title_list, found_title_list]]
     [title_list, found_title_list] = [remove_accents(word) for word in [title_list, found_title_list]]
     if len(title_list)>len(found_title_list):
-        title_list_count=[title_list.count(word) for word in title_list]
-        found_title_list_count=[found_title_list.count(word) for word in title_list]
+        title_list_count=[title_list.count(word) for word in title_list if (word not in stopwords_en)]
+        found_title_list_count=[found_title_list.count(word) for word in title_list if (word not in stopwords_en)]
     else:
-        title_list_count=[title_list.count(word) for word in found_title_list]
-        found_title_list_count=[found_title_list.count(word) for word in found_title_list]
-    title_list_index={str(title_list.index(word)):word for word in title_list}
-    found_title_list_index={str(found_title_list.index(word)):word for word in found_title_list}
+        title_list_count=[title_list.count(word) for word in found_title_list if (word not in stopwords_en)]
+        found_title_list_count=[found_title_list.count(word) for word in found_title_list if (word not in stopwords_en)]
+    #print(title_list)
+    #print(title_list_count)
+    #print(found_title_list)
+    #print(found_title_list_count)
     similarity = 1 - spatial.distance.cosine(title_list_count, found_title_list_count)
-    if similarity == 1.0:
+    #print(similarity)
+    if similarity>0.9:
         return True
-    if similarity!=1.0:
+    elif similarity>0.68:
+        skipped_word_nr=0
+        skipped=False
         mismatches_nr=0
         matches_nr=0
         for word in title_list:
+            if skipped_word_nr>(len(title_list)/3):
+                return False
             if word in found_title_list:
-                if any(index == found_title_list.index(word) for index in [title_list.index(word)+1, title_list.index(word)+0, title_list.index(word)-1]):
-                    matches_nr+=1
-                else:
-                    mismatches_nr+=1
-        if matches_nr > mismatches_nr:
+                    if any(index == found_title_list.index(word) for index in [title_list.index(word)+1+skipped_word_nr, title_list.index(word)+skipped_word_nr, title_list.index(word)-1+skipped_word_nr]):
+                        if word not in stopwords_en:
+                            matches_nr+=1
+                    else:
+                        if word not in stopwords_en:
+                            mismatches_nr+=1
+            else:
+                skipped_word_nr+=1
+        #print(matches_nr, mismatches_nr)
+        if (matches_nr > mismatches_nr*2):
             return True
     return False
 
@@ -85,32 +105,24 @@ def swagger_find_article(search_title, search_authors, year, title):
         url=u'https://zenon.dainst.org/api/v1/search?lookfor=title%3A'+search_title+'%20AND%20author%3A'+search_authors+'%20AND%20publishDate%3A'+year+'&type=AllFields&sort=relevance&page=1&limit=20&prettyPrint=false&lng=de'
     else:
         url=u'https://zenon.dainst.org/api/v1/search?lookfor=title%3A'+search_title+'%20AND%20publishDate%3A'+year+'&type=AllFields&sort=relevance&page=1&limit=20&prettyPrint=false&lng=de'
+    #print(url)
     req = urllib.request.Request(url)
     with urllib.request.urlopen(req) as response:
         journal_page = response.read()
     journal_page=journal_page.decode('utf-8')
     resultcount=str(ast.literal_eval(str(journal_page))["resultCount"])
     if resultcount>='1':
-        title_found=str(ast.literal_eval(str(journal_page))["records"][0]["title"])
-        sysnr = str(ast.literal_eval(str(journal_page))["records"][0]["id"])
-        xml = "https://zenon.dainst.org/Record/"+sysnr+"/Export?style=MARCXML"
-        xml_file = urllib.request.urlopen(xml)
-        xml_file = xml_file.read()
-        xml_soup = BeautifulSoup(xml_file, 'xml')
-        parentid = [b.find('subfield', code='b').text for b in xml_soup.find_all('datafield', tag="995") if b.find('subfield', code='a').text =='ANA']
-        if parentid!=[]:
-            parentid = parentid[0]
-            if parentid in system_nrs:
-                system_nrs[parentid].append(sysnr)
-            else:
-                system_nrs[parentid]=[sysnr]
-        #similarity = calculate_cosine_similarity(title, title_found)
-        '''if similarity == True:
-            print(similarity)
-            print(title)
-            print(title_found)
-        else:
-            resultcount = '0'''''
+        for record in ast.literal_eval(str(journal_page))["records"]:
+            #print(record)
+            title_found=record["title"]
+            sysnr = str(ast.literal_eval(str(journal_page))["records"][0]["id"])
+            similarity = calculate_cosine_similarity(title, title_found)
+            if similarity==False:
+                resultcount = '0'
+            if similarity==True:
+                resultcount = '1'
+                break
+    #print(resultcount)
     return resultcount
 
 def find_article(title, authors):
@@ -128,40 +140,51 @@ def find_article(title, authors):
         author_nr += 1
     search_authors=search_authors.strip("+")
     for word in RegexpTokenizer(r'\w+').tokenize(title):
-        if (not 'vol' in word.lower()) and (word_nr<7) and (len(word)>3):
+        if (not 'vol' in word.lower()) and (word_nr<7) and (len(word)>2) and (word not in stopwords_en):
             word=urllib.parse.quote(word, safe='')
             search_title=search_title+"+"+word
             word_nr+=1
-    if word_nr>=2:
-        search_title=search_title.strip("+")
-        resultcount=swagger_find_article(search_title, search_authors, year, title)
-    if resultcount=='0':
-        search_authors=search_authors.split("+")[0]
-        resultcount=swagger_find_article(search_title, search_authors, year, title)
-    if resultcount=='0':
-        search_title=""
-        word_nr=0
-        adjusted_title=title.split(".")[0].split(":")[0]
-        for word in RegexpTokenizer(r'\w+').tokenize(adjusted_title):
-            if (not 'vol' in word.lower()) and (word_nr<7) and (len(word)>3):
-                word=urllib.parse.quote(word, safe='')
-                if '%' in word:
-                    continue
-                search_title=search_title+"+"+word
-                word_nr+=1
         if word_nr>=2:
             search_title=search_title.strip("+")
             resultcount=swagger_find_article(search_title, search_authors, year, title)
-    if resultcount=='0':
-        search_authors=""
-        resultcount=swagger_find_article(search_title, search_authors, year, title)
-    if resultcount=='0':
-        for word in search_title.split("+"):
-            if resultcount>'0':
-                continue
-            search_title_without_word=search_title.replace(word, '').replace('++', '+').strip('+')
-            resultcount=swagger_find_article(search_title_without_word, search_authors, year, title)
-    return resultcount
+        if resultcount=='0':
+            search_authors=search_authors.split("+")[0]
+            resultcount=swagger_find_article(search_title, search_authors, year, title)
+        if resultcount=='0':
+            resultcount=swagger_find_article(search_title, "", year, title)
+        if resultcount=='0':
+            search_title=""
+            word_nr=0
+            adjusted_title=title.split(".")[0].split(":")[0]
+            for word in RegexpTokenizer(r'\w+').tokenize(adjusted_title):
+                if (not 'vol' in word.lower()) and (word_nr<8) and (len(word)>3):
+                    word=urllib.parse.quote(word, safe='')
+                    if '%' in word:
+                        continue
+                    search_title=search_title+"+"+word
+                    word_nr+=1
+            search_title=search_title.strip("+")
+            resultcount=swagger_find_article(search_title, search_authors, year, title)
+        if resultcount=='0':
+            search_authors=""
+            resultcount=swagger_find_article(search_title, search_authors, year, title)
+        if resultcount=='0':
+            if len(RegexpTokenizer(r'\w+').tokenize(title))>4:
+                for pair in itertools.combinations(search_title.split("+"), 2):
+                    search_title_without_words=search_title
+                    if resultcount>'0':
+                        break
+                    for word in pair:
+                        search_title_without_words=search_title_without_words.replace(word, '').replace('++', '+').strip('+')
+                    resultcount=swagger_find_article(search_title_without_words, search_authors, year, title)
+            else:
+                for word in search_title.split("+"):
+                    search_title_without_words=search_title
+                    if resultcount>'0':
+                        break
+                    search_title_without_words=search_title_without_words.replace(word, '').replace('++', '+').strip('+')
+                    resultcount=swagger_find_article(search_title_without_words, search_authors, year, title)
+        return resultcount
 def create_jpgs(pdf, record_nr, title):
     webFile = urllib.request.urlopen(pdf)
     pdfFile = open("efb_files/"+year+"_"+title+'.pdf', 'wb')
@@ -211,8 +234,7 @@ def determine_nonfiling_characters(recent_record, title, year):
     recent_record.add_field(Field(tag='008', indicators=None, subfields=None, data=data_008))
     return nonfiling_characters
 
-def create_new_record(adjusted_parts_of_title, out, toc, pdf, pages, issue, year):
-    print(year)
+def create_new_record(adjusted_parts_of_title, out, toc, pdf, pages, issue, year, titles_processed):
     doi=None
     recent_record = Record(force_utf8=True)
     if "DOI:" in adjusted_parts_of_title[-1]:
@@ -240,47 +262,68 @@ def create_new_record(adjusted_parts_of_title, out, toc, pdf, pages, issue, year
             recent_record.add_field(Field(tag='700', indicators=['1', ' '], subfields=['a', author]))
             author_nr = author_nr
     title=adjusted_parts_of_title[0]
+
     lang=detect(title)
     title_word_list = RegexpTokenizer(r'\w+').tokenize(title)
     title_word_list.sort(key=len, reverse=True)
     for word in title_word_list:
         for item in re.findall(r'(?:^|\W)'+ word + r'(?:\W|$)', title):
-            title=title.replace(item, item.replace(word, word.capitalize()))
-    print(title)
-    recent_record.add_field(Field(tag='006', indicators=None, data='m        d        '))
-    recent_record.add_field(Field(tag='007', indicators=None, subfields=None, data=u'tz'))
-    recent_record.add_field(Field(tag='040', indicators=[' ', ' '], subfields=['a', 'DE-2553', 'd', 'DE-2553']))
-    recent_record.add_field(Field(tag='336', indicators=[' ', ' '], subfields=['a', 'text', 'b', 'txt', '2', 'rdacontent']))
-    recent_record.add_field(Field(tag='337', indicators=[' ', ' '], subfields=['a', 'computer', 'b', 'c', '2', 'rdamedia']))
-    recent_record.add_field(Field(tag='338', indicators=[' ', ' '], subfields=['a', 'online resource', 'b', 'cr', '2', 'rdacarrier']))
-    recent_record.leader = recent_record.leader[:5] + 'nmb a       uu ' + recent_record.leader[20:]
-    recent_record.add_field(Field(tag='590', indicators=[' ', ' '], subfields=['a', 'arom']))
-    recent_record.add_field(Field(tag='590', indicators=[' ', ' '], subfields=['a', '2019xhnxmaa']))
-    recent_record.add_field(Field(tag='590', indicators=[' ', ' '], subfields=['a', 'online publication']))
-    nonfiling_characters = determine_nonfiling_characters(recent_record, title, year)
-    create_245_and_246(recent_record, title, nonfiling_characters, author_nr)
-    recent_record.add_field(Field(tag='264', indicators=[' ', '1'], subfields=['a', 'Rhodes', 'b', 'University of the Aegean', 'c', year]))
-    if pdf != None:
-        recent_record.add_field(Field(tag='856', indicators=['4', '1'],
-                                      subfields=['z', 'application/pdf', 'u', pdf]))
-    recent_record.add_field(Field(tag='856', indicators=['4', '1'],
-                                  subfields=['z', 'Table of Contents', 'u', toc]))
-    recent_record.add_field(Field(tag='LKR', indicators=[' ', ' '],
-                                  subfields=['a', 'ANA', 'b', '001376930', 'l', 'DAI01',
-                                             'm', title, 'n', 'Mediterranean Archaeology & Archaeometry, ' +issue_nr+" ("+year+")", 'x', '2241-8121']))
-    if pages!=[]:
-        recent_record.add_field(Field(tag='300', indicators=[' ', ' '], subfields=['a', 'Fasc.'+issue_nr+', p.'+pages]))
-    else:
-        recent_record.add_field(Field(tag='300', indicators=[' ', ' '], subfields=['a', 'Fasc.'+issue_nr]))
-    if year!='2019':
-        resultcount=find_article(title, authors)
-    else:
-        resultcount='0'
-    #if resultcount != '0':
-        #print(year, issue_nr)
-    if resultcount=='0':
+            if item[0] == "'" and len(item) == 3:
+                title=title.replace(item, item.replace(word, word.lower()))
+            else:
+                title=title.replace(item, item.replace(word, word.capitalize()))
+    '''
+    if title in [#'Comparative Re-Surveys By Statistics And Gis In Isernia And Venosa (Molise And Basilicata, Italy)', #Index-Problem mit Einschub lösen?
+                 'On The Value And Meaning Of Proclus’ Perfect Year',
+                 'Metal Jewelry And Socioeconomic Status In Rural Jordan In Late Antiquity',
+                 'Identification Of Buried Archaeological Relics Using Derivatives Of Magnetic Anomalies In Olympos Mountain, West Anatolia: A Case Study',
+                 'Auditory Exostoses, Infracranial Skeleto-Muscular Changes And Maritime Activities In Classical Period Thasos Island',
+                 'Comparison Between The Properties Of "Acceelerated-Aged" Bones And Archaeologcial Bones',
+                 'Breaking News: Decoding The Earliest "Computer": The Antikythera Astrolabe. Science And Technology In Ancient Greece',
+                 'Dating Of Megalithic Masontry By Luminescence Techniques',
+                 'Editorial Addendum: Revival Of Obsidian Studies']:
+    '''
+    if title not in titles_processed:
+        recent_record.add_field(Field(tag='006', indicators=None, data='m        d        '))
+        recent_record.add_field(Field(tag='007', indicators=None, subfields=None, data=u'cr uuu   uuuuu'))
+        recent_record.add_field(Field(tag='040', indicators=[' ', ' '], subfields=['a', 'MAA', 'd', 'DE-2553']))
+        recent_record.add_field(Field(tag='336', indicators=[' ', ' '], subfields=['a', 'text', 'b', 'txt', '2', 'rdacontent']))
+        recent_record.add_field(Field(tag='337', indicators=[' ', ' '], subfields=['a', 'computer', 'b', 'c', '2', 'rdamedia']))
+        recent_record.add_field(Field(tag='338', indicators=[' ', ' '], subfields=['a', 'online resource', 'b', 'cr', '2', 'rdacarrier']))
+        recent_record.leader = recent_record.leader[:5] + 'nab a       uu ' + recent_record.leader[20:]
+        recent_record.add_field(Field(tag='590', indicators=[' ', ' '], subfields=['a', 'arom']))
+        recent_record.add_field(Field(tag='590', indicators=[' ', ' '], subfields=['a', '2019xhnxmaa']))
+        recent_record.add_field(Field(tag='590', indicators=[' ', ' '], subfields=['a', 'online publication']))
+        nonfiling_characters = determine_nonfiling_characters(recent_record, title, year)
+        create_245_and_246(recent_record, title, nonfiling_characters, author_nr)
+        titles_processed.append(title)
+        recent_record.add_field(Field(tag='264', indicators=[' ', '1'], subfields=['a', 'Rhodes', 'b', 'University of the Aegean', 'c', year]))
+        if pdf != None:
+            recent_record.add_field(Field(tag='856', indicators=['4', '0'],
+                                          subfields=['z', 'application/pdf', 'u', pdf]))
+        recent_record.add_field(Field(tag='856', indicators=['4', '2'],
+                                      subfields=['z', 'Table of Contents', 'u', toc]))
+        recent_record.add_field(Field(tag='LKR', indicators=[' ', ' '],
+                                      subfields=['a', 'ANA', 'b', '001575472', 'l', 'DAI01',
+                                                 'm', title, 'n', 'Mediterranean Archaeology & Archaeometry, ' +issue_nr+" ("+year+")", 'x', '2241-8121']))
+        if pages!=[]:
+            recent_record.add_field(Field(tag='300', indicators=[' ', ' '], subfields=['a', 'Fasc.'+issue_nr+', p.'+pages]))
+        else:
+            recent_record.add_field(Field(tag='300', indicators=[' ', ' '], subfields=['a', 'Fasc.'+issue_nr]))
+        '''
+        if year!='2019':
+            resultcount=find_article(title, authors)
+        else:
+            resultcount='0'
+        if resultcount>'0':
+            print('found:', year, issue_nr, title)
+        else:
+            print('not found:', year, issue_nr, title)
+        '''
         out.write(recent_record.as_marc21())
+    return titles_processed
 
+titles_processed=[]
 issue_data={}
 out = None
 basic_url = 'http://www.maajournal.com/'
@@ -304,6 +347,10 @@ for issue in issues:
     url = basic_url+issue.find('a')['href']+'#mw999'
     toc = url
     year=re.findall('\d{4}', issue.find('a')['href'])[0]
+    if year != '2019':
+        break
+    #if year in ['2001', '2004', '2007', '2008', '2009', '2011', '2012', '2018']:
+        #continue
     req = urllib.request.Request(url, data, headers)
     with urllib.request.urlopen(req) as response:
         issue_page = response.read()
@@ -368,6 +415,7 @@ for issue in issues:
                                 parts_of_title[0]=parts_of_title[0]+")"
                             issue_data[year+"_"+volume][pdf]={'title':title, 'year':year, 'volume':volume, 'issue_nr':issue_nr}
                 if len(adjusted_parts_of_title)!=0:
+                    article_nr+=1
                     if adjusted_parts_of_title[0] in ["FAUNAL REMAINS FROM EARLY HELLADIC II", "SUKIAS HOUSE AND ITS WALL PAINTINGS: REFLECTION OF ENGLISH-ARMENIAN LINKS IN THE SAFAVID PERIOD (1501-1736 AD) IN ISFAHAN,"]:
                         seperator=" "
                         adjusted_parts_of_title=[seperator.join((adjusted_parts_of_title))]
@@ -380,22 +428,7 @@ for issue in issues:
                     if pages!=[]:
                         adjusted_parts_of_title[0]=adjusted_parts_of_title[0].replace(pages[0], "").strip()
                         pages=pages[0].replace('(', '').replace(')', '').replace('pp.', '').strip()
-                    create_new_record(adjusted_parts_of_title, out, toc, pdf, pages, issue, year)
+                    create_new_record(adjusted_parts_of_title, out, toc, pdf, pages, issue, year, titles_processed)
+    print(year, article_nr)
 
 doublets_not_recognized=[]
-
-all_sysnumbers=[]
-
-for parentid in system_nrs:
-    print(system_nrs[parentid])
-    url="https://zenon.dainst.org/api/v1/search?lookfor="+parentid+"&sort=relevance&page=1&limit=20&prettyPrint=false&lng=de"
-    print(url)
-    req = urllib.request.Request(url)
-    with urllib.request.urlopen(req) as response:
-        records_page = response.read()
-    records_page=records_page.decode('utf-8')
-    all_records=ast.literal_eval(str(records_page))["records"]
-    for id in system_nrs[parentid]:
-        if id in all_records:
-            all_records.remove(id)
-    print(all_records)

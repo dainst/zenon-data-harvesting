@@ -1,32 +1,33 @@
 from PIL import Image
 import pytesseract
 import os
-import time
 import language_codes
 from langdetect import detect
 
-for dirname in os.listdir('pages_jpg'):
+for dirname in os.listdir('pages_jpg_efb'):
+    print(dirname)
     lang_code=None
-    txt=open("eperiodica_text_files/"+dirname+".txt", mode='w+', encoding='utf-8')
+    txt=open("efb_text_files/"+dirname+".txt", mode='w+', encoding='utf-8')
+    lang = language_codes.resolve(detect(dirname[4:]))
+    if lang=='fre':
+        lang_code='fra'
+    elif lang=='ita':
+        lang_code='ita'
+    elif lang=='dut':
+        lang_code='nld'
+    elif lang=='spa':
+        lang_code='spa'
+    else:
+        lang_code='deu'
+    print(lang_code)
     jpg_nr=0
-    for filename in os.listdir('pages_jpg/'+dirname):
+    for filename in sorted(os.listdir('pages_jpg_efb/'+dirname)):
         jpg_nr+=1
-        text = str(((pytesseract.image_to_string(Image.open('pages_jpg/'+dirname+'/'+filename),lang="deu"))))
         try:
-            language=language_codes.resolve(detect(text))
-            print(language)
-            if language!='ger':
-                if language=='fre':
-                    lang_code='fra'
-                if language=='ita':
-                    lang_code='ita'
-                if language=='dut':
-                    lang_code='nld'
-                if language=='spa':
-                    lang_code='spa'
-                text = str(((pytesseract.image_to_string(Image.open('pages_jpg/'+dirname+'/'+filename),lang=lang_code))))
+            text = str(pytesseract.image_to_string(Image.open('pages_jpg_efb/'+dirname+'/'+filename),lang=lang_code))
             txt.write(text)
         except:
+            print('Umwandlung gescheitert')
             continue
     txt.close()
 '''

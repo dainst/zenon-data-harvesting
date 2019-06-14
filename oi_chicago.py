@@ -17,59 +17,70 @@ import unicodedata
 import pymarc
 import xml.etree.ElementTree as ET
 
+language_articles={'eng': ['the','a', 'an'], 'fre':['la','le','les','un', 'une', 'l\'', 'il'], 'spa':['el','lo','la','las','los',
+                                                                                                      'uno' 'un', 'unos', 'unas', 'una'], 'ger':['das', 'der', 'ein', 'eine', 'die'], 'ita':['gli', 'i','le', 'la', 'l\'',
+                                                                                                                                                                                             'lo', 'il', 'gl\'', 'l']}
+
 def create_new_record(out, xml_soup, pdfs, url, record_nr):
     time_str = arrow.now().format('YYMMDD')
     recent_record = Record(force_utf8=True)
-    #print(xml_soup)
-    if xml_soup.find('datafield', tag='245').find('b')!=None:
-        title_for_lang_detection=xml_soup.find('datafield', tag='245').find('subfield', code='a').text+" "+xml_soup.find('datafield', tag='245').find('subfield', code='b').text
-    else:
-        title_for_lang_detection=xml_soup.find('datafield', tag='245').find('subfield', code='a').text
-    language = language_codes.resolve(detect(title_for_lang_detection))
     recent_record.add_field(Field(tag='006', indicators=None, data='m        d        '))
     recent_record.add_field(Field(tag='007', indicators=None, subfields=None, data=u'tz'))
     old_008 = xml_soup.find('controlfield', tag='008').text
-    print(old_008)
-    year='    '
-    copyright_year=''
-    if len(xml_soup.find_all('datafield', tag='260'))!=0:
-        year=re.findall(r'(\d{4})',xml_soup.find_all('datafield', tag='260')[0].find('subfield', code='c').text)[0]
-    if len(xml_soup.find_all('datafield', tag='264'))==0:
-        copyright_year=input('Bitte geben Sie das Copyright-Jahr an: ')
-    if len(xml_soup.find_all('datafield', tag='264'))==1:
-        year=re.findall(r'(\d{4})',xml_soup.find_all('datafield', tag='264')[0].find('subfield', code='c').text)[0]
-    if len(xml_soup.find_all('datafield', tag='264'))==2:
-        year=re.findall(r'\d{4}',xml_soup.find_all('datafield', tag='264')[0].find('subfield', code='c').text)[0]
-        copyright_year=re.findall(r'\d{4}',xml_soup.find_all('datafield', tag='264')[1].find('subfield', code='c').text)[0]
-    if copyright_year=='':
-        data_008 = time_str+'s'+year+'    '+'ilu'+' |   o     |    |'+old_008[-5:]
-    else:
-        data_008 = time_str+'t'+year+copyright_year+'ilu'+' |   o     |    |'+old_008[-5:]
-    print(data_008)
-    #str(time_str) + 's' + year + '    ' + 'gr ' + ' |   o     |    |' + language + ' d'
-    '''
-    data_008 = str(time_str) + 's' + year + '    ' + 'gr ' + ' |   o     |    |' + language + ' d'
-    
-
+    language = old_008[35:38]
+    year=''
+    if len(xml_soup.find_all('datafield', tag='264'))>=1:
+        year = re.findall(r'(\d{4})',xml_soup.find_all('datafield', tag='264')[0].find('subfield', code='c').text)[0]
+    if len(xml_soup.find_all('datafield', tag='260'))!=0 and year=='':
+        year = re.findall(r'(\d{4})',xml_soup.find_all('datafield', tag='260')[0].find('subfield', code='c').text)[0]
+    if year=='':
+        year=input('Bitte geben Sie das Jahr ein: ')
+    print(year)
+    data_008 = time_str+'s'+year+'    '+'ilu'+' |   o     |    |'+old_008[-5:]
     recent_record.add_field(Field(tag='008', indicators=None, subfields=None, data=data_008))
-    recent_record.add_field(Field(tag='040', indicators=[' ', ' '], subfields=['a', 'DE-2553', 'b', 'DE-2553']))
+    recent_record.add_field(Field(tag='040', indicators=[' ', ' '], subfields=['a', 'OI', 'b', 'eng', 'd', 'DE-2553', 'e', 'rda']))
+    recent_record.add_field(Field(tag='041', indicators=['1', ' '], subfields=['a', language]))
+    recent_record.add_field(Field(tag='300', indicators=[' ', ' '], subfields=['a', '1 online resource']))
     recent_record.add_field(Field(tag='336', indicators=[' ', ' '], subfields=['a', 'text', 'b', 'txt', '2', 'rdacontent']))
     recent_record.add_field(Field(tag='337', indicators=[' ', ' '], subfields=['a', 'computer', 'b', 'c', '2', 'rdamedia']))
     recent_record.add_field(Field(tag='338', indicators=[' ', ' '], subfields=['a', 'online resource', 'b', 'cr', '2', 'rdacarrier']))
     recent_record.leader = recent_record.leader[:5] + 'mmb a       uu ' + recent_record.leader[20:]
-    recent_record.add_field(Field(tag='590', indicators=[' ', ' '], subfields=['a', 'arom']))
-    recent_record.add_field(Field(tag='590', indicators=[' ', ' '], subfields=['a', '2019xhnxmaa']))
+    recent_record.add_field(Field(tag='590', indicators=[' ', ' '], subfields=['a', 'ebookoa0619']))
+    recent_record.add_field(Field(tag='590', indicators=[' ', ' '], subfields=['a', '2019xhnxoi']))
     recent_record.add_field(Field(tag='590', indicators=[' ', ' '], subfields=['a', 'online publication']))
-    recent_record.add_field(Field(tag='041', indicators=['1', ' '], subfields=['a', language]))
-
-    recent_record.add_field(Field(tag='245', indicators=[str(author_nr), nonfiling_characters], subfields=['a', title]))
-
-    recent_record.add_field(Field(tag='264', indicators=[' ', '1'], subfields=['a', 'Rhodes', 'b', 'University of the Aegean', 'c', year]))
+    ind_1_245 = ' '
+    if xml_soup.find('datafield', tag='100') != None:
+        ind_1_245 = '1'
+        for responsible in xml_soup.find_all('datafield', tag='100'):
+            subfields_100=[]
+            for subfield in xml_soup.find('datafield', tag='100').find_all('subfield'):
+                subfields_100.append(subfield['code'])
+                subfields_100.append(subfield.text)
+            recent_record.add_field(Field(tag='100', indicators=[responsible['ind1'], responsible['ind2']], subfields=subfields_100))
+    if xml_soup.find('datafield', tag='700') != None:
+        ind_1_245 = '1'
+        for responsible in xml_soup.find_all('datafield', tag='700'):
+            subfields_700=[]
+            for subfield in xml_soup.find('datafield', tag='700').find_all('subfield'):
+                subfields_700.append(subfield['code'])
+                subfields_700.append(subfield.text)
+            recent_record.add_field(Field(tag='700', indicators=[responsible['ind1'], responsible['ind2']], subfields=subfields_700))
+    nonfiling_characters = '0'
+    if language in language_articles.keys():
+        first_word=(xml_soup.find('datafield', tag='245').find('subfield', code='a').text).split()[0].lower()
+        if first_word in language_articles[language]:
+            nonfiling_characters=str(len(first_word)+1)
+    subfields_245 = []
+    for subfield in xml_soup.find('datafield', tag='245').find_all('subfield'):
+        subfields_245.append(subfield['code'])
+        subfields_245.append(xml_soup.find('datafield', tag='245').find('subfield', code=subfield['code']).text)
+    recent_record.add_field(Field(tag='245', indicators=[ind_1_245, nonfiling_characters], subfields=subfields_245))
+    recent_record.add_field(Field(tag='264', indicators=[' ', '1'], subfields=['a', 'Chicago', 'b', 'The Oriental Institute', 'c', year]))
     for pdf in pdfs:
         recent_record.add_field(Field(tag='856', indicators=['4', '1'], subfields=['z', 'application/pdf', 'u', pdf]))
     recent_record.add_field(Field(tag='856', indicators=['4', '1'],
                                   subfields=['z', 'Abstract', 'u', url]))
-    out.write(recent_record.as_marc21())'''
+    out.write(recent_record.as_marc21())
 
 out=open('oi_all.mrc', 'wb')
 basic_url = 'https://oi.uchicago.edu/research/publications/archaeology'
@@ -119,14 +130,13 @@ for pub in oi_pubs:
         journal_page = journal_page.decode('utf-8')
         journal_soup = BeautifulSoup(journal_page, 'html.parser')
         title=journal_soup.find('article').find('h1').text
-        previous_title=title
-        title=urllib.parse.quote(title, safe='')
         pdfs=[]
         for item in journal_soup.find_all('a', text='Download'):
             if '.pdf' in item['href']:
-                pdfs.append(item['href'])
-        print(previous_title)
-        number=input('Bitte geben sie die ID ein: ')
+                pdfs.append('https://oi.uchicago.edu'+item['href'])
+        print(title)
+
         with open('oi_c/'+str(record_nr)+'.xml', 'r') as xml_file:
             xml_soup=BeautifulSoup(xml_file, 'xml')
             create_new_record(out, xml_soup, pdfs, url, record_nr)
+

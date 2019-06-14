@@ -27,6 +27,5 @@ else:
     print("Es gibt mehrere Treffer zu Ihrer Suche. Diese lauten:")
     for title in titles_found:
         print(title.text)
-
 driver.close()
 

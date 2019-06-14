@@ -81,74 +81,48 @@ def swagger_search_ebook(search_title, search_authors, year, title):
     return selected_sysnumber
 #definition für create_review_title
 
-def swagger_find_reviewed_article(recent_record, title, author_names, editor_names, year):
-    search_title=""
-    word_nr=0
-    search_authors=""
-    name_nr=0
-    for author_name in author_names:
-        name_nr+=1
-        if name_nr<=1:
-            for name in author_name.split(" "):
-                name=urllib.parse.quote(name, safe='')
-                if ("." not in name):
-                    search_authors=search_authors+"+"+name
-    search_authors=search_authors.strip("+")
-    for editor_name in editor_names:
-        name_nr+=1
-        if name_nr<=2:
-            for name in editor_name.split(" "):
-                name=urllib.parse.quote(name, safe='')
-                if ("." not in name):
-                    search_authors=search_authors+"+"+name
-    search_authors=search_authors.strip("+")
-    for word in RegexpTokenizer(r'\w+').tokenize(title):
-        if (word_nr<7) and (len(word)>3):
-            word=urllib.parse.quote(word, safe='')
-            search_title=search_title+"+"+word
-            word_nr+=1
-    search_title=search_title.strip("+")
-    ebook=swagger_search_ebook(search_title, search_authors, year, title)
-    return ebook
-
-def create_245_and_246(recent_record, title, nonfiling_characters, author_nr):
-    recent_record.add_field(Field(tag='245', indicators = [str(author_nr), nonfiling_characters], subfields = ['a', title]))
-
-def determine_nonfiling_characters(recent_record, title, year):
-    nonfiling_characters=0
-    language='eng'
-    recent_record.add_field(Field(tag='041', indicators = ['1', ' '], subfields = ['a', language]))
-    if language in language_articles.keys():
-        first_word=(title.split()[0]).lower()
-        if first_word in language_articles[language]:
-            nonfiling_characters=str(len(first_word)+1)
-    time_str=arrow.now().format('YYMMDD')
-    data_008=str(time_str)+'s'+ year + '    ' + 'enk' + ' |   o     |    |' + language  +' d'
-    recent_record.add_field(Field(tag='008', indicators=None, subfields=None, data=data_008))
-    return nonfiling_characters
-
-def create_new_record(recent_record, out, link):
-
+def create_new_record(recent_record, out, link, year, href):
+        time_str=arrow.now().format('YYMMDD')
+        data_008=str(time_str)+'s'+ year + '    ' + 'enk' + ' |   o     |    |' + 'eng'  +' d'
+        recent_record.add_field(Field(tag='008', indicators=None, subfields=None, data=data_008))
+        recent_record.add_field(Field(tag='006', indicators=None, subfields=None, data=u'm        d        '))
+        recent_record.add_field(Field(tag='007', indicators=None, subfields=None, data=u'tc'))
+        recent_record.add_field(Field(tag='041', indicators = ['1', ' '], subfields = ['a', 'eng']))
         recent_record.add_field(Field(tag='336', indicators = [' ', ' '], subfields = ['a', 'text', 'b', 'txt', '2', 'rdacontent']))
+        recent_record.add_field(Field(tag='337', indicators = [' ', ' '], subfields = ['a', 'computer', 'b', 'c', '2', 'rdamedia']))
+        recent_record.add_field(Field(tag='336', indicators = [' ', ' '], subfields = ['a', 'online resource', 'b', 'cr', '2', 'rdacarrier']))
         recent_record.add_field(Field(tag='040', indicators = [' ', ' '], subfields = ['a', 'FID-ALT-KA-DE-16', 'd', 'DE-2553']))
-        recent_record.leader = recent_record.leader[:5] + 'nab a       uu ' + recent_record.leader[20:]
+        recent_record.leader = recent_record.leader[:5] + 'nmm a       uu ' + recent_record.leader[20:]
+        recent_record.add_field(Field(tag='300', indicators = [' ', ' '], subfields = ['a', '1 online resource']))
         recent_record.add_field(Field(tag='500', indicators = [' ', ' '], subfields = ['a', 'Fachinformationsdienst Altertumswissenschaften (FID) Propylaeum: Sie können auf dieses Volltext-Angebot zugreifen, \
 sofern Sie sich registriert haben und zum berechtigten Nutzerkreis gehören. Weitere Informationen finden Sie hier: https://www.propylaeum.de/service/fid-lizenzen/']))
         recent_record.add_field(Field(tag='500', indicators = [' ', ' '], subfields = ['a', 'Propylaeum – Fachinformationsdienst Altertumswissenschaften ist der, gemeinsam von der Bayerischen Staatsbibliothek München und der Universitätsbibliothek Heidelberg, betriebene Fachinformationsdienst Altertumswissenschaften. Im Kontext der aktuellen Förderung durch die DFG sorgt Propylaeum mit Hilfe sogenannter „FID-Lizenzen“ auch für die überregionale Bereitstellung lizenzpflichtiger digitaler Medien.']))
-        recent_record.add_field(Field(tag='590', indicators = [' ', ' '], subfields = ['a', 'arom']))
-        recent_record.add_field(Field(tag='590', indicators = [' ', ' '], subfields = ['a', '2019xhnxosoe']))
+        recent_record.add_field(Field(tag='590', indicators = [' ', ' '], subfields = ['a', '2019xhnxjsotreeb']))
         recent_record.add_field(Field(tag='590', indicators = [' ', ' '], subfields = ['a', 'online publication']))
-        recent_record.add_field(Field(tag='590', indicators = [' ', ' '], subfields = ['a', 'ebookfid0519']))
-        recent_record.add_field(Field(tag='590', indicators = [' ', ' '], subfields = ['a', 'fidoso']))
-        recent_record.add_field(Field(tag='007', indicators=None, subfields=None, data=u'tu'))
-        nonfiling_characters=determine_nonfiling_characters(recent_record, title, year)
-        recent_record.add_field(Field(tag='264', indicators = [' ', '1'],
-                                      subfields = ['a', 'Oxford', 'b', publisher, 'c', year]))
+        recent_record.add_field(Field(tag='590', indicators = [' ', ' '], subfields = ['a', 'jstorebclassstud']))
+        if input("Wollen Sie die Erscheinungsdaten übernehmen?")!="y":
+            place_of_publication=input("Bitte geben Sie den Verlagsort an: ")
+            publisher=input("Bitte geben Sie den Verlag an: ")
+            if recent_record['264']!=None:
+                recent_record['264']['a']=place_of_publication
+                recent_record['264']['b']=publisher
+                recent_record['264']['c']=year
+            else:
+                recent_record.remove_fields('260')
+                recent_record.add_field(Field(tag='264', indicators = [' ', '1'],
+                                              subfields = ['a', place_of_publication, 'b', publisher, 'c', year]))
+        else:
+            if recent_record['264']==None:
+                recent_record.add_field(Field(tag='264', indicators = [' ', '1'],
+                                              subfields = ['a', recent_record['260']['a'], 'b', recent_record['260']['b'], 'c', year]))
+                recent_record.remove_fields('260')
         recent_record.add_field(Field(tag='856', indicators = ['4', '0'],
-                                          subfields = ['z', 'Available online for registered users of FID', 'u', link, 'x', 'Oxford Scholarship Online']))
+                                          subfields = ['z', 'Available online for registered users of FID', 'u', href]))
+        toc=href.replace("http://proxy.fid-lizenzen.de/han/jstor-ebooks-altertum/", "https://")
         recent_record.add_field(Field(tag='856', indicators = ['4', '1'],
-                                          subfields = ['z', 'Table of Contents', 'u', url]))
+                                      subfields = ['z', 'Table of Contents', 'u', toc]))
         out.write(recent_record.as_marc21())
+        return recent_record
 
 out=open('jstor.mrc', 'wb')
 record_nr=0
@@ -167,21 +141,22 @@ page=page.decode('utf-8')
 soup=BeautifulSoup(page, 'html.parser')
 links=soup.find_all("td")
 linklist=[]
+hreflist=[]
 for link in links:
     if link.find("a")!=None:
         linklist.append(link.find("a").text)
+        hreflist.append(link.find("a")['href'])
 linklist=linklist[4:]
+hreflist=hreflist[4:]
 link_nr=0
 for link in linklist:
-    if link_nr>5:
-        break
+    href=hreflist[linklist.index(link)]
     link_nr+=1
     remove_parentheses = re.compile(".*?\((.*?)\)")
     result = re.findall(remove_parentheses, link)
     for item in result:
         link=link.replace(" ("+item+")", "")
     year=result[-1][-4:]
-    #print(year)
     print()
     print(link)
     author_names=[]
@@ -214,13 +189,13 @@ for link in linklist:
         webFile = urllib.request.urlopen("https://zenon.dainst.org/Record/"+selected_sysnumber+"/Export?style=MARC")
         marcFile = open('records/jstor/jstor'+str(link_nr)+'.mrc', 'wb')
         marcFile.write(webFile.read())
+        marcFile.close()
         webFile.close()
-'''
-for record in os.listdir("records/jstor"):
-    with open("records/jstor/"+record, 'rb') as selected_record:
-        reader = MARCReader(selected_record)
-        for record in reader:
-            record.remove_fields('001', '005', '003', '010', '015', '020', )
-            print(record)
-#self.remove_fields(‘200’, ‘899’)'''
+        with open('records/jstor/jstor'+str(link_nr)+'.mrc', 'rb') as selected_record:
+            reader = MARCReader(selected_record)
+            recent_record = next(reader)
+            recent_record.remove_fields('001', '005', '003', '008', '010', '015', '020', '336', '337', '338', '993', '504', '490', '300', '035', '590', '040')
+            recent_record=create_new_record(recent_record, out, link, year, href)
+
+
 
