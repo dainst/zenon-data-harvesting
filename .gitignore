@@ -3,9 +3,12 @@
 
 # Python
 .venv/
+venv/
+__pycache__/
 
 # Results
 records/
+*.json
 
 # Datenpruefung
 datenpruefung/
@@ -14,6 +17,25 @@ datenpruefung/
 find_ebooks.py
 frequent_words.txt
 test.jpg
-test.pdf
+test.pdfgi
 test.txt
 eperiodica_journals.json
+
+efb/
+efb_files/
+efb_text_files/
+efb_xml_files/
+eperiodica_files/
+eperiodica_text_files/
+gnd_ids_from_geonames/
+html_css_javascript/
+maa/
+pages_jpg_eperiodica/
+pdf_text_jpg_files/
+pages_jpg_efb/
+records/oi_c_xml_files
+cases_of_doubt/
+logfiles/
+scripts_not_currently_used/
+
+

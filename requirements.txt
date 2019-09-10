@@ -1,0 +1,11 @@
+# Only for harvest_new_records.py
+
+bs4
+nameparser
+spacy
+pymarc
+langdetect
+arrow
+nltk
+scipy
+unidecode

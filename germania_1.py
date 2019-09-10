@@ -189,6 +189,11 @@ def create_new_record(article_soup, out, category, url):
     recent_record = Record(force_utf8=True)
     recent_record.add_field(
         Field(tag='336', indicators=[' ', ' '], subfields=['a', 'text', 'b', 'txt', '2', 'rdacontent']))
+    recent_record.add_field(
+        Field(tag='337', indicators=[' ', ' '], subfields=['a', 'computer', 'b', 'c', '2', 'rdamedia']))
+    recent_record.add_field(
+        Field(tag='338', indicators=[' ', ' '], subfields=['a', 'online resource', 'b', 'cr', '2', 'rdacarrier']))
+
     authors = article_soup.find_all('meta', attrs={'name': 'citation_author'})
     author_names = []
     for author in authors:
@@ -205,6 +210,8 @@ def create_new_record(article_soup, out, category, url):
         issue = None
     if article_soup.find('meta', attrs={'name': 'citation_doi'}) != None:
         doi = 'https://doi.org/' + article_soup.find('meta', attrs={'name': 'citation_doi'})['content']
+        if doi != None:
+            recent_record.add_field(Field(tag='024', indicators=['7', ' '], subfields=['a', doi, '2', 'doi']))
     abstract = article_soup.find('meta', attrs={'name': 'citation_abstract_html_url'})['content']
     if article_soup.find('meta', attrs={'name': 'citation_pdf_url'}) != None:
         pdf = article_soup.find('meta', attrs={'name': 'citation_pdf_url'})['content']
@@ -223,15 +230,11 @@ def create_new_record(article_soup, out, category, url):
             else:
                 recent_record.add_field(Field(tag='700', indicators=['1', ' '], subfields=['a', author]))
                 author_nr = author_nr
-    if doi != None:
-        recent_record.add_field(Field(tag='024', indicators=['7', ' '], subfields=['a', doi, '2', 'doi']))
+
     date_published_online = article_soup.find('div', class_='published').find('div', class_='value').text.strip()
     recent_record.add_field(Field(tag='006', indicators=None, data='m        u        '))
     recent_record.add_field(Field(tag='040', indicators=[' ', ' '], subfields=['a', 'DE-16', 'd', 'DE-2553']))
-    recent_record.add_field(
-        Field(tag='337', indicators=[' ', ' '], subfields=['a', 'computer', 'b', 'c', '2', 'rdamedia']))
-    recent_record.add_field(
-        Field(tag='338', indicators=[' ', ' '], subfields=['a', 'online resource', 'b', 'cr', '2', 'rdacarrier']))
+
     recent_record.add_field(Field(tag='533', indicators=[' ', ' '],
                                   subfields=['a', 'Online edition', 'b', 'Heidelberg', 'c', 'Heidelberg UB', 'd',
                                              date_published_online[:4], 'e', 'Online resource']))
@@ -331,7 +334,7 @@ def create_new_record(article_soup, out, category, url):
     create_245_and_246(recent_record, print_title, nonfiling_characters, author_nr)
     if review != True and "Fundchronik" not in title:
         search_subject(year, search_subject_title, search_subject_person, title)
-    publishers = {'1917': ['Frankfurt am Main', 'Baer'], '1921': ['Bamberg', 'Buchner'],
+    publishers = {'1904': ['Frankfurt am Main', 'Baer'], '1921': ['Bamberg', 'Buchner'],
                   '1932': ['Berlin', 'de Gruyter'], '1976': ['Mainz', 'von Zabern'],
                   '2011': ['Darmstadt', 'von Zabern'],
                   '2013': ['Frankfurt am Main', 'Henrich Editionen']}
@@ -405,8 +408,7 @@ for page in range(1, 8):
             if list_element.text.split("(")[1].split(")")[0] not in issues:
                 issues.append(list_element.text.split("(")[1].split(")")[0].replace("/", "-"))
                 out = open('records/germania/volume_' + list_element.text.split("(")[1].split(")")[0].replace("/",
-                                                                                                              "-") + '.mrc',
-                           'wb')
+                                                                                                              "-") + '.mrc', 'wb')
             else:
                 out = out
             url = list_element['href']
