@@ -122,15 +122,14 @@ def harvest():
                                     {'place_of_publisher': 'Heidelberg', 'publisher': 'Heidelberg UB',
                                      'date_published_online': article_soup.find('div', class_='published').find('div', class_='value').text.strip()}
                                 publication_dict['default_language'] = language_codes.resolve(article_soup.find('meta', attrs={'name': 'DC.Language'})['content'])
-                            publication_dict['field_008_18-34'] = 'gr poo||||||   b|'
-                            publication_dict['fields_590'] = ['arom', '2019xhnxberrgk', 'Online publication']
+                            publication_dict['field_008_18-34'] = 'ar poo||||||   b|'
+                            publication_dict['fields_590'] = ['arom', '2019xhnxgermania', 'Online publication']
                             publication_dict['original_cataloging_agency'] = 'DE-16'
                             publication_dict['publication_etc_statement']['publication'] = {'place': 'Heidelberg',
                                                                                             'responsible': 'Propylaeum',
                                                                                             'country_code': 'gw '}
                             publication_dict['table_of_contents_link'] = issue_url
                             publication_dict['volume_year'] = volume_year
-                            publication_dict['default_language'] = 'de'
                             publication_dict['copyright_year'] = re.findall(r'\d{4}', article_soup.find('meta', attrs={'name': 'DC.Rights'})['content'])[0]
                             if article_soup.find('meta', attrs={'name': 'citation_abstract_html_url'})['content']:
                                 publication_dict['abstract_link'] = article_soup.find('meta', attrs={'name': 'citation_abstract_html_url'})['content']
@@ -223,3 +222,5 @@ def harvest():
                 print('Log-File wurde auf', max(issues_harvested), 'geupdated.')
     except Exception as e:
         handle_error_and_raise.handle_error_and_raise(e)
+
+# Lücke von 1960 bis 2013
