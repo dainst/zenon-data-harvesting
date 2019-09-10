@@ -614,7 +614,7 @@ def create_new_record(out, publication_dict):
                                                       'c', publication_dict['publication_year']]))
                     country_code = publication_dict['publication_etc_statement'][function]['country_code']
                 function_nr += 1
-            if publication_dict['copyright_year']:
+            if publication_dict['copyright_year'] and publication_dict['copyright_year'] != publication_dict['publication_year']:
                 recent_record.add_field(Field(tag='264', indicators=[' ', '4'],
                                               subfields=['c', '©' + publication_dict['copyright_year']]))
             time = str(arrow.now().format('YYMMDD'))
@@ -622,7 +622,7 @@ def create_new_record(out, publication_dict):
                 publication_dict['field_008_06'] = 'r'
                 first_date = publication_dict['retro_digitization_info']['date_published_online']
                 second_date = publication_dict['publication_year']
-            elif publication_dict['copyright_year']:
+            elif publication_dict['copyright_year'] and publication_dict['copyright_year'] != publication_dict['publication_year']:
                 publication_dict['field_008_06'] = 't'
                 first_date = publication_dict['publication_year']
                 second_date = publication_dict['copyright_year']
