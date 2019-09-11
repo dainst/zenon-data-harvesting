@@ -89,7 +89,7 @@ def harvest():
                     for article in issue_soup.find_all('div', class_='obj_article_summary'):
                         if not any(word in article.text for word in
                                    ["Titelei", "Inhalt", "Vorwort", "Titel", "Literatur", "Widmung", "Beilage",
-                                    "Neuerscheinungen", "Besprechungen"]):
+                                    "Neuerscheinungen", "Besprechungen", "Hinweise für Publikationen", "Guidelines for Publications", "Recommandations aux auteurs"]):
                             article_url = article.find('div', class_='title').find('a')['href']
                             req = urllib.request.Request(article_url, data, headers)
                             with urllib.request.urlopen(req) as response:
@@ -146,6 +146,20 @@ def harvest():
                                 publication_dict['abstract_link'] = article_soup.find('meta', attrs={'name': 'citation_abstract_html_url'})['content']
                             if category == "Rezensionen / Reviews / Comptes rendus":
                                 title = publication_dict['title_dict']['main_title'].strip()
+                                if ' / ' in title:
+                                    parts = title.split(' / ')
+                                    titles = []
+                                    start_of_next_part = 0
+                                    for part in parts:
+                                        if len(part) > 25:
+                                            if parts.index(part) != -1:
+                                                titles.append(' / '.join(parts[start_of_next_part:parts.index(part)+1]))
+                                                start_of_next_part = parts.index(part) + 1
+                                            else:
+                                                titles.append(' / '.join(parts[start_of_next_part:parts.index(part)+1]))
+                                    if len(titles) > 1:
+                                        print(titles)
+                                    # hier Lösung für Titelteilung einfügen...
                                 persons = []
                                 rev_authors = []
                                 rev_editors = []
@@ -231,14 +245,17 @@ def harvest():
                                 pub_nr += created
                             else:
                                 break
-        print('Es wurden', pub_nr, 'neue Records für Berichte der RGK erstellt.')
+        print('Es wurden', pub_nr, 'neue Records für Germania erstellt.')
         if issues_harvested:
-            with open('records/berrgk/berrgk_logfile.json', 'w') as log_file:
+            with open('records/germania/germania_logfile.json', 'w') as log_file:
                 log_dict = {"last_issue_harvested": max(issues_harvested)}
                 json.dump(log_dict, log_file)
                 print('Log-File wurde auf', max(issues_harvested), 'geupdated.')
     except Exception as e:
         handle_error_and_raise.handle_error_and_raise(e)
+
+
+harvest()
 
 
 # Sprache übernehmen, prüfen, ob Rezensionen korrekt verarbeitet werden.
