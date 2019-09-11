@@ -1,0 +1,52 @@
+publication_dict['title_dict']['main_title'] = ''
+publication_dict['title_dict']['sub_title'] = ''
+publication_dict['title_dict']['parallel_title'] = ''
+publication_dict['title_dict']['responsibility_statement'] = ''
+publication_dict['authors_list'] = []
+publication_dict['editors_list'] = []
+publication_dict['abstract_link'] = ''
+publication_dict['table_of_contents_link'] = ''
+publication_dict['pdf_links'].append('')
+publication_dict['html_links'].append('')
+publication_dict['other_links_with_public_note'].append({'public_note': '', 'url': '})'
+publication_dict['doi'] = ''
+publication_dict['urn'] = ''
+publication_dict['isbn'] = ''
+publication_dict['text_body_for_lang_detection'] = ''
+publication_dict['default_language'] = ''
+publication_dict['do_detect_lang'] = True
+publication_dict['language_field'] = {'language_of_resource': [], 'language_of_original_item': []}
+publication_dict['fields_590'] = []
+publication_dict['original_cataloging_agency'] = ''
+publication_dict['publication_year'] = ''
+publication_dict['copyright_year'] = ''
+publication_dict['field_300'] = ''
+publication_dict['publication_etc_statement']['publication'] = {'place': '', 'responsible': '', 'country_code': ''}
+publication_dict['publication_etc_statement']['production'] = {'place': '', 'responsible': '', 'country_code': ''}
+publication_dict['publication_etc_statement']['distribution'] = {'place': '', 'responsible': '', 'country_code': ''}
+publication_dict['publication_etc_statement']['manufacture'] = {'place': '', 'responsible': '', 'country_code': ''}
+publication_dict['rdacontent'] = ''
+publication_dict['rdamedia'] = ''
+publication_dict['rdacarrier'] = ''
+publication_dict['host_item']['name'] = ''
+publication_dict['host_item']['sysnumber'] = ''
+publication_dict['host_item']['issn']
+publication_dict['volume'] = ''
+publication_dict['volume_year'] = ''
+publication_dict['issue'] = ''
+publication_dict['pages'] = ''
+publication_dict['retro_digitization_info'] = {'place_of_publisher': '', 'publisher': '', 'date_published_online': ''}
+publication_dict['review'] = False
+publication_dict['review_list'].append({'reviewed_title': '', 'reviewed_authors': [], 'reviewed_editors': [], 'year_of_publication': ''})
+publication_dict['response'] = False
+publication_dict['response_list'].append({'reviewed_title': '', 'reviewed_authors': [], 'reviewed_editors': [], 'year_of_publication': ''})
+publication_dict['part_of_series'].append({'series_title': '', 'part': '', 'uniform_title': ''})
+publication_dict['general_note'] = ''
+publication_dict['additional_content'] = {'type': '', 'text': ''}
+publication_dict['terms_of_access'] = {'restrictions': '', 'terms_note': '', 'authorized_users': '', 'terms_link': ''}
+publication_dict['terms_of_use_and_reproduction'] = {'terms_note': '', 'use_and_reproduction_rights': '', 'terms_link': ''}
+publication_dict['LDR_06_07'] = ''
+publication_dict['field_006'] = ''
+publication_dict['field_007'] = ''
+publication_dict['field_008_18-34'] = ''
+publication_dict['additional_fields'].append({'tag': '', 'indicators': ['', ''], 'subfields': ['', '', ...]})
