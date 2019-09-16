@@ -12,6 +12,7 @@ import itertools
 from pymarc import MARCReader
 import math
 import unidecode
+import handle_error_and_raise
 
 rda_codes = {'rdacarrier': {'sg': 'audio cartridge', 'sb': 'audio belt', 'se': 'audio cylinder', 'sd': 'audio disc',
                             'si': 'sound track reel', 'sq': 'audio roll', 'sw': 'audio wire reel',
@@ -70,10 +71,7 @@ def typewriter_distance(letter1, letter2):
             distance = 1
         return distance
     except Exception as e:
-        print('Error! Code: {c}, Message, {m}'.format(c=type(e).__name__, m=str(e)))
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print(exc_type, fname, exc_tb.tb_lineno)
+        handle_error_and_raise.handle_error_and_raise(e)
 
 
 def iterative_levenshtein(s, t):
@@ -94,10 +92,7 @@ def iterative_levenshtein(s, t):
                                      dist[row - 1][col - 1] + typewriter_distance(s[row - 1], t[col - 1]))
         return dist[len(s)][len(t)]
     except Exception as e:
-        print('Error! Code: {c}, Message, {m}'.format(c=type(e).__name__, m=str(e)))
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print(exc_type, fname, exc_tb.tb_lineno)
+        handle_error_and_raise.handle_error_and_raise(e)
 
 
 def check_cosine_similarity(title, found_title, found_record, rejected_titles, lang):
@@ -159,10 +154,7 @@ def check_cosine_similarity(title, found_title, found_record, rejected_titles, l
                             rejected_titles.append(found_record["id"] + found_title)
         return False
     except Exception as e:
-        print('Error! Code: {c}, Message, {m}'.format(c=type(e).__name__, m=str(e)))
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print(exc_type, fname, exc_tb.tb_lineno)
+        handle_error_and_raise.handle_error_and_raise(e)
 
 
 def swagger_find(search_title, search_authors, year, year_of_review, title, rejected_titles, lang, authors, all_results):
@@ -224,10 +216,7 @@ def swagger_find(search_title, search_authors, year, year_of_review, title, reje
                                         rejected_titles.append(found_record["id"] + title_found)
         return all_results
     except Exception as e:
-        print('Error! Code: {c}, Message, {m}'.format(c=type(e).__name__, m=str(e)))
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print(exc_type, fname, exc_tb.tb_lineno)
+        handle_error_and_raise.handle_error_and_raise(e)
 
 
 def find(title, authors, year, year_of_review, default_lang):
@@ -306,10 +295,7 @@ def find(title, authors, year, year_of_review, default_lang):
                 # Suche unter Ausschluss von einem oder zwei Suchbegriffen je nach Länge des Titels
             return all_results
     except Exception as e:
-        print('Error! Code: {c}, Message, {m}'.format(c=type(e).__name__, m=str(e)))
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print(exc_type, fname, exc_tb.tb_lineno)
+        handle_error_and_raise.handle_error_and_raise(e)
 
 
 # Spracherkennung verbessern!
