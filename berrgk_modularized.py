@@ -206,7 +206,6 @@ def harvest():
                                                                             'reviewed_editors': rev_editors,
                                                                             'year_of_publication': '',
                                                                             })
-                                    publication_dict['review'] = True
                             if create_new_record.check_publication_dict_for_completeness_and_validity(publication_dict):
                                 created = create_new_record.create_new_record(out, publication_dict)
                                 issues_harvested.append(current_item)
@@ -224,3 +223,7 @@ def harvest():
         handle_error_and_raise.handle_error_and_raise(e)
 
 # Lücke von 1960 bis 2013
+
+
+'''publishers = {'1908': ['Frankfurt am Main', 'Joseph Baer & Co.'], '1942': ['Berlin', 'de Gruyter'], '1975': ['Mainz', 'von Zabern'],
+              '2008': ['Darmstadt', 'von Zabern'], '2015': ['Frankfurt am Main', 'Henrich Editionen']}'''
