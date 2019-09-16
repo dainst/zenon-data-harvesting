@@ -43,6 +43,11 @@ dateTimeObj = datetime.now()
 timestampStr = dateTimeObj.strftime("%d-%b-%Y")
 
 
+def handle_article(article):
+    ...
+    # Code Artikelauswertung
+
+
 def harvest():
     try:
         with open('records/germania/germania_logfile.json', 'r') as log_file:
@@ -55,7 +60,8 @@ def harvest():
         pub_nr = 0
         empty_page = False
         page = 0
-        while not empty_page:
+        cancelled = False
+        while not empty_page and not cancelled:
             page += 1
             url = basic_url + str(page)
             user_agent = 'Mozilla/5.0 (X11; Linux x86_64; rv:66.0)'
@@ -74,6 +80,8 @@ def harvest():
             if not issues:
                 empty_page = True
             for issue in issues:
+                if cancelled:
+                    break
                 issue_information = issue.text
                 publication_year = issue_information.strip().strip("Bd. ").split("(")[1].split(")")[0]
                 if int(re.findall(r'\d{4}', publication_year)[0]) < 2015:
@@ -146,99 +154,99 @@ def harvest():
                                 publication_dict['abstract_link'] = article_soup.find('meta', attrs={'name': 'citation_abstract_html_url'})['content']
                             if category == "Rezensionen / Reviews / Comptes rendus":
                                 title = publication_dict['title_dict']['main_title'].strip()
+                                titles = [title]
                                 if ' / ' in title:
                                     parts = title.split(' / ')
-                                    titles = []
                                     start_of_next_part = 0
                                     for part in parts:
-                                        if len(part) > 25:
+                                        if len(part) > 30 and title not in ['Eva Alram-Stern / Angelika Dousougli-Zachos, Die deutschen Ausgrabungen 1941 auf der Visviki-Magula / Velestino. Die neolithischen Befunde und Funde',
+                                                                            'Niedersächsisches Institut für historische Küstenforschung (ed.), Marschenratskolloquium 2012. Flint von Helgoland – Die Nutzung einer einzigartigen Rohstoffquelle an der Nordseeküste / Marshland Council Colloquium 2012. Flint from Heligoland – the Exploitation of a Unique Source of Raw-Material on the North Sea Coast, 26.–28. April 2012']:
+                                            titles = []
                                             if parts.index(part) != -1:
                                                 titles.append(' / '.join(parts[start_of_next_part:parts.index(part)+1]))
                                                 start_of_next_part = parts.index(part) + 1
                                             else:
                                                 titles.append(' / '.join(parts[start_of_next_part:parts.index(part)+1]))
-                                    if len(titles) > 1:
-                                        print(titles)
-                                    # hier Lösung für Titelteilung einfügen...
-                                persons = []
-                                rev_authors = []
-                                rev_editors = []
-                                year_of_publication = ''
-                                last_person = ''
-                                editorship = False
-                                publication_dict['review'] = True
-                                if ' / ' in title:
-                                    persons = [HumanName(person).last + ', ' + HumanName(person).first for person in title.split(' / ', title.count(' / '))[:-1]]
-                                    title = title.split(' / ', title.count(' / '))[-1]
-                                for editorship_word in [" (Red.)", " (Hrsg.)", " (ed.)", " (eds)"]:
-                                    if editorship_word in title:
-                                        editorship = True
-                                        title = title.replace(editorship_word, '')
-                                title = title.strip()
-                                lang = detect(title)
-                                nlp = None
-                                if lang in ["de", "en", "fr", "it", "es", "nl"]:
-                                    if lang == "de":
-                                        nlp = nlp_de
-                                    elif lang == "en":
-                                        nlp = nlp_en
-                                    elif lang == "fr":
-                                        nlp = nlp_fr
-                                    elif lang == "it":
-                                        nlp = nlp_it
-                                    elif lang == "es":
-                                        nlp = nlp_es
-                                    elif lang == "nl":
-                                        nlp = nlp_nl
-                                    tagged_sentence = nlp(title)
-                                    propn = False
-                                    punct = False
-                                    for word in tagged_sentence:
-                                        if propn and word.text == "und":
-                                            continue
-                                        if punct:
-                                            break
-                                        if word.pos_ not in ["PUNCT", "PROPN"]:
-                                            break
-                                        if word.pos_ == "PUNCT" and propn and word.text != "-":
-                                            punct = True
-                                            if len(title.split(word.text)[0].split()) > 1:
-                                                last_person = title.split(word.text)[0]
-                                        if word.pos_ == "PROPN":
-                                            propn = True
-                                        else:
-                                            propn = False
-                                    if not last_person:
+                                for title in titles:
+                                    persons = []
+                                    rev_authors = []
+                                    rev_editors = []
+                                    year_of_publication = ''
+                                    last_person = ''
+                                    editorship = False
+                                    publication_dict['review'] = True
+                                    if ' / ' in title:
+                                        persons = [HumanName(person).last + ', ' + HumanName(person).first for person in title.split(' / ', title.count(' / '))[:-1]]
+                                        title = title.split(' / ', title.count(' / '))[-1]
+                                    for editorship_word in [" (Red.)", " (Hrsg.)", " (ed.)", " (eds)"]:
+                                        if editorship_word in title:
+                                            editorship = True
+                                            title = title.replace(editorship_word, '')
+                                    title = title.strip()
+                                    lang = detect(title)
+                                    nlp = None
+                                    if lang in ["de", "en", "fr", "it", "es", "nl"]:
+                                        if lang == "de":
+                                            nlp = nlp_de
+                                        elif lang == "en":
+                                            nlp = nlp_en
+                                        elif lang == "fr":
+                                            nlp = nlp_fr
+                                        elif lang == "it":
+                                            nlp = nlp_it
+                                        elif lang == "es":
+                                            nlp = nlp_es
+                                        elif lang == "nl":
+                                            nlp = nlp_nl
+                                        tagged_sentence = nlp(title)
+                                        propn = False
+                                        punct = False
+                                        for word in tagged_sentence:
+                                            if propn and word.text == "und":
+                                                continue
+                                            if punct:
+                                                break
+                                            if word.pos_ not in ["PUNCT", "PROPN"]:
+                                                break
+                                            if word.pos_ == "PUNCT" and propn and word.text != "-":
+                                                punct = True
+                                                if len(title.split(word.text)[0].split()) > 1:
+                                                    last_person = title.split(word.text)[0]
+                                            if word.pos_ == "PROPN":
+                                                propn = True
+                                            else:
+                                                propn = False
+                                        if not last_person:
+                                            for ent in tagged_sentence.ents:
+                                                if ent.label_ == "PER":
+                                                    if title.startswith(ent.text):
+                                                        if len(ent.text.split()) > 1:
+                                                            last_person = ent.text
+                                                break
+                                    else:
+                                        nlp = nlp_xx
+                                        tagged_sentence = nlp(title)
                                         for ent in tagged_sentence.ents:
                                             if ent.label_ == "PER":
                                                 if title.startswith(ent.text):
                                                     if len(ent.text.split()) > 1:
                                                         last_person = ent.text
-                                            break
-                                else:
-                                    nlp = nlp_xx
-                                    tagged_sentence = nlp(title)
-                                    for ent in tagged_sentence.ents:
-                                        if ent.label_ == "PER":
-                                            if title.startswith(ent.text):
-                                                if len(ent.text.split()) > 1:
-                                                    last_person = ent.text
-                                            break
+                                                break
 
-                                if last_person:
-                                    title = title.replace(last_person + ", ", "")
-                                    persons.append(HumanName(last_person).last + ', ' + HumanName(last_person).first)
-                                    if editorship:
-                                        rev_editors = persons
-                                    else:
-                                        rev_authors = persons
-                                if len(publication_dict['text_body_for_lang_detection']) > 20:
-                                    year_of_publication = str(max([int(year) for year in re.findall(r'[^\d-](\d{4})[^\d-]', publication_dict['text_body_for_lang_detection'])]))
-                                publication_dict['review_list'].append({'reviewed_title': title,
-                                                                        'reviewed_authors': rev_authors,
-                                                                        'reviewed_editors': rev_editors,
-                                                                        'year_of_publication': year_of_publication,
-                                                                        })
+                                    if last_person:
+                                        title = title.replace(last_person + ", ", "")
+                                        persons.append(HumanName(last_person).last + ', ' + HumanName(last_person).first)
+                                        if editorship:
+                                            rev_editors = persons
+                                        else:
+                                            rev_authors = persons
+                                    if len(publication_dict['text_body_for_lang_detection']) > 35:
+                                        year_of_publication = str(max([int(year) for year in re.findall(r'[^\d-](\d{4})[^\d-]', publication_dict['text_body_for_lang_detection'])]))
+                                    publication_dict['review_list'].append({'reviewed_title': title,
+                                                                            'reviewed_authors': rev_authors,
+                                                                            'reviewed_editors': rev_editors,
+                                                                            'year_of_publication': year_of_publication,
+                                                                            })
                             if create_new_record.check_publication_dict_for_completeness_and_validity(publication_dict):
                                 created = create_new_record.create_new_record(out, publication_dict)
                                 issues_harvested.append(current_item)
@@ -260,6 +268,7 @@ harvest()
 
 # Sprache übernehmen, prüfen, ob Rezensionen korrekt verarbeitet werden.
 # Lücke von 1960 bis 1985
+
 
 '''publishers = {'1904': ['Frankfurt am Main', 'Baer'], '1921': ['Bamberg', 'Buchner'],
                                         '1932': ['Berlin', 'de Gruyter'], '1976': ['Mainz', 'von Zabern'],
