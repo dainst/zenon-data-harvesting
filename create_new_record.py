@@ -214,7 +214,7 @@ def add_field_from_record_to_publication_dict(publication_dict, record, field_li
 
 
 def doi_is_valid(doi):
-    if 'dx.doi.org' not in doi:
+    if 'doi.org' not in doi:
         doi = 'https://dx.doi.org/' + doi
     doi_page = None
     request_nr = 0
@@ -227,7 +227,8 @@ def doi_is_valid(doi):
             with urllib.request.urlopen(req) as response:
                 doi_page = response.read()
             return True
-        except:
+        except Exception as e:
+            handle_error_and_raise.handle_error_and_raise(e)
             continue
     return False
 
@@ -777,8 +778,8 @@ def create_new_record(out, publication_dict):
                                                                       + [editor.split(', ')[0] for editor in reviewed_title['reviewed_editors']], reviewed_title['year_of_publication'],
                                                                       publication_dict['publication_year'], 'en')
                         for reviewed_title_id in reviewed_title_ids:
-                            print(publication_dict['review_list'])
-                            print(reviewed_title_ids)
+                            # print(publication_dict['review_list'])
+                            # print(reviewed_title_ids)
                             recent_record.add_field(Field(tag='LKR', indicators=[' ', ' '],
                                                           subfields=['a', 'UP', 'b', reviewed_title_id, 'l', 'DAI01', 'm', 'Rezension', 'n', publication_dict['title_dict']['main_title']]))
             if publication_dict['response']:
@@ -800,22 +801,64 @@ def create_new_record(out, publication_dict):
         handle_error_and_raise.handle_error_and_raise(e)
 
 
-'''
-    publishers = {'1908': ['Frankfurt am Main', 'Joseph Baer & Co.'], '1942': ['Berlin', 'de Gruyter'], '1975': ['Mainz', 'von Zabern'],
-                  '2008': ['Darmstadt', 'von Zabern'], '2015': ['Frankfurt am Main', 'Henrich Editionen']}
-    years_published_in = list(publishers.keys())
+''' years_published_in = [int(year) for year in list(publishers.keys())]
     years_published_in.sort(reverse=True)
+    years_produced_in = [int(producer_key) for producer_key in list(producers.keys())]
+    years_produced_in.sort(reverse=True)
+    place_of_publication = ''
+    place_of_production = ''
+    publisher = ''
+    producer = ''
     for key in years_published_in:
-        if year >= key:
-            ...
+        if int(publication_dict['publication_year']) >= key:
+            place_of_publication = publishers[str(key)][0]
+            publisher = publishers[str(key)][1]
             break
+    for key in years_produced_in:
+        if int(volume) >= key:
+            place_of_production = producers[str(key)][0]
+            production = producers[str(key)][1]
+            break         
             '''
-'''
-     'subject_added_entries': [{'type': '', 'text': '', 'source': ''}],
+
+# falls verschiedene Publikationsangaben berücksichtigt werden sollen.
+
+''''subject_added_entries': [{'type': '', 'text': '', 'source': ''}],
      # type MUSS aus der Liste ['Person', 'Corporation', 'Event', 'Chronology', 'Topic', 'Geography']
      # source wird mit dem Code für den verwendeten Thesaurus angegeben, falls dieser in
      # https://www.loc.gov/standards/sourcelist/subject.html angegeben wird.
      # Thesaurus-Schlagwörter werden separat in THS angegeben.
-     # sollte noch überarbeitet werden!!!
-     '''
+     # sollte noch überarbeitet werden!!!'''
+
 # 6**-Felder auch einfügen.
+
+'''subject_info = article_xml.find('mods:subject')
+                if subject_info!=None:
+                    persons = subject_info.find_all('mods:name', type='personal')
+                    for person in persons:
+                        person_name = person.find('mods:displayForm').text
+                        if ',' in person_name:
+                            first_indicator = '1'
+                        else:
+                            first_indicator = '0'
+                        person_authority = person['authority']
+                        recent_record.add_field(Field(tag='600', indicators=[first_indicator, '7'],
+                                                      subfields=['a', person_name, '2', person_authority]))
+                    corporations = subject_info.find_all('mods:name', type='corporate')
+                    for corporation in corporations:
+                        corporation_name = corporation.find('mods:displayForm').text
+                        corporation_authority = corporation['authority']
+                        recent_record.add_field(Field(tag='610', indicators=['2', '7'],
+                                                      subfields=['a', corporation_name, '2', corporation_authority]))
+                    geographics = subject_info.find_all('mods:geographic')
+                    for geographic in geographics:
+                        geographic_name = geographic.text
+                        geographic_authority = geographic['authority']
+                        recent_record.add_field(Field(tag='651', indicators=[' ', '7'],
+                                                      subfields=['a', geographic_name, '2', geographic_authority]))
+                    topics = subject_info.find_all('mods:topic')
+                    for topic in topics:
+                        topic_name = topic.text
+                        topic_authority = topic['authority']
+                        recent_record.add_field(Field(tag='650', indicators=[' ', '7'],
+                                                      subfields=['a', topic_name, '2', topic_authority]))'''
