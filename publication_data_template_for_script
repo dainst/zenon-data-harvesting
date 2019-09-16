@@ -8,7 +8,7 @@ publication_dict['abstract_link'] = ''
 publication_dict['table_of_contents_link'] = ''
 publication_dict['pdf_links'].append('')
 publication_dict['html_links'].append('')
-publication_dict['other_links_with_public_note'].append({'public_note': '', 'url': '})'
+publication_dict['other_links_with_public_note'].append({'public_note': '', 'url': ''})
 publication_dict['doi'] = ''
 publication_dict['urn'] = ''
 publication_dict['isbn'] = ''
@@ -30,7 +30,7 @@ publication_dict['rdamedia'] = ''
 publication_dict['rdacarrier'] = ''
 publication_dict['host_item']['name'] = ''
 publication_dict['host_item']['sysnumber'] = ''
-publication_dict['host_item']['issn']
+publication_dict['host_item']['issn'] = ''
 publication_dict['volume'] = ''
 publication_dict['volume_year'] = ''
 publication_dict['issue'] = ''
@@ -40,7 +40,7 @@ publication_dict['review'] = False
 publication_dict['review_list'].append({'reviewed_title': '', 'reviewed_authors': [], 'reviewed_editors': [], 'year_of_publication': ''})
 publication_dict['response'] = False
 publication_dict['response_list'].append({'reviewed_title': '', 'reviewed_authors': [], 'reviewed_editors': [], 'year_of_publication': ''})
-publication_dict['part_of_series'].append({'series_title': '', 'part': '', 'uniform_title': ''})
+publication_dict['part_of_series'] = {'series_title': '', 'part': '', 'uniform_title': ''}
 publication_dict['general_note'] = ''
 publication_dict['additional_content'] = {'type': '', 'text': ''}
 publication_dict['terms_of_access'] = {'restrictions': '', 'terms_note': '', 'authorized_users': '', 'terms_link': ''}
