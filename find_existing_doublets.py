@@ -122,41 +122,44 @@ def check_cosine_similarity(title, found_title, found_record, rejected_titles, l
         title_list_count = [title_list.count(word) for word in title_list if (word not in stopwords_dict[lang])]
         found_title_list_count = [found_title_list.count(word) for word in title_list]
         # hier muss irgendwie iterative levensthein rein!!!
-        similarity = 1 - spatial.distance.cosine(title_list_count, found_title_list_count)
-        if similarity > 0.65:
-            skipped_word_nr = 0
-            mismatches_nr = 0
-            matches_nr = 0
-            for word in title_list:
-                if word in found_title_list:
-                    if any(index == found_title_list.index(word) for index in
-                           [title_list.index(word) + 1 + skipped_word_nr, title_list.index(word) + skipped_word_nr,
-                            title_list.index(word) - 1 + skipped_word_nr]):
-                        matches_nr += 1
+        if list(set(title_list_count)) == [0] or list(set(found_title_list_count)) == [0]:
+            return False
+        else:
+            similarity = 1 - spatial.distance.cosine(title_list_count, found_title_list_count)
+            if similarity > 0.65:
+                skipped_word_nr = 0
+                mismatches_nr = 0
+                matches_nr = 0
+                for word in title_list:
+                    if word in found_title_list:
+                        if any(index == found_title_list.index(word) for index in
+                               [title_list.index(word) + 1 + skipped_word_nr, title_list.index(word) + skipped_word_nr,
+                                title_list.index(word) - 1 + skipped_word_nr]):
+                            matches_nr += 1
+                        else:
+                            mismatches_nr += 1
+                            skipped_word_nr += 1
+                            if word in unskippable_words:
+                                return False
                     else:
-                        mismatches_nr += 1
                         skipped_word_nr += 1
                         if word in unskippable_words:
                             return False
-                else:
-                    skipped_word_nr += 1
-                    if word in unskippable_words:
-                        return False
-            if skipped_word_nr >= (len(title_list) / 3):
-                return False
-            if matches_nr > mismatches_nr * 2:
-                if similarity > 0.77:
-                    return True
-                else:
-                    print(lang)
-                    print(title_list)
-                    print(found_title_list)
-                    print(similarity)
-                    if found_title == found_record['title']:
-                        if input("Handelt es sich tatsächlich um eine Dublette? ") == "":
-                            return True
-                        else:
-                            rejected_titles.append(found_record["id"] + found_title)
+                if skipped_word_nr >= (len(title_list) / 3):
+                    return False
+                if matches_nr > mismatches_nr * 2:
+                    if similarity > 0.77:
+                        return True
+                    else:
+                        print(lang)
+                        print(title_list)
+                        print(found_title_list)
+                        print(similarity)
+                        if found_title == found_record['title']:
+                            if input("Handelt es sich tatsächlich um eine Dublette? ") == "":
+                                return True
+                            else:
+                                rejected_titles.append(found_record["id"] + found_title)
         return False
     except Exception as e:
         print('Error! Code: {c}, Message, {m}'.format(c=type(e).__name__, m=str(e)))
@@ -227,9 +230,10 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                                         for found_author in [aut for found_author in found_authors for aut in found_author.split()]:
                                             if right_author:
                                                 break
-                                            if min([iterative_levenshtein(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author)) for x in authors for splitted_author in x.split()]) <= (len(found_author)/3):
-                                                # Vorsicht vor impliziten Typkonvertierungen von Zahlen zu bool
-                                                right_author = True
+                                            if [iterative_levenshtein(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author)) for x in authors for splitted_author in x.split()]:
+                                                if min([iterative_levenshtein(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author)) for x in authors for splitted_author in x.split()]) <= (len(found_author)/3):
+                                                    # Vorsicht vor impliziten Typkonvertierungen von Zahlen zu bool
+                                                    right_author = True
                                     else:
                                         if not found_authors:
                                             right_author = True
