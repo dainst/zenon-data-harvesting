@@ -11,12 +11,12 @@ from datetime import datetime
 dateTimeObj = datetime.now()
 timestampStr = dateTimeObj.strftime("%d-%b-%Y")
 
+
 def harvest():
     with open('records/bmcr/bmcr_logfile.json', 'r') as log_file:
         log_dict = json.load(log_file)
         last_item_harvested_in_last_session = log_dict['last_item_harvested']
         print('Letzte geharvestete Publikation von BMCR:', last_item_harvested_in_last_session)
-
     pub_nr = 0
     items_harvested = []
     out = open('records/bmcr/bmcr_' + timestampStr + '.mrc', 'wb')
@@ -75,7 +75,6 @@ def harvest():
                     else:
                         blog_link = None
                     review_author = article.text.strip('\n').rsplit('\n', 1)[1].strip('.')
-                    review = False
                     review_author_name = review_author.replace('Response by ', '')
                     if 'Reviewed by ' in review_author:
                         review_author_name = review_author.replace('Reviewed by ', '')
@@ -112,16 +111,15 @@ def harvest():
                                                                         'year_of_publication': publication_year,
                                                                         })
                         else:
-                            for pub in article_soup.find_all('h3'):
-                                h3_tags = article_soup.find_all('h3')
+                            for h3_tags in article_soup.find_all('h3'):
                                 for h3 in h3_tags:
                                     for link in h3.find_all('a'):
                                         responded_review_link = link['href']
                                         req = urllib.request.Request(responded_review_link)
                                         with urllib.request.urlopen(req) as response:
-                                            review_page = response.read()
-                                        review_soup = BeautifulSoup(review_page, 'html.parser')
-                                        for resp_rev in article_soup.find_all('h3'):
+                                            responded_review_page = response.read()
+                                        responded_review_soup = BeautifulSoup(responded_review_page, 'html.parser')
+                                        for resp_rev in responded_review_soup.find_all('h3'):
                                             title_reviewed = resp_rev.find_all('i', property='name')[0].text
                                             if re.findall(r'.Bd\..', title_reviewed):
                                                 if len(re.findall(r'.Bd\..*?:', title_reviewed)) == 0:
@@ -131,7 +129,7 @@ def harvest():
                                             elif re.findall(r'.\..', title_reviewed):
                                                 title_reviewed = title_reviewed.rsplit('.', 1)[0]
                                             if resp_rev.find_all('span', property='datePublished'):
-                                                resp_revlication_year = resp_rev.find_all('span', property='datePublished')[0].text
+                                                publication_year = resp_rev.find_all('span', property='datePublished')[0].text
                                             else:
                                                 ''
                                             if resp_rev.find_all('span', property='author'):
