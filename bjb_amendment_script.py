@@ -7,7 +7,7 @@ from datetime import datetime
 import json
 from nameparser import HumanName
 import create_new_record
-import handle_error_and_raise
+import write_error_to_logfile
 import find_existing_doublets
 from pymarc import MARCReader, Field
 import find_reviewed_title
@@ -38,14 +38,12 @@ def create_773(recent_record, publication_dict, volume, review, response):
                                           subfields=['w', publication_dict['host_item']['sysnumber'],
                                                      't', lkr_subfield_n]))
     except Exception as e:
-        handle_error_and_raise.handle_error_and_raise(e)
+        write_error_to_logfile.write(e)
+
 
 def harvest():
     try:
-        dateTimeObj = datetime.now()
-        timestampStr = dateTimeObj.strftime("%d-%b-%Y")
-        issues_harvested = []
-
+        datetimeobj = datetime.now()
         with open('records/bjb/bjb_logfile.json', 'r') as log_file:
             log_dict = json.load(log_file)
             last_item_harvested_in_last_session = log_dict['last_issue_harvested']
@@ -128,14 +126,12 @@ def harvest():
                 volume_year = str(min([int(year) for year in re.findall(r'\d{4}', volume_title)]))
                 current_item = int(volume_year + volume.split('/')[0].zfill(3))
                 if current_item > last_item_harvested_in_last_session:
-                    if int(volume_year) + 3 > int(dateTimeObj.strftime("%Y")):
+                    if int(volume_year) + 3 > int(datetimeobj.strftime("%Y")):
                         continue
                         # die Bände werden erst drei Jahre nach dem Druck Open Access online publiziert.
                     if int(volume_year) < 2011:
                         break
                     for article in issue_soup.find_all('div', class_='obj_article_summary'):
-                        if pub_nr == 5:
-                            break
                         title = article.find('div', class_='title')
                         article_url = title.find('a')['href']
                         req = urllib.request.Request(article_url, data, headers)
@@ -216,7 +212,7 @@ def harvest():
                                     for title in publication_dict['title_dict']['main_title'].split("/"):
                                         title_nr += 1
                                         if title not in exclude_titles:
-                                            review = True
+                                            title = title.replace(' (†)', '')
                                             authors = []
                                             editors = []
                                             if title_nr < len(year_of_reviewed_title):
@@ -228,10 +224,14 @@ def harvest():
                                                     editors_string, title = title.split(editorship_word)
                                                     editors_string = editors_string.strip()
                                                     title = title.strip(", ").strip()
-                                                    for separation_word in [" und ", " et ", " and ", " e "]:
-                                                        if separation_word in editors_string:
-                                                            editors = \
-                                                                [HumanName(edit).last + ', ' + HumanName(edit).first for editor in editors_string.split(', ') for edit in editor.split(separation_word)]
+                                                    if any(word in editors_string for word in [" und ", " et ", " and ", " e "]):
+                                                        for separation_word in [" und ", " et ", " and ", " e "]:
+                                                            if separation_word in editors_string:
+                                                                editors = \
+                                                                    [HumanName(edit).last + ', ' + HumanName(edit).first for editor in editors_string.split(separation_word)
+                                                                     for edit in editor.split(', ')]
+                                                    else:
+                                                        editors = [HumanName(editor).last + ', ' + HumanName(editor).first for editor in editors_string.split(', ')]
                                                     break
                                             title = title.strip()
                                             parts = [title]
@@ -272,12 +272,20 @@ def harvest():
                             if publication_dict['review']:
                                 publication_dict['title_dict']['main_title'] = \
                                     create_new_record.create_title_for_review_and_response_search(publication_dict['review_list'], publication_dict['response_list'])[0]
-                            all_results, additional_physical_form_entrys = \
-                                find_existing_doublets.find(publication_dict['title_dict']['main_title'], publication_dict['authors_list'] + publication_dict['editors_list'],
-                                                            publication_dict['publication_year'], 'de', ['001470245'], publication_dict)
+                                all_results, additional_physical_form_entrys = \
+                                    find_existing_doublets.find_review(publication_dict['authors_list'] + publication_dict['editors_list'],
+                                                                       publication_dict['publication_year'], 'de', ['001470245'], publication_dict)
+                            else:
+                                all_results, additional_physical_form_entrys = \
+                                    find_existing_doublets.find(publication_dict['title_dict']['main_title'], publication_dict['authors_list'] + publication_dict['editors_list'],
+                                                                publication_dict['publication_year'], 'de', ['001470245'], publication_dict)
+
+
                             if create_new_record.check_publication_dict_for_completeness_and_validity(publication_dict) and len(additional_physical_form_entrys) == 1:
-                                webFile = urllib.request.urlopen("https://zenon.dainst.org/Record/"+additional_physical_form_entrys[0]['zenon_id']+"/Export?style=MARC")
-                                new_reader = MARCReader(webFile)
+                                print(publication_dict['title_dict']['main_title'])
+                                print(additional_physical_form_entrys)
+                                webfile = urllib.request.urlopen("https://zenon.dainst.org/Record/"+additional_physical_form_entrys[0]['zenon_id']+"/Export?style=MARC")
+                                new_reader = MARCReader(webfile)
                                 for recent_record in new_reader:
                                     if publication_dict['table_of_contents_link']:
                                         recent_record.add_field(Field(tag='856', indicators=['4', '2'],
@@ -330,18 +338,21 @@ def harvest():
                                         recent_record.remove_fields(tag)
                                     if not [field['a'] for field in recent_record.get_fields('590') if field['a'] == '2019xhnxupdated']:
                                         recent_record.add_field(Field(tag='590', indicators=[' ', ' '], subfields=['a', '2019xhnxupdated']))
-                                    print(recent_record)
+                                    # print(recent_record)
                                     out.write(recent_record.as_marc21())
                                     pub_nr += 1
+                            else:
+                                print('title not found', publication_dict['title_dict']['main_title'])
+                                print(publication_dict['review_list'][0])
+                                print(publication_dict['authors_list'], publication_dict['editors_list'], publication_dict['publication_year'])
 
-
-        print('Es wurden', pub_nr, 'neue Records für Bonner Jahrbücher erstellt.')
+        print('Es wurden', pub_nr, 'Ersatzrecords für Bonner Jahrbücher erstellt.')
 
     except Exception as e:
-        handle_error_and_raise.handle_error_and_raise(e)
-
-
-
+        write_error_to_logfile.write(e)
 
 
 harvest()
+
+# funktioniert bis 1986 zurück.
+# Bis 1933 alles online; dafür nichts erstellen! (Online von mir selbst, also nichts ausfüllen, Auffüllskript erstellen für frühere, die nach und nach online gestellt werden.
