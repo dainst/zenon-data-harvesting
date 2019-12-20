@@ -2,25 +2,22 @@ import urllib.parse
 import urllib.request
 import language_codes
 from bs4 import BeautifulSoup
-import spacy
 import re
 from datetime import datetime
 import json
 from nameparser import HumanName
 import create_new_record
-import handle_error_and_raise
+import write_error_to_logfile
 
 def harvest():
+    return_string = ''
     try:
         dateTimeObj = datetime.now()
         timestampStr = dateTimeObj.strftime("%d-%b-%Y")
         issues_harvested = []
-
         with open('records/bjb/bjb_logfile.json', 'r') as log_file:
             log_dict = json.load(log_file)
             last_item_harvested_in_last_session = log_dict['last_issue_harvested']
-            print('Letztes geharvestetes Heft von Bonner Jahrbücher:', last_item_harvested_in_last_session)
-
         producers = {'138': ['Darmstadt', "L.C. Wittich'sche Hofbuchdruckerei"],
                      '106': ['Bonn', "A. Marcus und E. Weber's"],
                      '084': ['Bonn', 'Adolph Marcus'],
@@ -70,7 +67,6 @@ def harvest():
             if not list_elements:
                 empty_page = True
             for list_element in list_elements:
-                issue_information = list_element.text
                 issue_url = list_element['href']
                 user_agent = 'Mozilla/5.0 (X11; Linux x86_64; rv:66.0)'
                 values = {'name': 'Helena Nebel',
@@ -98,7 +94,6 @@ def harvest():
                 volume_name = volume_title.split(": ")[1].split("|")[0].strip()
                 volume_year = str(min([int(year) for year in re.findall(r'\d{4}', volume_title)]))
                 current_item = int(volume_year + volume.split('/')[0].zfill(3))
-                print(current_item, volume)
                 if current_item > last_item_harvested_in_last_session:
                     if int(volume_year) + 3 > int(dateTimeObj.strftime("%Y")):
                         continue
@@ -176,7 +171,7 @@ def harvest():
                             publication_dict['LDR_06_07'] = 'ab'
                             publication_dict['field_006'] = 'm     o  d |      '
                             publication_dict['field_008_18-34'] = 'ar poo||||||   b|'
-                            print(category)
+                            # print(category)
                             if category in ["Litteratur", "Besprechungen"]:
                                 not_human_name = "Römisch-germanische Kommission des Deutschen Archaeologischen Instituts"
                                 if title not in ["Nachtrag zur Anzeige der in der Hermes’schen Schrift 'Die Neuerburg an der Wied' angeregten Frage: Wer war Heinrich von Ofterdingen?",
@@ -214,7 +209,7 @@ def harvest():
                                                             if ', ' in parts[1]:
                                                                 abbreviation_nr = \
                                                                     len([abbreviation for abbreviation in re.findall(r'[A-Z]\.', parts[1].split(', ', 1)[0])]) + parts[1].split(', ', 1)[0].count(' von ')
-                                                                if len(parts[1].split(', ', 1)[0].split()) - abbreviation_nr in [2, 3]:
+                                                                if len(parts[1].split(', ', 1)[0].split()) - abbreviation_nr in [2, 3] or len(parts[1].split(', ', 1)[0].split()) in [2, 3]:
                                                                     wrong = [part for part in parts[0].split(', ') if len(part.split()) - part.count(' von ') not in [2, 3]]
                                                                     if not wrong:
                                                                         parts = [parts[0]] + [separation_word.join(parts[1:])]
@@ -226,16 +221,16 @@ def harvest():
                                                                     parts = [title]
                                                             else:
                                                                 parts = [title]
-                                                                sep = False
                                                             if len(parts) > 1:
                                                                 break
                                                 if ', ' in title and len(parts) == 1:
                                                     abbreviation_nr = len([abbreviation for abbreviation in re.findall(r'[A-Z]\.', title.split(', ', 1)[0])]) + title.split(', ', 1)[0].count(' von ')
-                                                    if len(title.split(', ', 1)[0].split()) - abbreviation_nr in [2, 3]:
+                                                    if len(title.split(', ', 1)[0].split()) - abbreviation_nr in [2, 3] or len(title.split(', ', 1)[0].split()):
                                                         authors, title = title.split(', ', 1)
                                                         authors = [authors]
                                             authors = [HumanName(author).last + ', ' + HumanName(author).first for author in authors]
                                             publication_dict['review'] = True
+                                            # print('reviewed_title', title, 'reviewed_authors', authors, 'reviewed_editors', editors, 'year_of_publication', year)
                                             publication_dict['review_list'].append({'reviewed_title': title,
                                                                                     'reviewed_authors': authors,
                                                                                     'reviewed_editors': editors,
@@ -247,16 +242,16 @@ def harvest():
                                 pub_nr += created
                             else:
                                 break
-
-        print('Es wurden', pub_nr, 'neue Records für Bonner Jahrbücher erstellt.')
+        write_error_to_logfile.comment('Letztes geharvestetes Heft von Bonner Jahrbücher: ' + str(last_item_harvested_in_last_session) + '.')
+        return_string += 'Es wurden ' + str(pub_nr) + 'neue Records für Bonner Jahrbücher erstellt.'
         if issues_harvested:
             with open('records/bjb/bjb_logfile.json', 'w') as log_file:
                 log_dict = {"last_issue_harvested": max(issues_harvested)}
                 json.dump(log_dict, log_file)
-                print('Log-File wurde auf', max(issues_harvested), 'geupdated.')
-
+                write_error_to_logfile.comment('Log-File wurde auf ' + str(max(issues_harvested)) + ' geupdated.')
     except Exception as e:
-        handle_error_and_raise.handle_error_and_raise(e)
+        write_error_to_logfile.write(e)
+    return return_string
 
 
 # Lücke zwischen 1933 und 1986 beachten!!!
@@ -271,3 +266,6 @@ old_responsibility_word = ["Beschrieben von ", "Aus den Quellen bearbeitet von "
                            "Den Herrn H. Meyer und H. Koechly gewidmet von ",
                            "Aufgenommen und gezeichnet v. ", "Beschrieben und durch XXVI Tafeln erläutert von ", "dessinées par ", "dessinée par ", "eröffnet und beschrieben von ",
                            "von Gymnasialdirector ", "Bijdrage van ", ", by ", " di ", "instruxit ", " scripsit ", "Bijdrage van ", ", étude par "]
+
+if __name__ == '__main__':
+    harvest()
