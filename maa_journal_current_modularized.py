@@ -5,9 +5,8 @@ from nltk.tokenize import RegexpTokenizer
 import re
 from nameparser import HumanName
 import json
-from pymarc import MARCReader
 from datetime import datetime
-import handle_error_and_raise
+import write_error_to_logfile
 import unidecode
 import create_new_record
 
@@ -15,21 +14,21 @@ dateTimeObj = datetime.now()
 timestampStr = dateTimeObj.strftime("%d-%b-%Y")
 
 volumes_sysnumbers = {}
-volumes_url = 'https://zenon.dainst.org/api/v1/search?lookfor=000724049&type=ParentID'
-volumes_req = urllib.request.Request(volumes_url)
-with urllib.request.urlopen(volumes_req) as volumes_response:
-    volumes_response = volumes_response.read()
-volumes_response = volumes_response.decode('utf-8')
-volumes_json = json.loads(volumes_response)
-for result in volumes_json["records"]:
-    webFile = urllib.request.urlopen("https://zenon.dainst.org/Record/"+str(result['id'])+"/Export?style=MARC")
-    new_reader = MARCReader(webFile)
-    for file in new_reader:
-        pub_date = ""
-        for field in ['260', '264']:
-            if file[field] is not None:
-                pub_date = re.findall(r'\d{4}', file[field]['c'])[0]
-        volumes_sysnumbers[pub_date] = result['id']
+page_nr = 0
+empty_page = False
+while not empty_page:
+    page_nr += 1
+    volumes_url = 'https://zenon.dainst.org/api/v1/search?lookfor=000724049&type=ParentID&page='
+    volumes_req = urllib.request.Request(volumes_url + str(page_nr))
+    with urllib.request.urlopen(volumes_req) as volumes_response:
+        volumes_response = volumes_response.read()
+    volumes_response = volumes_response.decode('utf-8')
+    volumes_json = json.loads(volumes_response)
+    if 'records' not in volumes_json:
+        empty_page = True
+        continue
+    for result in volumes_json['records']:
+        volumes_sysnumbers[result["publicationDates"][0]] = result['id']
 
 
 def harvest():
@@ -72,7 +71,8 @@ def harvest():
             issue_soup = BeautifulSoup(issue_page, 'html.parser')
             volume_nr, issue_nr = re.findall(r' (\d{2,3}) - .*? (\d)', issue_soup.find('title').text)[0]
             current_item = int(year + volume_nr.zfill(3) + issue_nr.zfill(2))
-            if current_item > last_issue_harvested_in_last_session:
+            if current_item == 201901903:
+            # if current_item > last_issue_harvested_in_last_session:
                 article_info_and_pdf = [item.find('span', class_='style18') for item in issue_soup.find_all('p', class_='style9 style12') if item.find('span', class_='style18') is not None]
                 for part in article_info_and_pdf:
                     parts_of_title = [part.strip() for part in part.text.split('\n')]
@@ -139,14 +139,15 @@ def harvest():
                         else:
                             break
         print('Es wurden', pub_nr, 'neue Records für MAA erstellt.')
-        if issues_harvested:
-            with open('records/maa/maa_logfile.json', 'w') as log_file:
-                log_dict = {"last_issue_harvested": max(issues_harvested)}
-                json.dump(log_dict, log_file)
-                print('Log-File wurde auf', max(issues_harvested), 'geupdated.')
+        # if issues_harvested:
+            # with open('records/maa/maa_logfile.json', 'w') as log_file:
+                # log_dict = {"last_issue_harvested": max(issues_harvested)}
+                # json.dump(log_dict, log_file)
+                # print('Log-File wurde auf', max(issues_harvested), 'geupdated.')
 
     except Exception as e:
-        handle_error_and_raise.handle_error_and_raise(e)
+        write_error_to_logfile.write(e)
 
 
-harvest()
+if __name__ == '__main__':
+    harvest()

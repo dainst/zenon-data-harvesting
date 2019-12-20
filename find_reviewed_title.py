@@ -4,15 +4,13 @@ from langdetect import detect
 from nltk.tokenize import RegexpTokenizer
 import json
 import re
-import os
-import sys
 from nltk.corpus import stopwords
 from scipy import spatial
 import itertools
 from pymarc import MARCReader
 import math
 import unidecode
-import handle_error_and_raise
+import write_error_to_logfile
 
 rda_codes = {'rdacarrier': {'sg': 'audio cartridge', 'sb': 'audio belt', 'se': 'audio cylinder', 'sd': 'audio disc',
                             'si': 'sound track reel', 'sq': 'audio roll', 'sw': 'audio wire reel',
@@ -71,7 +69,7 @@ def typewriter_distance(letter1, letter2):
             distance = 1
         return distance
     except Exception as e:
-        handle_error_and_raise.handle_error_and_raise(e)
+        write_error_to_logfile.write(e)
 
 
 def iterative_levenshtein(s, t):
@@ -92,7 +90,7 @@ def iterative_levenshtein(s, t):
                                      dist[row - 1][col - 1] + typewriter_distance(s[row - 1], t[col - 1]))
         return dist[len(s)][len(t)]
     except Exception as e:
-        handle_error_and_raise.handle_error_and_raise(e)
+        write_error_to_logfile.write(e)
 
 
 def check_cosine_similarity(title, found_title, found_record, rejected_titles, lang):
@@ -154,31 +152,40 @@ def check_cosine_similarity(title, found_title, found_record, rejected_titles, l
                             rejected_titles.append(found_record["id"] + found_title)
         return False
     except Exception as e:
-        handle_error_and_raise.handle_error_and_raise(e)
+        write_error_to_logfile.write(e)
 
 
 def swagger_find(search_title, search_authors, year, year_of_review, title, rejected_titles, lang, authors, all_results):
     try:
-        search_authors = search_authors.replace(" ", "+")
-        if year:
-            url = u'https://zenon.dainst.org/api/v1/search?join=AND&lookfor0%5B%5D=' + search_title + '&type0%5B%5D=Title&lookfor0%5B%5D=' + search_authors \
-                  + '&type0%5B%5D=Author&lookfor0%5B%5D=&type0%5B%5D=year&bool0%5B%5D=AND&lookfor1%5B%5D=Rez.zu&type0%5B%5D=Title&bool1%5B%5D=NOT&illustration=-1&daterange%5B%5D=publishDate&publishDatefrom=' \
-                  + str(int(year) - 1) + '&publishDateto=' + str(int(year) + 1)
-        elif year_of_review:
-            url = u'https://zenon.dainst.org/api/v1/search?join=AND&lookfor0%5B%5D=' + search_title + '&type0%5B%5D=Title&lookfor0%5B%5D=' + search_authors \
-                  + '&type0%5B%5D=Author&lookfor0%5B%5D=&type0%5B%5D=year&bool0%5B%5D=AND&lookfor1%5B%5D=Rez.zu&type0%5B%5D=Title&bool1%5B%5D=NOT&illustration=-1&daterange%5B%5D=publishDate&publishDatefrom=&publishDateto=' + year_of_review
-        else:
-            url = u'https://zenon.dainst.org/api/v1/search?join=AND&lookfor0%5B%5D=' + search_title + '&type0%5B%5D=Title&lookfor0%5B%5D=' + search_authors \
-                  + '&type0%5B%5D=Author&lookfor0%5B%5D=&type0%5B%5D=year&bool0%5B%5D=AND&lookfor1%5B%5D=Rez.zu&type0%5B%5D=Title&bool1%5B%5D=NOT&illustration=-1&daterange%5B%5D=publishDate&publishDatefrom=&publishDateto='
-        req = urllib.request.Request(url)
-        with urllib.request.urlopen(req) as response:
-            response = response.read()
-        response = response.decode('utf-8')
-        json_response = json.loads(response)
-        resultcount = json_response["resultCount"]
-        results = 0
-        if resultcount > 0:
-            for found_record in json_response["records"]:
+        page_nr = 0
+        empty_page = False
+        while not empty_page:
+            page_nr += 1
+            search_authors = search_authors.replace(" ", "+")
+            if year:
+                url = u'https://zenon.dainst.org/api/v1/search?join=AND&lookfor0%5B%5D=' + search_title + '&type0%5B%5D=Title&lookfor0%5B%5D=' + search_authors \
+                      + '&type0%5B%5D=Author&lookfor0%5B%5D=&type0%5B%5D=year&bool0%5B%5D=AND&lookfor1%5B%5D=Rez.zu&type0%5B%5D=Title&bool1%5B%5D=NOT&illustration=-1&daterange%5B%5D=publishDate&publishDatefrom=' \
+                      + str(int(year) - 1) + '&publishDateto=' + str(int(year) + 1) + '&page=' + str(page_nr)
+            elif year_of_review:
+                url = u'https://zenon.dainst.org/api/v1/search?join=AND&lookfor0%5B%5D=' + search_title + '&type0%5B%5D=Title&lookfor0%5B%5D=' + search_authors \
+                      + '&type0%5B%5D=Author&lookfor0%5B%5D=&type0%5B%5D=year&bool0%5B%5D=AND&lookfor1%5B%5D=Rez.zu&type0%5B%5D=Title&bool1%5B%5D=NOT&illustration=-1&daterange%5B%5D=publishDate&publishDatefrom=&publishDateto=' \
+                      + year_of_review + '&page=' + str(page_nr)
+            else:
+                url = u'https://zenon.dainst.org/api/v1/search?join=AND&lookfor0%5B%5D=' + search_title + '&type0%5B%5D=Title&lookfor0%5B%5D=' + search_authors \
+                      + '&type0%5B%5D=Author&lookfor0%5B%5D=&type0%5B%5D=year&bool0%5B%5D=AND&lookfor1%5B%5D=Rez.zu&type0%5B%5D=Title&bool1%5B%5D=NOT&illustration=-1&daterange%5B%5D=publishDate&publishDatefrom=&publishDateto='\
+                      + '&page=' + str(page_nr)
+
+            req = urllib.request.Request(url)
+            with urllib.request.urlopen(req) as response:
+                response = response.read()
+            response = response.decode('utf-8')
+            json_response = json.loads(response)
+            if 'records' not in json_response:
+                empty_page = True
+                continue
+            for found_record in json_response['records']:
+                if 'title' not in found_record:
+                    continue
                 title_found = found_record["title"]
                 if found_record["id"] + title_found not in rejected_titles:
                     similarity = check_cosine_similarity(title, title_found, found_record, rejected_titles, lang)
@@ -216,7 +223,7 @@ def swagger_find(search_title, search_authors, year, year_of_review, title, reje
                                         rejected_titles.append(found_record["id"] + title_found)
         return all_results
     except Exception as e:
-        handle_error_and_raise.handle_error_and_raise(e)
+        write_error_to_logfile.write(e)
 
 
 def find(title, authors, year, year_of_review, default_lang):
@@ -294,8 +301,9 @@ def find(title, authors, year, year_of_review, default_lang):
                         all_results = swagger_find(search_title_without_words, search_authors, year, year_of_review, title, rejected_titles, lang, authors, all_results)
                 # Suche unter Ausschluss von einem oder zwei Suchbegriffen je nach Länge des Titels
             return all_results
+
     except Exception as e:
-        handle_error_and_raise.handle_error_and_raise(e)
+        write_error_to_logfile.write(e)
 
 
 # Spracherkennung verbessern!

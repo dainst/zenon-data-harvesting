@@ -2,35 +2,26 @@ import urllib.parse
 import urllib.request
 import re
 from bs4 import BeautifulSoup
-from nltk.corpus import stopwords
 from _datetime import datetime
 import json
 import create_new_record
-import handle_error_and_raise
-
-publishers = {'1885':['Berlin', 'Georg Reimer'], '1919': ['Berlin; Leipzig', 'Walter de Gruyter & Co.']}
-years_published_in = [int(year) for year in list(publishers.keys())]
-years_published_in.sort(reverse=True)
-
-stopwords_de=stopwords.words('german')
-stopwords_en=stopwords.words('english')
-stopwords_fr=stopwords.words('french')
-stopwords_es=stopwords.words('spanish')
-stopwords_it=stopwords.words('italian')
-stopwords_nl=stopwords.words('dutch')
-
-
-dateTimeObj = datetime.now()
-timestampStr = dateTimeObj.strftime("%d-%b-%Y")
+import write_error_to_logfile
 
 
 def harvest():
     try:
+        publishers = {'1885': ['Berlin', 'Georg Reimer'], '1919': ['Berlin; Leipzig', 'Walter de Gruyter & Co.']}
+        years_published_in = [int(year) for year in list(publishers.keys())]
+        years_published_in.sort(reverse=True)
+
+        datetimeobj = datetime.now()
+        timestamp = datetimeobj.strftime("%d-%b-%Y")
+
         with open('records/jdi/jdi_logfile.json', 'r') as log_file:
             log_dict = json.load(log_file)
             last_issue_harvested_in_last_session = log_dict['last_issue_harvested']
         issues_harvested = []
-        out = open('records/jdi/jdi_' + timestampStr + '.mrc', 'wb')
+        out = open('records/jdi/jdi_' + timestamp + '.mrc', 'wb')
         basic_url = 'https://digi.ub.uni-heidelberg.de/diglit/jdi'
         user_agent = 'Mozilla/5.0 (X11; Linux x86_64; rv:66.0)'
         values = {'name': 'Helena Nebel',
@@ -55,7 +46,7 @@ def harvest():
             volume_page = volume_page.decode('utf-8')
             volume_soup = BeautifulSoup(volume_page, 'html.parser')
             date_published_online = re.findall(r'\d{4}', volume_soup.find('div', id='publikationsdatum').text)[0]
-            volume_title=volume_years[volume_nr]
+            volume_title = volume_years[volume_nr]
             volume_nr += 1
             if re.findall(r'(\d{1,3}/\d{1,3})\.', volume_title.strip()):
                 volume = re.findall(r'(\d{1,3})\.', volume_title)[0]
@@ -68,18 +59,20 @@ def harvest():
             current_item = int(volume_year.split('/')[0] + volume.split('/')[0].zfill(3))
             print(current_item, last_issue_harvested_in_last_session)
             if current_item > last_issue_harvested_in_last_session:
-                mets_url=volume_url.split("?")[0]+'/mets'
+                mets_url = volume_url.split("?")[0]+'/mets'
                 xml_file = urllib.request.urlopen(mets_url)
-                xml_soup=BeautifulSoup(xml_file, 'xml')
+                xml_soup = BeautifulSoup(xml_file, 'xml')
                 for article_xml in xml_soup.find_all('mods:mods')[1:]:
-                    if article_xml.find('mods:identifier', type='doi') and article_xml.find('mods:title').text not in []: # 'Inhalt', 'Register'
+                    if article_xml.find('mods:identifier', type='doi') and article_xml.find('mods:title').text not in ['Inhalt', 'Register']:
                         with open('publication_dict.json', 'r') as publication_dict_template:
                             publication_dict = json.load(publication_dict_template)
                         publication_dict['title_dict']['main_title'] = article_xml.find('mods:title').text
-                        publication_dict['authors_list'] = list(dict.fromkeys([authors_tag.find('mods:displayForm').text for authors_tag in [authors_tag for authors_tag in article_xml.find_all('mods:name')
-                                                                            if authors_tag.find('mods:roleTerm')] if authors_tag.find('mods:roleTerm').text == 'aut']))
-                        publication_dict['editors_list'] = list(dict.fromkeys([authors_tag.find('mods:displayForm').text for authors_tag in [authors_tag for authors_tag in article_xml.find_all('mods:name')
-                                                                            if authors_tag.find('mods:roleTerm')] if authors_tag.find('mods:roleTerm').text == 'edt']))
+                        publication_dict['authors_list'] = list(dict.fromkeys([authors_tag.find('mods:displayForm').text
+                                                                               for authors_tag in [authors_tag for authors_tag in article_xml.find_all('mods:name')
+                                                                                                   if authors_tag.find('mods:roleTerm')] if authors_tag.find('mods:roleTerm').text == 'aut']))
+                        publication_dict['editors_list'] = list(dict.fromkeys([authors_tag.find('mods:displayForm').text
+                                                                               for authors_tag in [authors_tag for authors_tag in article_xml.find_all('mods:name')
+                                                                                                   if authors_tag.find('mods:roleTerm')] if authors_tag.find('mods:roleTerm').text == 'edt']))
                         publication_dict['table_of_contents_link'] = volume_url
                         publication_dict['doi'] = article_xml.find('mods:identifier', type='doi').text
                         publication_dict['html_links'].append('https://www.doi.org/' + publication_dict['doi'])
@@ -132,6 +125,4 @@ def harvest():
                 print('Log-File wurde auf', max(issues_harvested), 'geupdated.')
 
     except Exception as e:
-        handle_error_and_raise.handle_error_and_raise(e)
-
-harvest()
+        write_error_to_logfile.handle_error_and_raise(e)

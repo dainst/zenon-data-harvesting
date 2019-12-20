@@ -2,7 +2,7 @@ import re
 from sickle import Sickle
 import json
 from _datetime import datetime
-import handle_error_and_raise
+import write_error_to_logfile
 import create_new_record
 
 dateTimeObj = datetime.now()
@@ -91,9 +91,15 @@ def harvest_eperiodica(journal_pid, publisher, publication_place, default_langua
                 print('Log-File wurde auf', max(issues_harvested), 'geupdated.')
 
     except Exception as e:
-        handle_error_and_raise.handle_error_and_raise(e)
+        write_error_to_logfile.write(e)
+
+if __name__ == '__main__':
+    harvest_eperiodica('bat-001', 'Associazione archeologica ticinese', 'Lugano', 'ita', 3, '001543081', 'Bollettino dell’Associazione Archeologica Ticinese', 'ar p o |||||   a|')
 
 
-harvest_eperiodica('bat-001', 'Associazione archeologica ticinese', 'Lugano', 'ita', 3, '001543081', 'Bollettino dell’Associazione Archeologica Ticinese', 'ar p o |||||   a|')
+def harvest():
+    harvest_eperiodica('bat-001', 'Associazione Archeologica Ticinese', 'Lugano', 'ita', 3, '001543081', 'Bollettino dell’Associazione Archeologica Ticinese', 'ar p o |||||   a|')
+    harvest_eperiodica('snr-003', 'Schweizerische Numismatische Gesellschaft', 'Bern', 'ger', 3, '001570578', 'Schweizerische numismatische Rundschau', 'ar p o |||||   a|')
+    harvest_eperiodica('akb-002', 'Schweizerische Numismatische Gesellschaft', 'Bern', 'ger', 3, '001570578', 'Schweizerische numismatische Rundschau', 'ar p o |||||   a|')
+    # welche weiteren Publikationen?
 
-# für einzelne Publikationen anpassen.

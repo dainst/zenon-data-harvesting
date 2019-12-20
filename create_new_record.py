@@ -1,6 +1,7 @@
 import urllib.parse
 import urllib.request
-from pymarc import Record, Field
+from pymarc import Record
+from pymarc import Field
 import arrow
 import language_codes
 from langdetect import detect
@@ -8,6 +9,8 @@ import find_reviewed_title
 import find_existing_doublets
 import re
 import write_error_to_logfile
+import probablepeople
+
 
 rda_codes = {'rdacarrier': {'sg': 'audio cartridge', 'sb': 'audio belt', 'se': 'audio cylinder', 'sd': 'audio disc',
                             'si': 'sound track reel', 'sq': 'audio roll', 'sw': 'audio wire reel',
@@ -90,6 +93,7 @@ publication_dict_template = {'title_dict':
                              # das Feld MUSS belegt werden mit einem String, der vier Ziffern enthält.
                              'field_300': '',
                              # das Feld enthält den Wert, der in Feld 300, Unterfeld a gesetzt werden soll. Dieses Feld wird nur dann gesetzt, wenn es sich um eine Monographie handelt!
+                             'force_300': False,
                              'publication_etc_statement':
                                  {'production': {'place': '', 'responsible': '', 'country_code': ''},
                                   'publication': {'place': '', 'responsible': '', 'country_code': ''},
@@ -228,8 +232,9 @@ def doi_is_valid(doi):
                 doi_page = response.read()
             return True
         except Exception as e:
-            write_error_to_logfile.write(e)
-            write_error_to_logfile.comment(doi)
+            if request_nr == 4:
+                write_error_to_logfile.write(e)
+                write_error_to_logfile.comment(doi)
     return False
 
 
@@ -246,8 +251,9 @@ def link_is_valid(link):
                 link_page = response.read()
             return True
         except Exception as e:
-            write_error_to_logfile.write(e)
-            write_error_to_logfile.comment(link)
+            if request_nr == 4:
+                write_error_to_logfile.write(e)
+                write_error_to_logfile.comment(link)
             continue
     return False
 
@@ -310,7 +316,7 @@ def create_245_and_246_for_response(recent_record, response_list, author_nr):
     try:
         reviewed_publication_nr = 0
         for reviewed_publication in response_list:
-            if reviewed_publication['reviewed-title']:
+            if reviewed_publication['reviewed_title']:
                 responsible = ''
                 if reviewed_publication['reviewed_authors']:
                     responsible = reviewed_publication['reviewed_authors'][0] + ': '
@@ -462,9 +468,9 @@ def check_publication_dict_for_completeness_and_validity(publication_dict):
                 #print('DOI' + publication_dict['doi'] + 'is not valid')
                 #validity = False
         if publication_dict['urn']:
-            if type(publication_dict['doi']).__name__ != 'str':
+            if type(publication_dict['urn']).__name__ != 'str':
                 write_error_to_logfile.comment('URN has to be of type string but is' + type(publication_dict['doi']).__name__ + '.')
-                print('URN has to be of type string but is' + type(publication_dict['doi']).__name__ + '.')
+                print('URN has to be of type string but is' + type(publication_dict['urn']).__name__ + '.')
                 validity = False
         if publication_dict['isbn']:
             if publication_dict['LDR_06_07'] != 'am':
@@ -726,11 +732,13 @@ def create_new_record(out, publication_dict):
             if publication_dict['review']:
                 create_245_and_246_for_review(recent_record, publication_dict['review_list'], author_nr)
             elif publication_dict['response']:
-                create_245_and_246_for_response(recent_record, publication_dict['review_list'], author_nr)
+                create_245_and_246_for_response(recent_record, publication_dict['response_list'], author_nr)
             else:
                 create_245_and_246(recent_record, publication_dict['title_dict'],
                                    author_nr, determine_nonfiling_characters(language, publication_dict['title_dict']))
-            if publication_dict['rdacarrier'] == 'cr':
+            if publication_dict['force_300'] == True:
+                recent_record.add_field(Field(tag='300', indicators=[' ', ' '], subfields=['a', publication_dict['field_300']]))
+            elif publication_dict['rdacarrier'] == 'cr':
                 recent_record.add_field(Field(tag='300', indicators=[' ', ' '], subfields=['a', '1 online resource']))
             elif publication_dict['pages'] and publication_dict['issue']:
                 recent_record.add_field(Field(tag='300', indicators=[' ', ' '], subfields=['a', 'Fasc. ' + publication_dict['issue'] + ', '+publication_dict['pages']]))
@@ -922,3 +930,5 @@ def create_new_record(out, publication_dict):
                         topic_authority = topic['authority']
                         recent_record.add_field(Field(tag='650', indicators=[' ', '7'],
                                                       subfields=['a', topic_name, '2', topic_authority]))'''
+
+# Umgang mit Körperschaften

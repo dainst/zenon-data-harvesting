@@ -118,14 +118,25 @@ def check_cosine_similarity(title, found_title, found_record, rejected_titles, l
         found_title_list = [word for word in found_title_list if
                             ((word not in stopwords_dict[lang]) and (len(word) > 2))]
         length = min(len(title_list), len(found_title_list))
+        # Längenvergleich der Titel sollte stattfinden!!!
         [title_list, found_title_list] = [a[:length] for a in [title_list, found_title_list]]
         title_list_count = [title_list.count(word) for word in title_list if (word not in stopwords_dict[lang])]
-        found_title_list_count = [found_title_list.count(word) for word in title_list]
+        found_title_list_count = [found_title_list.count(word) for word in title_list if (word not in stopwords_dict[lang])]
+        # print(title_list, found_title_list)
         # hier muss irgendwie iterative levensthein rein!!!
+        # mehr Worte skippen und danach die Similarität und übriggebliebene Wortlänge vergleichen.
         if list(set(title_list_count)) == [0] or list(set(found_title_list_count)) == [0]:
             return False
         else:
             similarity = 1 - spatial.distance.cosine(title_list_count, found_title_list_count)
+            if similarity <= 0.65:
+                for word in title_list:
+                    for found_word in found_title_list:
+                        if (iterative_levenshtein(word, found_word)) < (len(word)/4) and iterative_levenshtein(word, found_word) > 0:
+                            print('levenshtein_title_test')
+                            print(word, found_word, iterative_levenshtein(word, found_word))
+                            print(title)
+                            print(found_title)
             if similarity > 0.65:
                 skipped_word_nr = 0
                 mismatches_nr = 0
@@ -139,11 +150,13 @@ def check_cosine_similarity(title, found_title, found_record, rejected_titles, l
                         else:
                             mismatches_nr += 1
                             skipped_word_nr += 1
-                            if word in unskippable_words:
+                            if word in unskippable_words and title_list.index(word) in [0, 1]:
+                                print(title_list)
                                 return False
                     else:
                         skipped_word_nr += 1
-                        if word in unskippable_words:
+                        if word in unskippable_words and title_list.index(word) in [0, 1]:
+                            print(title_list)
                             return False
                 if skipped_word_nr >= (len(title_list) / 3):
                     return False
@@ -168,159 +181,214 @@ def check_cosine_similarity(title, found_title, found_record, rejected_titles, l
         print(exc_type, fname, exc_tb.tb_lineno)
 
 
+def create_review_titles_for_review_search(review_list):
+    possible_review_titles = []
+    reviewed_title = review_list[1]['reviewed_title']
+    reviewed_responsibles = review_list[1]['reviewed_authors'] + review_list[1]['reviewed_editors']
+    if reviewed_responsibles:
+        for person in reviewed_responsibles:
+            possible_review_titles.append('[Rez.zu]:' + person + ': ' + reviewed_title)
+    if len(reviewed_responsibles) >= 2:
+        for pair in itertools.combinations(reviewed_responsibles, 2):
+            possible_review_titles.append('[Rez.zu]:' + ', '.join(pair) + ': ' + reviewed_title)
+        reviewed_responsibles.reverse()
+        for pair in itertools.combinations(reviewed_responsibles, 2):
+            possible_review_titles.append('[Rez.zu]:' + ', '.join(pair) + ': ' + reviewed_title)
+    else:
+        possible_review_titles.append('[Rez.zu]:' + reviewed_title)
+    return possible_review_titles
+
+
+def create_response_titles_for_response_search(review_list):
+    possible_review_titles = []
+    reviewed_title = review_list[1]['reviewed_title']
+    reviewed_responsibles = review_list[1]['reviewed_authors'] + review_list[1]['reviewed_editors']
+    if reviewed_responsibles:
+        for person in reviewed_responsibles:
+            possible_review_titles.append('[Response to]:[Rez.zu]:' + person + ': ' + reviewed_title)
+    if len(reviewed_responsibles) >= 2:
+        for pair in itertools.combinations(reviewed_responsibles, 2):
+            possible_review_titles.append('[Response to]:[Rez.zu]:' + ', '.join(pair) + ': ' + reviewed_title)
+        reviewed_responsibles.reverse()
+        for pair in itertools.combinations(reviewed_responsibles, 2):
+            possible_review_titles.append('[Response to]:[Rez.zu]:' + ', '.join(pair) + ': ' + reviewed_title)
+    else:
+        possible_review_titles.append('[Response to]:[Rez.zu]:' + reviewed_title)
+    return possible_review_titles
+
+
 def swagger_find(search_title, search_authors, year, title, rejected_titles, possible_host_items, lang, authors, additional_physical_form_entrys, publication_dict, all_results):
     try:
-        search_authors = search_authors.replace(" ", "+")
-        if year:
-            url = u'https://zenon.dainst.org/api/v1/search?join=AND&lookfor0%5B%5D=' + search_title + '&type0%5B%5D=Title&lookfor0%5B%5D=' + search_authors + '&type0%5B%5D=Author&lookfor0%5B%5D=&type0%5B%5D=year&bool0%5B%5D=AND&illustration=-1&daterange%5B%5D=publishDate&publishDatefrom=' + str(
-                int(year) - 1) + '&publishDateto=' + str(int(year) + 1)
-        else:
-            url = u'https://zenon.dainst.org/api/v1/search?join=AND&lookfor0%5B%5D=' + search_title + '&type0%5B%5D=Title&lookfor0%5B%5D=' + search_authors + '&type0%5B%5D=Author&bool0%5B%5D=AND&illustration=-1&daterange%5B%5D=publishDate&publishDatefrom=&publishDateto='
-        req = urllib.request.Request(url)
-        with urllib.request.urlopen(req) as response:
-            response = response.read()
-        response = response.decode('utf-8')
-        json_response = json.loads(response)
-        resultcount = json_response["resultCount"]
-        if resultcount > 0:
-            for found_record in json_response["records"]:
+        page_nr = 0
+        empty_page = False
+        while not empty_page:
+            page_nr += 1
+            search_authors = search_authors.replace(" ", "+")
+            if year:
+                url = u'https://zenon.dainst.org/api/v1/search?join=AND&lookfor0%5B%5D=' + search_title + '&type0%5B%5D=Title&lookfor0%5B%5D=' + search_authors \
+                      + '&type0%5B%5D=Author&lookfor0%5B%5D=&type0%5B%5D=year&bool0%5B%5D=AND&illustration=-1&daterange%5B%5D=publishDate&publishDatefrom=' \
+                      + str(int(year) - 1) + '&publishDateto=' + str(int(year) + 1) + '&page=' + str(page_nr)
+            else:
+                url = u'https://zenon.dainst.org/api/v1/search?join=AND&lookfor0%5B%5D=' + search_title + '&type0%5B%5D=Title&lookfor0%5B%5D=' + search_authors \
+                      + '&type0%5B%5D=Author&bool0%5B%5D=AND&illustration=-1&daterange%5B%5D=publishDate&publishDatefrom=&publishDateto=' + '&page=' + str(page_nr)
+            req = urllib.request.Request(url)
+            with urllib.request.urlopen(req) as response:
+                response = response.read()
+            response = response.decode('utf-8')
+            json_response = json.loads(response)
+            if 'records' not in json_response:
+                empty_page = True
+                continue
+            for found_record in json_response['records']:
                 title_found = found_record["title"]
-                if found_record["id"] + title_found not in rejected_titles:
+                if (found_record["id"] + title_found not in rejected_titles) and (found_record['id'] not in all_results + additional_physical_form_entrys):
                     similarity = check_cosine_similarity(title, title_found, found_record, rejected_titles, lang)
                     right_author = False
                     right_year = False
                     if similarity:
-                        webfile = urllib.request.urlopen(
-                            "https://zenon.dainst.org/Record/" + found_record['id'] + "/Export?style=MARC")
-                        new_reader = MARCReader(webfile)
-                        for file in new_reader:
-                            # hier Möglichkeit für review einbauen? oder anderes Vorgehen?
-                            if publication_dict['LDR_06_07'][1] == file.leader[7]:
-                                par = False
-                                if possible_host_items:
-                                    right_host_item = False
-                                    if file['995'] is not None:
-                                        if file['995']['b'] is not None:
-                                            if file['995']['b'] in possible_host_items:
+                        try:
+                            webfile = urllib.request.urlopen(
+                                "https://zenon.dainst.org/Record/" + found_record['id'] + "/Export?style=MARC")
+                            new_reader = MARCReader(webfile)
+                            for file in new_reader:
+                                # if publication_dict['LDR_06_07'][1] == file.leader[7]:
+                                    par = False
+                                    if possible_host_items:
+                                        right_host_item = False
+                                        if [field['b'] for field in file.get_fields('995') if field['b'] and field['a'] == 'ANA']:
+                                            if [field['b'] for field in file.get_fields('995') if field['b'] and field['a'] == 'ANA'][0] in possible_host_items:
                                                 right_host_item = True
                                             else:
-                                                parent_webfile = urllib.request.urlopen(
-                                                    "https://zenon.dainst.org/Record/" + file['995'][
-                                                        'b'] + "/Export?style=MARC")
-                                                new_reader = MARCReader(parent_webfile)
-                                                for parent_file in new_reader:
-                                                    if parent_file['995'] is not None:
-                                                        if parent_file['995']['b'] in possible_host_items:
-                                                            right_host_item = True
-                                    if right_host_item is False:
-                                        rejected_titles.append(found_record["id"] + title_found)
-                                        continue
-                                if 'authors' in found_record:
-                                    found_authors = []
-                                    if 'primary' in found_record['authors']:
-                                        for primary_author in found_record['authors']['primary']:
-                                            found_authors.append(primary_author.split(', ')[0])
-                                    if 'secondary' in found_record['authors']:
-                                        for secondary_author in found_record['authors']['secondary']:
-                                            found_authors.append(secondary_author.split(', ')[0])
-                                    if 'corporate' in found_record['authors']:
-                                        for primary_author in found_record['authors']['secondary']:
-                                            found_authors.append(primary_author.split(', ')[0])
-                                    if authors:
-                                        for found_author in [aut for found_author in found_authors for aut in found_author.split()]:
-                                            if right_author:
-                                                break
-                                            if [iterative_levenshtein(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author)) for x in authors for splitted_author in x.split()]:
-                                                if min([iterative_levenshtein(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author)) for x in authors for splitted_author in x.split()]) <= (len(found_author)/3):
-                                                    # Vorsicht vor impliziten Typkonvertierungen von Zahlen zu bool
-                                                    right_author = True
-                                    else:
-                                        if not found_authors:
-                                            right_author = True
-                                found_year = [min([int(year) for year in re.findall(r'\d{4}', field)]) for field in [field['c'] for field in file.get_fields('260', '264') if field['c']] if '©' not in field and re.findall(r'\d{4}', field)]
-                                if found_year and year:
-                                    if found_year[0] in [int(year)-1, int(year), int(year)+1]:
+                                                try:
+                                                    parent_webfile = urllib.request.urlopen(
+                                                        "https://zenon.dainst.org/Record/" + file['995'][
+                                                            'b'] + "/Export?style=MARC")
+                                                    new_reader = MARCReader(parent_webfile)
+                                                    for parent_file in new_reader:
+                                                        if [field['b'] for field in parent_file.get_fields('995') if field['b'] and field['a'] == 'ANA']:
+                                                            if [field['b'] for field in parent_file.get_fields('995') if field['b'] and field['a'] == 'ANA'][0] in possible_host_items:
+                                                                right_host_item = True
+                                                except:
+                                                    print('Das Host-Item von', found_record['id'], 'hat ein ungültiges Host-Item bzw. es gibt ein Problem mit der Weiterleitung.')
+                                        if right_host_item is False:
+                                            rejected_titles.append(found_record["id"] + title_found)
+                                            continue
+                                    if 'authors' in found_record:
+                                        found_authors = []
+                                        if 'primary' in found_record['authors']:
+                                            for primary_author in found_record['authors']['primary']:
+                                                found_authors.append(primary_author.split(', ')[0])
+                                        if 'secondary' in found_record['authors']:
+                                            for secondary_author in found_record['authors']['secondary']:
+                                                found_authors.append(secondary_author.split(', ')[0])
+                                        if 'corporate' in found_record['authors']:
+                                            for primary_author in found_record['authors']['secondary']:
+                                                found_authors.append(primary_author.split(', ')[0])
+                                        if authors:
+                                            for found_author in [aut for found_author in found_authors for aut in found_author.split()]:
+                                                if right_author:
+                                                    break
+                                                if [iterative_levenshtein(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author)) for x in authors for splitted_author in x.split()]:
+                                                    if min([iterative_levenshtein(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author)) for x in authors for splitted_author in x.split()]) <= (len(found_author)/3):
+                                                        # Vorsicht vor impliziten Typkonvertierungen von Zahlen zu bool
+                                                        right_author = True
+                                        else:
+                                            if not found_authors:
+                                                right_author = True
+                                    found_year = [min([int(year) for year in re.findall(r'\d{4}', field)]) for field in [field['c'] for field in file.get_fields('260', '264') if field['c']] if '©' not in field and re.findall(r'\d{4}', field)]
+                                    if found_year and year:
+                                        if found_year[0] in [int(year)-1, int(year), int(year)+1]:
+                                            right_year = True
+                                    if not found_year and not year:
                                         right_year = True
-                                if not found_year and not year:
-                                    right_year = True
-                                if file['245']['c'] and publication_dict['title_dict']['responsibility_statement']:
-                                    right_responsibility = check_cosine_similarity(file['245']['c'], publication_dict['title_dict']['responsibility_statement'], found_record, rejected_titles, lang)
-                                elif publication_dict['title_dict']['responsibility_statement']:
-                                    right_responsibility = False
-                                else:
-                                    right_responsibility = True
-                                if right_author and right_responsibility and right_year:
-                                    if found_record['id'] not in [entry['zenon_id'] for entry in additional_physical_form_entrys]:
-                                        e_resource = False
-                                        if file['337']:
-                                            if (file['337']['b'] != publication_dict['rdamedia']) or (file['337']['a'] != rda_codes['rdamedia'][publication_dict['rdamedia']]):
-                                                par = True
-                                                if file['337']['b'] =='c' or file['337']['a'] == 'computer':
-                                                    e_resource = True
-                                        if file['338']:
-                                            if (file['338']['b'] != publication_dict['rdacarrier']) or (file['338']['a'] != rda_codes['rdacarrier'][publication_dict['rdacarrier']]):
-                                                par = True
-                                                if file['338']['b'] =='cr' or file['338']['a'] == 'online resource':
-                                                    e_resource = True
-                                        if file['006']:
-                                            if publication_dict['field_006'][0] != str(file['006'].data)[0]:
-                                                par = True
-                                                if str(file['006'].data)[0] == 'm':
-                                                    e_resource = True
-                                        if file['007']:
-                                            if publication_dict['field_007'][0:2] != str(file['007'])[0:2]:
-                                                par = True
-                                                if str(file['007'].data)[0] == 'c':
-                                                    e_resource = True
-                                        if publication_dict['pdf_links'] or publication_dict['html_links'] or [link for link in publication_dict['other_links_with_public_note'] if 'online' in link['public_note']]:
-                                            if file['856']:
-                                                if 'online' in str(file['856']['z']).lower():
-                                                    par = False
+                                    if file['245']['c'] and publication_dict['title_dict']['responsibility_statement']:
+                                        right_responsibility = check_cosine_similarity(file['245']['c'], publication_dict['title_dict']['responsibility_statement'], found_record, rejected_titles, lang)
+                                    elif publication_dict['title_dict']['responsibility_statement']:
+                                        right_responsibility = False
+                                    else:
+                                        right_responsibility = True
+                                    if right_author and right_responsibility and right_year:
+                                        if found_record['id'] not in [entry['zenon_id'] for entry in additional_physical_form_entrys]:
+                                            e_resource = False
+                                            if file['337']:
+                                                if (file['337']['b'] != publication_dict['rdamedia']) or (file['337']['a'] != rda_codes['rdamedia'][publication_dict['rdamedia']]):
+                                                    par = True
+                                                    if file['337']['b'] == 'c' or file['337']['a'] == 'computer':
+                                                        e_resource = True
+                                            if file['338']:
+                                                if (file['338']['b'] != publication_dict['rdacarrier']) or (file['338']['a'] != rda_codes['rdacarrier'][publication_dict['rdacarrier']]):
+                                                    par = True
+                                                    if file['338']['b'] == 'cr' or file['338']['a'] == 'online resource':
+                                                        e_resource = True
+                                            if file['006']:
+                                                if publication_dict['field_006'][0] != str(file['006'].data)[0]:
+                                                    par = True
+                                                    if str(file['006'].data)[0] == 'm':
+                                                        e_resource = True
+                                            if file['007']:
+                                                if publication_dict['field_007'][0] != str(file['007'].data)[0]:
+                                                    par = True
+                                                    if str(file['007'].data)[0] == 'c':
+                                                        e_resource = True
+                                            if publication_dict['pdf_links'] or publication_dict['html_links'] \
+                                                    or [link for link in publication_dict['other_links_with_public_note'] if 'online' in link['public_note']]:
+                                                if file['856']:
+                                                    if 'online' in str(file['856']['z']).lower():
+                                                        par = False
+                                                    else:
+                                                        par = True
                                                 else:
                                                     par = True
                                             else:
-                                                par = True
-                                        else:
-                                            if file['856']:
-                                                if 'online' in str(file['856']['z']).lower():
-                                                    par = True
-                                                    e_resource = True
-                                        if publication_dict['rdamedia'] != 'c':
-                                            if file['300']:
-                                                if ('online' in str(file['300']['a']).lower()):
-                                                    par = True
-                                                    e_resource = True
-                                            if file['533']:
-                                                if ('online' in str(file['533']['a']).lower()):
-                                                    par = True
-                                                    e_resource = True
-                                            if file['590']:
-                                                if [str(field['a']).lower() for field in file.get_fields('590') if 'online' in str(field['a']) or 'ebook' in str(field['a'])]:
-                                                    par = True
-                                                    e_resource = True
-                                        else:
-                                            if file['300']:
-                                                if 'online' in str(file['300']['a']).lower():
-                                                    par = False
-                                            if file['533']:
-                                                if 'online' in str(file['533']['a']).lower():
-                                                    par = False
-                                            if file['590']:
-                                                if [str(field['a']).lower() for field in file.get_fields('590') if 'online' in str(field['a'].lower()) or 'ebook' in str(field['a'].lower())]:
-                                                    par = False
-                                        if par:
-                                            if e_resource:
-                                                subfield_i = 'Online version'
+                                                if file['856']:
+                                                    if 'online' in str(file['856']['z']).lower():
+                                                        par = True
+                                                        e_resource = True
+                                            if publication_dict['rdamedia'] != 'c':
+                                                if file['300']:
+                                                    if ('online' in str(file['300']['a']).lower()):
+                                                        par = True
+                                                        e_resource = True
+                                                if file['533']:
+                                                    if ('online' in str(file['533']['a']).lower()):
+                                                        par = True
+                                                        e_resource = True
+                                                if file['590']:
+                                                    if [str(field['a']).lower() for field in file.get_fields('590') if 'online' in str(field['a']) or 'ebook' in str(field['a'])]:
+                                                        par = True
+                                                        e_resource = True
                                             else:
-                                                subfield_i = 'Print version'
-                                            additional_physical_form_entrys.append({'zenon_id': found_record['id'],
-                                                                                    'subfield_i': subfield_i})
-                                            # print('par found:', found_record['id'], publication_dict['table_of_contents_link'])
-                                        elif not par:
-                                            all_results.append(found_record['id'])
-                                            # print('doublet found:', found_record['id'], publication_dict['table_of_contents_link'])
-                                        else:
-                                            rejected_titles.append(found_record["id"] + title_found)
+                                                if file['300']:
+                                                    if 'online' in str(file['300']['a']).lower():
+                                                        par = False
+                                                if file['533']:
+                                                    if 'online' in str(file['533']['a']).lower():
+                                                        par = False
+                                                if file['590']:
+                                                    if [str(field['a']).lower() for field in file.get_fields('590') if 'online' in str(field['a'].lower()) or 'ebook' in str(field['a'].lower())]:
+                                                        par = False
+                                            if par:
+                                                if e_resource:
+                                                    subfield_i = 'Online version'
+                                                else:
+                                                    subfield_i = 'Print version'
+                                                additional_physical_form_entrys.append({'zenon_id': found_record['id'],
+                                                                                        'subfield_i': subfield_i})
+                                                # print('par found:', found_record['id'], publication_dict['table_of_contents_link'])
+                                            elif not par:
+                                                if found_record['id'] not in all_results:
+                                                    all_results.append(found_record['id'])
+                                                # print('doublet found:', found_record['id'], publication_dict['table_of_contents_link'])
+                                            else:
+                                                rejected_titles.append(found_record["id"] + title_found)
+                        except Exception as e:
+                            print('Error! Code: {c}, Message, {m}'.format(c=type(e).__name__, m=str(e)))
+                            exc_type, exc_obj, exc_tb = sys.exc_info()
+                            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+                            print(exc_type, fname, exc_tb.tb_lineno)
+                            print(found_record['id'])
+            if all_results:
+                break
         return all_results
     except Exception as e:
         print('Error! Code: {c}, Message, {m}'.format(c=type(e).__name__, m=str(e)))
@@ -423,4 +491,190 @@ def find(title, authors, year, default_lang, possible_host_items, publication_di
         print(exc_type, fname, exc_tb.tb_lineno)
 
 
+def find_review(authors, year, default_lang, possible_host_items, publication_dict):
+    try:
+        all_results = []
+        rejected_titles = []
+        additional_physical_form_entrys = []
+        if publication_dict['review']:
+            for title in create_review_titles_for_review_search(publication_dict['review_list']):
+                title = unidecode.unidecode(title)
+                lang = detect(title)
+                if lang not in stopwords_dict:
+                    lang = default_lang
+                search_title = ""
+                search_authors = ""
+                word_nr = 0
+                author_nr = 0
+                for author in authors:
+                    author = unidecode.unidecode(author)
+                    if author_nr < 2 and ('ß' not in author):
+                        search_authors = search_authors + "+" + author
+                    author_nr += 1
+                search_authors = search_authors.strip("+")
+                for word in RegexpTokenizer(r'\w+').tokenize(title):
+                    if ((not any(stopword in word for stopword in stopwords_for_search_in_zenon)) and (len(word) > 2) and (
+                            word not in stopwords_dict[lang]) and (re.findall(r'^\d{1,2}$', word) == []) and (
+                            re.findall(r'^[IVXLCDM]*$', word) == [])):
+                        word = urllib.parse.quote(word, safe='')
+                        search_title = search_title + "+" + word
+                        word_nr += 1
+                # Generierung eines bereinigten Suchtitels
+                search_title = search_title.strip("+")
+                if word_nr >= 1:
+                    all_results += swagger_find(search_title, search_authors, year, title, rejected_titles, possible_host_items,
+                                               lang, authors, additional_physical_form_entrys, publication_dict, all_results)
+                    # Suche mit vollständigen Daten
+                    if len(all_results) == 0:
+                        search_authors = search_authors.split("+")[0]
+                        all_results += swagger_find(search_title, search_authors, year, title, rejected_titles,
+                                                   possible_host_items,
+                                                   lang, authors, additional_physical_form_entrys, publication_dict, all_results)
+                        # Suche nur mit dem ersten Autoren
+                    if len(all_results) == 0:
+                        word_nr = 0
+                        search_title = ""
+                        for word in RegexpTokenizer(r'\w+').tokenize(title):
+                            if ((not any(stopword in word for stopword in stopwords_for_search_in_zenon)) and (
+                                    len(word) > 2) and (word not in stopwords_dict[lang]) and (
+                                    re.findall(r'^\d{1,2}$', word) == []) and (re.findall(r'^[IVXLCDM]*$', word) == [])):
+                                word = urllib.parse.quote(word, safe='')
+                                if '%' in word:
+                                    continue
+                                search_title = search_title + "+" + word
+                            if word_nr > 8:
+                                break
+                        search_title = search_title.strip("+")
+                        all_results += swagger_find(search_title, search_authors, year, title, rejected_titles,
+                                                   possible_host_items,
+                                                   lang, authors, additional_physical_form_entrys, publication_dict, all_results)
+                        # Suche mit verkürztem Titel
+                    if len(all_results) == 0:
+                        search_authors = ""
+                        all_results += swagger_find(search_title, search_authors, year, title, rejected_titles,
+                                                   possible_host_items,
+                                                   lang, authors, additional_physical_form_entrys, publication_dict, all_results)
+                        # Suche ohne Autorennamen
+                    if len(all_results) == 0:
+                        if len(search_title.split('+')) > 5:
+                            for pair in itertools.combinations(search_title.split("+"), 2):
+                                search_title_without_words = search_title
+                                if len(all_results) > 0:
+                                    break
+                                for word in pair:
+                                    search_title_without_words = search_title_without_words.replace(word, '').replace('++',
+                                                                                                                      '+').strip(
+                                        '+')
+                                all_results += swagger_find(search_title_without_words, search_authors, year, title,
+                                                           rejected_titles,
+                                                           possible_host_items, lang, authors, additional_physical_form_entrys, publication_dict, all_results)
+                        else:
+                            for word in search_title.split("+"):
+                                search_title_without_words = search_title
+                                if len(all_results) > 0:
+                                    break
+                                search_title_without_words = search_title_without_words.replace(word, '').replace('++',
+                                                                                                                  '+').strip(
+                                    '+')
+                                all_results += swagger_find(search_title_without_words, search_authors, year, title,
+                                                           rejected_titles,
+                                                           possible_host_items, lang, authors, additional_physical_form_entrys, publication_dict, all_results)
+                        # Suche unter Ausschluss von einem oder zwei Suchbegriffen je nach Länge des Titels
+        else:
+            for title in create_response_titles_for_response_search(publication_dict['response_list']):
+                title = unidecode.unidecode(title)
+                lang = detect(title)
+                if lang not in stopwords_dict:
+                    lang = default_lang
+                search_title = ""
+                search_authors = ""
+                word_nr = 0
+                author_nr = 0
+                for author in authors:
+                    author = unidecode.unidecode(author)
+                    if author_nr < 2 and ('ß' not in author):
+                        search_authors = search_authors + "+" + author
+                    author_nr += 1
+                search_authors = search_authors.strip("+")
+                for word in RegexpTokenizer(r'\w+').tokenize(title):
+                    if ((not any(stopword in word for stopword in stopwords_for_search_in_zenon)) and (len(word) > 2) and (
+                            word not in stopwords_dict[lang]) and (re.findall(r'^\d{1,2}$', word) == []) and (
+                            re.findall(r'^[IVXLCDM]*$', word) == [])):
+                        word = urllib.parse.quote(word, safe='')
+                        search_title = search_title + "+" + word
+                        word_nr += 1
+                # Generierung eines bereinigten Suchtitels
+                search_title = search_title.strip("+")
+                if word_nr >= 1:
+                    all_results += swagger_find(search_title, search_authors, year, title, rejected_titles, possible_host_items,
+                                                lang, authors, additional_physical_form_entrys, publication_dict, all_results)
+                    # Suche mit vollständigen Daten
+                    if len(all_results) == 0:
+                        search_authors = search_authors.split("+")[0]
+                        all_results += swagger_find(search_title, search_authors, year, title, rejected_titles,
+                                                    possible_host_items,
+                                                    lang, authors, additional_physical_form_entrys, publication_dict, all_results)
+                        # Suche nur mit dem ersten Autoren
+                    if len(all_results) == 0:
+                        word_nr = 0
+                        search_title = ""
+                        for word in RegexpTokenizer(r'\w+').tokenize(title):
+                            if ((not any(stopword in word for stopword in stopwords_for_search_in_zenon)) and (
+                                    len(word) > 2) and (word not in stopwords_dict[lang]) and (
+                                    re.findall(r'^\d{1,2}$', word) == []) and (re.findall(r'^[IVXLCDM]*$', word) == [])):
+                                word = urllib.parse.quote(word, safe='')
+                                if '%' in word:
+                                    continue
+                                search_title = search_title + "+" + word
+                            if word_nr > 8:
+                                break
+                        search_title = search_title.strip("+")
+                        all_results += swagger_find(search_title, search_authors, year, title, rejected_titles,
+                                                    possible_host_items,
+                                                    lang, authors, additional_physical_form_entrys, publication_dict, all_results)
+                        # Suche mit verkürztem Titel
+                    if len(all_results) == 0:
+                        search_authors = ""
+                        all_results += swagger_find(search_title, search_authors, year, title, rejected_titles,
+                                                    possible_host_items,
+                                                    lang, authors, additional_physical_form_entrys, publication_dict, all_results)
+                        # Suche ohne Autorennamen
+                    if len(all_results) == 0:
+                        if len(search_title.split('+')) > 5:
+                            for pair in itertools.combinations(search_title.split("+"), 2):
+                                search_title_without_words = search_title
+                                if len(all_results) > 0:
+                                    break
+                                for word in pair:
+                                    search_title_without_words = search_title_without_words.replace(word, '').replace('++',
+                                                                                                                      '+').strip(
+                                        '+')
+                                all_results += swagger_find(search_title_without_words, search_authors, year, title,
+                                                            rejected_titles,
+                                                            possible_host_items, lang, authors, additional_physical_form_entrys, publication_dict, all_results)
+                        else:
+                            for word in search_title.split("+"):
+                                search_title_without_words = search_title
+                                if len(all_results) > 0:
+                                    break
+                                search_title_without_words = search_title_without_words.replace(word, '').replace('++',
+                                                                                                                  '+').strip(
+                                    '+')
+                                all_results += swagger_find(search_title_without_words, search_authors, year, title,
+                                                            rejected_titles,
+                                                            possible_host_items, lang, authors, additional_physical_form_entrys, publication_dict, all_results)
+                        # Suche unter Ausschluss von einem oder zwei Suchbegriffen je nach Länge des Titels
+                if all_results:
+                    break
+        return all_results, additional_physical_form_entrys
+    except Exception as e:
+        print('Error! Code: {c}, Message, {m}'.format(c=type(e).__name__, m=str(e)))
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        print(exc_type, fname, exc_tb.tb_lineno)
+
+
 # Spracherkennung verbessern!
+# Behandlung bei der Suche nach Rezensionsdubletten UND rezensierten Titeln verbessern!!!
+# hier noch Möglichkeiten für hidden filters einbauen?
+# Problem: bei sehr kurzen "Haupttiteln" werden zu kurze Dublettentitel gefunden.

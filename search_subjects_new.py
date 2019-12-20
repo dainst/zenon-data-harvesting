@@ -13,7 +13,6 @@ import sys, os
 import copy
 import math
 from statistics import mean, median, stdev
-import geopandas
 from geopandas import GeoSeries
 from shapely.geometry import Polygon, Point
 
@@ -21,7 +20,6 @@ def get_distance_of_coordinates(coord_1, coord_2):
     R = 6373.0
     dlon = math.radians(coord_1[0]) - math.radians(coord_2[0])
     dlat = math.radians(coord_1[1]) - math.radians(coord_2[1])
-
     a = math.sin(dlat / 2)**2 + math.cos(math.radians(coord_2[1])) * math.cos(math.radians(coord_1[1])) * math.sin(dlon / 2)**2
     c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
     distance = R * c

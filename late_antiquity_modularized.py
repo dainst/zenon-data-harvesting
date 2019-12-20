@@ -4,9 +4,8 @@ import urllib.request
 from bs4 import BeautifulSoup
 import re
 import create_new_record
-from pymarc import MARCReader
 import json
-import handle_error_and_raise
+import write_error_to_logfile
 from datetime import datetime
 
 
@@ -38,29 +37,31 @@ dateTimeObj = datetime.now()
 timestampStr = dateTimeObj.strftime("%d-%b-%Y")
 
 volumes_sysnumbers = {}
-volumes_url = 'https://zenon.dainst.org/api/v1/search?lookfor=000793833&type=ParentID'
-volumes_req = urllib.request.Request(volumes_url)
-with urllib.request.urlopen(volumes_req) as volumes_response:
-    volumes_response = volumes_response.read()
-volumes_response = volumes_response.decode('utf-8')
-volumes_json = json.loads(volumes_response)
-for result in volumes_json["records"]:
-    webFile = urllib.request.urlopen("https://zenon.dainst.org/Record/"+str(result['id'])+"/Export?style=MARC")
-    new_reader = MARCReader(webFile)
-    for file in new_reader:
-        pub_date = ""
-        for field in ['260', '264']:
-            if file[field] is not None:
-                pub_date = re.findall(r'\d{4}', file[field]['c'])[0]
-        volumes_sysnumbers[pub_date] = result['id']
+volumes_basic_url = 'https://zenon.dainst.org/api/v1/search?lookfor=000793833&type=ParentID&sort=year&page='
+page_nr = 0
+empty_page = False
+while not empty_page:
+    page_nr += 1
+    volume_record_url = volumes_basic_url + str(page_nr)
+    req = urllib.request.Request(volume_record_url)
+    with urllib.request.urlopen(req) as response:
+        response = response.read()
+    response = response.decode('utf-8')
+    json_response = json.loads(response)
+    if 'records' not in json_response:
+        empty_page = True
+        continue
+    for result in json_response['records']:
+        for date in result['publicationDates']:
+            volumes_sysnumbers[date] = result['id']
 
 
 def harvest():
+    return_string = ''
     try:
         with open('records/late_antiquity/late_antiquity_logfile.json', 'r') as log_file:
             log_dict = json.load(log_file)
             last_issue_harvested_in_last_session = log_dict['last_issue_harvested']
-            print('Letztes geharvestetes Heft von Late Antiquity:', last_issue_harvested_in_last_session)
         pub_nr = 0
         issues_harvested = []
         out = open('records/late_antiquity/late_antiquity_' + timestampStr + '.mrc', 'wb')
@@ -82,9 +83,12 @@ def harvest():
         for issue_url in urls:
             volume_name = volume_names[urls.index(issue_url)]
             volume, issue, year_of_publication = re.findall(r'Volume (\d{1,2}), Number (\d), \w+ (\d{4})', volume_name)[0]
+            if year_of_publication not in volumes_sysnumbers:
+                print('Artikel von Journal of Late Antiquity konnten teilweise nicht geharvestet werden, da keine übergeordnete Aufnahme für das Jahr', year_of_publication, 'existiert.')
+                print('Bitte erstellen Sie eine neue übergeordnete Aufnahme für das Jahr', year_of_publication, '.')
+                break
             current_item = int(year_of_publication + volume.zfill(2) + issue.zfill(2))
             if current_item > last_issue_harvested_in_last_session:
-                print(issue_url)
                 req = urllib.request.Request(issue_url, data, headers)
                 with urllib.request.urlopen(req) as response:
                     issue_page = response.read().decode('utf-8')
@@ -136,16 +140,12 @@ def harvest():
                             pub_nr += created
                         else:
                             break
-
-        print('Es wurden', pub_nr, 'neue Records für Journal of Late Antiquity erstellt.')
+        write_error_to_logfile.comment('Letztes geharvestetes Heft von Late Antiquity: ' + str(last_issue_harvested_in_last_session))
+        return_string += 'Es wurden ' + str(pub_nr) + ' neue Records für Journal of Late Antiquity erstellt.'
         if issues_harvested:
             with open('records/late_antiquity/late_antiquity_logfile.json', 'w') as log_file:
                 log_dict = {"last_issue_harvested": max(issues_harvested)}
                 json.dump(log_dict, log_file)
-                print('Log-File wurde auf', max(issues_harvested), 'geupdated.')
-
+                write_error_to_logfile.comment('Log-File wurde auf ' + str(max(issues_harvested)) + ' geupdated.')
     except Exception as e:
-        handle_error_and_raise.handle_error_and_raise(e)
-
-
-harvest()
+        write_error_to_logfile.write(e)
