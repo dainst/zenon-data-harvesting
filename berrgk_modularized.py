@@ -9,7 +9,7 @@ import language_codes
 import re
 from datetime import datetime
 import json
-import handle_error_and_raise
+import write_error_to_logfile
 
 nlp_de = spacy.load('de_core_news_sm')
 nlp_en = spacy.load('en_core_web_sm')
@@ -24,11 +24,11 @@ timestampStr = dateTimeObj.strftime("%d-%b-%Y")
 
 
 def harvest():
+    return_string = ''
     try:
         with open('records/berrgk/berrgk_logfile.json', 'r') as log_file:
             log_dict = json.load(log_file)
             last_item_harvested_in_last_session = log_dict['last_issue_harvested']
-            print('Letztes geharvestetes Heft von Berichte der RGK:', last_item_harvested_in_last_session)
         issues_harvested = []
         out = open('records/berrgk/berrgk_' + timestampStr + '.mrc', 'wb')
         basic_url = 'https://journals.ub.uni-heidelberg.de/index.php/berrgk/issue/archive/'
@@ -212,15 +212,16 @@ def harvest():
                                 pub_nr += created
                             else:
                                 break
-
-        print('Es wurden', pub_nr, 'neue Records für Berichte der RGK erstellt.')
+        write_error_to_logfile.comment('Letztes geharvestetes Heft von Berichte der RGK: ' + str(last_item_harvested_in_last_session))
+        return_string += 'Es wurden ' + str(pub_nr) + ' neue Records für Berichte der RGK erstellt.'
         if issues_harvested:
             with open('records/berrgk/berrgk_logfile.json', 'w') as log_file:
                 log_dict = {"last_issue_harvested": max(issues_harvested)}
                 json.dump(log_dict, log_file)
-                print('Log-File wurde auf', max(issues_harvested), 'geupdated.')
+                write_error_to_logfile.comment('Log-File wurde auf ' + str(max(issues_harvested)) + ' geupdated.')
     except Exception as e:
-        handle_error_and_raise.handle_error_and_raise(e)
+        write_error_to_logfile.write(e)
+    return return_string
 
 
 # Lücke von 1960 bis 2013
