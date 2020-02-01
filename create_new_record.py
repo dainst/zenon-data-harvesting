@@ -636,13 +636,14 @@ def create_new_record(out, publication_dict):
                                             [person.split(', ')[0] for person in (publication_dict['authors_list'] + publication_dict['editors_list'])],
                                             publication_dict['publication_year'], 'en', [publication_dict['host_item']['sysnumber']], publication_dict)
         if all_doublets:
-            print('doublet found:', all_doublets)
+            print('doublet found:', list(set(all_doublets)))
             # print(publication_dict['title_dict'])
             # print(publication_dict['authors_list'], publication_dict['editors_list'], publication_dict['publication_year'])
         elif additional_physical_form_entrys:
             print('additional physical form entry', additional_physical_form_entrys)
             print(publication_dict['title_dict'])
             print(publication_dict['authors_list'], publication_dict['editors_list'], publication_dict['publication_year'])
+        all_doublets = []
         if not all_doublets:
             recent_record = Record(force_utf8=True)
             recent_record.leader = \
@@ -664,7 +665,10 @@ def create_new_record(out, publication_dict):
                 except:
                     language = 'und'
             if not publication_dict['do_detect_lang']:
-                language = publication_dict['default_language']
+                if len(publication_dict['default_language']) == 3:
+                    language = publication_dict['default_language']
+                else:
+                    language = language_codes.resolve(publication_dict['default_language'])
             second_indicators = ['3', '2', '0', '1']
             function_nr = 0
             country_code = 'xx '
@@ -841,26 +845,25 @@ def create_new_record(out, publication_dict):
             if publication_dict['review']:
                 for reviewed_title in publication_dict['review_list']:
                     if reviewed_title['reviewed_title']:
-                        reviewed_title_ids = find_reviewed_title.find(reviewed_title['reviewed_title'],
-                                                                      [author.split(', ')[0] for author in reviewed_title['reviewed_authors']]
-                                                                      + [editor.split(', ')[0] for editor in reviewed_title['reviewed_editors']], reviewed_title['year_of_publication'],
-                                                                      publication_dict['publication_year'], 'en')
+                        reviewed_title_ids, review_titles = find_reviewed_title.find(reviewed_title, publication_dict['publication_year'], 'en')
+                        if reviewed_title_ids:
+                            print(reviewed_title_ids)
+                        else:
+                            print('no lkr generated')
                         for reviewed_title_id in reviewed_title_ids:
                             # print(publication_dict['review_list'])
                             # print(reviewed_title_ids)
                             recent_record.add_field(Field(tag='LKR', indicators=[' ', ' '],
-                                                          subfields=['a', 'UP', 'b', reviewed_title_id, 'l', 'DAI01', 'm', 'Rezension', 'n', publication_dict['title_dict']['main_title']]))
+                                                          subfields=['a', 'UP', 'b', reviewed_title_id, 'l', 'DAI01', 'm', 'Rezension',
+                                                                     'n', publication_dict['title_dict']['main_title']]))
             if publication_dict['response']:
                 for reviewed_title in publication_dict['response_list']:
                     if reviewed_title['reviewed_title']:
-                        reviewed_title_ids = find_reviewed_title.find(reviewed_title['reviewed_title'],
-                                                                      [author.split(', ')[0] for author in reviewed_title['reviewed_authors']]
-                                                                      + [editor.split(', ')[0] for editor in reviewed_title['reviewed_editors']], reviewed_title['year_of_publication'],
-                                                                      publication_dict['publication_year'], 'en')
+                        reviewed_title_ids, review_titles = find_reviewed_title.find(reviewed_title, publication_dict['publication_year'], 'en')
                         for reviewed_title_id in reviewed_title_ids:
                             recent_record.add_field(Field(tag='LKR', indicators=[' ', ' '],
                                                           subfields=['a', 'UP', 'b', reviewed_title_id, 'l', 'DAI01',
-                                                                     'm', 'Rezension', 'n', publication_dict['title_dict']['main_title']]))
+                                                                     'm', 'Rezension', 'n', review_titles[reviewed_title_ids.index(reviewed_title_id)]]))
             print(recent_record)
             out.write(recent_record.as_marc21())
             created = 1

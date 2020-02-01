@@ -9,7 +9,7 @@ from nameparser import HumanName
 import create_new_record
 import write_error_to_logfile
 
-def harvest():
+def harvest(path):
     return_string = ''
     try:
         dateTimeObj = datetime.now()
@@ -43,7 +43,7 @@ def harvest():
                           "Marmorskulpturen der römischen Kaiserzeit aus Milet. Aufstellungskontext und programmatische Aussage",
                           "Gérard Moitrieux unter Mitarbeit von Jean-Noël Castorio, Toul et la cité des Leuques. Nouvel Espérandieu"]
 
-        out = open('records/bjb/bjb_' + timestampStr + '.mrc', 'wb')
+        out = open(path + 'bjb_' + timestampStr + '.mrc', 'wb')
         basic_url = 'https://journals.ub.uni-heidelberg.de/index.php/bjb/issue/archive/'
         pub_nr = 0
         empty_page = False
@@ -95,7 +95,7 @@ def harvest():
                 volume_year = str(min([int(year) for year in re.findall(r'\d{4}', volume_title)]))
                 current_item = int(volume_year + volume.split('/')[0].zfill(3))
                 if current_item > last_item_harvested_in_last_session:
-                    if int(volume_year) + 3 > int(dateTimeObj.strftime("%Y")):
+                    if int(volume_year) + 4 > int(dateTimeObj.strftime("%Y")):
                         continue
                         # die Bände werden erst drei Jahre nach dem Druck Open Access online publiziert.
                     if int(volume_year) < 2011:
@@ -111,7 +111,7 @@ def harvest():
                         if category not in ['Titel', 'Inhalt', 'Verbesserungen', 'Vorwort/Widmung', 'Abkürzungen']:
                             with open('publication_dict.json', 'r') as publication_dict_template:
                                 publication_dict = json.load(publication_dict_template)
-                            publication_dict['publication_year'] = article_soup.find('meta', attrs={'name': 'citation_date'})['content']
+                            publication_dict['publication_year'] = re.findall(r'\d{4}', article_soup.find('meta', attrs={'name': 'citation_date'})['content'])[0]
                             if category in ['Bildbeilage', 'Register', 'Miszellen', 'Chronik', 'Vereinsangelegenheiten_Statuten', 'Jahresberichte']:
                                 publication_dict['title_dict']['main_title'] = \
                                     article_soup.find('meta', attrs={'name': 'citation_title'})['content'].replace("...", "") + ' ' + volume_name + ', ' + volume + ' (' + volume_year + ')'
@@ -153,11 +153,11 @@ def harvest():
                                 publication_dict['retro_digitization_info'] = \
                                     {'place_of_publisher': 'Heidelberg', 'publisher': 'Heidelberg UB',
                                      'date_published_online': article_soup.find('div', class_='published').find('div', class_='value').text.strip()}
-                                publication_dict['default_language'] = 'de'
+                                publication_dict['default_language'] = 'ger'
                                 publication_dict['publication_etc_statement']['publication'] = {'place': place_of_publication, 'responsible': publisher, 'country_code': ''}
                                 publication_dict['publication_etc_statement']['production'] = {'place': place_of_production, 'responsible': producer, 'country_code': ''}
                             publication_dict['language_field'] = {'language_of_resource': [], 'language_of_original_item': []}
-                            publication_dict['fields_590'] = ['arom', '2019xhnxbjb', 'Online publication']
+                            publication_dict['fields_590'] = ['arom', '2020xhnxbjb', 'Online publication']
                             publication_dict['original_cataloging_agency'] = 'DE-16'
                             if re.findall(r'\d{4}', article_soup.find('meta', attrs={'name': 'DC.Rights'})['content']):
                                 publication_dict['copyright_year'] = re.findall(r'\d{4}', article_soup.find('meta', attrs={'name': 'DC.Rights'})['content'])[0]
@@ -267,5 +267,8 @@ old_responsibility_word = ["Beschrieben von ", "Aus den Quellen bearbeitet von "
                            "Aufgenommen und gezeichnet v. ", "Beschrieben und durch XXVI Tafeln erläutert von ", "dessinées par ", "dessinée par ", "eröffnet und beschrieben von ",
                            "von Gymnasialdirector ", "Bijdrage van ", ", by ", " di ", "instruxit ", " scripsit ", "Bijdrage van ", ", étude par "]
 
+
 if __name__ == '__main__':
-    harvest()
+    dateTimeObj = datetime.now()
+    timestampStr = dateTimeObj.strftime("%d-%b-%Y")
+    harvest('records/bjb/bjb_' + timestampStr + '.mrc')

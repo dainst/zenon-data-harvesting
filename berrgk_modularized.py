@@ -23,14 +23,14 @@ dateTimeObj = datetime.now()
 timestampStr = dateTimeObj.strftime("%d-%b-%Y")
 
 
-def harvest():
+def harvest(path):
     return_string = ''
     try:
         with open('records/berrgk/berrgk_logfile.json', 'r') as log_file:
             log_dict = json.load(log_file)
             last_item_harvested_in_last_session = log_dict['last_issue_harvested']
         issues_harvested = []
-        out = open('records/berrgk/berrgk_' + timestampStr + '.mrc', 'wb')
+        out = open(path + 'berrgk_' + timestampStr + '.mrc', 'wb')
         basic_url = 'https://journals.ub.uni-heidelberg.de/index.php/berrgk/issue/archive/'
         pub_nr = 0
         empty_page = False
@@ -123,7 +123,7 @@ def harvest():
                                      'date_published_online': article_soup.find('div', class_='published').find('div', class_='value').text.strip()}
                                 publication_dict['default_language'] = language_codes.resolve(article_soup.find('meta', attrs={'name': 'DC.Language'})['content'])
                             publication_dict['field_008_18-34'] = 'ar poo||||||   b|'
-                            publication_dict['fields_590'] = ['arom', '2019xhnxgermania', 'Online publication']
+                            publication_dict['fields_590'] = ['arom', '2020xhnxgermania', 'Online publication']
                             publication_dict['original_cataloging_agency'] = 'DE-16'
                             publication_dict['publication_etc_statement']['publication'] = {'place': 'Heidelberg',
                                                                                             'responsible': 'Propylaeum',
@@ -213,7 +213,7 @@ def harvest():
                             else:
                                 break
         write_error_to_logfile.comment('Letztes geharvestetes Heft von Berichte der RGK: ' + str(last_item_harvested_in_last_session))
-        return_string += 'Es wurden ' + str(pub_nr) + ' neue Records für Berichte der RGK erstellt.'
+        return_string += 'Es wurden ' + str(pub_nr) + ' neue Records für Berichte der RGK erstellt.\n'
         if issues_harvested:
             with open('records/berrgk/berrgk_logfile.json', 'w') as log_file:
                 log_dict = {"last_issue_harvested": max(issues_harvested)}
@@ -223,6 +223,11 @@ def harvest():
         write_error_to_logfile.write(e)
     return return_string
 
+
+if __name__ == '__main__':
+    dateTimeObj = datetime.now()
+    timestampStr = dateTimeObj.strftime("%d-%b-%Y")
+    harvest('records/berrgk/berrgk_' + timestampStr + '.mrc')
 
 # Lücke von 1960 bis 2013
 

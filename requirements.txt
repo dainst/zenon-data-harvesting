@@ -9,3 +9,6 @@ arrow
 nltk
 scipy
 unidecode
+sickle
+pickle5
+click

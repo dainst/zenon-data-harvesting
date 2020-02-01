@@ -48,14 +48,14 @@ def handle_article(article):
     # Code Artikelauswertung
 
 
-def harvest():
+def harvest(path):
     return_string = ''
     try:
         with open('records/germania/germania_logfile.json', 'r') as log_file:
             log_dict = json.load(log_file)
             last_item_harvested_in_last_session = log_dict['last_issue_harvested']
         issues_harvested = []
-        out = open('records/germania/germania_' + timestampStr + '.mrc', 'wb')
+        out = open(path + 'germania_' + timestampStr + '.mrc', 'wb')
         basic_url = 'https://journals.ub.uni-heidelberg.de/index.php/germania/issue/archive/'
         pub_nr = 0
         empty_page = False
@@ -142,7 +142,7 @@ def harvest():
                                      'date_published_online': article_soup.find('div', class_='published').find('div', class_='value').text.strip()}
                                 publication_dict['default_language'] = language_codes.resolve(article_soup.find('meta', attrs={'name': 'DC.Language'})['content'])
                             publication_dict['field_008_18-34'] = 'gr poo||||||   b|'
-                            publication_dict['fields_590'] = ['arom', '2019xhnxgerm', 'Online publication', 'daiauf8']
+                            publication_dict['fields_590'] = ['arom', '2020xhnxgerm', 'Online publication', 'daiauf8']
                             publication_dict['original_cataloging_agency'] = 'DE-16'
                             publication_dict['publication_etc_statement']['publication'] = {'place': 'Heidelberg',
                                                                                             'responsible': 'Propylaeum',
@@ -265,6 +265,10 @@ def harvest():
     return return_string
 
 
+if __name__ == '__main__':
+    dateTimeObj = datetime.now()
+    timestampStr = dateTimeObj.strftime("%d-%b-%Y")
+    harvest('records/germania/germania_' + timestampStr + '.mrc')
 
 # Sprache übernehmen, prüfen, ob Rezensionen korrekt verarbeitet werden.
 # Lücke von 1960 bis 1985

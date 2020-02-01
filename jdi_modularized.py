@@ -7,8 +7,11 @@ import json
 import create_new_record
 import write_error_to_logfile
 
+# bearbeiten, Titel kann nicht ausgelesen werden!
 
-def harvest():
+def harvest(path):
+    pub_nr = 0
+    return_string = ''
     try:
         publishers = {'1885': ['Berlin', 'Georg Reimer'], '1919': ['Berlin; Leipzig', 'Walter de Gruyter & Co.']}
         years_published_in = [int(year) for year in list(publishers.keys())]
@@ -21,7 +24,7 @@ def harvest():
             log_dict = json.load(log_file)
             last_issue_harvested_in_last_session = log_dict['last_issue_harvested']
         issues_harvested = []
-        out = open('records/jdi/jdi_' + timestamp + '.mrc', 'wb')
+        out = open(path + 'jdi_' + timestamp + '.mrc', 'wb')
         basic_url = 'https://digi.ub.uni-heidelberg.de/diglit/jdi'
         user_agent = 'Mozilla/5.0 (X11; Linux x86_64; rv:66.0)'
         values = {'name': 'Helena Nebel',
@@ -48,6 +51,7 @@ def harvest():
             date_published_online = re.findall(r'\d{4}', volume_soup.find('div', id='publikationsdatum').text)[0]
             volume_title = volume_years[volume_nr]
             volume_nr += 1
+            print(volume_title)
             if re.findall(r'(\d{1,3}/\d{1,3})\.', volume_title.strip()):
                 volume = re.findall(r'(\d{1,3})\.', volume_title)[0]
             else:
@@ -79,7 +83,7 @@ def harvest():
                         publication_dict['other_links_with_public_note'].append({'public_note': '', 'url': ''})
                         publication_dict['default_language'] = 'ger'
                         publication_dict['do_detect_lang'] = False
-                        publication_dict['fields_590'] = ['arom', '2019xhnxjdi', 'Online publication']
+                        publication_dict['fields_590'] = ['arom', '2020xhnxjdi', 'Online publication']
                         publication_dict['original_cataloging_agency'] = 'DE-16'
                         publication_dict['publication_year'] = re.findall(r'\d{4}', xml_soup.find_all('mods:mods')[0].find('mods:originInfo').find('mods:dateIssued', keyDate='yes').text)[0]
                         place_of_publication = ''
@@ -117,12 +121,19 @@ def harvest():
                         else:
                             break
 
-        print('Es wurden', pub_nr, 'neue Records für Jahrbuch des Deutschen Archäologischen Instituts erstellt.')
+        return_string = 'Es wurden' + str(pub_nr) + 'neue Records für Jahrbuch des Deutschen Archäologischen Instituts erstellt.'
         if issues_harvested:
             with open('records/jdi/jdi_logfile.json', 'w') as log_file:
                 log_dict = {"last_issue_harvested": max(issues_harvested)}
                 json.dump(log_dict, log_file)
-                print('Log-File wurde auf', max(issues_harvested), 'geupdated.')
+                write_error_to_logfile.comment('Log-File wurde auf' + str(max(issues_harvested)) + 'geupdated.')
 
     except Exception as e:
-        write_error_to_logfile.handle_error_and_raise(e)
+        write_error_to_logfile.write(e)
+    return return_string
+
+
+if __name__ == '__main__':
+    datetimeobj = datetime.now()
+    timestamp = datetimeobj.strftime("%d-%b-%Y")
+    harvest('records/jdi/jdi_' + timestamp + '.mrc')

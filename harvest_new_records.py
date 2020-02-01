@@ -1,64 +1,82 @@
+import os
+from webdav3.client import Client
+import write_error_to_logfile
+from datetime import datetime
+
 import aegyptiaca_modularized
+import antiquite_modularized
 import berrgk_modularized
+# import bjb_modularized
 import BMCR_modularized
 import cipeg_modularized
 import efb_modularized
-# import eperiodica_modularized
-import germania_modularized
-# import hsozkult_modularized
-import bjb_modularized
+import eperiodica_akb_002_modularized
+import eperiodica_bat_001_modularized
+import eperiodica_snr_003_modularized
+# import germania_modularized >>> nachfragen, was jetzt damit ist!
+import gnomon_modularized
+import hsozkult_modularized
 # import jdi_modularized
-import late_antiquity_modularized
+import late_antiquity_modularized_new
 import maa_journal_current_modularized
-import write_error_to_logfile
-import smtplib
-from email.mime.multipart import MIMEMultipart
-# from email.mime.text import MIMEText
-from datetime import datetime
 
 # logfiles vorhanden für:
 
 dateTimeObj = datetime.now()
 timestampStr = dateTimeObj.strftime("%d-%b-%Y")
 
-logfile = 'logfile_' + timestampStr
-
 return_string = ''
-
-print('beep')
-
-for harvesting_script in [aegyptiaca_modularized, berrgk_modularized, cipeg_modularized, BMCR_modularized, bjb_modularized,
-                          efb_modularized, germania_modularized, # hsozkult_modularized, eperiodica_modularized, jdi_modularized
-                          late_antiquity_modularized, maa_journal_current_modularized]:
+new_dir = 'harvest_' + timestampStr
+path = '/home/hnebel/Programmierung/zenon-data-harvesting/records/'
+error_path = '/home/hnebel/Programmierung/zenon-data-harvesting/logfiles_debugging/'
+if new_dir not in os.listdir(path):
+    os.mkdir(path + new_dir)
+path_for_cumulus = '/home/hnebel/Programmierung/zenon-data-harvesting/records/' + new_dir
+path = '/home/hnebel/Programmierung/zenon-data-harvesting/records/' + new_dir + '/'
+print(path)
+for harvesting_script in [aegyptiaca_modularized, antiquite_modularized, berrgk_modularized, BMCR_modularized, # bjb_modularized,
+                          cipeg_modularized,
+                          efb_modularized,  # germania_modularized,
+                          hsozkult_modularized, late_antiquity_modularized_new,  # jdi_modularized,
+                          eperiodica_akb_002_modularized, eperiodica_bat_001_modularized,
+                          eperiodica_snr_003_modularized,
+                          maa_journal_current_modularized,
+                          gnomon_modularized]:
     try:
-        return_string += harvesting_script.harvest()
+        print(harvesting_script)
+        return_string += harvesting_script.harvest(path)
         print(return_string)
+        write_error_to_logfile.comment(return_string)
     except Exception as e:
         write_error_to_logfile.write(e)
 
 print(return_string)
+write_error_to_logfile.comment(return_string)
+# alle Dateien mit size 0 Bytes löschen:
+for file in os.listdir(path_for_cumulus):
+    size = os.path.getsize(path + file)
+    print(size)
+    if size == 0:
+        os.remove(path + file)
 
-# set up the SMTP server
-s = smtplib.SMTP(host="securesmtp.t-online.de", port=587)
-s.starttls()
-s.login("helena.nebel@t-online.de", 'DW!&FwvmE')
+options = {
+    'webdav_hostname': 'https://cumulus.dainst.org/remote.php/webdav',
+    'webdav_login':    'hnebel',
+    'webdav_password': '9J_m3na'
+}
+client = Client(options)
+client.Verify = False
+client.mkdir('Periodicals_continuously_harvested/harvest_' + timestampStr)
+# Directory mit Datum auf Cumulus erstellen
+client.upload(remote_path='Periodicals_continuously_harvested/harvest_' + timestampStr, local_path=path)
+client.mkdir('Periodicals_continuously_harvested/harvest_' + timestampStr + '_logfiles_debugging')
+# Directory mit Datum auf Cumulus erstellen
+client.upload(remote_path='Periodicals_continuously_harvested/harvest_' + timestampStr + '_logfiles_debugging',
+              local_path='/home/hnebel/Programmierung/zenon-data-harvesting/logfiles_debugging/')
 
+# lokales Directory mit den erstellten Files hochladen
 
-# For each contact, send the email:
-msg = MIMEMultipart()       # create a message
-
-# add in the actual person name to the message template
-message = 'bla'
-
-# setup the parameters of the message
-msg['From']='Helena Nebel'
-msg['To']='helena.nebel@dainst.de' # ändern
-msg['Subject']= "Ergebnisse des Harvesting-Prozesses am " + timestampStr
-
-#with open(logfile, 'r') as new_logfile:
-    #msg.attach(MIMEText(new_logfile.read(), "plain"))
-
-# send the message via the server set up earlier.
-s.send_message(msg)
-
-# zwei Emails senden.
+# bei 404 Fehlerbehandlung anpassen.
+# Error! Code: HTTPError, Message, HTTP Error 404: Not Found,
+# Type, <class 'urllib.error.HTTPError'>, File, hsozkult_modularized.py, Line 104
+# logfiles hochladen!

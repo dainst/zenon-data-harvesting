@@ -5,6 +5,8 @@ import create_new_record
 import json
 import write_error_to_logfile
 from datetime import datetime
+from bs4 import BeautifulSoup
+import language_codes
 
 
 def create_review_dict(review_title):
@@ -55,7 +57,7 @@ while not empty_page:
             volumes_sysnumbers[date] = result['id']
 
 
-def harvest():
+def harvest(path):
     return_string = ''
     try:
         with open('records/late_antiquity/late_antiquity_logfile.json', 'r') as log_file:
@@ -63,7 +65,7 @@ def harvest():
             last_issue_harvested_in_last_session = log_dict['last_issue_harvested']
         pub_nr = 0
         issues_harvested = []
-        out = open('records/late_antiquity/late_antiquity_' + timestampStr + '.mrc', 'wb')
+        out = open(path + 'late_antiquity_' + timestampStr + '.mrc', 'wb')
         current_year = int(dateTimeObj.strftime("%Y"))
         basic_url = 'https://api.crossref.org/journals/1942-1273/works?filter=from-print-pub-date%3A'\
                     + str(current_year - 1) + ',type%3Ajournal-article&cursor='
@@ -72,7 +74,7 @@ def harvest():
         request_nr = 0
         while True:
             request_nr += 1
-            print(basic_url + next_cursor)
+            # print(basic_url + next_cursor)
             req = urllib.request.Request(basic_url + next_cursor)
             with urllib.request.urlopen(req) as response:
                 response = response.read()
@@ -82,7 +84,7 @@ def harvest():
             if not json_response['message']['items']:
                 break
             for item in json_response['message']['items']:
-                print(item)
+                # print(item)
                 volume, issue, year_of_publication = item['volume'], item['journal-issue']['issue'], str(item['issued']['date-parts'][0][0])
                 if year_of_publication not in volumes_sysnumbers:
                     print('Artikel von Journal of Late Antiquity konnten teilweise nicht geharvestet werden, da keine übergeordnete Aufnahme für das Jahr', year_of_publication, 'existiert.')
@@ -94,21 +96,32 @@ def harvest():
                     if item['title'][0] not in ["Volume Table of Contents", "Volume Contents", "From the Editor", "Bibliography", "From the Guest Editors"]:
                         with open('publication_dict.json', 'r') as publication_dict_template:
                             publication_dict = json.load(publication_dict_template)
-                        if any(word in item['title'][0] for word in [" (review)", " by "]):
-                            publication_dict['review'] = True
-                            publication_dict['review_list'] += create_review_dict(item['title'][0])
-                        else:
-                            publication_dict['title_dict']['main_title'] = item['title'][0].split(': ', 1)[0] if len(item['title'][0].split(": ", 1)) == 2 else item['title'][0]
-                            publication_dict['title_dict']['sub_title'] = item['title'][0].split(': ', 1)[1] if len(item['title'][0].split(": ", 1)) == 2 else ''
                         publication_dict['authors_list'] = [author['family'] + ', ' + author['given'] for author in item['author']]
                         publication_dict['abstract_link'] = item['URL']
                         publication_dict['pages'] = item['page']
                         publication_dict['issue'] = issue
                         publication_dict['doi'] = item['DOI']
+                        print('doi', publication_dict['doi'])
+                        if "(review)" in item['title'][0]:
+                            publication_dict['review'] = True
+                            publication_dict['review_list'] += create_review_dict(item['title'][0])
+                        elif any(word in item['title'][0] for word in [" eds. by ", " ed. by ", " by "]):
+                            article_url = 'https://www.doi.org/' + publication_dict['doi']
+                            req = urllib.request.Request(article_url)
+                            with urllib.request.urlopen(req) as response:
+                                article_page = response.read().decode('utf-8')
+                            article_title = BeautifulSoup(article_page, 'html.parser').find('title').text
+                            print(article_title)
+                            if "(review)" in article_title:
+                                publication_dict['review'] = True
+                                publication_dict['review_list'] += create_review_dict(item['title'][0])
+                        else:
+                            publication_dict['title_dict']['main_title'] = item['title'][0].split(': ', 1)[0] if len(item['title'][0].split(": ", 1)) == 2 else item['title'][0]
+                            publication_dict['title_dict']['sub_title'] = item['title'][0].split(': ', 1)[1] if len(item['title'][0].split(": ", 1)) == 2 else ''
                         publication_dict['LDR_06_07'] = 'ab'
                         publication_dict['do_detect_lang'] = False
-                        publication_dict['default_language'] = item['language']
-                        publication_dict['fields_590'] = ['arom', '2019xhnxjola']
+                        publication_dict['default_language'] = language_codes.resolve(item['language'])
+                        publication_dict['fields_590'] = ['arom', '2020xhnxjola']
                         publication_dict['original_cataloging_agency'] = 'Crossref'
                         publication_dict['publication_year'] = year_of_publication
                         publication_dict['publication_etc_statement']['publication'] = {'place': 'Baltimore, MD', 'responsible': 'Johns Hopkins University Press', 'country_code': 'mdu'}
@@ -135,6 +148,10 @@ def harvest():
                 write_error_to_logfile.comment('Log-File wurde auf ' + str(max(issues_harvested)) + ' geupdated.')
     except Exception as e:
         write_error_to_logfile.write(e)
+    return return_string
+
 
 if __name__ == '__main__':
-    harvest()
+    dateTimeObj = datetime.now()
+    timestampStr = dateTimeObj.strftime("%d-%b-%Y")
+    harvest('records/late_antiquity/late_antiquity_' + timestampStr + '.mrc')

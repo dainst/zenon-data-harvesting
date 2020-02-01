@@ -122,7 +122,7 @@ def harvest():
                         publication_dict['table_of_contents_link'] = issue_url
                         publication_dict['default_language'] = 'eng'
                         publication_dict['do_detect_lang'] = True
-                        publication_dict['fields_590'] = ['arom', '2019xhnxjola']
+                        publication_dict['fields_590'] = ['arom', '2020xhnxjola']
                         publication_dict['original_cataloging_agency'] = 'Journal of Late Antiquity'
                         publication_dict['publication_year'] = year_of_publication
                         publication_dict['publication_etc_statement']['publication'] = {'place': 'Baltimore, MD', 'responsible': 'Johns Hopkins University Press', 'country_code': 'mdu'}
@@ -141,7 +141,7 @@ def harvest():
                         else:
                             break
         write_error_to_logfile.comment('Letztes geharvestetes Heft von Late Antiquity: ' + str(last_issue_harvested_in_last_session))
-        return_string += 'Es wurden ' + str(pub_nr) + ' neue Records für Journal of Late Antiquity erstellt.'
+        return_string += 'Es wurden ' + str(pub_nr) + ' neue Records für Journal of Late Antiquity erstellt.\n'
         if issues_harvested:
             with open('records/late_antiquity/late_antiquity_logfile.json', 'w') as log_file:
                 log_dict = {"last_issue_harvested": max(issues_harvested)}

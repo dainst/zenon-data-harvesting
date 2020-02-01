@@ -13,7 +13,7 @@ dateTimeObj = datetime.now()
 timestampStr = dateTimeObj.strftime("%d-%b-%Y")
 
 
-def harvest():
+def harvest(path):
     return_string = ''
     try:
         with open('records/cipeg/cipeg_logfile.json', 'r') as log_file:
@@ -21,7 +21,7 @@ def harvest():
             last_item_harvested_in_last_session = log_dict['last_issue_harvested']
         pub_nr = 0
         issues_harvested = []
-        out = open('records/cipeg/cipeg_' + timestampStr + '.mrc', 'wb')
+        out = open(path + 'cipeg_' + timestampStr + '.mrc', 'wb')
         basic_url = 'https://journals.ub.uni-heidelberg.de/index.php/cipeg/issue/archive/'
         empty_page = False
         page = 0
@@ -98,7 +98,7 @@ def harvest():
                             publication_dict['default_language'] = language_codes.resolve(article_soup.find('meta', attrs={'name': 'DC.Language'})['content'])
                             publication_dict['do_detect_lang'] = False
                             publication_dict['field_008_18-34'] = 'ar poo||||||   b|'
-                            publication_dict['fields_590'] = ['arom', '2019xhnxcipeg', 'Online publication']
+                            publication_dict['fields_590'] = ['arom', '2020xhnxcipeg', 'Online publication']
                             publication_dict['original_cataloging_agency'] = 'DE-16'
                             publication_dict['publication_etc_statement']['publication'] = {'place': 'Heidelberg',
                                                                                             'responsible': 'Propylaeum',
@@ -116,7 +116,7 @@ def harvest():
                             else:
                                 break
         write_error_to_logfile.comment('Letzte geharvestete Publikation von CIPEG: ' + str(last_item_harvested_in_last_session))
-        return_string += 'Es wurden ' + str(pub_nr) + ' neue Records für CIPEG erstellt.'
+        return_string += 'Es wurden ' + str(pub_nr) + ' neue Records für CIPEG erstellt.\n'
         if issues_harvested:
             with open('records/cipeg/cipeg_logfile.json', 'w') as log_file:
                 log_dict = {"last_issue_harvested": max(issues_harvested)}
@@ -125,3 +125,8 @@ def harvest():
     except Exception as e:
         write_error_to_logfile.write(e)
     return return_string
+
+if __name__ == '__main__':
+    dateTimeObj = datetime.now()
+    timestampStr = dateTimeObj.strftime("%d-%b-%Y")
+    harvest('records/cipeg/cipeg_' + timestampStr + '.mrc')

@@ -9,11 +9,12 @@ dateTimeObj = datetime.now()
 timestampStr = dateTimeObj.strftime("%d-%b-%Y")
 
 
-def harvest_eperiodica(journal_pid, publisher, publication_place, default_language, time_interval, host_item_sysnumber, host_item_name, field_008_18_34):
+def harvest_eperiodica(path, journal_pid, publisher, publication_place, default_language, time_interval, host_item_sysnumber, host_item_name, field_008_18_34):
+    return_string = ''
     try:
         issues_harvested = []
         last_year_of_harvesting = int(dateTimeObj.strftime("%Y")) - time_interval
-        out = open('records/' + journal_pid.replace('-', '') + '_' + timestampStr + '.mrc', 'wb')
+        out = open(path + '_' + journal_pid.replace('-', '') + '_' + timestampStr + '.mrc', 'wb')
         with open('records/' + journal_pid.replace('-', '') + '/' + journal_pid.replace('-', '') + '_logfile.json', 'r') as log_file:
             log_dict = json.load(log_file)
         last_issue_harvested_in_last_session = log_dict['last_issue_harvested']
@@ -56,7 +57,7 @@ def harvest_eperiodica(journal_pid, publisher, publication_place, default_langua
                 publication_dict['doi'] = content_list[14][1][2][4:]
                 publication_dict['default_language'] = default_language
                 publication_dict['do_detect_lang'] = True
-                publication_dict['fields_590'] = ['Online publication', 'arom', '2019xhnx' + journal_pid.replace('-', '')]
+                publication_dict['fields_590'] = ['Online publication', 'arom', '2020xhnx' + journal_pid.replace('-', '')]
                 publication_dict['original_cataloging_agency'] = 'eperiodica'
                 publication_dict['publication_year'] = year
                 publication_dict['publication_etc_statement']['publication'] = {'place': publication_place, 'responsible': publisher, 'country_code': 'sz '}
@@ -75,7 +76,7 @@ def harvest_eperiodica(journal_pid, publisher, publication_place, default_langua
                 publication_dict['field_006'] = 'm     o  d |      '
                 publication_dict['field_007'] = 'cr uuu   uu|uu'
                 publication_dict['field_008_18-34'] = field_008_18_34
-                publication_dict['additional_fields'].append({'tag': '042', 'indicators': [' ', ' '], 'subfields': ['a', 'dc']})
+                publication_dict['additional_fields'].append({'tag': '042', 'indicators': [' ', ' '], 'subfields': ['a', 'dc'], 'data': ''})
                 if create_new_record.check_publication_dict_for_completeness_and_validity(publication_dict):
                     created = create_new_record.create_new_record(out, publication_dict)
                     issues_harvested.append(current_item)
@@ -83,23 +84,27 @@ def harvest_eperiodica(journal_pid, publisher, publication_place, default_langua
                 else:
                     break
 
-        print('Es wurden', pub_nr, 'neue Records für', journal_pid + 'erstellt.')
+        return_string = 'Es wurden ' + str(pub_nr) + ' neue Records für ' + journal_pid + ' erstellt.\n'
         if issues_harvested:
             with open('records/' + journal_pid.replace('-', '') + '/' + journal_pid.replace('-', '') + '_logfile.json', 'w') as log_file:
                 log_dict = {"last_issue_harvested": max(issues_harvested)}
                 json.dump(log_dict, log_file)
-                print('Log-File wurde auf', max(issues_harvested), 'geupdated.')
+                write_error_to_logfile.comment('Log-File wurde auf' + str(max(issues_harvested)) + 'geupdated.')
 
     except Exception as e:
         write_error_to_logfile.write(e)
-
-if __name__ == '__main__':
-    harvest_eperiodica('bat-001', 'Associazione archeologica ticinese', 'Lugano', 'ita', 3, '001543081', 'Bollettino dell’Associazione Archeologica Ticinese', 'ar p o |||||   a|')
+    return return_string
 
 
 def harvest():
-    harvest_eperiodica('bat-001', 'Associazione Archeologica Ticinese', 'Lugano', 'ita', 3, '001543081', 'Bollettino dell’Associazione Archeologica Ticinese', 'ar p o |||||   a|')
-    harvest_eperiodica('snr-003', 'Schweizerische Numismatische Gesellschaft', 'Bern', 'ger', 3, '001570578', 'Schweizerische numismatische Rundschau', 'ar p o |||||   a|')
-    harvest_eperiodica('akb-002', 'Schweizerische Numismatische Gesellschaft', 'Bern', 'ger', 3, '001570578', 'Schweizerische numismatische Rundschau', 'ar p o |||||   a|')
+    harvest_eperiodica('bat-001', 'Associazione Archeologica Ticinese', 'Lugano', 'ita', 3, '001543081', 'Bollettino dell’Associazione Archeologica Ticinese', 'ar p o||||||   a|')
+    harvest_eperiodica('snr-003', 'Schweizerische Numismatische Gesellschaft', 'Bern', 'ger', 3, '001570578', 'Schweizerische numismatische Rundschau', 'ar p o||||||   a|')
+    harvest_eperiodica('akb-002', 'Archäologischer Dienst des Kantons Bern', 'Bern', 'ger', 2, '000855529', 'Archäologie Bern', 'ar p o||||||   a|')
     # welche weiteren Publikationen?
+
+
+if __name__ == '__main__':
+    harvest()
+
+
 

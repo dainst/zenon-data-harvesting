@@ -31,7 +31,8 @@ while not empty_page:
         volumes_sysnumbers[result["publicationDates"][0]] = result['id']
 
 
-def harvest():
+def harvest(path):
+    return_string = ''
     try:
         with open('records/maa/maa_logfile.json', 'r') as log_file:
             log_dict = json.load(log_file)
@@ -39,7 +40,7 @@ def harvest():
             print('Letztes geharvestetes Heft von Mediterranean Archaeology and Archaeometry (MAA):', last_issue_harvested_in_last_session)
         pub_nr = 0
         issues_harvested = []
-        out = open('records/maa/maa_' + timestampStr + '.mrc', 'wb')
+        out = open(path + 'maa_' + timestampStr + '.mrc', 'wb')
         titles_processed = []
         basic_url = 'http://www.maajournal.com/'
         user_agent = 'Mozilla/5.0 (X11; Linux x86_64; rv:66.0)'
@@ -71,8 +72,9 @@ def harvest():
             issue_soup = BeautifulSoup(issue_page, 'html.parser')
             volume_nr, issue_nr = re.findall(r' (\d{2,3}) - .*? (\d)', issue_soup.find('title').text)[0]
             current_item = int(year + volume_nr.zfill(3) + issue_nr.zfill(2))
-            if current_item == 201901903:
-            # if current_item > last_issue_harvested_in_last_session:
+            # if current_item == 201901903:
+            print('maa', current_item, last_issue_harvested_in_last_session)
+            if current_item > last_issue_harvested_in_last_session:
                 article_info_and_pdf = [item.find('span', class_='style18') for item in issue_soup.find_all('p', class_='style9 style12') if item.find('span', class_='style18') is not None]
                 for part in article_info_and_pdf:
                     parts_of_title = [part.strip() for part in part.text.split('\n')]
@@ -115,7 +117,7 @@ def harvest():
                     publication_dict['table_of_contents_link'] = issue_url
                     publication_dict['default_language'] = 'eng'
                     publication_dict['do_detect_lang'] = True
-                    publication_dict['fields_590'] = ['arom', '2019xhnxmaa']
+                    publication_dict['fields_590'] = ['arom', '2020xhnxmaa']
                     publication_dict['original_cataloging_agency'] = 'MAA'
                     publication_dict['publication_year'] = year
                     publication_dict['publication_etc_statement']['publication'] = {'place': 'Rhodes', 'responsible': 'University of the Aegean', 'country_code': 'gr '}
@@ -138,16 +140,19 @@ def harvest():
                             pub_nr += created
                         else:
                             break
-        print('Es wurden', pub_nr, 'neue Records für MAA erstellt.')
-        # if issues_harvested:
-            # with open('records/maa/maa_logfile.json', 'w') as log_file:
-                # log_dict = {"last_issue_harvested": max(issues_harvested)}
-                # json.dump(log_dict, log_file)
-                # print('Log-File wurde auf', max(issues_harvested), 'geupdated.')
+        return_string = 'Es wurden' + str(pub_nr) + 'neue Records für MAA erstellt.\n'
+        if issues_harvested:
+            with open('records/maa/maa_logfile.json', 'w') as log_file:
+                log_dict = {"last_issue_harvested": max(issues_harvested)}
+                json.dump(log_dict, log_file)
+                write_error_to_logfile.comment('Log-File wurde auf'+ str(max(issues_harvested)) + 'geupdated.')
 
     except Exception as e:
         write_error_to_logfile.write(e)
+    return return_string
 
 
 if __name__ == '__main__':
-    harvest()
+    dateTimeObj = datetime.now()
+    timestampStr = dateTimeObj.strftime("%d-%b-%Y")
+    harvest('records/maa/maa_' + timestampStr + '.mrc')

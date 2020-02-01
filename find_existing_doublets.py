@@ -181,10 +181,10 @@ def check_cosine_similarity(title, found_title, found_record, rejected_titles, l
         print(exc_type, fname, exc_tb.tb_lineno)
 
 
-def create_review_titles_for_review_search(review_list):
+def create_review_titles_for_review_search(review_dict):
     possible_review_titles = []
-    reviewed_title = review_list[1]['reviewed_title']
-    reviewed_responsibles = review_list[1]['reviewed_authors'] + review_list[1]['reviewed_editors']
+    reviewed_title = review_dict['reviewed_title']
+    reviewed_responsibles = review_dict['reviewed_authors'] + review_dict['reviewed_editors']
     if reviewed_responsibles:
         for person in reviewed_responsibles:
             possible_review_titles.append('[Rez.zu]:' + person + ': ' + reviewed_title)
@@ -240,6 +240,8 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                 empty_page = True
                 continue
             for found_record in json_response['records']:
+                if "title" not in found_record:
+                    continue
                 title_found = found_record["title"]
                 if (found_record["id"] + title_found not in rejected_titles) and (found_record['id'] not in all_results + additional_physical_form_entrys):
                     similarity = check_cosine_similarity(title, title_found, found_record, rejected_titles, lang)
@@ -251,7 +253,7 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                                 "https://zenon.dainst.org/Record/" + found_record['id'] + "/Export?style=MARC")
                             new_reader = MARCReader(webfile)
                             for file in new_reader:
-                                # if publication_dict['LDR_06_07'][1] == file.leader[7]:
+                                if publication_dict['LDR_06_07'][1] == file.leader[7]:
                                     par = False
                                     if possible_host_items:
                                         right_host_item = False
@@ -320,7 +322,7 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                                                     par = True
                                                     if file['338']['b'] == 'cr' or file['338']['a'] == 'online resource':
                                                         e_resource = True
-                                            if file['006']:
+                                            if file['006'] and publication_dict['field_006']:
                                                 if publication_dict['field_006'][0] != str(file['006'].data)[0]:
                                                     par = True
                                                     if str(file['006'].data)[0] == 'm':
@@ -497,7 +499,7 @@ def find_review(authors, year, default_lang, possible_host_items, publication_di
         rejected_titles = []
         additional_physical_form_entrys = []
         if publication_dict['review']:
-            for title in create_review_titles_for_review_search(publication_dict['review_list']):
+            for title in create_review_titles_for_review_search(publication_dict['review_list'][1]):
                 title = unidecode.unidecode(title)
                 lang = detect(title)
                 if lang not in stopwords_dict:

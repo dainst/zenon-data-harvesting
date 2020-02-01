@@ -55,7 +55,7 @@ while not empty_page:
             volumes_sysnumbers[date] = result['id']
 
 
-def harvest():
+def harvest(path):
     return_string = ''
     try:
         with open('records/antiquite/antiquite.json', 'r') as log_file:
@@ -63,7 +63,7 @@ def harvest():
             last_issue_harvested_in_last_session = log_dict['last_issue_harvested']
         pub_nr = 0
         issues_harvested = []
-        out = open('records/antiquite/antiquite_' + timestampStr + '.mrc', 'wb')
+        out = open(path + 'antiquite_' + timestampStr + '.mrc', 'wb')
         current_year = int(dateTimeObj.strftime("%Y"))
         basic_url = 'https://api.crossref.org/journals/1724-2134/works?filter=type%3Ajournal-article,from-print-pub-date%3A' \
                     + str(current_year - 1) + '&cursor='
@@ -103,8 +103,8 @@ def harvest():
                         publication_dict['doi'] = item['DOI']
                         publication_dict['LDR_06_07'] = 'ab'
                         publication_dict['do_detect_lang'] = True
-                        publication_dict['default_language'] = 'fr'
-                        publication_dict['fields_590'] = ['arom', '2019xhnxmefra']
+                        publication_dict['default_language'] = 'fre'
+                        publication_dict['fields_590'] = ['arom', '2020xhnxmefra']
                         publication_dict['original_cataloging_agency'] = 'Crossref'
                         publication_dict['publication_year'] = year_of_publication
                         publication_dict['publication_etc_statement']['publication'] = {'place': 'Rome', 'responsible': 'École Française de Rome', 'country_code': 'it '}
@@ -124,7 +124,7 @@ def harvest():
                         else:
                             break
         write_error_to_logfile.comment('Letztes geharvestetes Heft von Antiquité: ' + str(last_issue_harvested_in_last_session))
-        return_string += 'Es wurden ' + str(pub_nr) + ' neue Records für Journal of Antiquité erstellt.'
+        return_string += 'Es wurden ' + str(pub_nr) + ' neue Records für Antiquité erstellt.\n'
         if issues_harvested:
             with open('records/antiquite/antiquite.json', 'w') as log_file:
                 log_dict = {"last_issue_harvested": max(issues_harvested)}
@@ -132,10 +132,13 @@ def harvest():
                 write_error_to_logfile.comment('Log-File wurde auf ' + str(max(issues_harvested)) + ' geupdated.')
     except Exception as e:
         write_error_to_logfile.write(e)
+    return return_string
 
 
 if __name__ == '__main__':
-    harvest()
+    dateTimeObj = datetime.now()
+    timestampStr = dateTimeObj.strftime("%d-%b-%Y")
+    harvest('records/antiquite/antiquite_' + timestampStr + '.mrc')
 
 # Valid filters for this route are: until-approved-date, has-assertion, from-print-pub-date,
 # until-deposit-date, from-accepted-date, has-authenticated-orcid, from-created-date, relation.object,

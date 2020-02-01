@@ -32,16 +32,17 @@ while not empty_page:
             volumes_sysnumbers[date] = result['id']
 
 
-def harvest():
+def harvest(path):
+    return_string = ''
     try:
         return_string = ''
-        with open('records/gnomon/gnomon_logfile.json', 'r') as log_file:
+        with open('records/gnomon/groma_logfile.json', 'r') as log_file:
             log_dict = json.load(log_file)
             last_issue_harvested_in_last_session = log_dict['last_issue_harvested']
             print('Letztes geharvestetes Review von Gnomon:', last_issue_harvested_in_last_session)
         pub_nr = 0
         issues_harvested = []
-        out = open('records/gnomon/gnomon_' + timestampStr + '.mrc', 'wb')
+        out = open(path + 'gnomon_' + timestampStr + '.mrc', 'wb')
         basic_url = 'https://elibrary.chbeck.de/zeitschrift/0017-1417'
         if dateTimeObj.strftime("%Y") not in volumes_sysnumbers:
             print('Reviews von Gnomon konnten teilweise nicht geharvestet werden, da keine übergeordnete Aufnahme für das Jahr', dateTimeObj.strftime("%Y"), 'existiert.')
@@ -107,7 +108,7 @@ def harvest():
                             publication_dict['default_language'] = language_codes.resolve(title_soup.find('meta', attrs={'name': 'citation_language'})['content'])
                             publication_dict['do_detect_lang'] = False
                             publication_dict['field_008_18-34'] = 'zr p|o||||||   b|'
-                            publication_dict['fields_590'] = ['arom', '2019xhnxgnomon']
+                            publication_dict['fields_590'] = ['arom', '2020xhnxgnomon']
                             publication_dict['original_cataloging_agency'] = 'C.H.Beck eLibrary'
                             publication_dict['publication_etc_statement']['publication'] = {'place': 'München',
                                                                                             'responsible': "C. H. Beck'sche Verlagsbuchhandlung",
@@ -146,15 +147,18 @@ def harvest():
                             else:
                                 break
         write_error_to_logfile.comment('Letztes geharvestetes Heft von Gnomon:' + str(last_issue_harvested_in_last_session))
-        return_string += 'Es wurden ' + str(pub_nr) + ' neue Records für Gnomon erstellt.'
+        return_string += 'Es wurden ' + str(pub_nr) + ' neue Records für Gnomon erstellt.\n'
         if issues_harvested:
-            with open('records/gnomon/gnomon_logfile.json', 'w') as log_file:
+            with open('records/gnomon/groma_logfile.json', 'w') as log_file:
                 log_dict = {"last_issue_harvested": max(issues_harvested)}
                 json.dump(log_dict, log_file)
                 write_error_to_logfile.comment('Log-File wurde auf ' + str(max(issues_harvested)) + ' geupdated.')
     except Exception as e:
         write_error_to_logfile.write(e)
+    return return_string
 
 
 if __name__ == '__main__':
-    harvest()
+    dateTimeObj = datetime.now()
+    timestampStr = dateTimeObj.strftime("%d-%b-%Y")
+    harvest('records/gnomon/gnomon_' + timestampStr + '.mrc')

@@ -169,7 +169,7 @@ def create_new_record(adjusted_parts_of_title, out, toc, pdf, pages, issue_nr, y
             recent_record.add_field(Field(tag='338', indicators=[' ', ' '], subfields=['a', 'online resource', 'b', 'cr', '2', 'rdacarrier']))
             recent_record.leader = recent_record.leader[:5] + 'nab a       uu ' + recent_record.leader[20:]
             recent_record.add_field(Field(tag='590', indicators=[' ', ' '], subfields=['a', 'arom']))
-            recent_record.add_field(Field(tag='590', indicators=[' ', ' '], subfields=['a', '2019xhnxmaa']))
+            recent_record.add_field(Field(tag='590', indicators=[' ', ' '], subfields=['a', '2020xhnxmaa']))
             recent_record.add_field(Field(tag='590', indicators=[' ', ' '], subfields=['a', 'online publication']))
             nonfiling_characters = determine_nonfiling_characters(recent_record, title, year)
             create_245_and_246(recent_record, title, nonfiling_characters, author_nr)

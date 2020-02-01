@@ -12,16 +12,16 @@ dateTimeObj = datetime.now()
 timestampStr = dateTimeObj.strftime("%d-%b-%Y")
 
 
-def harvest():
+def harvest(path):
     return_string = ''
+    pub_nr = 0
+    issues_harvested = []
     try:
         with open('records/efb/efb_logfile.json', 'r') as log_file:
             log_dict = json.load(log_file)
             last_item_harvested_in_last_session = log_dict['last_issue_harvested']
-        issues_harvested = []
-        out = open('records/efb/efb_' + timestampStr + '.mrc', 'wb')
+        out = open(path + 'efb_' + timestampStr + '.mrc', 'wb')
         basic_url = 'https://publications.dainst.org/journals/index.php/efb'
-        pub_nr = 0
         user_agent = 'Mozilla/5.0 (X11; Linux x86_64; rv:66.0)'
         values = {'name': 'Helena Nebel',
                   'location': 'Berlin',
@@ -46,7 +46,7 @@ def harvest():
             if current_item > last_item_harvested_in_last_session:
                 for article in issue_soup.find_all('table', class_='tocArticle')[1:]:
                     article_url = article.find('div', class_='tocTitle').find('a')['href'].strip()
-                    print(article_url)
+                    print('Artikel:', article_url)
                     req = urllib.request.Request(article_url, data, headers)
                     with urllib.request.urlopen(req) as response:
                         article_page = response.read().decode('utf-8')
@@ -76,7 +76,7 @@ def harvest():
                         publication_dict['publication_etc_statement']['publication'] = {'place': 'Berlin',
                                                                                         'responsible': 'Deutsches Archäologisches Institut',
                                                                                         'country_code': 'gw '}
-                        publication_dict['fields_590'] = ['arom', '2019xhnxefb', 'aeforsch', 'daiauf8', 'Online publication']
+                        publication_dict['fields_590'] = ['arom', '2020xhnxefb', 'aeforsch', 'daiauf8', 'Online publication']
                         publication_dict['table_of_contents_link'] = issue_url
                         publication_dict['abstract_link'] = article_soup.find('meta', attrs={'name': 'citation_abstract_html_url'})['content'] \
                             if article_soup.find('meta', attrs={'name': 'citation_abstract_html_url'}) else ''
@@ -94,13 +94,21 @@ def harvest():
                             pub_nr += created
                         else:
                             break
-        write_error_to_logfile.comment('Letztes geharvestetes Heft von E-Forschungsberichte:' + str(last_item_harvested_in_last_session))
-        return_string += 'Es wurden ' + str(pub_nr) + ' neue Records für e-Forschungsberichte erstellt.'
-        if issues_harvested:
-            with open('records/efb/efb_logfile.json', 'w') as log_file:
-                log_dict = {"last_issue_harvested": max(issues_harvested)}
-                json.dump(log_dict, log_file)
-                write_error_to_logfile.comment('Log-File wurde auf ' + str(max(issues_harvested)) + ' geupdated.')
     except Exception as e:
         write_error_to_logfile.write(e)
+        pub_nr = 0
+        issues_harvested = []
+    write_error_to_logfile.comment('Letztes geharvestetes Heft von E-Forschungsberichte:' + str(last_item_harvested_in_last_session))
+    return_string += 'Es wurden ' + str(pub_nr) + ' neue Records für e-Forschungsberichte erstellt.\n'
+    if issues_harvested:
+        with open('records/efb/efb_logfile.json', 'w') as log_file:
+            log_dict = {"last_issue_harvested": max(issues_harvested)}
+            json.dump(log_dict, log_file)
+            write_error_to_logfile.comment('Log-File wurde auf ' + str(max(issues_harvested)) + ' geupdated.')
     return return_string
+
+
+if __name__ == '__main__':
+    dateTimeObj = datetime.now()
+    timestampStr = dateTimeObj.strftime("%d-%b-%Y")
+    harvest('records/efb/efb_' + timestampStr + '.mrc')

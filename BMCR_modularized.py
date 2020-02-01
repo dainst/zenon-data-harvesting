@@ -12,7 +12,7 @@ dateTimeObj = datetime.now()
 timestampStr = dateTimeObj.strftime("%d-%b-%Y")
 
 
-def harvest():
+def harvest(path):
     return_string = ''
     try:
         with open('records/bmcr/bmcr_logfile.json', 'r') as log_file:
@@ -20,7 +20,7 @@ def harvest():
             last_item_harvested_in_last_session = log_dict['last_item_harvested']
         pub_nr = 0
         items_harvested = []
-        out = open('records/bmcr/bmcr_' + timestampStr + '.mrc', 'wb')
+        out = open(path + 'bmcr_' + timestampStr + '.mrc', 'wb')
         url = 'http://bmcr.brynmawr.edu/archive.html'
         user_agent = 'Mozilla/5.0 (X11; Linux x86_64; rv:66.0)'
         values = {'name': 'Helena Nebel',
@@ -38,6 +38,8 @@ def harvest():
         list_elements = [list_element['href'] for list_element in list_elements if len(re.findall(r'^\d{4}$', list_element.text)) == 1]
         list_elements = [list_element if "http://bmcr.brynmawr.edu/" in list_element else "http://bmcr.brynmawr.edu/" + list_element for list_element in list_elements]
         list_elements = [re.findall(r'(http://bmcr.brynmawr.edu/\d{4}).*$', list_element)[0] for list_element in list_elements]
+        if ('http://bmcr.brynmawr.edu/' + dateTimeObj.strftime("%Y")) not in list_elements:
+            list_elements.append('http://bmcr.brynmawr.edu/' + dateTimeObj.strftime("%Y"))
         issues = []
         for list_element in list_elements:
             url = list_element
@@ -157,7 +159,7 @@ def harvest():
                         publication_dict['rdacontent'] = 'txt'
                         publication_dict['rdamedia'] = 'c'
                         publication_dict['rdacarrier'] = 'cr'
-                        publication_dict['fields_590'] = ['arom', 'Online publication', '2019xhnxbmcr']
+                        publication_dict['fields_590'] = ['arom', 'Online publication', '2020xhnxbmcr']
                         publication_dict['html_links'].append(article_link)
                         publication_dict['additional_fields'].append({'tag': '856', 'indicators': ['4', '1'],
                                                                       'subfields':
@@ -173,7 +175,7 @@ def harvest():
                         else:
                             break
         write_error_to_logfile.comment('Letzte geharvestete Publikation von BMCR: ' + str(last_item_harvested_in_last_session))
-        return_string += 'Es wurden ' + str(pub_nr) + ' neue Records für BMCR erstellt.'
+        return_string += 'Es wurden ' + str(pub_nr) + ' neue Records für BMCR erstellt.\n'
         if items_harvested:
             with open('records/bmcr/bmcr_logfile.json', 'w') as log_file:
                 log_dict = {"last_item_harvested": max(items_harvested)}
@@ -183,6 +185,11 @@ def harvest():
         write_error_to_logfile.write(e)
     return return_string
 
+
+if __name__ == '__main__':
+    dateTimeObj = datetime.now()
+    timestampStr = dateTimeObj.strftime("%d-%b-%Y")
+    harvest('records/bmcr/bmcr_' + timestampStr + '.mrc')
 
 '''bryn m.:
 beim nächsten harvesting: eine Statistik ausgeben

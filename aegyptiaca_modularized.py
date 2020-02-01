@@ -10,6 +10,7 @@ from datetime import datetime
 import json
 import re
 import write_error_to_logfile
+import os
 
 nlp_de = spacy.load('de_core_news_sm')
 nlp_en = spacy.load('en_core_web_sm')
@@ -23,14 +24,16 @@ dateTimeObj = datetime.now()
 timestampStr = dateTimeObj.strftime("%d-%b-%Y")
 
 
-def harvest():
+def harvest(path):
     return_string = ''
+    pub_nr = 0
+    issues_harvested = 0
     try:
         with open('records/aegyptiaca/aegyptiaca_logfile.json', 'r') as log_file:
             log_dict = json.load(log_file)
             last_item_harvested_in_last_session = log_dict['last_issue_harvested']
         issues_harvested = []
-        out = open('records/aegyptiaca/aegyptiaca' + timestampStr + '.mrc', 'wb')
+        out = open(path + 'aegyptiaca' + timestampStr + '.mrc', 'wb')
         basic_url = 'https://journals.ub.uni-heidelberg.de/index.php/aegyp/issue/archive/'
         pub_nr = 0
         empty_page = False
@@ -111,7 +114,7 @@ def harvest():
                             publication_dict['field_006'] = 'm     o  d |      '
                             publication_dict['field_007'] = 'cr uuu   uuuuu'
                             publication_dict['field_008_18-34'] = 'gr poo||||||   b|'
-                            publication_dict['fields_590'] = ['arom', '2019xhnxaegyp', 'Online publication']
+                            publication_dict['fields_590'] = ['arom', '2020xhnxaegyp', 'Online publication']
                             publication_dict['original_cataloging_agency'] = 'DE-16'
                             publication_dict['publication_etc_statement']['publication'] = {'place': 'Heidelberg',
                                                                                             'responsible': 'Propylaeum',
@@ -200,15 +203,22 @@ def harvest():
                             else:
                                 break
         write_error_to_logfile.comment('Letztes geharvestetes Heft von Aegyptiaca: ' + str(last_item_harvested_in_last_session))
-        return_string += 'Es wurden ' + str(pub_nr) + ' neue Records für Aegyptiaca erstellt.\n'
-        if issues_harvested:
-            max(issues_harvested)
-            with open('records/aegyptiaca/aegyptiaca_logfile.json', 'w') as log_file:
-                log_dict = {"last_issue_harvested": max(issues_harvested)}
-                json.dump(log_dict, log_file)
-                write_error_to_logfile.comment('Log-File wurde auf' + str(max(issues_harvested)) + 'geupdated.')
     except Exception as e:
         write_error_to_logfile.write(e)
+        pub_nr = 0
+        if os.path.exists(path + 'aegyptiaca' + timestampStr + '.mrc'):
+            os.remove(path + 'aegyptiaca' + timestampStr + '.mrc')
+    return_string += 'Es wurden ' + str(pub_nr) + ' neue Records für Aegyptiaca erstellt.\n'
+    if issues_harvested:
+        max(issues_harvested)
+        with open('records/aegyptiaca/aegyptiaca_logfile.json', 'w') as log_file:
+            log_dict = {"last_issue_harvested": max(issues_harvested)}
+            json.dump(log_dict, log_file)
+            write_error_to_logfile.comment('Log-File wurde auf' + str(max(issues_harvested)) + 'geupdated.')
     return return_string
 
-# keine Änderungen vorgenommen
+
+if __name__ == 'main':
+    dateTimeObj = datetime.now()
+    timestampStr = dateTimeObj.strftime("%d-%b-%Y")
+    harvest('records/aegyptiaca/aegyptiaca' + timestampStr + '.mrc')

@@ -1,6 +1,6 @@
 publication_dict['title_dict']['main_title'] = ''
 publication_dict['title_dict']['sub_title'] = ''
-publication_dict['title_dict']['parallel_title'] = ''
+publication_dict['title_dict']['parallel_titles'] = []
 publication_dict['title_dict']['responsibility_statement'] = ''
 publication_dict['authors_list'] = []
 publication_dict['editors_list'] = []
@@ -49,4 +49,4 @@ publication_dict['LDR_06_07'] = ''
 publication_dict['field_006'] = ''
 publication_dict['field_007'] = ''
 publication_dict['field_008_18-34'] = ''
-publication_dict['additional_fields'].append({'tag': '', 'indicators': ['', ''], 'subfields': ['', '', ...]})
+publication_dict['additional_fields'].append({'tag': '', 'indicators': ['', ''], 'subfields': ['', '', ...], 'data': ''})

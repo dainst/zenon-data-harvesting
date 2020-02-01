@@ -11,6 +11,7 @@ from pymarc import MARCReader
 import math
 import unidecode
 import write_error_to_logfile
+import find_existing_doublets
 
 rda_codes = {'rdacarrier': {'sg': 'audio cartridge', 'sb': 'audio belt', 'se': 'audio cylinder', 'sd': 'audio disc',
                             'si': 'sound track reel', 'sq': 'audio roll', 'sw': 'audio wire reel',
@@ -115,41 +116,44 @@ def check_cosine_similarity(title, found_title, found_record, rejected_titles, l
         title_list_count = [title_list.count(word) for word in title_list if (word not in stopwords_dict[lang])]
         found_title_list_count = [found_title_list.count(word) for word in title_list]
         # hier muss irgendwie iterative levensthein rein!!!
-        similarity = 1 - spatial.distance.cosine(title_list_count, found_title_list_count)
-        if similarity > 0.65:
-            skipped_word_nr = 0
-            mismatches_nr = 0
-            matches_nr = 0
-            for word in title_list:
-                if word in found_title_list:
-                    if any(index == found_title_list.index(word) for index in
-                           [title_list.index(word) + 1 + skipped_word_nr, title_list.index(word) + skipped_word_nr,
-                            title_list.index(word) - 1 + skipped_word_nr]):
-                        matches_nr += 1
+        if list(set(title_list_count)) == [0] or list(set(found_title_list_count)) == [0]:
+            return False
+        else:
+            similarity = 1 - spatial.distance.cosine(title_list_count, found_title_list_count)
+            if similarity > 0.65:
+                skipped_word_nr = 0
+                mismatches_nr = 0
+                matches_nr = 0
+                for word in title_list:
+                    if word in found_title_list:
+                        if any(index == found_title_list.index(word) for index in
+                               [title_list.index(word) + 1 + skipped_word_nr, title_list.index(word) + skipped_word_nr,
+                                title_list.index(word) - 1 + skipped_word_nr]):
+                            matches_nr += 1
+                        else:
+                            mismatches_nr += 1
+                            skipped_word_nr += 1
+                            if word in unskippable_words:
+                                return False
                     else:
-                        mismatches_nr += 1
                         skipped_word_nr += 1
                         if word in unskippable_words:
                             return False
-                else:
-                    skipped_word_nr += 1
-                    if word in unskippable_words:
-                        return False
-            if skipped_word_nr >= (len(title_list) / 3):
-                return False
-            if matches_nr > mismatches_nr * 2:
-                if similarity > 0.77:
-                    return True
-                else:
-                    print(lang)
-                    print(title_list)
-                    print(found_title_list)
-                    print(similarity)
-                    if found_title == found_record['title']:
-                        if input("Handelt es sich tatsächlich um den rezensierten Titel? ") == "":
-                            return True
-                        else:
-                            rejected_titles.append(found_record["id"] + found_title)
+                if skipped_word_nr >= (len(title_list) / 3):
+                    return False
+                if matches_nr > mismatches_nr * 2:
+                    if similarity > 0.77:
+                        return True
+                    else:
+                        print(lang)
+                        print(title_list)
+                        print(found_title_list)
+                        print(similarity)
+                        if found_title == found_record['title']:
+                            if input("Handelt es sich tatsächlich um den rezensierten Titel? ") == "":
+                                return True
+                            else:
+                                rejected_titles.append(found_record["id"] + found_title)
         return False
     except Exception as e:
         write_error_to_logfile.write(e)
@@ -226,11 +230,18 @@ def swagger_find(search_title, search_authors, year, year_of_review, title, reje
         write_error_to_logfile.write(e)
 
 
-def find(title, authors, year, year_of_review, default_lang):
+def find(review, year, default_lang):
     try:
+        title = review['reviewed_title']
+        authors = review['reviewed_authors'] + review['reviewed_editors']
+        year_of_review = review['year_of_publication']
         all_results = []
+        review_titles = []
         title = unidecode.unidecode(title)
-        lang = detect(title)
+        try:
+            lang = detect(title)
+        except Exception as e:
+            lang = default_lang
         if lang not in stopwords_dict:
             lang = default_lang
         rejected_titles = []
@@ -300,10 +311,14 @@ def find(title, authors, year, year_of_review, default_lang):
                             '+')
                         all_results = swagger_find(search_title_without_words, search_authors, year, year_of_review, title, rejected_titles, lang, authors, all_results)
                 # Suche unter Ausschluss von einem oder zwei Suchbegriffen je nach Länge des Titels
-            return all_results
+            for i in range(len(all_results)):
+                review_titles.append(find_existing_doublets.create_review_titles_for_review_search(review))
+            return all_results, review_titles
 
     except Exception as e:
         write_error_to_logfile.write(e)
 
 
 # Spracherkennung verbessern!
+# Darum kümmern, dass bei mehreren reviews der Link auf die richtige Publikation gesetzt wird, nicht auf die erste!
+# Namen von Autoren auch in nicht invertierter Form bei der Suche verwenden?

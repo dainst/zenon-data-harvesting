@@ -9,11 +9,12 @@ logging.getLogger('chardet.charsetprober').setLevel(logging.INFO)
 dateTimeObj = datetime.now()
 timestampStr = dateTimeObj.strftime("%d-%b-%Y %H:%M")
 
-logfile = 'logfile_' + timestampStr
+logfile = 'logfiles_debugging/logfile_' + timestampStr
 
 main.initialize_logger(logfile, 'debug', 'debug', allow_override=True)
 logger = logging.getLogger()
 
+# logger default setzen?
 
 def write(e):
     exc_type, exc_obj, exc_tb = sys.exc_info()

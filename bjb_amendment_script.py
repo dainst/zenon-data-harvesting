@@ -188,7 +188,7 @@ def harvest():
                                 publication_dict['publication_etc_statement']['publication'] = {'place': place_of_publication, 'responsible': publisher, 'country_code': ''}
                                 publication_dict['publication_etc_statement']['production'] = {'place': place_of_production, 'responsible': producer, 'country_code': ''}
                             publication_dict['language_field'] = {'language_of_resource': [], 'language_of_original_item': []}
-                            publication_dict['fields_590'] = ['arom', '2019xhnxbjb', 'Online publication']
+                            publication_dict['fields_590'] = ['arom', '2020xhnxbjb', 'Online publication']
                             publication_dict['original_cataloging_agency'] = 'DE-16'
                             if re.findall(r'\d{4}', article_soup.find('meta', attrs={'name': 'DC.Rights'})['content']):
                                 publication_dict['copyright_year'] = re.findall(r'\d{4}', article_soup.find('meta', attrs={'name': 'DC.Rights'})['content'])[0]
@@ -305,10 +305,7 @@ def harvest():
                                     if publication_dict['review']:
                                         for reviewed_title in publication_dict['review_list']:
                                             if reviewed_title['reviewed_title']:
-                                                reviewed_title_ids = find_reviewed_title.find(reviewed_title['reviewed_title'],
-                                                                                              [author.split(', ')[0] for author in reviewed_title['reviewed_authors']]
-                                                                                              + [editor.split(', ')[0] for editor in reviewed_title['reviewed_editors']], reviewed_title['year_of_publication'],
-                                                                                              publication_dict['publication_year'], 'en')
+                                                reviewed_title_ids, review_titles = find_reviewed_title.find(reviewed_title, publication_dict['publication_year'], 'en')
                                                 all_reviews += reviewed_title_ids
                                                 for reviewed_title_id in reviewed_title_ids:
                                                     recent_record.add_field(Field(tag='773', indicators=[' ', ' '],
@@ -316,9 +313,7 @@ def harvest():
                                     if publication_dict['response']:
                                         for reviewed_title in publication_dict['response_list']:
                                             if reviewed_title['reviewed_title']:
-                                                reviewed_title_ids = find_reviewed_title.find(reviewed_title['reviewed_title'],
-                                                                                              [author.split(', ')[0] for author in reviewed_title['reviewed_authors']]
-                                                                                              + [editor.split(', ')[0] for editor in reviewed_title['reviewed_editors']], reviewed_title['year_of_publication'],
+                                                reviewed_title_ids, review_titles = find_reviewed_title.find(reviewed_title, reviewed_title['year_of_publication'],
                                                                                               publication_dict['publication_year'], 'en')
                                                 all_responses += reviewed_title_ids
                                                 for reviewed_title_id in reviewed_title_ids:
@@ -336,8 +331,8 @@ def harvest():
                                             fields_to_remove.append(field.tag)
                                     for tag in fields_to_remove:
                                         recent_record.remove_fields(tag)
-                                    if not [field['a'] for field in recent_record.get_fields('590') if field['a'] == '2019xhnxupdated']:
-                                        recent_record.add_field(Field(tag='590', indicators=[' ', ' '], subfields=['a', '2019xhnxupdated']))
+                                    if not [field['a'] for field in recent_record.get_fields('590') if field['a'] == '2020xhnxupdated']:
+                                        recent_record.add_field(Field(tag='590', indicators=[' ', ' '], subfields=['a', '2020xhnxupdated']))
                                     # print(recent_record)
                                     out.write(recent_record.as_marc21())
                                     pub_nr += 1
