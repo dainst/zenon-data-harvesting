@@ -855,7 +855,7 @@ def create_new_record(out, publication_dict):
                             # print(reviewed_title_ids)
                             recent_record.add_field(Field(tag='LKR', indicators=[' ', ' '],
                                                           subfields=['a', 'UP', 'b', reviewed_title_id, 'l', 'DAI01', 'm', 'Rezension',
-                                                                     'n', publication_dict['title_dict']['main_title']]))
+                                                                     'n', review_titles[reviewed_title_ids.index(reviewed_title_id)][0]]))
             if publication_dict['response']:
                 for reviewed_title in publication_dict['response_list']:
                     if reviewed_title['reviewed_title']:
@@ -863,7 +863,7 @@ def create_new_record(out, publication_dict):
                         for reviewed_title_id in reviewed_title_ids:
                             recent_record.add_field(Field(tag='LKR', indicators=[' ', ' '],
                                                           subfields=['a', 'UP', 'b', reviewed_title_id, 'l', 'DAI01',
-                                                                     'm', 'Rezension', 'n', review_titles[reviewed_title_ids.index(reviewed_title_id)]]))
+                                                                     'm', 'Rezension', 'n', publication_dict['title_dict']['main_title']]))
             print(recent_record)
             out.write(recent_record.as_marc21())
             created = 1
