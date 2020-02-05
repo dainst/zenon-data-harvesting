@@ -94,8 +94,7 @@ def harvest(path):
                     publication_dict['table_of_contents_link'] = toc_link
                     publication_dict['field_006'] = 'm     o  d |      '
                     publication_dict['html_links'].append(article_url)
-                    # all_tags = [tag.text for tag in article_soup.find('dl', class_='article-metadata').find_all()]
-                    # page_tag = [tag for tag in all_tags if 'Pp.' in all_tags[all_tags.index(tag) - 1]]
+                    publication_dict['general_note'] = 'Die Seitenzahlen von Online- und Printausgabe können variieren'
                     if 'Review of' in publication_dict['title_dict']['main_title'] and '“' in \
                             publication_dict['title_dict']['main_title']:
                         publication_dict['title_dict']['main_title'] = \
