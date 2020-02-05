@@ -14,7 +14,6 @@ import language_codes
 
 # Dubletten werden nicht gefunden. Warum?
 # wg LDR != nab, ist naa
-# Vorgehen bei Mehrfachrezensionen, wenn nur der zweite rezensierte Titel vorhanden ist?
 
 dateTimeObj = datetime.now()
 timestampStr = dateTimeObj.strftime("%d-%b-%Y")
@@ -45,7 +44,7 @@ def harvest(path):
     try:
         days_harvested = []
         year_to_save_from = int(dateTimeObj.strftime("%Y")) - 3
-        page = 1
+        page = 161
         harvest_until = int((datetime.now() - timedelta(days=7)).strftime('%Y%m%d'))
         with open('records/hsozkult/hsozkult_logfile.json', 'r') as log_file:
             log_dict = json.load(log_file)
@@ -77,6 +76,7 @@ def harvest(path):
                 break
             url = basic_url + str(page)
             page += 1
+            print(page)
             user_agent = 'Mozilla/5.0 (X11; Linux x86_64; rv:66.0)'
             values = {'name': 'Helena Nebel',
                       'location': 'Berlin',
@@ -103,7 +103,6 @@ def harvest(path):
                 day_of_publication, month_of_publication, year_of_publication = \
                     re.findall(r'(\d{2})\.(\d{2})\.(\d{4})', review_soup.find('div', id='hfn-item-citation').text)[0]
                 days_harvested.append(int(year_of_publication + month_of_publication + day_of_publication))
-                print(year_of_publication + month_of_publication + day_of_publication)
                 if int(year_of_publication + month_of_publication + day_of_publication) > harvest_until:
                     continue
                 if int(year_of_publication + month_of_publication + day_of_publication) <= last_day_harvested:
@@ -140,7 +139,9 @@ def harvest(path):
                 publication_dict['field_008_18-34'] = 'k| p oo|||||   b|'
                 mainentity_div_tag = review_soup.find_all('div')[review_soup.find_all('div').index(review_soup.find_all('div', class_="hfn-item-fulltext")[0])+1]
                 reviews = []
+                nr_reviewed_titles = 0
                 for pub in mainentity_div_tag.find_all('span', class_="mainEntity", itemproperty="mainEntity"):
+                    nr_reviewed_titles += 1
                     title_reviewed = pub.find('span', itemprop="name").text.strip(' .').strip()
                     publication_year = ''
                     if pub.find_all('span', itemproperty="datePublished"):
@@ -160,7 +161,8 @@ def harvest(path):
                                                          'reviewed_editors': editors_reviewed,
                                                          'year_of_publication': publication_year,
                                                          }, year_of_publication, 'en')[0]
-                if reviews:
+                if len(reviews) > 1:
+                    print(nr_reviewed_titles)
                     print(reviews)
                     pub_nr += create_new_record.create_new_record(out, publication_dict)
                     #if publication_dict in as_reserve:
@@ -180,17 +182,17 @@ def harvest(path):
                             publication_dict['text_body_for_lang_detection'] = ''
                         as_reserve.append(publication_dict)
                         saved_pub_nr += 1
-                        print('pub saved:', saved_pub_nr)
+                        # print('pub saved:', saved_pub_nr)
         return_string = 'Es wurden ' + str(pub_nr) + ' neue Records für HSozKult erstellt.\n'
         last_day_harvested = max(days_harvested)
         with open('records/hsozkult/hsozkult_logfile.json', 'w') as log_file:
             log_dict = {"last_day_harvested": last_day_harvested}
             json.dump(log_dict, log_file)
             write_error_to_logfile.comment('Log-File wurde auf' + str(last_day_harvested) + 'geupdated.')
-        if saved_pub_nr > 0:
-            with open('records/hsozkult/hsozkult_as_reserve.json', 'w') as hsozkult_as_reserve:
-                json.dump(as_reserve, hsozkult_as_reserve)
-                print('Es wurden', saved_pub_nr, 'Rezensionen für die spätere Verwendung gespeichert.')
+        # if saved_pub_nr > 0:
+            # with open('records/hsozkult/hsozkult_as_reserve.json', 'w') as hsozkult_as_reserve:
+                # json.dump(as_reserve, hsozkult_as_reserve)
+                # print('Es wurden', saved_pub_nr, 'Rezensionen für die spätere Verwendung gespeichert.')
     except Exception as e:
         write_error_to_logfile.write(e)
     return return_string
