@@ -9,18 +9,21 @@ dateTimeObj = datetime.now()
 timestampStr = dateTimeObj.strftime("%d-%b-%Y")
 
 
-def harvest_eperiodica(path, journal_pid, publisher, publication_place, default_language, time_interval, host_item_sysnumber, host_item_name, field_008_18_34):
+def harvest_eperiodica(path, journal_pid, publisher, publication_place, default_language, time_interval, host_item_sysnumber,
+                       host_item_name, field_008_18_34):
     return_string = ''
     try:
         issues_harvested = []
         last_year_of_harvesting = int(dateTimeObj.strftime("%Y")) - time_interval
-        out = open(path + '_' + journal_pid.replace('-', '') + '_' + timestampStr + '.mrc', 'wb')
+        out = open(path + journal_pid.replace('-', '') + '_' + timestampStr + '.mrc', 'wb')
         with open('records/' + journal_pid.replace('-', '') + '/' + journal_pid.replace('-', '') + '_logfile.json', 'r') as log_file:
             log_dict = json.load(log_file)
         last_issue_harvested_in_last_session = log_dict['last_issue_harvested']
+        date_string = str(last_issue_harvested_in_last_session)[:4] + '-01-01'
+        print(date_string)
         print('Letztes geharvestetes Heft von', journal_pid.replace('-', ''), ':', last_issue_harvested_in_last_session)
         sickle = Sickle('https://www.e-periodica.ch/oai/dataprovider')
-        records_930 = sickle.ListIdentifiers(**{'metadataPrefix': 'oai_dc', 'set': 'ddc:930'})
+        records_930 = sickle.ListIdentifiers(**{'metadataPrefix': 'oai_dc', 'set': 'ddc:930', 'from': date_string})
         doi_list = []
         start_of_journal = False
         for record in records_930:
@@ -97,14 +100,11 @@ def harvest_eperiodica(path, journal_pid, publisher, publication_place, default_
 
 
 def harvest():
-    harvest_eperiodica('bat-001', 'Associazione Archeologica Ticinese', 'Lugano', 'ita', 3, '001543081', 'Bollettino dell’Associazione Archeologica Ticinese', 'ar p o||||||   a|')
-    harvest_eperiodica('snr-003', 'Schweizerische Numismatische Gesellschaft', 'Bern', 'ger', 3, '001570578', 'Schweizerische numismatische Rundschau', 'ar p o||||||   a|')
-    harvest_eperiodica('akb-002', 'Archäologischer Dienst des Kantons Bern', 'Bern', 'ger', 2, '000855529', 'Archäologie Bern', 'ar p o||||||   a|')
+    harvest_eperiodica('records/bat001/', 'bat-001', 'Associazione Archeologica Ticinese', 'Lugano', 'ita', 3, '001543081', 'Bollettino dell’Associazione Archeologica Ticinese', 'ar p o||||||   a|')
+    harvest_eperiodica('records/snr003/', 'snr-003', 'Schweizerische Numismatische Gesellschaft', 'Bern', 'ger', 3, '001570578', 'Schweizerische numismatische Rundschau', 'ar p o||||||   a|')
+    harvest_eperiodica('records/akb002/', 'akb-002', 'Archäologischer Dienst des Kantons Bern', 'Bern', 'ger', 2, '000855529', 'Archäologie Bern', 'ar p o||||||   a|')
     # welche weiteren Publikationen?
 
 
 if __name__ == '__main__':
     harvest()
-
-
-
