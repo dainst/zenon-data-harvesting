@@ -94,6 +94,7 @@ publication_dict_template = {'title_dict':
                              'field_300': '',
                              # das Feld enthält den Wert, der in Feld 300, Unterfeld a gesetzt werden soll. Dieses Feld wird nur dann gesetzt, wenn es sich um eine Monographie handelt!
                              'force_300': False,
+                             'force_epub': False,
                              'publication_etc_statement':
                                  {'production': {'place': '', 'responsible': '', 'country_code': ''},
                                   'publication': {'place': '', 'responsible': '', 'country_code': ''},
@@ -430,9 +431,12 @@ def check_publication_dict_for_completeness_and_validity(publication_dict):
         if not publication_dict['pdf_links'] + publication_dict['html_links']:
             if publication_dict['field_007']:
                 if publication_dict['field_007'][0:2] == 'cr':
-                    write_error_to_logfile.comment('Records of online resources have to have a link to the online resource.')
-                    print('Records of online resources have to have a link to the online resource.')
-                    validity = False
+                    if publication_dict['force_epub']:
+                        validity = True
+                    else:
+                        write_error_to_logfile.comment('Records of online resources have to have a link to the online resource.')
+                        print('Records of online resources have to have a link to the online resource.')
+                        validity = False
         for link in publication_dict['pdf_links'] + publication_dict['html_links']:
             if type(link).__name__ != 'str':
                 write_error_to_logfile.comment('Link has to be of type string but is' + type(link).__name__ + '.')
@@ -643,7 +647,6 @@ def create_new_record(out, publication_dict):
             print('additional physical form entry', additional_physical_form_entrys)
             print(publication_dict['title_dict'])
             print(publication_dict['authors_list'], publication_dict['editors_list'], publication_dict['publication_year'])
-        all_doublets = []
         if not all_doublets:
             recent_record = Record(force_utf8=True)
             recent_record.leader = \
