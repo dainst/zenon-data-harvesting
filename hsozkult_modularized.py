@@ -36,15 +36,14 @@ while not empty_page:
     for result in json_response['records']:
         for date in result['publicationDates']:
             volumes_sysnumbers[date] = result['id']
-# print(volumes_sysnumbers)
 
-#
+
 def harvest(path):
     return_string = ''
     try:
         days_harvested = []
         year_to_save_from = int(dateTimeObj.strftime("%Y")) - 3
-        page = 161
+        page = 1
         harvest_until = int((datetime.now() - timedelta(days=7)).strftime('%Y%m%d'))
         with open('records/hsozkult/hsozkult_logfile.json', 'r') as log_file:
             log_dict = json.load(log_file)
@@ -55,19 +54,7 @@ def harvest(path):
         saved_pub_nr = 0
         out = open(path + 'hsozkult_' + timestampStr + '.mrc', 'wb')
         with open('records/hsozkult/hsozkult_as_reserve.json', 'r') as hsozkult_as_reserve:
-                as_reserve = json.load(hsozkult_as_reserve)
-        #for publication_dict in as_reserve:
-            #reviews = []
-            #for review in publication_dict['review_list']:
-                #if review['reviewed_title']:
-                    #reviews += find_reviewed_title.find(review, review['year_of_publication'], 'en')[0]
-            #if reviews:
-                #create_new_record.create_new_record(out, publication_dict)
-                #pub_nr += 1
-                #issues_harvested.append(publication_dict['html_links'][0])
-                #as_reserve.remove(publication_dict)
-            #elif int(publication_dict['publication_year']) < year_to_save_from:
-                #as_reserve.remove(publication_dict)
+            as_reserve = json.load(hsozkult_as_reserve)
         basic_url = 'https://www.hsozkult.de/publicationreview/page?page='
         while not empty_review_page:
             if dateTimeObj.strftime("%Y") not in volumes_sysnumbers:
@@ -161,12 +148,8 @@ def harvest(path):
                                                          'reviewed_editors': editors_reviewed,
                                                          'year_of_publication': publication_year,
                                                          }, year_of_publication, 'en')[0]
-                if len(reviews) > 1:
-                    print(nr_reviewed_titles)
-                    print(reviews)
+                if reviews:
                     pub_nr += create_new_record.create_new_record(out, publication_dict)
-                    #if publication_dict in as_reserve:
-                        #as_reserve.remove(publication_dict)
                 else:
                     if int(year_of_publication) >= year_to_save_from:
                         language = publication_dict['default_language']
@@ -182,17 +165,17 @@ def harvest(path):
                             publication_dict['text_body_for_lang_detection'] = ''
                         as_reserve.append(publication_dict)
                         saved_pub_nr += 1
-                        # print('pub saved:', saved_pub_nr)
+                        print('pub saved:', saved_pub_nr)
         return_string = 'Es wurden ' + str(pub_nr) + ' neue Records für HSozKult erstellt.\n'
         last_day_harvested = max(days_harvested)
         with open('records/hsozkult/hsozkult_logfile.json', 'w') as log_file:
             log_dict = {"last_day_harvested": last_day_harvested}
             json.dump(log_dict, log_file)
             write_error_to_logfile.comment('Log-File wurde auf' + str(last_day_harvested) + 'geupdated.')
-        # if saved_pub_nr > 0:
-            # with open('records/hsozkult/hsozkult_as_reserve.json', 'w') as hsozkult_as_reserve:
-                # json.dump(as_reserve, hsozkult_as_reserve)
-                # print('Es wurden', saved_pub_nr, 'Rezensionen für die spätere Verwendung gespeichert.')
+        if saved_pub_nr > 0:
+            with open('records/hsozkult/hsozkult_as_reserve.json', 'w') as hsozkult_as_reserve:
+                json.dump(as_reserve, hsozkult_as_reserve)
+                print('Es wurden', saved_pub_nr, 'Rezensionen für die spätere Verwendung gespeichert.')
     except Exception as e:
         write_error_to_logfile.write(e)
     return return_string
