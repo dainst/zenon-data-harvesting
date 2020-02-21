@@ -1,26 +1,21 @@
+from datetime import datetime
 import urllib.parse
 import urllib.request
 from bs4 import BeautifulSoup
+from nameparser import HumanName
+import json
 import re
 import write_error_to_logfile
-from nameparser import HumanName
-import create_new_record
-import json
-from datetime import datetime
+from harvest_records import harvest_records
 
-dateTimeObj = datetime.now()
-timestampStr = dateTimeObj.strftime("%d-%b-%Y")
+nlp_dict = {'de': 'de_core_news_sm', 'en': 'en_core_web_sm', 'fr': 'fr_core_news_sm',
+            'es': 'es_core_news_sm', 'it': 'it_core_news_sm', 'nl': 'nl_core_news_sm', 'xx': 'xx_ent_wiki_sm'}
 
 
-def harvest(path):
-    return_string = ''
+def create_publication_dicts(last_item_harvested_in_last_session):
+    publication_dicts = []
+    items_harvested = []
     try:
-        with open('records/bmcr/bmcr_logfile.json', 'r') as log_file:
-            log_dict = json.load(log_file)
-            last_item_harvested_in_last_session = log_dict['last_item_harvested']
-        pub_nr = 0
-        items_harvested = []
-        out = open(path + 'bmcr_' + timestampStr + '.mrc', 'wb')
         url = 'http://bmcr.brynmawr.edu/archive.html'
         user_agent = 'Mozilla/5.0 (X11; Linux x86_64; rv:66.0)'
         values = {'name': 'Helena Nebel',
@@ -38,6 +33,7 @@ def harvest(path):
         list_elements = [list_element['href'] for list_element in list_elements if len(re.findall(r'^\d{4}$', list_element.text)) == 1]
         list_elements = [list_element if "http://bmcr.brynmawr.edu/" in list_element else "http://bmcr.brynmawr.edu/" + list_element for list_element in list_elements]
         list_elements = [re.findall(r'(http://bmcr.brynmawr.edu/\d{4}).*$', list_element)[0] for list_element in list_elements]
+        dateTimeObj = datetime.now()
         if ('http://bmcr.brynmawr.edu/' + dateTimeObj.strftime("%Y")) not in list_elements:
             list_elements.append('http://bmcr.brynmawr.edu/' + dateTimeObj.strftime("%Y"))
         issues = []
@@ -167,33 +163,27 @@ def harvest(path):
                                                                       'data': ''})
                         publication_dict['host_item'] = {'name': 'Bryn Mawr Classical Review', 'sysnumber': '000810352', 'issn': ''}
                         publication_dict['default_language'] = 'en'
-                        if create_new_record.check_publication_dict_for_completeness_and_validity(publication_dict):
-                            created = create_new_record.create_new_record(out, publication_dict)
-                            items_harvested.append(int(article.find('a').text.replace('.', '')))
-                            pub_nr += created
-                            print(pub_nr)
-                        else:
-                            break
-        write_error_to_logfile.comment('Letzte geharvestete Publikation von BMCR: ' + str(last_item_harvested_in_last_session))
-        return_string += 'Es wurden ' + str(pub_nr) + ' neue Records für BMCR erstellt.\n'
-        if items_harvested:
-            with open('records/bmcr/bmcr_logfile.json', 'w') as log_file:
-                log_dict = {"last_item_harvested": max(items_harvested)}
-                json.dump(log_dict, log_file)
-                write_error_to_logfile.comment('Log-File wurde auf ' + str(max(items_harvested)) + ' geupdated.')
+                        publication_dicts.append(publication_dict)
+                        items_harvested.append(int(article.find('a').text.replace('.', '')))
     except Exception as e:
         write_error_to_logfile.write(e)
+        write_error_to_logfile.comment('Es konnten keine Artikel für BMCR geharvested werden.')
+    return publication_dicts, items_harvested
+
+
+def harvest(path):
+    return_string = harvest_records(path, 'bmcr', 'BMCR', create_publication_dicts)
     return return_string
 
 
 if __name__ == '__main__':
-    dateTimeObj = datetime.now()
-    timestampStr = dateTimeObj.strftime("%d-%b-%Y")
-    harvest('records/bmcr/bmcr_' + timestampStr + '.mrc')
+    harvest_records('records/bmcr/', 'bmcr', 'BMCR', create_publication_dicts)
 
-'''bryn m.:
+
+'''
 beim nächsten harvesting: eine Statistik ausgeben
 - wie viele Datensätze ohne LKR zum rezensierten Werk
 - wie viele Datensätze mit  LKR zum rezensierten Werk
 - wie viele Datensätze mit  2 LKR-Feldern zum rezensierten Werk , mit
-Angabe der ZENON-IDs'''
+Angabe der ZENON-IDs
+'''

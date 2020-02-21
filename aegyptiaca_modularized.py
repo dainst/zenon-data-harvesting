@@ -1,41 +1,24 @@
 import urllib.parse
 import urllib.request
 from bs4 import BeautifulSoup
-import create_new_record
 from nameparser import HumanName
 from langdetect import detect
 import language_codes
 import spacy
-from datetime import datetime
 import json
 import re
 import write_error_to_logfile
-import os
+from harvest_records import harvest_records
 
-nlp_de = spacy.load('de_core_news_sm')
-nlp_en = spacy.load('en_core_web_sm')
-nlp_fr = spacy.load('fr_core_news_sm')
-nlp_es = spacy.load('es_core_news_sm')
-nlp_it = spacy.load('it_core_news_sm')
-nlp_nl = spacy.load('nl_core_news_sm')
-nlp_xx = spacy.load('xx_ent_wiki_sm')
-
-dateTimeObj = datetime.now()
-timestampStr = dateTimeObj.strftime("%d-%b-%Y")
+nlp_dict = {'de': 'de_core_news_sm', 'en': 'en_core_web_sm', 'fr': 'fr_core_news_sm',
+            'es': 'es_core_news_sm', 'it': 'it_core_news_sm', 'nl': 'nl_core_news_sm', 'xx': 'xx_ent_wiki_sm'}
 
 
-def harvest(path):
-    return_string = ''
-    pub_nr = 0
-    issues_harvested = 0
+def create_publication_dicts(last_item_harvested_in_last_session):
+    publication_dicts = []
+    items_harvested = []
     try:
-        with open('records/aegyptiaca/aegyptiaca_logfile.json', 'r') as log_file:
-            log_dict = json.load(log_file)
-            last_item_harvested_in_last_session = log_dict['last_issue_harvested']
-        issues_harvested = []
-        out = open(path + 'aegyptiaca' + timestampStr + '.mrc', 'wb')
         basic_url = 'https://journals.ub.uni-heidelberg.de/index.php/aegyp/issue/archive/'
-        pub_nr = 0
         empty_page = False
         page = 0
         while not empty_page:
@@ -136,18 +119,7 @@ def harvest(path):
                                     lang = detect(title)
                                     nlp = None
                                     if lang in ["de", "en", "fr", "it", "es", "nl"]:
-                                        if lang == "de":
-                                            nlp = nlp_de
-                                        elif lang == "en":
-                                            nlp = nlp_en
-                                        elif lang == "fr":
-                                            nlp = nlp_fr
-                                        elif lang == "it":
-                                            nlp = nlp_it
-                                        elif lang == "es":
-                                            nlp = nlp_es
-                                        elif lang == "nl":
-                                            nlp = nlp_nl
+                                        nlp = spacy.load(nlp_dict[lang])
                                         tagged_sentence = nlp(title)
                                         propn = False
                                         punct = False
@@ -174,7 +146,7 @@ def harvest(path):
                                                             rev_authors = ent.text
                                                 break
                                     else:
-                                        nlp = nlp_xx
+                                        nlp = spacy.load(nlp_dict['xx'])
                                         tagged_sentence = nlp(title)
                                         for ent in tagged_sentence.ents:
                                             if ent.label_ == "PER":
@@ -196,29 +168,18 @@ def harvest(path):
                                                                             'year_of_publication': '',
                                                                             })
                                     publication_dict['review'] = True
-                            if create_new_record.check_publication_dict_for_completeness_and_validity(publication_dict):
-                                created = create_new_record.create_new_record(out, publication_dict)
-                                issues_harvested.append(current_item)
-                                pub_nr += created
-                            else:
-                                break
-        write_error_to_logfile.comment('Letztes geharvestetes Heft von Aegyptiaca: ' + str(last_item_harvested_in_last_session))
+                            publication_dicts.append(publication_dict)
+                            items_harvested.append(current_item)
     except Exception as e:
         write_error_to_logfile.write(e)
-        pub_nr = 0
-        if os.path.exists(path + 'aegyptiaca' + timestampStr + '.mrc'):
-            os.remove(path + 'aegyptiaca' + timestampStr + '.mrc')
-    return_string += 'Es wurden ' + str(pub_nr) + ' neue Records für Aegyptiaca erstellt.\n'
-    if issues_harvested:
-        max(issues_harvested)
-        with open('records/aegyptiaca/aegyptiaca_logfile.json', 'w') as log_file:
-            log_dict = {"last_issue_harvested": max(issues_harvested)}
-            json.dump(log_dict, log_file)
-            write_error_to_logfile.comment('Log-File wurde auf' + str(max(issues_harvested)) + 'geupdated.')
+        write_error_to_logfile.comment('Es konnten keine Artikel für Aegyptiaca geharvested werden.')
+    return publication_dicts, items_harvested
+
+
+def harvest(path):
+    return_string = harvest_records(path, 'aegyptiaca', 'Aegyptiaca', create_publication_dicts)
     return return_string
 
 
-if __name__ == 'main':
-    dateTimeObj = datetime.now()
-    timestampStr = dateTimeObj.strftime("%d-%b-%Y")
-    harvest('records/aegyptiaca/aegyptiaca' + timestampStr + '.mrc')
+if __name__ == '__main__':
+    harvest_records('records/aegyptiaca/', 'aegyptiaca', 'Aegyptiaca', create_publication_dicts)

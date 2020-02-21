@@ -6,18 +6,18 @@ import re
 from datetime import datetime
 import json
 from nameparser import HumanName
-import create_new_record
 import write_error_to_logfile
+from harvest_records import harvest_records
 
-def harvest(path):
-    return_string = ''
+nlp_dict = {'de': 'de_core_news_sm', 'en': 'en_core_web_sm', 'fr': 'fr_core_news_sm',
+            'es': 'es_core_news_sm', 'it': 'it_core_news_sm', 'nl': 'nl_core_news_sm', 'xx': 'xx_ent_wiki_sm'}
+
+
+def create_publication_dicts(last_item_harvested_in_last_session):
+    publication_dicts = []
+    items_harvested = []
     try:
         dateTimeObj = datetime.now()
-        timestampStr = dateTimeObj.strftime("%d-%b-%Y")
-        issues_harvested = []
-        with open('records/bjb/bjb_logfile.json', 'r') as log_file:
-            log_dict = json.load(log_file)
-            last_item_harvested_in_last_session = log_dict['last_issue_harvested']
         producers = {'138': ['Darmstadt', "L.C. Wittich'sche Hofbuchdruckerei"],
                      '106': ['Bonn', "A. Marcus und E. Weber's"],
                      '084': ['Bonn', 'Adolph Marcus'],
@@ -38,14 +38,12 @@ def harvest(path):
         years_produced_in = [int(producer_key) for producer_key in list(producers.keys())]
         years_produced_in.sort(reverse=True)
 
-        exclude_titles = ["Renate Bol, with the collaboration of Simone Frede and Patrick Schollmeyer, and contributions by Anke Ahle, Ute Bolender, Georg Breitner, Friederike Fless, Wolfgang Günther, "
+        exclude_titles = ["Renate Bol, with the collaboration of Simone Frede and Patrick Schollmeyer, "
+                          "and contributions by Anke Ahle, Ute Bolender, Georg Breitner, Friederike Fless, Wolfgang Günther, "
                           "Huberta Heres, Nike Meissner, S. Felicia Meynersen, Carsten Schneider and Berthold F. Weber, "
                           "Marmorskulpturen der römischen Kaiserzeit aus Milet. Aufstellungskontext und programmatische Aussage",
                           "Gérard Moitrieux unter Mitarbeit von Jean-Noël Castorio, Toul et la cité des Leuques. Nouvel Espérandieu"]
-
-        out = open(path + 'bjb_' + timestampStr + '.mrc', 'wb')
         basic_url = 'https://journals.ub.uni-heidelberg.de/index.php/bjb/issue/archive/'
-        pub_nr = 0
         empty_page = False
         page = 0
         while not empty_page:
@@ -108,7 +106,7 @@ def harvest(path):
                             article_page = response.read().decode('utf-8')
                         article_soup = BeautifulSoup(article_page, 'html.parser')
                         category = article_soup.find('meta', attrs={'name': 'DC.Type.articleType'})['content']
-                        if category not in ['Titel', 'Inhalt', 'Verbesserungen', 'Vorwort/Widmung', 'Abkürzungen']:
+                        if category not in ['Titel', 'Inhalt', 'Verbesserungen', 'Vorwort/Widmung', 'Abkürzungen', 'Titelei']:
                             with open('publication_dict.json', 'r') as publication_dict_template:
                                 publication_dict = json.load(publication_dict_template)
                             publication_dict['publication_year'] = re.findall(r'\d{4}', article_soup.find('meta', attrs={'name': 'citation_date'})['content'])[0]
@@ -127,7 +125,8 @@ def harvest(path):
                             publication_dict['table_of_contents_link'] = issue_url
                             publication_dict['pdf_links'].append(article_soup.find('meta', attrs={'name': 'citation_pdf_url'})['content'])
                             publication_dict['other_links_with_public_note'].append({'public_note': '', 'url': ''})
-                            publication_dict['doi'] = article_soup.find('meta', attrs={'name': 'citation_doi'})['content']
+                            if article_soup.find('meta', attrs={'name': 'citation_doi'}):
+                                publication_dict['doi'] = article_soup.find('meta', attrs={'name': 'citation_doi'})['content']
                             publication_dict['text_body_for_lang_detection'] = article_soup.find('meta', attrs={'name': 'DC.Description'})['content']
                             if int(publication_dict['publication_year']) > 2013:
                                 publication_dict['field_007'] = 'cr uuu   uu|uu'
@@ -171,9 +170,7 @@ def harvest(path):
                             publication_dict['LDR_06_07'] = 'ab'
                             publication_dict['field_006'] = 'm     o  d |      '
                             publication_dict['field_008_18-34'] = 'ar poo||||||   b|'
-                            # print(category)
                             if category in ["Litteratur", "Besprechungen"]:
-                                not_human_name = "Römisch-germanische Kommission des Deutschen Archaeologischen Instituts"
                                 if title not in ["Nachtrag zur Anzeige der in der Hermes’schen Schrift 'Die Neuerburg an der Wied' angeregten Frage: Wer war Heinrich von Ofterdingen?",
                                                  "Rheinische Bibliographie", "Litteratur", "Bemerkungen zu der bei Gall in Trier erschienenen Schrift des Dr. Jacob Schneider",
                                                  "Bemerkungen über das römische Baudenkmal zu Fliessem, in Bezug auf die, im IV. Hefte dieser Jahrbücher, erschienene Recension"]:
@@ -182,7 +179,6 @@ def harvest(path):
                                     for title in publication_dict['title_dict']['main_title'].split("/"):
                                         title_nr += 1
                                         if title not in exclude_titles:
-                                            review = True
                                             authors = []
                                             editors = []
                                             if title_nr < len(year_of_reviewed_title):
@@ -208,7 +204,8 @@ def harvest(path):
                                                             parts = [part for part in title.split(separation_word)]
                                                             if ', ' in parts[1]:
                                                                 abbreviation_nr = \
-                                                                    len([abbreviation for abbreviation in re.findall(r'[A-Z]\.', parts[1].split(', ', 1)[0])]) + parts[1].split(', ', 1)[0].count(' von ')
+                                                                    len([abbreviation
+                                                                         for abbreviation in re.findall(r'[A-Z]\.', parts[1].split(', ', 1)[0])]) + parts[1].split(', ', 1)[0].count(' von ')
                                                                 if len(parts[1].split(', ', 1)[0].split()) - abbreviation_nr in [2, 3] or len(parts[1].split(', ', 1)[0].split()) in [2, 3]:
                                                                     wrong = [part for part in parts[0].split(', ') if len(part.split()) - part.count(' von ') not in [2, 3]]
                                                                     if not wrong:
@@ -230,28 +227,26 @@ def harvest(path):
                                                         authors = [authors]
                                             authors = [HumanName(author).last + ', ' + HumanName(author).first for author in authors]
                                             publication_dict['review'] = True
-                                            # print('reviewed_title', title, 'reviewed_authors', authors, 'reviewed_editors', editors, 'year_of_publication', year)
                                             publication_dict['review_list'].append({'reviewed_title': title,
                                                                                     'reviewed_authors': authors,
                                                                                     'reviewed_editors': editors,
                                                                                     'year_of_publication': year,
                                                                                     })
-                            if create_new_record.check_publication_dict_for_completeness_and_validity(publication_dict):
-                                created = create_new_record.create_new_record(out, publication_dict)
-                                issues_harvested.append(current_item)
-                                pub_nr += created
-                            else:
-                                break
-        write_error_to_logfile.comment('Letztes geharvestetes Heft von Bonner Jahrbücher: ' + str(last_item_harvested_in_last_session) + '.')
-        return_string += 'Es wurden ' + str(pub_nr) + 'neue Records für Bonner Jahrbücher erstellt.'
-        if issues_harvested:
-            with open('records/bjb/bjb_logfile.json', 'w') as log_file:
-                log_dict = {"last_issue_harvested": max(issues_harvested)}
-                json.dump(log_dict, log_file)
-                write_error_to_logfile.comment('Log-File wurde auf ' + str(max(issues_harvested)) + ' geupdated.')
+                            publication_dicts.append(publication_dict)
+                            items_harvested.append(current_item)
     except Exception as e:
         write_error_to_logfile.write(e)
+        write_error_to_logfile.comment('Es konnten keine Artikel für Bonner Jahrbücher geharvested werden.')
+    return publication_dicts, items_harvested
+
+
+def harvest(path):
+    return_string = harvest_records(path, 'bjb', 'Bonner Jahrbücher', create_publication_dicts)
     return return_string
+
+
+if __name__ == '__main__':
+    harvest_records('records/bjb/', 'bjb', 'Bonner Jahrbücher', create_publication_dicts)
 
 
 # Lücke zwischen 1933 und 1986 beachten!!!
@@ -266,9 +261,3 @@ old_responsibility_word = ["Beschrieben von ", "Aus den Quellen bearbeitet von "
                            "Den Herrn H. Meyer und H. Koechly gewidmet von ",
                            "Aufgenommen und gezeichnet v. ", "Beschrieben und durch XXVI Tafeln erläutert von ", "dessinées par ", "dessinée par ", "eröffnet und beschrieben von ",
                            "von Gymnasialdirector ", "Bijdrage van ", ", by ", " di ", "instruxit ", " scripsit ", "Bijdrage van ", ", étude par "]
-
-
-if __name__ == '__main__':
-    dateTimeObj = datetime.now()
-    timestampStr = dateTimeObj.strftime("%d-%b-%Y")
-    harvest('records/bjb/bjb_' + timestampStr + '.mrc')
