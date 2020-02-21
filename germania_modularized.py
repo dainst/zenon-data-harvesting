@@ -11,13 +11,8 @@ from datetime import datetime
 import json
 import write_error_to_logfile
 
-nlp_de = spacy.load('de_core_news_sm')
-nlp_en = spacy.load('en_core_web_sm')
-nlp_fr = spacy.load('fr_core_news_sm')
-nlp_es = spacy.load('es_core_news_sm')
-nlp_it = spacy.load('it_core_news_sm')
-nlp_nl = spacy.load('nl_core_news_sm')
-nlp_xx = spacy.load('xx_ent_wiki_sm')
+nlp_dict = {'de': 'de_core_news_sm', 'en': 'en_core_web_sm', 'fr': 'fr_core_news_sm',
+            'es': 'es_core_news_sm', 'it': 'it_core_news_sm', 'nl': 'nl_core_news_sm', 'xx': 'xx_ent_wiki_sm'}
 
 unresolved_titles = {
     "H. G. Bandi und J. Maringer, Kunst der Eiszeit. Levantekunst. Arktische Kunst": "H. G. Bandi und J. Maringer",
@@ -184,20 +179,8 @@ def harvest(path):
                                             title = title.replace(editorship_word, '')
                                     title = title.strip()
                                     lang = detect(title)
-                                    nlp = None
                                     if lang in ["de", "en", "fr", "it", "es", "nl"]:
-                                        if lang == "de":
-                                            nlp = nlp_de
-                                        elif lang == "en":
-                                            nlp = nlp_en
-                                        elif lang == "fr":
-                                            nlp = nlp_fr
-                                        elif lang == "it":
-                                            nlp = nlp_it
-                                        elif lang == "es":
-                                            nlp = nlp_es
-                                        elif lang == "nl":
-                                            nlp = nlp_nl
+                                        nlp = spacy.load(nlp_dict[lang])
                                         tagged_sentence = nlp(title)
                                         propn = False
                                         punct = False
@@ -224,7 +207,7 @@ def harvest(path):
                                                             last_person = ent.text
                                                 break
                                     else:
-                                        nlp = nlp_xx
+                                        nlp = spacy.load(nlp_dict['xx'])
                                         tagged_sentence = nlp(title)
                                         for ent in tagged_sentence.ents:
                                             if ent.label_ == "PER":

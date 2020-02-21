@@ -5,7 +5,10 @@ import create_new_record
 import json
 import write_error_to_logfile
 from datetime import datetime
+import find_sysnumbers_of_volumes
 
+volumes_sysnumbers = find_sysnumbers_of_volumes.find_sysnumbers('001579554')
+print(volumes_sysnumbers)
 
 def create_review_dict(review_title):
     review_title = review_title.replace(" (review)", "")
@@ -35,30 +38,10 @@ def create_review_dict(review_title):
 dateTimeObj = datetime.now()
 timestampStr = dateTimeObj.strftime("%d-%b-%Y")
 
-volumes_sysnumbers = {}
-volumes_basic_url = 'https://zenon.dainst.org/api/v1/search?lookfor=001579554&type=ParentID&sort=year&page='
-page_nr = 0
-empty_page = False
-while not empty_page:
-    page_nr += 1
-    volume_record_url = volumes_basic_url + str(page_nr)
-    req = urllib.request.Request(volume_record_url)
-    with urllib.request.urlopen(req) as response:
-        response = response.read()
-    response = response.decode('utf-8')
-    json_response = json.loads(response)
-    if 'records' not in json_response:
-        empty_page = True
-        continue
-    for result in json_response['records']:
-        for date in result['publicationDates']:
-            volumes_sysnumbers[date] = result['id']
-
 
 def harvest(path):
     return_string = ''
     try:
-        not_issued = 0
         with open('records/world_prehistory/world_prehistory_logfile.json', 'r') as log_file:
             log_dict = json.load(log_file)
             last_issue_harvested_in_last_session = log_dict['last_issue_harvested']
@@ -66,8 +49,6 @@ def harvest(path):
         page_nr = 1
         issues_harvested = []
         out = open(path + 'world_prehistory_' + timestampStr + '.mrc', 'wb')
-        current_year = int(dateTimeObj.strftime("%Y"))
-        url = 'http://api.springernature.com/meta/v2/json?q=issn:0892-7537%20sort:date&s=' + str(page_nr) + '&p=50&api_key=ff7edff14a8f19f744a6fa74860259c8'
         request_nr = 0
         empty_page = False
         while not empty_page:

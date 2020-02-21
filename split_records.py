@@ -1,8 +1,8 @@
 from pymarc import MARCReader
 
-filestring = 'records/hsozkult/hsozkult_to_recent'
+filestring = 'records/world_prehistory/world_prehistory_12-Feb-2020'
 count = 0
-out = open('records/hsozkult/hsozkult_to_recent/hsozkult_to_recent' + '_' + str(count) + '.mrc', 'wb')
+out = open('records/gnomon/gnomon_12-Feb-2020' + '_' + str(count) + '.mrc', 'wb')
 print(filestring + '.mrc')
 with open(filestring + '.mrc', 'rb') as file:
     new_reader = MARCReader(file)
@@ -10,6 +10,6 @@ with open(filestring + '.mrc', 'rb') as file:
     print()
     for record in new_reader:
         if count % 25 == 0:
-            out = open(filestring + str(count) + '.mrc', 'wb')
+            out = open(filestring + '_' + str(count) + '.mrc', 'wb')
         out.write(record.as_marc21())
         count += 1

@@ -10,25 +10,14 @@ import write_error_to_logfile
 import unidecode
 import create_new_record
 
+import find_sysnumbers_of_volumes
+
+
 dateTimeObj = datetime.now()
 timestampStr = dateTimeObj.strftime("%d-%b-%Y")
 
-volumes_sysnumbers = {}
-page_nr = 0
-empty_page = False
-while not empty_page:
-    page_nr += 1
-    volumes_url = 'https://zenon.dainst.org/api/v1/search?lookfor=000724049&type=ParentID&page='
-    volumes_req = urllib.request.Request(volumes_url + str(page_nr))
-    with urllib.request.urlopen(volumes_req) as volumes_response:
-        volumes_response = volumes_response.read()
-    volumes_response = volumes_response.decode('utf-8')
-    volumes_json = json.loads(volumes_response)
-    if 'records' not in volumes_json:
-        empty_page = True
-        continue
-    for result in volumes_json['records']:
-        volumes_sysnumbers[result["publicationDates"][0]] = result['id']
+volumes_sysnumbers = find_sysnumbers_of_volumes.find_sysnumbers('000724049')
+dateTimeObj = datetime.now()
 
 
 def harvest(path):
@@ -140,12 +129,12 @@ def harvest(path):
                             pub_nr += created
                         else:
                             break
-        return_string = 'Es wurden' + str(pub_nr) + 'neue Records für MAA erstellt.\n'
+        return_string = 'Es wurden ' + str(pub_nr) + ' neue Records für MAA erstellt.\n'
         if issues_harvested:
             with open('records/maa/maa_logfile.json', 'w') as log_file:
                 log_dict = {"last_issue_harvested": max(issues_harvested)}
                 json.dump(log_dict, log_file)
-                write_error_to_logfile.comment('Log-File wurde auf'+ str(max(issues_harvested)) + 'geupdated.')
+                write_error_to_logfile.comment('Log-File wurde auf ' + str(max(issues_harvested)) + ' geupdated.')
 
     except Exception as e:
         write_error_to_logfile.write(e)

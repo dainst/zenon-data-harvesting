@@ -19,6 +19,10 @@ import hsozkult_modularized
 # import jdi_modularized
 import late_antiquity_modularized_new
 import maa_journal_current_modularized
+import groma_modularized
+import world_prehistory
+import kokalos
+import sardinia_corsica_baleares_modularized
 
 # logfiles vorhanden für:
 
@@ -34,19 +38,25 @@ if new_dir not in os.listdir(path):
 path_for_cumulus = '/home/hnebel/Programmierung/zenon-data-harvesting/records/' + new_dir
 path = '/home/hnebel/Programmierung/zenon-data-harvesting/records/' + new_dir + '/'
 print(path)
-for harvesting_script in [aegyptiaca_modularized, antiquite_modularized, berrgk_modularized, BMCR_modularized, # bjb_modularized,
+for harvesting_script in [aegyptiaca_modularized, antiquite_modularized, berrgk_modularized, BMCR_modularized,  # bjb_modularized,
                           cipeg_modularized,
                           efb_modularized,  # germania_modularized,
                           hsozkult_modularized, late_antiquity_modularized_new,  # jdi_modularized,
                           eperiodica_akb_002_modularized, eperiodica_bat_001_modularized,
                           eperiodica_snr_003_modularized,
                           maa_journal_current_modularized,
-                          gnomon_modularized]:
+                          gnomon_modularized,
+                          groma_modularized,
+                          world_prehistory,
+                          kokalos,
+                          sardinia_corsica_baleares_modularized,
+                          ]:
     try:
         print(harvesting_script)
-        return_string += harvesting_script.harvest(path)
-        print(return_string)
-        write_error_to_logfile.comment(return_string)
+        new_return_string = harvesting_script.harvest(path)
+        return_string += new_return_string
+        print(new_return_string)
+        write_error_to_logfile.comment(new_return_string)
     except Exception as e:
         write_error_to_logfile.write(e)
 

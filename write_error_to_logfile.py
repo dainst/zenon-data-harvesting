@@ -25,3 +25,5 @@ def write(e):
 
 def comment(comment_string):
     logger.debug(comment_string)
+
+# logger mit Pfadübergabe setzen!!!

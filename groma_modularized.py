@@ -8,28 +8,12 @@ import write_error_to_logfile
 from datetime import datetime
 from nameparser import HumanName
 import language_codes
+import find_sysnumbers_of_volumes
+
+volumes_sysnumbers = find_sysnumbers_of_volumes.find_sysnumbers('001597435')
 
 dateTimeObj = datetime.now()
 timestampStr = dateTimeObj.strftime("%d-%b-%Y")
-
-volumes_sysnumbers = {}
-volumes_basic_url = 'https://zenon.dainst.org/api/v1/search?lookfor=001597435&type=ParentID&sort=year&page='
-page_nr = 0
-empty_page = False
-while not empty_page:
-    page_nr += 1
-    volume_record_url = volumes_basic_url + str(page_nr)
-    req = urllib.request.Request(volume_record_url)
-    with urllib.request.urlopen(req) as response:
-        response = response.read()
-    response = response.decode('utf-8')
-    json_response = json.loads(response)
-    if 'records' not in json_response:
-        empty_page = True
-        continue
-    for result in json_response['records']:
-        for date in result['publicationDates']:
-            volumes_sysnumbers[date] = result['id']
 
 
 def harvest(path):

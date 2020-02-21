@@ -7,6 +7,9 @@ import write_error_to_logfile
 from datetime import datetime
 from bs4 import BeautifulSoup
 import language_codes
+import find_sysnumbers_of_volumes
+
+volumes_sysnumbers = find_sysnumbers_of_volumes.find_sysnumbers('000793833')
 
 
 def create_review_dict(review_title):
@@ -36,25 +39,6 @@ def create_review_dict(review_title):
 
 dateTimeObj = datetime.now()
 timestampStr = dateTimeObj.strftime("%d-%b-%Y")
-
-volumes_sysnumbers = {}
-volumes_basic_url = 'https://zenon.dainst.org/api/v1/search?lookfor=000793833&type=ParentID&sort=year&page='
-page_nr = 0
-empty_page = False
-while not empty_page:
-    page_nr += 1
-    volume_record_url = volumes_basic_url + str(page_nr)
-    req = urllib.request.Request(volume_record_url)
-    with urllib.request.urlopen(req) as response:
-        response = response.read()
-    response = response.decode('utf-8')
-    json_response = json.loads(response)
-    if 'records' not in json_response:
-        empty_page = True
-        continue
-    for result in json_response['records']:
-        for date in result['publicationDates']:
-            volumes_sysnumbers[date] = result['id']
 
 
 def harvest(path):
@@ -140,7 +124,7 @@ def harvest(path):
                         else:
                             break
         write_error_to_logfile.comment('Letztes geharvestetes Heft von Late Antiquity: ' + str(last_issue_harvested_in_last_session))
-        return_string += 'Es wurden ' + str(pub_nr) + ' neue Records für Journal of Late Antiquity erstellt.'
+        return_string += 'Es wurden ' + str(pub_nr) + ' neue Records für Journal of Late Antiquity erstellt.\n'
         if issues_harvested:
             with open('records/late_antiquity/late_antiquity_logfile.json', 'w') as log_file:
                 log_dict = {"last_issue_harvested": max(issues_harvested)}

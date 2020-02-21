@@ -10,32 +10,15 @@ from datetime import datetime, timedelta
 import find_existing_doublets
 from langdetect import detect
 import language_codes
+import find_sysnumbers_of_volumes
 
+volumes_sysnumbers = find_sysnumbers_of_volumes.find_sysnumbers('000810356')
 
 # Dubletten werden nicht gefunden. Warum?
 # wg LDR != nab, ist naa
 
 dateTimeObj = datetime.now()
 timestampStr = dateTimeObj.strftime("%d-%b-%Y")
-
-volumes_sysnumbers = {}
-page_nr = 0
-empty_page = False
-while not empty_page:
-    page_nr += 1
-    volumes_url = 'https://zenon.dainst.org/api/v1/search?lookfor=000810356&type=ParentID&page=' + str(page_nr)
-    req = urllib.request.Request(volumes_url)
-    with urllib.request.urlopen(req) as response:
-        response = response.read()
-    response = response.decode('utf-8')
-    json_response = json.loads(response)
-    # print(json_response)
-    if 'records' not in json_response:
-        empty_page = True
-        continue
-    for result in json_response['records']:
-        for date in result['publicationDates']:
-            volumes_sysnumbers[date] = result['id']
 
 
 def harvest(path):

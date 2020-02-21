@@ -7,7 +7,7 @@ import create_new_record
 import json
 import write_error_to_logfile
 from datetime import datetime
-
+import find_sysnumbers_of_volumes
 
 def create_review_dict(review_title):
     review_title = review_title.replace(" (review)", "")
@@ -36,24 +36,7 @@ def create_review_dict(review_title):
 dateTimeObj = datetime.now()
 timestampStr = dateTimeObj.strftime("%d-%b-%Y")
 
-volumes_sysnumbers = {}
-volumes_basic_url = 'https://zenon.dainst.org/api/v1/search?lookfor=000793833&type=ParentID&sort=year&page='
-page_nr = 0
-empty_page = False
-while not empty_page:
-    page_nr += 1
-    volume_record_url = volumes_basic_url + str(page_nr)
-    req = urllib.request.Request(volume_record_url)
-    with urllib.request.urlopen(req) as response:
-        response = response.read()
-    response = response.decode('utf-8')
-    json_response = json.loads(response)
-    if 'records' not in json_response:
-        empty_page = True
-        continue
-    for result in json_response['records']:
-        for date in result['publicationDates']:
-            volumes_sysnumbers[date] = result['id']
+volumes_sysnumbers = find_sysnumbers_of_volumes.find_sysnumbers('000793833')
 
 
 def harvest():
