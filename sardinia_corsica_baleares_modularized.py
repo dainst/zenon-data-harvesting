@@ -1,33 +1,20 @@
 import urllib.parse
 import urllib.request
 from bs4 import BeautifulSoup
-import create_new_record
 from nameparser import HumanName
-from datetime import datetime
 import json
 import re
 import write_error_to_logfile
-import os
 import find_sysnumbers_of_volumes
+from harvest_records import harvest_records
 
 
-dateTimeObj = datetime.now()
-timestampStr = dateTimeObj.strftime("%d-%b-%Y")
-
-volumes_sysnumbers = find_sysnumbers_of_volumes.find_sysnumbers('000068815')
-
-def harvest(path):
-    return_string = ''
-    pub_nr = 0
-    issues_harvested = 0
+def create_publication_dicts(last_item_harvested_in_last_session, *other):
+    publication_dicts = []
+    items_harvested = []
     try:
-        with open('records/sardinia_corsica_baleares/sardinia_corsica_baleares_logfile.json', 'r') as log_file:
-            log_dict = json.load(log_file)
-            last_item_harvested_in_last_session = log_dict['last_issue_harvested']
-        issues_harvested = []
-        out = open(path + 'sardinia_corsica_baleares' + timestampStr + '.mrc', 'wb')
+        volumes_sysnumbers = find_sysnumbers_of_volumes.find_sysnumbers('000068815')
         url = 'http://www.libraweb.net/sommari.php?chiave=97'
-        pub_nr = 0
         user_agent = 'Mozilla/5.0 (X11; Linux x86_64; rv:66.0)'
         values = {'name': 'Helena Nebel',
                   'location': 'Berlin',
@@ -41,7 +28,7 @@ def harvest(path):
         journal_page = journal_page.decode('utf-8')
         journal_soup = BeautifulSoup(journal_page, 'html.parser')
         volume_urls = ['http://www.libraweb.net/' + link['href'] for link in journal_soup.find_all('a')
-               if (link.text.strip('\n') == 'Online') and ('articoli' in link['href'])]
+                       if (link.text.strip('\n') == 'Online') and ('articoli' in link['href'])]
         for volume_url in volume_urls:
             req = urllib.request.Request(volume_url)
             with urllib.request.urlopen(req) as response:
@@ -60,7 +47,7 @@ def harvest(path):
                     doi = [url.text for url in [link for link in article_info.find_all('a') if 'href' in link.attrs] if 'dx.medra.org' in url['href']][0]
                 else:
                     doi = ''
-                title_and_author_info = [info for info in article_info('span', class_='font-xl') if 'Volume'  not in info.text][0]
+                title_and_author_info = [info for info in article_info('span', class_='font-xl') if 'Volume' not in info.text][0]
                 volume_info = [info.find('a') for info in article_info('span', class_='font-xl') if 'Volume' in info.text][0]
                 volume_name, volume_year = re.findall(r'([X|V|I]+)[^o].+(\d{4})', volume_info.text)[0]
                 current_item = int(volume_year)
@@ -69,7 +56,7 @@ def harvest(path):
                         publication_dict = json.load(publication_dict_template)
                     title = title_and_author_info.find('em').text
                     authors = [author.split('/')[0] for author in title_and_author_info.text.replace(title, '').replace('\n', '').split(', ')]
-                    pages = re.findall(r'\d{1,3}-\d{1,3}',article_info.text.split('Pagine:')[1].split('Prezzo:')[0])[0]
+                    pages = re.findall(r'\d{1,3}-\d{1,3}', article_info.text.split('Pagine:')[1].split('Prezzo:')[0])[0]
                     publication_dict['volume'] = volume_name
                     publication_dict['authors_list'] = [HumanName(author).last + ', ' + HumanName(author).first
                                                         for author in authors if author]
@@ -99,29 +86,18 @@ def harvest(path):
                     publication_dict['force_300'] = True
                     publication_dict['default_language'] = 'ita'
                     publication_dict['do_detect_lang'] = True
-                    if create_new_record.check_publication_dict_for_completeness_and_validity(publication_dict):
-                        created = create_new_record.create_new_record(out, publication_dict)
-                        issues_harvested.append(current_item)
-                        pub_nr += created
-                    else:
-                        break
-        write_error_to_logfile.comment('Letztes geharvestetes Heft von sardinia_corsica_baleares: ' + str(last_item_harvested_in_last_session))
+                    publication_dicts.append(publication_dict)
+                    items_harvested.append(current_item)
     except Exception as e:
         write_error_to_logfile.write(e)
-        pub_nr = 0
-        if os.path.exists(path + 'sardinia_corsica_baleares' + timestampStr + '.mrc'):
-            os.remove(path + 'sardinia_corsica_baleares' + timestampStr + '.mrc')
-    return_string += 'Es wurden ' + str(pub_nr) + ' neue Records für sardinia_corsica_baleares erstellt.\n'
-    if issues_harvested:
-        max(issues_harvested)
-        with open('records/sardinia_corsica_baleares/sardinia_corsica_baleares_logfile.json', 'w') as log_file:
-            log_dict = {"last_issue_harvested": max(issues_harvested)}
-            json.dump(log_dict, log_file)
-            write_error_to_logfile.comment('Log-File wurde auf ' + str(max(issues_harvested)) + ' geupdated.')
+        write_error_to_logfile.comment('Es konnten keine Artikel für Sardinia, Corsica et Baleares antiquae geharvested werden.')
+    return publication_dicts, items_harvested
+
+
+def harvest(path):
+    return_string = harvest_records(path, 'sardinia_corsica_baleares', 'Sardinia, Corsica et Baleares antiquae', create_publication_dicts)
     return return_string
 
 
 if __name__ == '__main__':
-    dateTimeObj = datetime.now()
-    timestampStr = dateTimeObj.strftime("%d-%b-%Y")
-    harvest('records/sardinia_corsica_baleares/')
+    harvest_records('records/sardinia_corsica_baleares/', 'sardinia_corsica_baleares', 'Sardinia, Corsica et Baleares antiquae', create_publication_dicts)

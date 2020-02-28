@@ -246,6 +246,8 @@ def link_is_valid(link):
         if request_nr >= 5:
             break
         request_nr += 1
+        if 'jstor' in link:
+            return True
         try:
             req = urllib.request.Request(link)
             with urllib.request.urlopen(req) as response:
@@ -823,6 +825,7 @@ def create_new_record(out, publication_dict):
             if publication_dict['table_of_contents_link']:
                 recent_record.add_field(Field(tag='856', indicators=['4', '2'],
                                               subfields=['z', 'Table of Contents', 'u', publication_dict['table_of_contents_link']]))
+            print(publication_dict['pdf_links'] + publication_dict['html_links'])
             for link in publication_dict['pdf_links']:
                 recent_record.add_field(Field(tag='856', indicators=['4', '0'],
                                               subfields=['z', 'Available online', 'u', link]))

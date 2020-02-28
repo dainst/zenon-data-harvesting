@@ -1,58 +1,22 @@
-from nameparser import HumanName
 import urllib.parse
 import urllib.request
-import create_new_record
 import json
 import write_error_to_logfile
 from datetime import datetime
 import find_sysnumbers_of_volumes
-
-volumes_sysnumbers = find_sysnumbers_of_volumes.find_sysnumbers('001579554')
-print(volumes_sysnumbers)
-
-def create_review_dict(review_title):
-    review_title = review_title.replace(" (review)", "")
-    review_list = []
-    for title in review_title.split(" and: "):
-        new_review = {'year_of_publication': ''}
-        title = title.strip(",")
-        if " ed. by " in title:
-            new_review['reviewed_title'], new_review['reviewed_editors'] = title.split(" ed. by ")
-            new_review['reviewed_authors'] = []
-        elif " eds. by " in title:
-            new_review['reviewed_title'], new_review['reviewed_editors'] = title.split(" eds. by ")
-            new_review['reviewed_authors'] = []
-        elif "trans. by" in title:
-            new_review['reviewed_title'], new_review['reviewed_editors'] = title.split(" trans. by ")
-            new_review['reviewed_authors'] = []
-        elif " by " in title:
-            new_review['reviewed_title'], new_review['reviewed_authors'] = title.split(" by ")
-            new_review['reviewed_editors'] = []
-        for responsibles in ['reviewed_editors', 'reviewed_authors']:
-            if new_review[responsibles]:
-                new_review[responsibles] = [(HumanName(person).last+", "+HumanName(person).first).strip() for person in new_review[responsibles].split(', ')[0].split(' and ')]
-        review_list.append(new_review)
-    return review_list
+from harvest_records import harvest_records
 
 
-dateTimeObj = datetime.now()
-timestampStr = dateTimeObj.strftime("%d-%b-%Y")
-
-
-def harvest(path):
-    return_string = ''
+def create_publication_dicts(last_item_harvested_in_last_session, *other):
+    publication_dicts = []
+    items_harvested = []
     try:
-        with open('records/world_prehistory/world_prehistory_logfile.json', 'r') as log_file:
-            log_dict = json.load(log_file)
-            last_issue_harvested_in_last_session = log_dict['last_issue_harvested']
-        pub_nr = 0
+        volumes_sysnumbers = find_sysnumbers_of_volumes.find_sysnumbers('001579554')
+        volumes_sysnumbers['2007'] = volumes_sysnumbers['2006']
+        dateTimeObj = datetime.now()
         page_nr = 1
-        issues_harvested = []
-        out = open(path + 'world_prehistory_' + timestampStr + '.mrc', 'wb')
-        request_nr = 0
         empty_page = False
         while not empty_page:
-            request_nr += 1
             url = 'http://api.springernature.com/meta/v2/json?q=issn:0892-7537%20sort:date&s=' + str(page_nr) + '&p=50&api_key=ff7edff14a8f19f744a6fa74860259c8'
             req = urllib.request.Request(url)
             with urllib.request.urlopen(req) as response:
@@ -63,7 +27,11 @@ def harvest(path):
                 empty_page = True
             page_nr += 50
             for article in json_response['records']:
-                if 'printDate' in article:
+                if 'coverDate' in article:
+                    publication_year = article['coverDate'][:4]
+                    issue = str(article['number'])
+                    volume = str(article['volume'])
+                elif 'printDate' in article:
                     publication_year = article['printDate'][:4]
                     issue = str(article['number'])
                     volume = str(article['volume'])
@@ -71,14 +39,13 @@ def harvest(path):
                     publication_year = article['publicationDate'][:4]
                     issue = str(article['number'])
                     volume = str(article['volume'])
-
                 if publication_year not in volumes_sysnumbers:
-                    print('Artikel von Journal of World Prehistory konnten teilweise nicht geharvestet werden, da keine übergeordnete Aufnahme für das Jahr', publication_year, 'existiert.')
-                    print('Bitte erstellen Sie eine neue übergeordnete Aufnahme für das Jahr', publication_year, '.')
+                    write_error_to_logfile.comment('Artikel von Journal of World Prehistory konnten teilweise nicht geharvestet werden, da keine übergeordnete Aufnahme für das Jahr ' + publication_year + ' existiert.')
+                    write_error_to_logfile.comment('Bitte erstellen Sie eine neue übergeordnete Aufnahme für das Jahr ' + publication_year + '.')
                     continue
                 current_item = int(publication_year + volume.zfill(3) + issue[0].zfill(2))
-                if current_item > last_issue_harvested_in_last_session:
-                    if int(publication_year) > 2000:
+                if current_item > last_item_harvested_in_last_session:
+                    if int(publication_year) > (int(dateTimeObj.strftime("%Y")) - 4):
                         continue
                     with open('publication_dict.json', 'r') as publication_dict_template:
                         publication_dict = json.load(publication_dict_template)
@@ -105,38 +72,26 @@ def harvest(path):
                     publication_dict['field_300'] = '1 online resource pp. ' + article['startingPage'] + '-' + article['endingPage']
                     publication_dict['force_300'] = True
                     publication_dict['text_body_for_lang_detection'] = article['abstract']
-                    print(int(publication_year), int(dateTimeObj.strftime("%Y")) - 4)
                     if int(publication_year) < 2003:
                         publication_dict['html_links'] = [url['value'] for url in article['url'] if 'html' in url['format'] == 'html']
                         publication_dict['pdf_links'] = [url['value'] for url in article['url'] if url['format'] == 'pdf']
-                        print(publication_dict['html_links'], publication_dict['pdf_links'])
-                    elif int(publication_year) < (int(dateTimeObj.strftime("%Y")) - 4):
+                    elif int(publication_year) < (int(dateTimeObj.strftime("%Y")) - 3):
                         publication_dict['html_links'] = ['https://www.jstor.org/openurl?issn=08927537&volume=' + volume + '&issue=' + issue + '&spage=' + article['startingPage']]
-                        # https://www.jstor.org/openurl?issn=08927537&volume=28&issue=3&spage=179
-                        print(publication_dict['html_links'])
                         publication_dict['general_note'] = "For online access see also parent record"
                     else:
                         publication_dict['force_epub'] = True
-                    print(article)
-                    if create_new_record.check_publication_dict_for_completeness_and_validity(publication_dict):
-                        created = create_new_record.create_new_record(out, publication_dict)
-                        issues_harvested.append(current_item)
-                        pub_nr += created
-                    else:
-                        break
-        write_error_to_logfile.comment('Letztes geharvestetes Heft von Journal of World Prehistory: ' + str(last_issue_harvested_in_last_session))
-        return_string += 'Es wurden ' + str(pub_nr) + ' neue Records für Journal of World Prehistory erstellt.\n'
-        if issues_harvested:
-            with open('records/world_prehistory/world_prehistory_logfile.json', 'w') as log_file:
-                log_dict = {"last_issue_harvested": max(issues_harvested)}
-                json.dump(log_dict, log_file)
-                write_error_to_logfile.comment('Log-File wurde auf ' + str(max(issues_harvested)) + ' geupdated.')
+                    publication_dicts.append(publication_dict)
+                    items_harvested.append(current_item)
     except Exception as e:
         write_error_to_logfile.write(e)
+        write_error_to_logfile.comment('Es konnten keine Artikel für Journal of World Prehistory geharvested werden.')
+    return publication_dicts, items_harvested
+
+
+def harvest(path):
+    return_string = harvest_records(path, 'world_prehistory', 'Journal of World Prehistory', create_publication_dicts)
     return return_string
 
 
 if __name__ == '__main__':
-    dateTimeObj = datetime.now()
-    timestampStr = dateTimeObj.strftime("%d-%b-%Y")
-    harvest('records/world_prehistory/')
+    harvest_records('records/world_prehistory/', 'world_prehistory', 'Journal of World Prehistory', create_publication_dicts)

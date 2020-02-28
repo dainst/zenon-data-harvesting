@@ -2,26 +2,17 @@ import urllib.parse
 import urllib.request
 import language_codes
 from bs4 import BeautifulSoup
-import create_new_record
 import json
-from datetime import datetime
 import re
 from nameparser import HumanName
 import write_error_to_logfile
-
-dateTimeObj = datetime.now()
-timestampStr = dateTimeObj.strftime("%d-%b-%Y")
+from harvest_records import harvest_records
 
 
-def harvest(path):
-    return_string = ''
+def create_publication_dicts(last_item_harvested_in_last_session):
+    publication_dicts = []
+    items_harvested = []
     try:
-        with open('records/cipeg/cipeg_logfile.json', 'r') as log_file:
-            log_dict = json.load(log_file)
-            last_item_harvested_in_last_session = log_dict['last_issue_harvested']
-        pub_nr = 0
-        issues_harvested = []
-        out = open(path + 'cipeg_' + timestampStr + '.mrc', 'wb')
         basic_url = 'https://journals.ub.uni-heidelberg.de/index.php/cipeg/issue/archive/'
         empty_page = False
         page = 0
@@ -108,25 +99,18 @@ def harvest(path):
                             publication_dict['copyright_year'] = re.findall(r'\d{4}', article_soup.find('meta', attrs={'name': 'DC.Rights'})['content'])[0]
                             if article_soup.find('meta', attrs={'name': 'citation_abstract_html_url'})['content']:
                                 publication_dict['abstract_link'] = article_soup.find('meta', attrs={'name': 'citation_abstract_html_url'})['content']
-                            # bei der Suche nach Textcorpora die pdf-Dateien mit einbeziehen!!!
-                            if create_new_record.check_publication_dict_for_completeness_and_validity(publication_dict):
-                                created = create_new_record.create_new_record(out, publication_dict)
-                                issues_harvested.append(current_item)
-                                pub_nr += created
-                            else:
-                                break
-        write_error_to_logfile.comment('Letzte geharvestete Publikation von CIPEG: ' + str(last_item_harvested_in_last_session))
-        return_string += 'Es wurden ' + str(pub_nr) + ' neue Records für CIPEG erstellt.\n'
-        if issues_harvested:
-            with open('records/cipeg/cipeg_logfile.json', 'w') as log_file:
-                log_dict = {"last_issue_harvested": max(issues_harvested)}
-                json.dump(log_dict, log_file)
-                write_error_to_logfile.comment('Log-File wurde auf ' + str(max(issues_harvested)) + ' geupdated.')
+                            publication_dicts.append(publication_dict)
+                            items_harvested.append(current_item)
     except Exception as e:
         write_error_to_logfile.write(e)
+        write_error_to_logfile.comment('Es konnten keine Artikel für Cipeg geharvested werden.')
+    return publication_dicts, items_harvested
+
+
+def harvest(path):
+    return_string = harvest_records(path, 'cipeg', 'Cipeg', create_publication_dicts)
     return return_string
 
+
 if __name__ == '__main__':
-    dateTimeObj = datetime.now()
-    timestampStr = dateTimeObj.strftime("%d-%b-%Y")
-    harvest('records/cipeg/cipeg_' + timestampStr + '.mrc')
+    harvest_records('records/cipeg/', 'cipeg', 'Cipeg', create_publication_dicts)

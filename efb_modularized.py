@@ -4,23 +4,15 @@ import create_new_record
 from nameparser import HumanName
 from bs4 import BeautifulSoup
 import re
-from datetime import datetime
+from harvest_records import harvest_records
 import json
 import write_error_to_logfile
 
-dateTimeObj = datetime.now()
-timestampStr = dateTimeObj.strftime("%d-%b-%Y")
 
-
-def harvest(path):
-    return_string = ''
-    pub_nr = 0
-    issues_harvested = []
+def create_publication_dicts(last_item_harvested_in_last_session, *other):
+    publication_dicts = []
+    items_harvested = []
     try:
-        with open('records/efb/efb_logfile.json', 'r') as log_file:
-            log_dict = json.load(log_file)
-            last_item_harvested_in_last_session = log_dict['last_issue_harvested']
-        out = open(path + 'efb_' + timestampStr + '.mrc', 'wb')
         basic_url = 'https://publications.dainst.org/journals/index.php/efb'
         user_agent = 'Mozilla/5.0 (X11; Linux x86_64; rv:66.0)'
         values = {'name': 'Helena Nebel',
@@ -88,27 +80,18 @@ def harvest(path):
                         publication_dict['field_300'] = 'Fasc. ' + issue + ', ' + article_soup.find('meta', attrs={'name': "DC.Identifier.pageNumber"})['content']
                         publication_dict['force_300'] = True
                         publication_dict['volume'] = 'Fasc. ' + issue
-                        if create_new_record.check_publication_dict_for_completeness_and_validity(publication_dict):
-                            created = create_new_record.create_new_record(out, publication_dict)
-                            issues_harvested.append(current_item)
-                            pub_nr += created
-                        else:
-                            break
+                        publication_dicts.append(publication_dict)
+                        items_harvested.append(current_item)
     except Exception as e:
         write_error_to_logfile.write(e)
-        pub_nr = 0
-        issues_harvested = []
-    write_error_to_logfile.comment('Letztes geharvestetes Heft von E-Forschungsberichte:' + str(last_item_harvested_in_last_session))
-    return_string += 'Es wurden ' + str(pub_nr) + ' neue Records für e-Forschungsberichte erstellt.\n'
-    if issues_harvested:
-        with open('records/efb/efb_logfile.json', 'w') as log_file:
-            log_dict = {"last_issue_harvested": max(issues_harvested)}
-            json.dump(log_dict, log_file)
-            write_error_to_logfile.comment('Log-File wurde auf ' + str(max(issues_harvested)) + ' geupdated.')
+        write_error_to_logfile.comment('Es konnten keine Artikel für E-Forschungsberichte geharvested werden.')
+    return publication_dicts, items_harvested
+
+
+def harvest(path):
+    return_string = harvest_records(path, 'efb', 'E-Forschungsberichte', create_publication_dicts)
     return return_string
 
 
 if __name__ == '__main__':
-    dateTimeObj = datetime.now()
-    timestampStr = dateTimeObj.strftime("%d-%b-%Y")
-    harvest('records/efb/efb_' + timestampStr + '.mrc')
+    harvest_records('records/efb/', 'efb', 'E-Forschungsberichte', create_publication_dicts)

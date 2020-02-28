@@ -3,25 +3,18 @@ from sickle import Sickle
 import json
 from _datetime import datetime
 import write_error_to_logfile
-import create_new_record
-
-dateTimeObj = datetime.now()
-timestampStr = dateTimeObj.strftime("%d-%b-%Y")
+from harvest_records import harvest_records
 
 
-def harvest_eperiodica(path, journal_pid, publisher, publication_place, default_language, time_interval, host_item_sysnumber,
-                       host_item_name, field_008_18_34):
-    return_string = ''
+def create_publication_dicts(last_item_harvested_in_last_session, journal_pid_underscore, host_item_name, publisher, publication_place, default_language, time_interval, host_item_sysnumber,
+                             field_008_18_34):
+    publication_dicts = []
+    items_harvested = []
     try:
-        issues_harvested = []
+        journal_pid = journal_pid_underscore.replace('_', '-')
+        dateTimeObj = datetime.now()
         last_year_of_harvesting = int(dateTimeObj.strftime("%Y")) - time_interval
-        out = open(path + journal_pid.replace('-', '') + '_' + timestampStr + '.mrc', 'wb')
-        with open('records/' + journal_pid.replace('-', '') + '/' + journal_pid.replace('-', '') + '_logfile.json', 'r') as log_file:
-            log_dict = json.load(log_file)
-        last_issue_harvested_in_last_session = log_dict['last_issue_harvested']
-        date_string = str(last_issue_harvested_in_last_session)[:4] + '-01-01'
-        print(date_string)
-        print('Letztes geharvestetes Heft von', journal_pid.replace('-', ''), ':', last_issue_harvested_in_last_session)
+        date_string = str(last_item_harvested_in_last_session)[:4] + '-01-01'
         sickle = Sickle('https://www.e-periodica.ch/oai/dataprovider')
         records_930 = sickle.ListIdentifiers(**{'metadataPrefix': 'oai_dc', 'set': 'ddc:930', 'from': date_string})
         doi_list = []
@@ -34,14 +27,13 @@ def harvest_eperiodica(path, journal_pid, publisher, publication_place, default_
                 doi_list.append(doi)
             if doi[13:20] != journal_pid and start_of_journal:
                 break
-        pub_nr = 0
         for doi in doi_list:
             sickle2 = Sickle('https://www.e-periodica.ch/oai/dataprovider')
             content_list = list(sickle2.GetRecord(identifier=doi, metadataPrefix='oai_dc'))
             year = content_list[6][1][0][:5]
             volume_year, volume_nr = re.findall(r'(\d{4}):(\d{1,3})::', content_list[14][1][0][51:])[0]
             current_item = int(volume_year + volume_nr.zfill(3))
-            if current_item > last_issue_harvested_in_last_session:
+            if current_item > last_item_harvested_in_last_session:
                 with open('publication_dict.json', 'r') as publication_dict_template:
                     publication_dict = json.load(publication_dict_template)
                 parallel_title_nr = 0
@@ -74,37 +66,29 @@ def harvest_eperiodica(path, journal_pid, publisher, publication_place, default_
                 publication_dict['retro_digitization_info'] = {'place_of_publisher': '', 'publisher': '', 'date_published_online': ''}
                 publication_dict['terms_of_use_and_reproduction'] = {'terms_note': 'Die auf der Plattform E-Periodica veröffentlichten Dokumente stehen für nicht-kommerzielle Zwecke in Lehre und '
                                                                                    'Forschung sowie für die private Nutzung frei zur Verfügung.', 'use_and_reproduction_rights': '',
-                                                                                   'terms_link': 'https://www.e-periodica.ch/digbib/about3'}
+                                                                     'terms_link': 'https://www.e-periodica.ch/digbib/about3'}
                 publication_dict['LDR_06_07'] = 'ab'
                 publication_dict['field_006'] = 'm     o  d |      '
                 publication_dict['field_007'] = 'cr uuu   uu|uu'
                 publication_dict['field_008_18-34'] = field_008_18_34
                 publication_dict['additional_fields'].append({'tag': '042', 'indicators': [' ', ' '], 'subfields': ['a', 'dc'], 'data': ''})
-                if create_new_record.check_publication_dict_for_completeness_and_validity(publication_dict):
-                    created = create_new_record.create_new_record(out, publication_dict)
-                    issues_harvested.append(current_item)
-                    pub_nr += created
-                else:
-                    break
-
-        return_string = 'Es wurden ' + str(pub_nr) + ' neue Records für ' + journal_pid + ' erstellt.\n'
-        if issues_harvested:
-            with open('records/' + journal_pid.replace('-', '') + '/' + journal_pid.replace('-', '') + '_logfile.json', 'w') as log_file:
-                log_dict = {"last_issue_harvested": max(issues_harvested)}
-                json.dump(log_dict, log_file)
-                write_error_to_logfile.comment('Log-File wurde auf' + str(max(issues_harvested)) + 'geupdated.')
-
+                publication_dicts.append(publication_dict)
+                items_harvested.append(current_item)
     except Exception as e:
         write_error_to_logfile.write(e)
+        write_error_to_logfile.comment('Es konnten keine Artikel für Aegyptiaca geharvested werden.')
+    return publication_dicts, items_harvested
+
+
+def harvest_eperiodica(path, journal_pid_underscore, host_item_name, create_publication_dicts, publisher, publication_place, default_language,
+                       time_interval, host_item_sysnumber, field_008_18_34):
+    return_string = harvest_records(path, journal_pid_underscore, host_item_name,  create_publication_dicts, publisher, publication_place, default_language,
+                                    time_interval, host_item_sysnumber, field_008_18_34)
     return return_string
 
 
-def harvest():
-    harvest_eperiodica('records/bat001/', 'bat-001', 'Associazione Archeologica Ticinese', 'Lugano', 'ita', 3, '001543081', 'Bollettino dell’Associazione Archeologica Ticinese', 'ar p o||||||   a|')
-    harvest_eperiodica('records/snr003/', 'snr-003', 'Schweizerische Numismatische Gesellschaft', 'Bern', 'ger', 3, '001570578', 'Schweizerische numismatische Rundschau', 'ar p o||||||   a|')
-    harvest_eperiodica('records/akb002/', 'akb-002', 'Archäologischer Dienst des Kantons Bern', 'Bern', 'ger', 2, '000855529', 'Archäologie Bern', 'ar p o||||||   a|')
-    # welche weiteren Publikationen?
-
-
 if __name__ == '__main__':
-    harvest()
+    harvest_eperiodica('records/bat_001/', 'bat_001', 'Bollettino dell’Associazione Archeologica Ticinese', create_publication_dicts, 'Associazione Archeologica Ticinese', 'Lugano', 'ita', 3, '001543081',  'ar p o||||||   a|')
+    harvest_eperiodica('records/snr_003/', 'snr_003', 'Schweizerische numismatische Rundschau', create_publication_dicts, 'Schweizerische Numismatische Gesellschaft', 'Bern', 'ger', 3, '001570578', 'ar p o||||||   a|')
+    harvest_eperiodica('records/akb_002/', 'akb_002', 'Archäologie Bern', create_publication_dicts, 'Archäologischer Dienst des Kantons Bern', 'Bern', 'ger', 2, '000855529', 'ar p o||||||   a|')
+    # welche weiteren Publikationen?

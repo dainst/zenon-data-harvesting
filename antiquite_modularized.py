@@ -13,7 +13,7 @@ timestampStr = dateTimeObj.strftime("%d-%b-%Y")
 volumes_sysnumbers = find_sysnumbers('000594790')
 
 
-def create_publication_dicts(last_item_harvested_in_last_session):
+def create_publication_dicts(last_item_harvested_in_last_session, *other):
     publication_dicts = []
     items_harvested = []
     try:

@@ -1,33 +1,20 @@
 import urllib.parse
 import urllib.request
 from bs4 import BeautifulSoup
-import create_new_record
 from nameparser import HumanName
-from datetime import datetime
 import json
 import re
 import write_error_to_logfile
-import os
 import find_sysnumbers_of_volumes
+from harvest_records import harvest_records
 
 
-dateTimeObj = datetime.now()
-timestampStr = dateTimeObj.strftime("%d-%b-%Y")
-
-volumes_sysnumbers = find_sysnumbers_of_volumes.find_sysnumbers('000058571')
-
-
-def harvest(path):
-    return_string = ''
-    issues_harvested = 0
+def create_publication_dicts(last_item_harvested_in_last_session, *other):
+    publication_dicts = []
+    items_harvested = []
     try:
-        with open('records/kokalos/kokalos_logfile.json', 'r') as log_file:
-            log_dict = json.load(log_file)
-            last_item_harvested_in_last_session = log_dict['last_issue_harvested']
-        issues_harvested = []
-        out = open(path + 'kokalos' + timestampStr + '.mrc', 'wb')
+        volumes_sysnumbers = find_sysnumbers_of_volumes.find_sysnumbers('000058571')
         url = 'https://www.libraweb.net/sommari.php?chiave=6'
-        pub_nr = 0
         user_agent = 'Mozilla/5.0 (X11; Linux x86_64; rv:66.0)'
         values = {'name': 'Helena Nebel',
                   'location': 'Berlin',
@@ -99,30 +86,18 @@ def harvest(path):
                     publication_dict['force_300'] = True
                     publication_dict['default_language'] = 'ita'
                     publication_dict['do_detect_lang'] = True
-                    print(publication_dict)
-                    if create_new_record.check_publication_dict_for_completeness_and_validity(publication_dict):
-                        created = create_new_record.create_new_record(out, publication_dict)
-                        issues_harvested.append(current_item)
-                        pub_nr += created
-                    else:
-                        break
-        write_error_to_logfile.comment('Letztes geharvestetes Heft von Kokalos: ' + str(last_item_harvested_in_last_session))
+                    publication_dicts.append(publication_dict)
+                    items_harvested.append(current_item)
     except Exception as e:
         write_error_to_logfile.write(e)
-        pub_nr = 0
-        if os.path.exists(path + 'kokalos' + timestampStr + '.mrc'):
-            os.remove(path + 'kokalos' + timestampStr + '.mrc')
-    return_string += 'Es wurden ' + str(pub_nr) + ' neue Records für Kokalos erstellt.\n'
-    if issues_harvested:
-        max(issues_harvested)
-        with open('records/kokalos/kokalos_logfile.json', 'w') as log_file:
-            log_dict = {"last_issue_harvested": max(issues_harvested)}
-            json.dump(log_dict, log_file)
-            write_error_to_logfile.comment('Log-File wurde auf ' + str(max(issues_harvested)) + ' geupdated.')
+        write_error_to_logfile.comment('Es konnten keine Artikel für Kókalos geharvested werden.')
+    return publication_dicts, items_harvested
+
+
+def harvest(path):
+    return_string = harvest_records(path, 'kokalos', 'Kókalos', create_publication_dicts)
     return return_string
 
 
 if __name__ == '__main__':
-    dateTimeObj = datetime.now()
-    timestampStr = dateTimeObj.strftime("%d-%b-%Y")
-    harvest('records/kokalos/')
+    harvest_records('records/kokalos/', 'kokalos', 'Kókalos', create_publication_dicts)

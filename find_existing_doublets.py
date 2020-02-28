@@ -431,6 +431,8 @@ def find(title, authors, year, default_lang, possible_host_items, publication_di
             all_results = swagger_find(search_title, search_authors, year, title, rejected_titles, possible_host_items,
                                        lang, authors, additional_physical_form_entrys, publication_dict, all_results)
             # Suche mit vollständigen Daten
+            if not all_results:
+                all_results = []
             if len(all_results) == 0:
                 search_authors = search_authors.split("+")[0]
                 all_results = swagger_find(search_title, search_authors, year, title, rejected_titles,

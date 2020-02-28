@@ -1,15 +1,13 @@
 from nameparser import HumanName
 import urllib.parse
 import urllib.request
-import create_new_record
 import json
 import write_error_to_logfile
 from datetime import datetime
 from bs4 import BeautifulSoup
 import language_codes
 import find_sysnumbers_of_volumes
-
-volumes_sysnumbers = find_sysnumbers_of_volumes.find_sysnumbers('000793833')
+from harvest_records import harvest_records
 
 
 def create_review_dict(review_title):
@@ -37,28 +35,19 @@ def create_review_dict(review_title):
     return review_list
 
 
-dateTimeObj = datetime.now()
-timestampStr = dateTimeObj.strftime("%d-%b-%Y")
-
-
-def harvest(path):
-    return_string = ''
+def create_publication_dicts(last_item_harvested_in_last_session, *other):
+    publication_dicts = []
+    items_harvested = []
     try:
-        with open('records/late_antiquity/late_antiquity_logfile.json', 'r') as log_file:
-            log_dict = json.load(log_file)
-            last_issue_harvested_in_last_session = log_dict['last_issue_harvested']
-        pub_nr = 0
-        issues_harvested = []
-        out = open(path + 'late_antiquity_' + timestampStr + '.mrc', 'wb')
+        volumes_sysnumbers = find_sysnumbers_of_volumes.find_sysnumbers('000793833')
+        dateTimeObj = datetime.now()
         current_year = int(dateTimeObj.strftime("%Y"))
-        basic_url = 'https://api.crossref.org/journals/1942-1273/works?filter=from-print-pub-date%3A'\
+        basic_url = 'https://api.crossref.org/journals/1942-1273/works?filter=from-print-pub-date%3A' \
                     + str(current_year - 1) + ',type%3Ajournal-article&cursor='
         next_cursor = '*'
-
         request_nr = 0
         while True:
             request_nr += 1
-            # print(basic_url + next_cursor)
             req = urllib.request.Request(basic_url + next_cursor)
             with urllib.request.urlopen(req) as response:
                 response = response.read()
@@ -68,15 +57,14 @@ def harvest(path):
             if not json_response['message']['items']:
                 break
             for item in json_response['message']['items']:
-                # print(item)
                 volume, issue, year_of_publication = item['volume'], item['journal-issue']['issue'], str(item['issued']['date-parts'][0][0])
                 if year_of_publication not in volumes_sysnumbers:
-                    print('Artikel von Journal of Late Antiquity konnten teilweise nicht geharvestet werden, da keine übergeordnete Aufnahme für das Jahr', year_of_publication, 'existiert.')
-                    print('Bitte erstellen Sie eine neue übergeordnete Aufnahme für das Jahr', year_of_publication, '.')
+                    write_error_to_logfile.comment('Artikel von Journal of Late Antiquity konnten teilweise nicht geharvestet werden, da keine übergeordnete Aufnahme für das Jahr '
+                                                   + year_of_publication + ' existiert.')
+                    write_error_to_logfile.comment('Bitte erstellen Sie eine neue übergeordnete Aufnahme für das Jahr ' + year_of_publication + '.')
                     break
                 current_item = int(year_of_publication + volume.zfill(2) + issue.zfill(2))
-                print(current_item)
-                if current_item > last_issue_harvested_in_last_session:
+                if current_item > last_item_harvested_in_last_session:
                     if item['title'][0] not in ["Volume Table of Contents", "Volume Contents", "From the Editor", "Bibliography", "From the Guest Editors"]:
                         with open('publication_dict.json', 'r') as publication_dict_template:
                             publication_dict = json.load(publication_dict_template)
@@ -85,7 +73,6 @@ def harvest(path):
                         publication_dict['pages'] = item['page']
                         publication_dict['issue'] = issue
                         publication_dict['doi'] = item['DOI']
-                        print('doi', publication_dict['doi'])
                         if "(review)" in item['title'][0]:
                             publication_dict['review'] = True
                             publication_dict['review_list'] += create_review_dict(item['title'][0])
@@ -95,7 +82,6 @@ def harvest(path):
                             with urllib.request.urlopen(req) as response:
                                 article_page = response.read().decode('utf-8')
                             article_title = BeautifulSoup(article_page, 'html.parser').find('title').text
-                            print(article_title)
                             if "(review)" in article_title:
                                 publication_dict['review'] = True
                                 publication_dict['review_list'] += create_review_dict(item['title'][0])
@@ -117,25 +103,18 @@ def harvest(path):
                         publication_dict['volume'] = volume
                         publication_dict['field_007'] = 'ta'
                         publication_dict['field_008_18-34'] = 'fr p|  |||||   a|'
-                        if create_new_record.check_publication_dict_for_completeness_and_validity(publication_dict):
-                            created = create_new_record.create_new_record(out, publication_dict)
-                            issues_harvested.append(current_item)
-                            pub_nr += created
-                        else:
-                            break
-        write_error_to_logfile.comment('Letztes geharvestetes Heft von Late Antiquity: ' + str(last_issue_harvested_in_last_session))
-        return_string += 'Es wurden ' + str(pub_nr) + ' neue Records für Journal of Late Antiquity erstellt.\n'
-        if issues_harvested:
-            with open('records/late_antiquity/late_antiquity_logfile.json', 'w') as log_file:
-                log_dict = {"last_issue_harvested": max(issues_harvested)}
-                json.dump(log_dict, log_file)
-                write_error_to_logfile.comment('Log-File wurde auf ' + str(max(issues_harvested)) + ' geupdated.')
+                        publication_dicts.append(publication_dict)
+                        items_harvested.append(current_item)
     except Exception as e:
         write_error_to_logfile.write(e)
+        write_error_to_logfile.comment('Es konnten keine Artikel für Journal of Late Antiquity geharvested werden.')
+    return publication_dicts, items_harvested
+
+
+def harvest(path):
+    return_string = harvest_records(path, 'late_antiquity', 'Journal of Late Antiquity', create_publication_dicts)
     return return_string
 
 
 if __name__ == '__main__':
-    dateTimeObj = datetime.now()
-    timestampStr = dateTimeObj.strftime("%d-%b-%Y")
-    harvest('records/late_antiquity/late_antiquity_' + timestampStr + '.mrc')
+    harvest_records('records/late_antiquity/', 'late_antiquity', 'Journal of Late Antiquity', create_publication_dicts)

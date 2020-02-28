@@ -2,35 +2,25 @@ import urllib.parse
 import urllib.request
 from bs4 import BeautifulSoup
 import re
-import create_new_record
 import json
 import write_error_to_logfile
 from datetime import datetime
 from nameparser import HumanName
 import language_codes
 import find_sysnumbers_of_volumes
-
-volumes_sysnumbers = find_sysnumbers_of_volumes.find_sysnumbers('000046235')
-
-dateTimeObj = datetime.now()
-timestampStr = dateTimeObj.strftime("%d-%b-%Y")
+from harvest_records import harvest_records
 
 
-def harvest(path):
-    return_string = ''
+def create_publication_dicts(last_item_harvested_in_last_session, *other):
+    publication_dicts = []
+    items_harvested = []
     try:
-        return_string = ''
-        with open('records/gnomon/gnomon_logfile.json', 'r') as log_file:
-            log_dict = json.load(log_file)
-            last_issue_harvested_in_last_session = log_dict['last_issue_harvested']
-            print('Letztes geharvestetes Review von Gnomon:', last_issue_harvested_in_last_session)
-        pub_nr = 0
-        issues_harvested = []
-        out = open(path + 'gnomon_' + timestampStr + '.mrc', 'wb')
+        dateTimeObj = datetime.now()
         basic_url = 'https://elibrary.chbeck.de/zeitschrift/0017-1417'
+        volumes_sysnumbers = find_sysnumbers_of_volumes.find_sysnumbers('000046235')
         if dateTimeObj.strftime("%Y") not in volumes_sysnumbers:
-            print('Reviews von Gnomon konnten teilweise nicht geharvestet werden, da keine übergeordnete Aufnahme für das Jahr', dateTimeObj.strftime("%Y"), 'existiert.')
-            print('Bitte erstellen Sie eine neue übergeordnete Aufnahme für das Jahr', dateTimeObj.strftime("%Y"), '.')
+            write_error_to_logfile.comment('Reviews von Gnomon konnten teilweise nicht geharvestet werden, da keine übergeordnete Aufnahme für das Jahr ' + dateTimeObj.strftime("%Y") + ' existiert.')
+            write_error_to_logfile.comment('Bitte erstellen Sie eine neue übergeordnete Aufnahme für das Jahr ' + dateTimeObj.strftime("%Y") + '.')
         else:
             url = basic_url
             user_agent = 'Mozilla/5.0 (X11; Linux x86_64; rv:66.0)'
@@ -61,8 +51,8 @@ def harvest(path):
                     volume = issue_soup.find('meta', attrs={'name': 'citation_volume'})['content']
                     issue = issue_soup.find('meta', attrs={'name': 'citation_issue'})['content']
                     publication_year = re.findall(r'\d{4}', issue_soup.find('meta', attrs={'name': 'citation_publication_date'})['content'])[0]
-                    current_issue = int(publication_year + volume.zfill(3) + issue.zfill(3))
-                    if current_issue > last_issue_harvested_in_last_session:
+                    current_item = int(publication_year + volume.zfill(3) + issue.zfill(3))
+                    if current_item > last_item_harvested_in_last_session:
                         titles_urls = [div.find('a')['href'] for div in issue_soup.find('div', id="toc-panel-body").find_all('div') if div.find('a')]
                         titles_urls = ['https://elibrary.chbeck.de' + title_url for title_url in titles_urls if re.findall(r'-\d+-\d+?/', title_url)]
                         for title_url in titles_urls:
@@ -126,25 +116,18 @@ def harvest(path):
                                                                     'reviewed_editors': reviewed_editors,
                                                                     'year_of_publication': ''
                                                                     })
-                            if create_new_record.check_publication_dict_for_completeness_and_validity(publication_dict):
-                                created = create_new_record.create_new_record(out, publication_dict)
-                                issues_harvested.append(current_issue)
-                                pub_nr += created
-                            else:
-                                break
-        write_error_to_logfile.comment('Letztes geharvestetes Heft von Gnomon: ' + str(last_issue_harvested_in_last_session))
-        return_string += 'Es wurden ' + str(pub_nr) + ' neue Records für Gnomon erstellt.\n'
-        if issues_harvested:
-            with open('records/gnomon/gnomon_logfile.json', 'w') as log_file:
-                log_dict = {"last_issue_harvested": max(issues_harvested)}
-                json.dump(log_dict, log_file)
-                write_error_to_logfile.comment('Log-File wurde auf ' + str(max(issues_harvested)) + ' geupdated.')
+                            publication_dicts.append(publication_dict)
+                            items_harvested.append(current_item)
     except Exception as e:
         write_error_to_logfile.write(e)
+        write_error_to_logfile.comment('Es konnten keine Artikel für Gnomon geharvested werden.')
+    return publication_dicts, items_harvested
+
+
+def harvest(path):
+    return_string = harvest_records(path, 'gnomon', 'Gnomon', create_publication_dicts)
     return return_string
 
 
 if __name__ == '__main__':
-    dateTimeObj = datetime.now()
-    timestampStr = dateTimeObj.strftime("%d-%b-%Y")
-    harvest('records/gnomon/')
+    harvest_records('records/gnomon/', 'gnomon', 'Gnomon', create_publication_dicts)

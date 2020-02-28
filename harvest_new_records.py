@@ -38,19 +38,19 @@ if new_dir not in os.listdir(path):
 path_for_cumulus = '/home/hnebel/Programmierung/zenon-data-harvesting/records/' + new_dir
 path = '/home/hnebel/Programmierung/zenon-data-harvesting/records/' + new_dir + '/'
 print(path)
-for harvesting_script in [aegyptiaca_modularized, antiquite_modularized, berrgk_modularized, BMCR_modularized,  # bjb_modularized,
+for harvesting_script in [aegyptiaca_modularized, antiquite_modularized, berrgk_modularized, BMCR_modularized,
                           cipeg_modularized,
-                          efb_modularized,  # germania_modularized,
-                          hsozkult_modularized, late_antiquity_modularized_new,  # jdi_modularized,
-                          eperiodica_akb_002_modularized, eperiodica_bat_001_modularized,
-                          eperiodica_snr_003_modularized,
-                          maa_journal_current_modularized,
+                          efb_modularized,
+                          eperiodica_akb_002_modularized, eperiodica_bat_001_modularized, eperiodica_snr_003_modularized,
                           gnomon_modularized,
                           groma_modularized,
+                          hsozkult_modularized,
+                          late_antiquity_modularized_new,
+                          maa_journal_current_modularized,
                           world_prehistory,
-                          kokalos,
                           sardinia_corsica_baleares_modularized,
-                          ]:
+                          kokalos
+                          ]:  # bjb_modularized, germania_modularized, jdi_modularized
     try:
         print(harvesting_script)
         new_return_string = harvesting_script.harvest(path)

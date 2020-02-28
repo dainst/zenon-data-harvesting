@@ -11,42 +11,66 @@ import find_existing_doublets
 from langdetect import detect
 import language_codes
 import find_sysnumbers_of_volumes
+from harvest_records import harvest_records
 
-volumes_sysnumbers = find_sysnumbers_of_volumes.find_sysnumbers('000810356')
 
 # Dubletten werden nicht gefunden. Warum?
 # wg LDR != nab, ist naa
 
-dateTimeObj = datetime.now()
-timestampStr = dateTimeObj.strftime("%d-%b-%Y")
 
-
-def harvest(path):
-    return_string = ''
+def fill_up():
     try:
-        days_harvested = []
+        with open('records/hsozkult/hsozkult_as_reserve.json', 'r') as hsozkult_as_reserve:
+            as_reserve = json.load(hsozkult_as_reserve)
+        dateTimeObj = datetime.now()
+        timestampStr = dateTimeObj.strftime("%d-%b-%Y")
+        out = open('records/hsozkult/hsozkult_' + timestampStr + '_fill_up.mrc', 'wb')
+        pub_nr = 0
+        saved_pub_nr = 1
+        new_reserve = []
+        for publication_dict in as_reserve:
+            reviews = []
+            for reviewed_pub in publication_dict['review_list']:
+                if reviewed_pub['reviewed_title']:
+                    reviews += find_reviewed_title.find(reviewed_pub, publication_dict['publication_year'], 'en')[0]
+                    if reviews:
+                        create_new_record.create_new_record(out, publication_dict)
+                        pub_nr += 1
+                    else:
+                        all_doublets, additional_physical_form_entrys = \
+                                find_existing_doublets.find_review([person.split(', ')[0] for person in (publication_dict['authors_list'] + publication_dict['editors_list'])],
+                                                                   publication_dict['publication_year'], 'en', [publication_dict['host_item']['sysnumber']], publication_dict)
+                        if not all_doublets:
+                            new_reserve.append(publication_dict)
+                        saved_pub_nr += 1
+        print('Es wurden', pub_nr, 'neue Records für HSozKult erstellt.')
+    except Exception as e:
+        write_error_to_logfile.write(e)
+
+
+def create_publication_dicts(last_item_harvested_in_last_session, *other):
+    publication_dicts = []
+    items_harvested = []
+    try:
+        dateTimeObj = datetime.now()
+        volumes_sysnumbers = find_sysnumbers_of_volumes.find_sysnumbers('000810356')
         year_to_save_from = int(dateTimeObj.strftime("%Y")) - 3
         page = 1
         harvest_until = int((datetime.now() - timedelta(days=7)).strftime('%Y%m%d'))
-        with open('records/hsozkult/hsozkult_logfile.json', 'r') as log_file:
-            log_dict = json.load(log_file)
-            last_day_harvested = log_dict['last_day_harvested']
-            print('Letztes geharvestetes Review von HSozKult:', last_day_harvested)
         empty_review_page = False
         pub_nr = 0
         saved_pub_nr = 0
-        out = open(path + 'hsozkult_' + timestampStr + '.mrc', 'wb')
         with open('records/hsozkult/hsozkult_as_reserve.json', 'r') as hsozkult_as_reserve:
             as_reserve = json.load(hsozkult_as_reserve)
         basic_url = 'https://www.hsozkult.de/publicationreview/page?page='
         while not empty_review_page:
             if dateTimeObj.strftime("%Y") not in volumes_sysnumbers:
-                print('Reviews von HSozKult konnten teilweise nicht geharvestet werden, da keine übergeordnete Aufnahme für das Jahr', dateTimeObj.strftime("%Y"), 'existiert.')
-                print('Bitte erstellen Sie eine neue übergeordnete Aufnahme für das Jahr', dateTimeObj.strftime("%Y"), '.')
+                write_error_to_logfile.comment('Reviews von HSozKult konnten teilweise nicht geharvestet werden, da keine übergeordnete Aufnahme für das Jahr '
+                                               + dateTimeObj.strftime("%Y") + ' existiert.')
+                write_error_to_logfile.comment('Bitte erstellen Sie eine neue übergeordnete Aufnahme für das Jahr ' + dateTimeObj.strftime("%Y") + '.')
                 break
             url = basic_url + str(page)
             page += 1
-            print(page)
             user_agent = 'Mozilla/5.0 (X11; Linux x86_64; rv:66.0)'
             values = {'name': 'Helena Nebel',
                       'location': 'Berlin',
@@ -72,10 +96,10 @@ def harvest(path):
                 review_soup = BeautifulSoup(review_page, 'html.parser')
                 day_of_publication, month_of_publication, year_of_publication = \
                     re.findall(r'(\d{2})\.(\d{2})\.(\d{4})', review_soup.find('div', id='hfn-item-citation').text)[0]
-                days_harvested.append(int(year_of_publication + month_of_publication + day_of_publication))
-                if int(year_of_publication + month_of_publication + day_of_publication) > harvest_until:
+                current_item = int(year_of_publication + month_of_publication + day_of_publication)
+                if current_item > harvest_until:
                     continue
-                if int(year_of_publication + month_of_publication + day_of_publication) <= last_day_harvested:
+                if current_item <= last_item_harvested_in_last_session:
                     empty_review_page = True
                     break
                 publication_dict['publication_year'] = year_of_publication
@@ -132,7 +156,8 @@ def harvest(path):
                                                          'year_of_publication': publication_year,
                                                          }, year_of_publication, 'en')[0]
                 if reviews:
-                    pub_nr += create_new_record.create_new_record(out, publication_dict)
+                    pub_nr += 1
+                    publication_dicts.append(publication_dict)
                 else:
                     if int(year_of_publication) >= year_to_save_from:
                         language = publication_dict['default_language']
@@ -142,63 +167,30 @@ def harvest(path):
                                     language_codes.resolve(detect(publication_dict['text_body_for_lang_detection']))
                             except:
                                 language = publication_dict['default_language']
+                            publication_dict['default_language'] = language
                         else:
                             publication_dict['default_language'] = language
                             publication_dict['do_detect_lang'] = False
                             publication_dict['text_body_for_lang_detection'] = ''
                         as_reserve.append(publication_dict)
                         saved_pub_nr += 1
-                        print('pub saved:', saved_pub_nr)
-        return_string = 'Es wurden ' + str(pub_nr) + ' neue Records für HSozKult erstellt.\n'
-        last_day_harvested = max(days_harvested)
-        with open('records/hsozkult/hsozkult_logfile.json', 'w') as log_file:
-            log_dict = {"last_day_harvested": last_day_harvested}
-            json.dump(log_dict, log_file)
-            write_error_to_logfile.comment('Log-File wurde auf' + str(last_day_harvested) + 'geupdated.')
-        if saved_pub_nr > 0:
-            with open('records/hsozkult/hsozkult_as_reserve.json', 'w') as hsozkult_as_reserve:
-                json.dump(as_reserve, hsozkult_as_reserve)
-                print('Es wurden', saved_pub_nr, 'Rezensionen für die spätere Verwendung gespeichert.')
+                        with open('records/hsozkult/hsozkult_as_reserve.json', 'w') as hsozkult_as_reserve:
+                            json.dump(as_reserve, hsozkult_as_reserve)
+                            write_error_to_logfile.comment('Es wurden ' + str(saved_pub_nr) + ' Rezensionen für die spätere Verwendung gespeichert.')
+                items_harvested.append(current_item)
     except Exception as e:
         write_error_to_logfile.write(e)
+        write_error_to_logfile.comment('Es konnten keine Artikel für HSozKult geharvested werden.')
+    return publication_dicts, items_harvested
+
+
+def harvest(path):
+    return_string = harvest_records(path, 'hsozkult', 'HSozKult', create_publication_dicts)
     return return_string
 
 
-def fill_up():
-    try:
-        with open('records/hsozkult/hsozkult_as_reserve.json', 'r') as hsozkult_as_reserve:
-            as_reserve = json.load(hsozkult_as_reserve)
-        out = open('records/hsozkult/hsozkult_' + timestampStr + '_fill_up.mrc', 'wb')
-        pub_nr = 0
-        saved_pub_nr = 1
-        new_reserve = []
-        for publication_dict in as_reserve:
-            reviews = []
-            for reviewed_pub in publication_dict['review_list']:
-                if reviewed_pub['reviewed_title']:
-                    reviews += find_reviewed_title.find(reviewed_pub, publication_dict['publication_year'], 'en')[0]
-                    if reviews:
-                        create_new_record.create_new_record(out, publication_dict)
-                        pub_nr += 1
-                    else:
-                        all_doublets, additional_physical_form_entrys = \
-                                find_existing_doublets.find_review([person.split(', ')[0] for person in (publication_dict['authors_list'] + publication_dict['editors_list'])],
-                                                   publication_dict['publication_year'], 'en', [publication_dict['host_item']['sysnumber']], publication_dict)
-                        if not all_doublets:
-                            new_reserve.append(publication_dict)
-                        saved_pub_nr += 1
-        print('Es wurden', pub_nr, 'neue Records für HSozKult erstellt.')
-    except Exception as e:
-        write_error_to_logfile.write(e)
-
-
 if __name__ == '__main__':
-    harvest('records/hsozkult/')
+    harvest_records('records/hsozkult/', 'hsozkult', 'HSozKult', create_publication_dicts)
 
 # nur 3 Jahre speichern, also nichts, was älter ist als 2017.
 # Zeitstempelvergleich einführen, sodass alle Reviews, die älter als drei Jahre sind, gelöscht werden!
-
-# alles im Fachbereich Archäologie: https://www.hsozkult.de/publicationreview/page?sort=newestPublished&fq=category_discip%3A%223/103/127%22
-# aktuellen Wert in 'total' mit altem Wert in 'total' vergleichen, dann um die Differenz zurückgehen.
-# https://www.hsozkult.de/review/id/reb-2333?title=a-m-de-zayas-a-terrible-revenge&recno=16543&page=828&q=&sort=&fq=&total=16546&subType=reb
-# den aktuellen Monat jeweils NICHT abfragen, sondern nur den letzten. Dann ist genau bekannt, ab wo gesammelt werden soll!

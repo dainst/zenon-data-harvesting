@@ -2,32 +2,22 @@ import urllib.parse
 import urllib.request
 from bs4 import BeautifulSoup
 import re
-import create_new_record
 import json
 import write_error_to_logfile
 from datetime import datetime
 from nameparser import HumanName
 import language_codes
 import find_sysnumbers_of_volumes
-
-volumes_sysnumbers = find_sysnumbers_of_volumes.find_sysnumbers('001597435')
-
-dateTimeObj = datetime.now()
-timestampStr = dateTimeObj.strftime("%d-%b-%Y")
+from harvest_records import harvest_records
 
 
-def harvest(path):
-    return_string = ''
+def create_publication_dicts(last_item_harvested_in_last_session, *other):
+    publication_dicts = []
+    items_harvested = []
     try:
-        return_string = ''
-        with open('records/groma/groma_logfile.json', 'r') as log_file:
-            log_dict = json.load(log_file)
-            last_issue_harvested_in_last_session = log_dict['last_issue_harvested']
-            print('Letztes geharvestetes Issue von Groma:', last_issue_harvested_in_last_session)
-        pub_nr = 0
-        out = open(path + 'groma_' + timestampStr + '.mrc', 'wb')
-        basic_url = 'http://groma.unibo.it/issue.all'
-        url = basic_url
+        dateTimeObj = datetime.now()
+        volumes_sysnumbers = find_sysnumbers_of_volumes.find_sysnumbers('001597435')
+        url = 'http://groma.unibo.it/issue.all'
         issue_req = urllib.request.Request(url)
         with urllib.request.urlopen(issue_req) as issue_response:
             issue = issue_response.read()
@@ -38,12 +28,12 @@ def harvest(path):
         toc_link = issue_soup.find('meta', attrs={'itemprop': 'url'})['content']
         articles = issue_soup.find('section', class_='toc').find_all('article')
         article_urls = ['http://groma.unibo.it/' + article.find('a')['href'] for article in articles]
-        current_issue = int(publication_year + issue.zfill(3))
+        current_item = int(publication_year + issue.zfill(3))
         if publication_year not in volumes_sysnumbers:
             print('Reviews von Groma konnten teilweise nicht geharvestet werden, da keine übergeordnete Aufnahme für das Jahr', dateTimeObj.strftime("%Y"), 'existiert.')
             print('Bitte erstellen Sie eine neue übergeordnete Aufnahme für das Jahr', dateTimeObj.strftime("%Y"), '.')
         else:
-            if current_issue > last_issue_harvested_in_last_session:
+            if current_item > last_item_harvested_in_last_session:
                 for article_url in article_urls:
                     article_req = urllib.request.Request(article_url)
                     with urllib.request.urlopen(article_req) as article_response:
@@ -92,16 +82,16 @@ def harvest(path):
                         authorship = authorship.replace(year_of_publication, '').strip()
                         if authorship != '':
                             while any([authorship[-1] == i for i in ['.', ',', ' ']]):
-                                    authorship = authorship.strip(authorship[-1])
+                                authorship = authorship.strip(authorship[-1])
                         reviewed_editors, reviewed_authors = [], []
                         if any([editorship_word in authorship for editorship_word in ['(ed.)', '(ed)', '(eds.)', '(eds)']]):
                             editorstring = re.sub(r' *\(.+\)', '', authorship)
                             reviewed_editors = [HumanName(editor).last + ', ' + HumanName(editor).first
-                                       for editor in editorstring.split(',')]
+                                                for editor in editorstring.split(',')]
                         elif authorship:
                             authorstring = authorship
                             reviewed_authors = [HumanName(author).last + ', ' + HumanName(author).first
-                                       for author in authorstring.split(',')]
+                                                for author in authorstring.split(',')]
                         publication_dict['review'] = True
                         publication_dict['review_list'].append({'reviewed_title': reviewed_title,
                                                                 'reviewed_authors': reviewed_authors,
@@ -111,24 +101,18 @@ def harvest(path):
                     publication_dict["terms_of_use_and_reproduction"] = \
                         {"terms_note": 'All published material is distributed under "Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International" (CC BY-NC-ND) license.',
                          "use_and_reproduction_rights": "CC BY-NC-ND", "terms_link": "http://groma.unibo.it/about#nt-3"}
-                    if create_new_record.check_publication_dict_for_completeness_and_validity(publication_dict):
-                        created = create_new_record.create_new_record(out, publication_dict)
-                        pub_nr += created
-                    else:
-                        break
-        write_error_to_logfile.comment('Letztes geharvestetes Heft von Groma:' + str(last_issue_harvested_in_last_session))
-        return_string += 'Es wurden ' + str(pub_nr) + ' neue Records für Groma erstellt.\n'
-        if pub_nr > 0:
-            with open('records/groma/groma_logfile.json', 'w') as log_file:
-                log_dict = {"last_issue_harvested": current_issue}
-                json.dump(log_dict, log_file)
-                write_error_to_logfile.comment('Log-File wurde auf ' + str(current_issue) + ' geupdated.')
+                    publication_dicts.append(publication_dict)
+                    items_harvested.append(current_item)
     except Exception as e:
         write_error_to_logfile.write(e)
+        write_error_to_logfile.comment('Es konnten keine Artikel für Groma geharvested werden.')
+    return publication_dicts, items_harvested
+
+
+def harvest(path):
+    return_string = harvest_records(path, 'groma', 'Groma', create_publication_dicts)
     return return_string
 
 
 if __name__ == '__main__':
-    dateTimeObj = datetime.now()
-    timestampStr = dateTimeObj.strftime("%d-%b-%Y")
-    harvest('records/groma/')
+    harvest_records('records/groma/', 'groma', 'Groma', create_publication_dicts)
