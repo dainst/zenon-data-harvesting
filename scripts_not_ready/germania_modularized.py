@@ -1,18 +1,14 @@
 import urllib.parse
 import urllib.request
-import create_new_record
 from nameparser import HumanName
 from bs4 import BeautifulSoup
 import spacy
 from langdetect import detect
 import language_codes
 import re
-from datetime import datetime
 import json
 import write_error_to_logfile
-
-nlp_dict = {'de': 'de_core_news_sm', 'en': 'en_core_web_sm', 'fr': 'fr_core_news_sm',
-            'es': 'es_core_news_sm', 'it': 'it_core_news_sm', 'nl': 'nl_core_news_sm', 'xx': 'xx_ent_wiki_sm'}
+from harvest_records import harvest_records
 
 unresolved_titles = {
     "H. G. Bandi und J. Maringer, Kunst der Eiszeit. Levantekunst. Arktische Kunst": "H. G. Bandi und J. Maringer",
@@ -34,25 +30,16 @@ unresolved_titles = {
     "Miles Burkitt and V. Gordon Childe, A Chronological Table of Prehistory": "Miles Burkitt und V. Gordon Childe",
     "W. Vermeulen, Een romeinsch Grafveld op den Hunnerberg te Nymegen": "W. Vermeulen"}
 
-dateTimeObj = datetime.now()
-timestampStr = dateTimeObj.strftime("%d-%b-%Y")
+
+nlp_dict = {'de': 'de_core_news_sm', 'en': 'en_core_web_sm', 'fr': 'fr_core_news_sm',
+            'es': 'es_core_news_sm', 'it': 'it_core_news_sm', 'nl': 'nl_core_news_sm', 'xx': 'xx_ent_wiki_sm'}
 
 
-def handle_article(article):
-    ...
-    # Code Artikelauswertung
-
-
-def harvest(path):
-    return_string = ''
+def create_publication_dicts(last_item_harvested_in_last_session, *other):
+    publication_dicts = []
+    items_harvested = []
     try:
-        with open('records/germania/germania_logfile.json', 'r') as log_file:
-            log_dict = json.load(log_file)
-            last_item_harvested_in_last_session = log_dict['last_issue_harvested']
-        issues_harvested = []
-        out = open(path + 'germania_' + timestampStr + '.mrc', 'wb')
         basic_url = 'https://journals.ub.uni-heidelberg.de/index.php/germania/issue/archive/'
-        pub_nr = 0
         empty_page = False
         page = 0
         cancelled = False
@@ -230,31 +217,24 @@ def harvest(path):
                                                                             'reviewed_editors': rev_editors,
                                                                             'year_of_publication': year_of_publication,
                                                                             })
-                            if create_new_record.check_publication_dict_for_completeness_and_validity(publication_dict):
-                                created = create_new_record.create_new_record(out, publication_dict)
-                                issues_harvested.append(current_item)
-                                pub_nr += created
-                            else:
-                                break
-        write_error_to_logfile.comment('Letztes geharvestetes Heft von Germania: ' + last_item_harvested_in_last_session)
-        return_string += 'Es wurden ' + str(pub_nr) + ' neue Records für Germania erstellt.'
-        if issues_harvested:
-            with open('records/germania/germania_logfile.json', 'w') as log_file:
-                log_dict = {"last_issue_harvested": max(issues_harvested)}
-                json.dump(log_dict, log_file)
-                write_error_to_logfile.comment('Log-File wurde auf ' + str(max(issues_harvested)) + ' geupdated.')
+                            publication_dicts.append(publication_dict)
+                            items_harvested.append(current_item)
     except Exception as e:
-        write_error_to_logfile.comment(e)
+        write_error_to_logfile.write(e)
+        write_error_to_logfile.comment('Es konnten keine Artikel für Germania geharvested werden.')
+    return publication_dicts, items_harvested
+
+
+def harvest(path):
+    return_string = harvest_records(path, 'germania', 'Germania', create_publication_dicts)
     return return_string
 
 
 if __name__ == '__main__':
-    dateTimeObj = datetime.now()
-    timestampStr = dateTimeObj.strftime("%d-%b-%Y")
-    harvest('records/germania/germania_' + timestampStr + '.mrc')
+    harvest_records('records/germania/', 'germania', 'Germania', create_publication_dicts)
 
-# Sprache übernehmen, prüfen, ob Rezensionen korrekt verarbeitet werden.
-# Lücke von 1960 bis 1985
+
+# Lücke von 1960 bis 1985? > erst beim Hinzufügen der Links von Bedeutung.
 
 
 '''publishers = {'1904': ['Frankfurt am Main', 'Baer'], '1921': ['Bamberg', 'Buchner'],
