@@ -250,7 +250,7 @@ if __name__ == '__main__':
 
 
 # Lücke zwischen 1933 und 1986 beachten!!!
-# bis wann harvesten?
+# nur zum Zuladen der Links / Auffüllen verwenden!
 
 editorship_words_old = ["Hrsg, von ", "Hrsg. von ", "Herausgegeben von ", "hrsg. von ", "herausgegeben von ", "herausg. von ", "Herausgegeb. von ", "; edd. ",
                         " bearbeitet von ", "Aus den Quellen bearbeitet von ", "mit Text von ", "Mit Einleitung, Commentar und zwei Karten versehen von ",
