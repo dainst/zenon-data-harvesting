@@ -1,55 +1,19 @@
-from nameparser import HumanName
+from harvest_records import harvest_records
 import urllib.parse
 import urllib.request
-import create_new_record
 import json
 import write_error_to_logfile
 from datetime import datetime
 import find_sysnumbers_of_volumes
+# noch nachbearbeiten!!!
 
-
-volumes_sysnumbers = find_sysnumbers_of_volumes.find_sysnumbers('001579554')
-
-
-def create_review_dict(review_title):
-    review_title = review_title.replace(" (review)", "")
-    review_list = []
-    for title in review_title.split(" and: "):
-        new_review = {'year_of_publication': ''}
-        title = title.strip(",")
-        if " ed. by " in title:
-            new_review['reviewed_title'], new_review['reviewed_editors'] = title.split(" ed. by ")
-            new_review['reviewed_authors'] = []
-        elif " eds. by " in title:
-            new_review['reviewed_title'], new_review['reviewed_editors'] = title.split(" eds. by ")
-            new_review['reviewed_authors'] = []
-        elif "trans. by" in title:
-            new_review['reviewed_title'], new_review['reviewed_editors'] = title.split(" trans. by ")
-            new_review['reviewed_authors'] = []
-        elif " by " in title:
-            new_review['reviewed_title'], new_review['reviewed_authors'] = title.split(" by ")
-            new_review['reviewed_editors'] = []
-        for responsibles in ['reviewed_editors', 'reviewed_authors']:
-            if new_review[responsibles]:
-                new_review[responsibles] = [(HumanName(person).last+", "+HumanName(person).first).strip() for person in new_review[responsibles].split(', ')[0].split(' and ')]
-        review_list.append(new_review)
-    return review_list
-
-
-dateTimeObj = datetime.now()
-timestampStr = dateTimeObj.strftime("%d-%b-%Y")
-
-
-def harvest(path):
-    return_string = ''
+def create_publication_dicts(last_item_harvested_in_last_session, *other):
+    publication_dicts = []
+    items_harvested = []
     try:
-        with open('records/vegetation_history_archaeobotany/vegetation_history_archaeobotany_logfile.json', 'r') as log_file:
-            log_dict = json.load(log_file)
-            last_issue_harvested_in_last_session = log_dict['last_issue_harvested']
-        pub_nr = 0
+        dateTimeObj = datetime.now()
+        volumes_sysnumbers = find_sysnumbers_of_volumes.find_sysnumbers('001579554')
         page_nr = 1
-        issues_harvested = []
-        out = open(path + 'vegetation_history_archaeobotany_' + timestampStr + '.mrc', 'wb')
         request_nr = 0
         empty_page = False
         while not empty_page:
@@ -78,7 +42,7 @@ def harvest(path):
                     print('Bitte erstellen Sie eine neue übergeordnete Aufnahme für das Jahr', publication_year, '.')
                     continue
                 current_item = int(publication_year + volume.zfill(3) + issue[0].zfill(2))
-                if current_item > last_issue_harvested_in_last_session:
+                if current_item > last_item_harvested_in_last_session:
                     if int(publication_year) > 2000:
                         continue
                     with open('publication_dict.json', 'r') as publication_dict_template:
@@ -91,7 +55,7 @@ def harvest(path):
                     publication_dict['LDR_06_07'] = 'ab'
                     publication_dict['do_detect_lang'] = True
                     publication_dict['default_language'] = 'eng'
-                    publication_dict['fields_590'] = ['arom', '2020xhnxjowp']
+                    publication_dict['fields_590'] = ['arom', '2020xhnxvha']
                     publication_dict['original_cataloging_agency'] = 'Springer Nature'
                     publication_dict['publication_year'] = publication_year
                     publication_dict['rdacontent'] = 'txt'
@@ -117,26 +81,18 @@ def harvest(path):
                         publication_dict['general_note'] = "For online access see also parent record"
                     else:
                         publication_dict['force_epub'] = True
-                    print(article)
-                    if create_new_record.check_publication_dict_for_completeness_and_validity(publication_dict):
-                        created = create_new_record.create_new_record(out, publication_dict)
-                        issues_harvested.append(current_item)
-                        pub_nr += created
-                    else:
-                        break
-        write_error_to_logfile.comment('Letztes geharvestetes Heft von Vegetation history and archaeobotany: ' + str(last_issue_harvested_in_last_session))
-        return_string += 'Es wurden ' + str(pub_nr) + ' neue Records für Vegetation history and archaeobotany erstellt.\n'
-        if issues_harvested:
-            with open('records/vegetation_history_archaeobotany/vegetation_history_archaeobotany_logfile.json', 'w') as log_file:
-                log_dict = {"last_issue_harvested": max(issues_harvested)}
-                json.dump(log_dict, log_file)
-                write_error_to_logfile.comment('Log-File wurde auf ' + str(max(issues_harvested)) + ' geupdated.')
+                    publication_dicts.append(publication_dict)
+                    items_harvested.append(current_item)
     except Exception as e:
         write_error_to_logfile.write(e)
+        write_error_to_logfile.comment('Es konnten keine Artikel für Vegetation History and Archaeobotany geharvested werden.')
+    return publication_dicts, items_harvested
+
+
+def harvest(path):
+    return_string = harvest_records(path, 'vegetation_history_archaeobotany', 'Vegetation History and Archaeobotany', create_publication_dicts)
     return return_string
 
 
 if __name__ == '__main__':
-    dateTimeObj = datetime.now()
-    timestampStr = dateTimeObj.strftime("%d-%b-%Y")
-    harvest('records/vegetation_history_archaeobotany/')
+    harvest_records('records/vegetation_history_archaeobotany/', 'vegetation_history_archaeobotany', 'Vegetation History and Archaeobotany', create_publication_dicts)

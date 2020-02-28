@@ -13,7 +13,7 @@ nlp_dict = {'de': 'de_core_news_sm', 'en': 'en_core_web_sm', 'fr': 'fr_core_news
             'es': 'es_core_news_sm', 'it': 'it_core_news_sm', 'nl': 'nl_core_news_sm', 'xx': 'xx_ent_wiki_sm'}
 
 
-def create_publication_dicts(last_item_harvested_in_last_session):
+def create_publication_dicts(last_item_harvested_in_last_session, *other):
     publication_dicts = []
     items_harvested = []
     try:
