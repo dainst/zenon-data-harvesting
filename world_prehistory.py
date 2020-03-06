@@ -39,13 +39,13 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                     publication_year = article['publicationDate'][:4]
                     issue = str(article['number'])
                     volume = str(article['volume'])
-                if publication_year not in volumes_sysnumbers:
-                    write_error_to_logfile.comment('Artikel von Journal of World Prehistory konnten teilweise nicht geharvestet werden, da keine übergeordnete Aufnahme für das Jahr ' + publication_year + ' existiert.')
-                    write_error_to_logfile.comment('Bitte erstellen Sie eine neue übergeordnete Aufnahme für das Jahr ' + publication_year + '.')
-                    continue
                 current_item = int(publication_year + volume.zfill(3) + issue[0].zfill(2))
                 if current_item > last_item_harvested_in_last_session:
                     if int(publication_year) > (int(dateTimeObj.strftime("%Y")) - 4):
+                        continue
+                    if publication_year not in volumes_sysnumbers:
+                        write_error_to_logfile.comment('Artikel von Journal of World Prehistory konnten teilweise nicht geharvestet werden, da keine übergeordnete Aufnahme für das Jahr ' + publication_year + ' existiert.')
+                        write_error_to_logfile.comment('Bitte erstellen Sie eine neue übergeordnete Aufnahme für das Jahr ' + publication_year + '.')
                         continue
                     with open('publication_dict.json', 'r') as publication_dict_template:
                         publication_dict = json.load(publication_dict_template)
@@ -69,7 +69,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                     publication_dict['field_006'] = 'm     o  d |      '
                     publication_dict['field_007'] = 'cr uuu   uu|uu'
                     publication_dict['field_008_18-34'] = 'qr p o |||||   a|'
-                    publication_dict['field_300'] = '1 online resource pp. ' + article['startingPage'] + '-' + article['endingPage']
+                    publication_dict['field_300'] = '1 online resource, pp. ' + article['startingPage'] + '-' + article['endingPage']
                     publication_dict['force_300'] = True
                     publication_dict['text_body_for_lang_detection'] = article['abstract']
                     if int(publication_year) < 2003:
@@ -85,6 +85,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
     except Exception as e:
         write_error_to_logfile.write(e)
         write_error_to_logfile.comment('Es konnten keine Artikel für Journal of World Prehistory geharvested werden.')
+        items_harvested, publication_dicts = [], []
     return publication_dicts, items_harvested
 
 

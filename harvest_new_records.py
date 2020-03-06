@@ -13,9 +13,10 @@ import efb_modularized
 import eperiodica_akb_002_modularized
 import eperiodica_bat_001_modularized
 import eperiodica_snr_003_modularized
-# import germania_modularized >>> nachfragen, was jetzt damit ist!
+import germania_modularized
 import gnomon_modularized
 import hsozkult_modularized
+import jdI_erganzungshefte
 # import jdi_modularized
 import late_antiquity_modularized_new
 import maa_journal_current_modularized
@@ -23,6 +24,7 @@ import groma_modularized
 import world_prehistory
 import kokalos
 import sardinia_corsica_baleares_modularized
+import gerion_modularized
 
 # logfiles vorhanden für:
 
@@ -42,15 +44,18 @@ for harvesting_script in [aegyptiaca_modularized, antiquite_modularized, berrgk_
                           cipeg_modularized,
                           efb_modularized,
                           eperiodica_akb_002_modularized, eperiodica_bat_001_modularized, eperiodica_snr_003_modularized,
+                          gerion_modularized,
                           gnomon_modularized,
                           groma_modularized,
                           hsozkult_modularized,
                           late_antiquity_modularized_new,
                           maa_journal_current_modularized,
-                          world_prehistory,
                           sardinia_corsica_baleares_modularized,
-                          kokalos
-                          ]:  # bjb_modularized, germania_modularized, jdi_modularized
+                          kokalos,
+                          world_prehistory,
+                          germania_modularized,
+                          jdI_erganzungshefte
+                          ]:  # bjb_modularized
     try:
         print(harvesting_script)
         new_return_string = harvesting_script.harvest(path)

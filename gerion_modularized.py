@@ -31,7 +31,6 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
             journal_page = response.read()
         journal_page = journal_page.decode('utf-8')
         journal_soup = BeautifulSoup(journal_page, 'html.parser')
-        #print(journal_soup)
         volume_urls = [volume.find('a', class_='cover')['href'] for volume in journal_soup.find_all('div', class_='obj_issue_summary')]
         for volume_url in volume_urls:
             req = urllib.request.Request(volume_url)
@@ -43,20 +42,18 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
             if int(volume_year) < 2018:
                 break
             if len(volume_title.split(volume_year + ')')) > 1:
-                volume_title = volume_title.split(volume_year + ')')[1].strip(': ')
+                volume_title = 'Gérion - ' + volume_title.split(volume_year + ')')[1].strip(': ') if volume_title.split(volume_year + ')')[1] else 'Gérion'
             else:
-                volume_title = ''
+                volume_title = 'Gérion'
             article_sections = [section for section in volume_soup.find_all('div', class_="section") if section.find('h2')]
             art_urls, rev_urls = [], []
             article_tags = [section for section in article_sections if 'Artículos' in section.find('h2').text]
             if article_tags:
-                art_urls = article_tags[0].find_all('a')['href']
+                art_urls = [article_tag.find('a')['href'] for article_tag in article_tags[0].find_all('div', class_='title')]
             review_tags = [section for section in article_sections if 'Reseñas' in section.find('h2').text]
             if review_tags:
-                rev_urls = review_tags[0].find_all('a')['href']
-            print(art_urls)
-            print(rev_urls)
-            article_urls = art_urls
+                rev_urls = [review_tag.find('a')['href'] for review_tag in review_tags[0].find_all('div', class_='title')]
+            article_urls = art_urls + rev_urls
             for article_url in article_urls:
                 req = urllib.request.Request(article_url)
                 with urllib.request.urlopen(req) as response:
@@ -67,7 +64,6 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                 publication_dict['volume'] = article_soup.find('meta', attrs={'name': 'citation_volume'})['content']
                 publication_dict['issue'] = article_soup.find('meta', attrs={'name': 'citation_issue'})['content']
                 current_item = int(volume_year + publication_dict['volume'].zfill(3) + publication_dict['issue'].zfill(2))
-                print(current_item, last_item_harvested_in_last_session)
                 if current_item <= last_item_harvested_in_last_session:
                     break
                 publication_dict['rdacontent'] = 'txt'
@@ -85,7 +81,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                 publication_dict['abstract_link'] = article_soup.find('meta', attrs={'name': 'citation_abstract_html_url'})['content']
                 if article_soup.find('meta', attrs={'name': 'citation_pdf_url'}):
                     publication_dict['pdf_links'].append(article_soup.find('meta', attrs={'name': 'citation_pdf_url'})['content'])
-                publication_dict['field_300'] = '1 online resource, p. ' + article_soup.find('meta', attrs={'name': 'citation_firstpage'})['content'] \
+                publication_dict['field_300'] = '1 online resource, pp. ' + article_soup.find('meta', attrs={'name': 'citation_firstpage'})['content'] \
                                             + '-' + article_soup.find('meta', attrs={'name': 'citation_lastpage'})['content']
                 publication_dict['force_300'] = True
                 publication_dict['LDR_06_07'] = 'ab'
@@ -98,15 +94,46 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                                                                                 'responsible': 'Universidad Complutense Madrid',
                                                                                 'country_code': 'sp '}
                 publication_dict['default_language'] = 'es'
-                publication_dict['text_body_for_lang_detection'] = article_soup.find('div', class_="item abstract").text.replace('Resumen', '') \
-                    if article_soup.find('div', class_="item abstract") else publication_dict['title_dict']['main_title']
-                print(publication_dict['text_body_for_lang_detection'])
-                publication_dict['do_detect_lang'] = True
+                if article_url in rev_urls:
+                    publication_dict['review'] = True
+                    split_pub = publication_dict['title_dict']['main_title'].split(', ', 1)
+                    reviewed_persons = split_pub[0]
+                    if re.findall(r'\(=.+?\)', split_pub[1]):
+                        title_and_pub = re.split(r'\( *= *.+\)', split_pub[1])
+                        publication_info = title_and_pub[1]
+                        reviewed_title = title_and_pub[0]
+                    elif split_pub[1][0] in ['"', '“']:
+                        title_and_pub = [string for string in re.split(r'["|“|”]', split_pub[1]) if string]
+                        if len(title_and_pub) < 2:
+                            continue
+                        reviewed_title = title_and_pub[0]
+                        publication_info = title_and_pub[1]
+                    else:
+                        continue
+                    year_of_publication = re.findall(r'\d{4}', publication_info)[0] if re.findall(r'\d{4}', publication_info) else ''
+                    reviewed_editors, reviewed_authors = [], []
+                    if re.findall(r'\(.+?\)', reviewed_persons):
+                        reviewed_persons = re.sub(r'\(.+?\)', '', reviewed_persons)
+                        reviewed_persons = reviewed_persons.strip()
+                        reviewed_editors = [HumanName(author).last + ', ' + HumanName(author).first for author in re.split(r' *– *', reviewed_persons)]
+                    else:
+                        reviewed_persons = reviewed_persons.strip()
+                        reviewed_authors = [HumanName(author).last + ', ' + HumanName(author).first for author in re.split(r' *– *', reviewed_persons)]
+                    publication_dict['review'] = True
+                    publication_dict['review_list'].append({'reviewed_title': reviewed_title, 'reviewed_authors': reviewed_authors,
+                                                            'reviewed_editors': reviewed_editors, 'year_of_publication': year_of_publication})
+                if not publication_dict['review']:
+                    publication_dict['text_body_for_lang_detection'] = article_soup.find('div', class_="item abstract").text.replace('Resumen', '').strip() \
+                        if article_soup.find('div', class_="item abstract") else publication_dict['title_dict']['main_title']
+                    publication_dict['do_detect_lang'] = True
+                else:
+                    publication_dict['do_detect_lang'] = False
                 publication_dicts.append(publication_dict)
                 items_harvested.append(current_item)
     except Exception as e:
         write_error_to_logfile.write(e)
         write_error_to_logfile.comment('Es konnten keine Artikel für Gerion geharvested werden.')
+        items_harvested, publication_dicts = [], []
     return publication_dicts, items_harvested
 
 

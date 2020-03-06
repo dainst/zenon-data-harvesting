@@ -9,6 +9,7 @@ import re
 import json
 import write_error_to_logfile
 from harvest_records import harvest_records
+from find_sysnumbers_of_volumes import find_sysnumbers
 
 unresolved_titles = {
     "H. G. Bandi und J. Maringer, Kunst der Eiszeit. Levantekunst. Arktische Kunst": "H. G. Bandi und J. Maringer",
@@ -39,6 +40,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
     publication_dicts = []
     items_harvested = []
     try:
+        volumes_sysnumbers = find_sysnumbers('000054792')
         basic_url = 'https://journals.ub.uni-heidelberg.de/index.php/germania/issue/archive/'
         empty_page = False
         page = 0
@@ -98,7 +100,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                             publication_dict['authors_list'] = [HumanName(author_tag['content']).last + ', ' + HumanName(author_tag['content']).first
                                                                 for author_tag in article_soup.find_all('meta', attrs={'name': 'citation_author'})]
                             publication_dict['host_item']['name'] = 'Germania'
-                            publication_dict['host_item']['sysnumber'] = '001555096'
+                            publication_dict['host_item']['sysnumber'] = volumes_sysnumbers[volume_year[:4]]
                             publication_dict['title_dict']['main_title'] = article_soup.find('meta', attrs={'name': 'citation_title'})['content']
                             publication_dict['publication_year'] = publication_year
                             if article_soup.find('meta', attrs={'name': 'citation_doi'}):
@@ -222,6 +224,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
     except Exception as e:
         write_error_to_logfile.write(e)
         write_error_to_logfile.comment('Es konnten keine Artikel für Germania geharvested werden.')
+        items_harvested, publication_dicts = [], []
     return publication_dicts, items_harvested
 
 

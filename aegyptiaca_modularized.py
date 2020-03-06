@@ -172,6 +172,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
     except Exception as e:
         write_error_to_logfile.write(e)
         write_error_to_logfile.comment('Es konnten keine Artikel für Aegyptiaca geharvested werden.')
+        items_harvested, publication_dicts = [], []
     return publication_dicts, items_harvested
 
 

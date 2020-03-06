@@ -9,7 +9,7 @@ import write_error_to_logfile
 from harvest_records import harvest_records
 
 
-def create_publication_dicts(last_item_harvested_in_last_session):
+def create_publication_dicts(last_item_harvested_in_last_session, *other):
     publication_dicts = []
     items_harvested = []
     try:
@@ -104,6 +104,7 @@ def create_publication_dicts(last_item_harvested_in_last_session):
     except Exception as e:
         write_error_to_logfile.write(e)
         write_error_to_logfile.comment('Es konnten keine Artikel für Cipeg geharvested werden.')
+        items_harvested, publication_dicts = [], []
     return publication_dicts, items_harvested
 
 
