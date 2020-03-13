@@ -81,7 +81,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                 publication_dict['abstract_link'] = article_soup.find('meta', attrs={'name': 'citation_abstract_html_url'})['content']
                 if article_soup.find('meta', attrs={'name': 'citation_pdf_url'}):
                     publication_dict['pdf_links'].append(article_soup.find('meta', attrs={'name': 'citation_pdf_url'})['content'])
-                publication_dict['field_300'] = '1 online resource, pp. ' + article_soup.find('meta', attrs={'name': 'citation_firstpage'})['content'] \
+                publication_dict['field_300'] = '1 online resource, Fasc. ' + publication_dict['issue'] + ' pp. ' + article_soup.find('meta', attrs={'name': 'citation_firstpage'})['content'] \
                                             + '-' + article_soup.find('meta', attrs={'name': 'citation_lastpage'})['content']
                 publication_dict['force_300'] = True
                 publication_dict['LDR_06_07'] = 'ab'
