@@ -128,7 +128,9 @@ def check_cosine_similarity(title, found_title, found_record, rejected_titles, l
         if list(set(title_list_count)) == [0] or list(set(found_title_list_count)) == [0]:
             return False
         else:
+            print(title_list, found_title_list)
             similarity = 1 - spatial.distance.cosine(title_list_count, found_title_list_count)
+            print('similarity:', similarity)
             if similarity <= 0.65:
                 for word in title_list:
                     for found_word in found_title_list:
@@ -201,8 +203,8 @@ def create_review_titles_for_review_search(review_dict):
 
 def create_response_titles_for_response_search(review_list):
     possible_review_titles = []
-    reviewed_title = review_list[1]['reviewed_title']
-    reviewed_responsibles = review_list[1]['reviewed_authors'] + review_list[1]['reviewed_editors']
+    reviewed_title = review_list[0]['reviewed_title']
+    reviewed_responsibles = review_list[0]['reviewed_authors'] + review_list[1]['reviewed_editors']
     if reviewed_responsibles:
         for person in reviewed_responsibles:
             possible_review_titles.append('[Response to]:[Rez.zu]:' + person + ': ' + reviewed_title)
@@ -247,14 +249,17 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                     similarity = check_cosine_similarity(title, title_found, found_record, rejected_titles, lang)
                     right_author = False
                     right_year = False
+                    print('id:', found_record['id'])
                     if similarity:
                         try:
+                            print('is similar')
                             webfile = urllib.request.urlopen(
                                 "https://zenon.dainst.org/Record/" + found_record['id'] + "/Export?style=MARC")
                             new_reader = MARCReader(webfile)
                             for file in new_reader:
-                                if publication_dict['LDR_06_07'][1] == file.leader[7]:
+                                # if publication_dict['LDR_06_07'][1] == file.leader[7]:
                                     par = False
+                                    [possible_host_items.remove(item) for item in possible_host_items if not item]
                                     if possible_host_items:
                                         right_host_item = False
                                         if [field['b'] for field in file.get_fields('995') if field['b'] and field['a'] == 'ANA']:
@@ -275,6 +280,7 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                                         if right_host_item is False:
                                             rejected_titles.append(found_record["id"] + title_found)
                                             continue
+                                    print('here')
                                     if 'authors' in found_record:
                                         found_authors = []
                                         if 'primary' in found_record['authors']:
@@ -286,6 +292,7 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                                         if 'corporate' in found_record['authors']:
                                             for primary_author in found_record['authors']['secondary']:
                                                 found_authors.append(primary_author.split(', ')[0])
+                                        print('authors', authors)
                                         if authors:
                                             for found_author in [aut for found_author in found_authors for aut in found_author.split()]:
                                                 if right_author:
@@ -298,6 +305,7 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                                             if not found_authors:
                                                 right_author = True
                                     found_year = [min([int(year) for year in re.findall(r'\d{4}', field)]) for field in [field['c'] for field in file.get_fields('260', '264') if field['c']] if '©' not in field and re.findall(r'\d{4}', field)]
+                                    print(found_year, year)
                                     if found_year and year:
                                         if found_year[0] in [int(year)-1, int(year), int(year)+1]:
                                             right_year = True
@@ -305,11 +313,10 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                                         right_year = True
                                     if file['245']['c'] and publication_dict['title_dict']['responsibility_statement']:
                                         right_responsibility = check_cosine_similarity(file['245']['c'], publication_dict['title_dict']['responsibility_statement'], found_record, rejected_titles, lang)
-                                    elif publication_dict['title_dict']['responsibility_statement']:
-                                        right_responsibility = False
                                     else:
                                         right_responsibility = True
                                     if right_author and right_responsibility and right_year:
+                                        print('everything correct')
                                         if found_record['id'] not in [entry['zenon_id'] for entry in additional_physical_form_entrys]:
                                             e_resource = False
                                             if file['337']:
@@ -501,7 +508,7 @@ def find_review(authors, year, default_lang, possible_host_items, publication_di
         rejected_titles = []
         additional_physical_form_entrys = []
         if publication_dict['review']:
-            for title in create_review_titles_for_review_search(publication_dict['review_list'][1]):
+            for title in create_review_titles_for_review_search(publication_dict['review_list'][0]):
                 title = unidecode.unidecode(title)
                 lang = detect(title)
                 if lang not in stopwords_dict:
