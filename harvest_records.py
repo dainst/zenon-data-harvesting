@@ -14,7 +14,7 @@ def harvest_records(path: str, short_name: str, real_name: str, create_publicati
     return_string = ''
     try:
         try:
-            with open('records/' + short_name + '/' + short_name + '_logfile.json', 'r') as log_file:
+            with open('logfiles/' + short_name + '_logfile.json', 'r') as log_file:
                 log_dict = json.load(log_file)
                 last_item_harvested_in_last_session = log_dict['last_item_harvested']
                 write_error_to_logfile.comment('Letztes geharvestetes Heft von ' + real_name + ': ' + str(last_item_harvested_in_last_session))
