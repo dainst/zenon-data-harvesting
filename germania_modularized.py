@@ -72,7 +72,13 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                     continue
                 volume, volume_year = issue_information.strip().strip("Bd. ").split("(")[0].split(" ")
                 current_item = int(publication_year + str(max([int(vol) for vol in re.findall(r'\d+', volume)])).zfill(3))
+                print(current_item, last_item_harvested_in_last_session)
                 if current_item > last_item_harvested_in_last_session:
+                    if publication_year not in volumes_sysnumbers:
+                        write_error_to_logfile.comment('Artikel von Germania konnten teilweise nicht geharvestet werden, da keine übergeordnete Aufnahme für das Jahr '
+                                                       + publication_year + ' existiert.')
+                        write_error_to_logfile.comment('Bitte erstellen Sie eine neue übergeordnete Aufnahme für das Jahr ' + publication_year + '.')
+                        break
                     issue_url = issue['href']
                     req = urllib.request.Request(issue_url, data, headers)
                     with urllib.request.urlopen(req) as response:
@@ -100,7 +106,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                             publication_dict['authors_list'] = [HumanName(author_tag['content']).last + ', ' + HumanName(author_tag['content']).first
                                                                 for author_tag in article_soup.find_all('meta', attrs={'name': 'citation_author'})]
                             publication_dict['host_item']['name'] = 'Germania'
-                            publication_dict['host_item']['sysnumber'] = volumes_sysnumbers[volume_year[:4]]
+                            publication_dict['host_item']['sysnumber'] = volumes_sysnumbers[publication_year]
                             publication_dict['title_dict']['main_title'] = article_soup.find('meta', attrs={'name': 'citation_title'})['content']
                             publication_dict['publication_year'] = publication_year
                             if article_soup.find('meta', attrs={'name': 'citation_doi'}):

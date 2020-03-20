@@ -199,32 +199,31 @@ def swagger_find(search_title, search_authors, year, year_of_review, title, reje
                             "https://zenon.dainst.org/Record/" + found_record['id'] + "/Export?style=MARC")
                         new_reader = MARCReader(webfile)
                         for file in new_reader:
-                            if file.leader[7] not in ['b', 'i', 's']:
-                                if 'authors' in found_record:
-                                    found_authors = []
-                                    if 'primary' in found_record['authors']:
-                                        for primary_author in found_record['authors']['primary']:
-                                            found_authors.append(primary_author.split(', ')[0])
-                                    if 'secondary' in found_record['authors']:
-                                        for secondary_author in found_record['authors']['secondary']:
-                                            found_authors.append(secondary_author.split(', ')[0])
-                                    if 'corporate' in found_record['authors']:
-                                        for primary_author in found_record['authors']['secondary']:
-                                            found_authors.append(primary_author.split(', ')[0])
-                                    if authors:
-                                        for found_author in [aut for found_author in found_authors for aut in found_author.split()]:
-                                            if right_author:
-                                                break
-                                            if min([iterative_levenshtein(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author)) for x in authors for splitted_author in x.split()]) <= (len(found_author)/3):
-                                                # Vorsicht vor impliziten Typkonvertierungen von Zahlen zu bool
-                                                right_author = True
-                                    else:
-                                        if not found_authors:
+                            if 'authors' in found_record:
+                                found_authors = []
+                                if 'primary' in found_record['authors']:
+                                    for primary_author in found_record['authors']['primary']:
+                                        found_authors.append(primary_author.split(', ')[0])
+                                if 'secondary' in found_record['authors']:
+                                    for secondary_author in found_record['authors']['secondary']:
+                                        found_authors.append(secondary_author.split(', ')[0])
+                                if 'corporate' in found_record['authors']:
+                                    for primary_author in found_record['authors']['secondary']:
+                                        found_authors.append(primary_author.split(', ')[0])
+                                if authors:
+                                    for found_author in [aut for found_author in found_authors for aut in found_author.split()]:
+                                        if right_author:
+                                            break
+                                        if min([iterative_levenshtein(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author)) for x in authors for splitted_author in x.split()]) <= (len(found_author)/3):
+                                            # Vorsicht vor impliziten Typkonvertierungen von Zahlen zu bool
                                             right_author = True
-                                    if right_author:
-                                        all_results.append(found_record['id'])
-                                    else:
-                                        rejected_titles.append(found_record["id"] + title_found)
+                                else:
+                                    if not found_authors:
+                                        right_author = True
+                                if right_author:
+                                    all_results.append(found_record['id'])
+                                else:
+                                    rejected_titles.append(found_record["id"] + title_found)
         return all_results
     except Exception as e:
         write_error_to_logfile.write(e)

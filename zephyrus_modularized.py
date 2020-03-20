@@ -64,10 +64,10 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                         publication_dict['field_008_18-34'] = 'gr p|o |||||   a|'
                         publication_dict['field_300'] = '1 online resource, pp. ' + item['bibjson']['start_page'] + '-' + item['bibjson']['end_page']
                         publication_dict['force_300'] = True
-                        if 'abstract' in item['bibjson']:
-                            print('abstract', publication_dict['html_links'])
-                        else:
-                            print('no abstract', publication_dict['html_links'])
+                        if 'abstract' not in item['bibjson']:
+                            publication_dict['review'] = True
+                            publication_dict['review_list'].append({"reviewed_title": publication_dict['title_dict']['main_title'], "reviewed_authors": [],
+                                                                "reviewed_editors": [], "year_of_publication": ""})
                         publication_dict['terms_of_use_and_reproduction'] = {'terms_note': '', 'use_and_reproduction_rights': 'CC BY-SA 4.0', 'terms_link': 'https://creativecommons.org/licenses/by-sa/4.0/'}
                         publication_dicts.append(publication_dict)
                         items_harvested.append(current_item)
@@ -79,7 +79,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
 
 
 def harvest(path):
-    return_string = harvest_records(path, 'zepyhrus', 'Zephyrus', create_publication_dicts)
+    return_string = harvest_records(path, 'zephyrus', 'Zephyrus', create_publication_dicts)
     return return_string
 
 

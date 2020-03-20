@@ -631,6 +631,9 @@ def check_publication_dict_for_completeness_and_validity(publication_dict):
 def create_new_record(out, publication_dict):
     created = 0
     try:
+        for review_entry in publication_dict['review_list']:
+            if not review_entry['reviewed_title']:
+                publication_dict['review_list'].remove(review_entry)
         if publication_dict['review'] or publication_dict['response']:
             publication_dict['title_dict']['main_title'] = create_title_for_review_and_response_search(publication_dict['review_list'], publication_dict['response_list'])[0]
             all_doublets, additional_physical_form_entrys = \
@@ -846,6 +849,8 @@ def create_new_record(out, publication_dict):
                 if field['data']:
                     recent_record.add_field(Field(tag=field['tag'], data=field['data']))
                 elif field['tag']:
+                    if field['tag'] == '300':
+                        recent_record.remove_fields('300')
                     recent_record.add_field(Field(tag=field['tag'], indicators=field['indicators'],
                                                   subfields=field['subfields']))
             if publication_dict['review']:

@@ -25,6 +25,7 @@ import world_prehistory
 import kokalos
 import sardinia_corsica_baleares_modularized
 import gerion_modularized
+import zephyrus_modularized
 
 # logfiles vorhanden für:
 
@@ -54,13 +55,13 @@ for harvesting_script in [aegyptiaca_modularized, antiquite_modularized, berrgk_
                           kokalos,
                           world_prehistory,
                           germania_modularized,
-                          jdI_erganzungshefte
+                          jdI_erganzungshefte,
+                          zephyrus_modularized
                           ]:  # bjb_modularized
     try:
         print(harvesting_script)
         new_return_string = harvesting_script.harvest(path)
         return_string += new_return_string
-        print(new_return_string)
         write_error_to_logfile.comment(new_return_string)
     except Exception as e:
         write_error_to_logfile.write(e)
