@@ -40,7 +40,6 @@ if new_dir not in os.listdir(path):
     os.mkdir(path + new_dir)
 path_for_cumulus = '/home/hnebel/Programmierung/zenon-data-harvesting/records/' + new_dir
 path = '/home/hnebel/Programmierung/zenon-data-harvesting/records/' + new_dir + '/'
-print(path)
 for harvesting_script in [aegyptiaca_modularized, antiquite_modularized, berrgk_modularized, BMCR_modularized,
                           cipeg_modularized,
                           efb_modularized,
@@ -74,6 +73,8 @@ for file in os.listdir(path_for_cumulus):
     print(size)
     if size == 0:
         os.remove(path + file)
+
+# falls alles erfolgreich war, log_backup überschreiben!
 
 options = {
     'webdav_hostname': 'https://cumulus.dainst.org/remote.php/webdav',

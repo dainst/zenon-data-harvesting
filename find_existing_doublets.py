@@ -128,9 +128,10 @@ def check_cosine_similarity(title, found_title, found_record, rejected_titles, l
         if list(set(title_list_count)) == [0] or list(set(found_title_list_count)) == [0]:
             return False
         else:
-            print(title_list, found_title_list)
             similarity = 1 - spatial.distance.cosine(title_list_count, found_title_list_count)
-            print('similarity:', similarity)
+            if similarity > 0.6:
+                print(title_list, found_title_list)
+                print('similarity:', similarity)
             if similarity <= 0.65:
                 for word in title_list:
                     for found_word in found_title_list:
@@ -245,14 +246,14 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                 if "title" not in found_record:
                     continue
                 title_found = found_record["title"]
-                if (found_record["id"] + title_found not in rejected_titles) and (found_record['id'] not in all_results + additional_physical_form_entrys):
+                if (found_record["id"] + title_found not in rejected_titles) and (found_record['id'] not in all_results) \
+                        and (found_record['id'] not in [par['zenon_id'] for par in additional_physical_form_entrys]):
                     similarity = check_cosine_similarity(title, title_found, found_record, rejected_titles, lang)
                     right_author = False
                     right_year = False
-                    print('id:', found_record['id'])
                     if similarity:
                         try:
-                            print('is similar')
+                            print('title is similar')
                             webfile = urllib.request.urlopen(
                                 "https://zenon.dainst.org/Record/" + found_record['id'] + "/Export?style=MARC")
                             new_reader = MARCReader(webfile)
@@ -280,7 +281,6 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                                         if right_host_item is False:
                                             rejected_titles.append(found_record["id"] + title_found)
                                             continue
-                                    print('here')
                                     if 'authors' in found_record:
                                         found_authors = []
                                         if 'primary' in found_record['authors']:
@@ -295,9 +295,13 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                                         print('authors', authors)
                                         if authors:
                                             for found_author in [aut for found_author in found_authors for aut in found_author.split()]:
+                                                if found_author in authors:
+                                                    print('found in authors')
+                                                    right_author = True
                                                 if right_author:
                                                     break
                                                 if [iterative_levenshtein(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author)) for x in authors for splitted_author in x.split()]:
+                                                    print([iterative_levenshtein(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author)) for x in authors for splitted_author in x.split()])
                                                     if min([iterative_levenshtein(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author)) for x in authors for splitted_author in x.split()]) <= (len(found_author)/3):
                                                         # Vorsicht vor impliziten Typkonvertierungen von Zahlen zu bool
                                                         right_author = True
@@ -311,12 +315,17 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                                             right_year = True
                                     if not found_year and not year:
                                         right_year = True
-                                    if file['245']['c'] and publication_dict['title_dict']['responsibility_statement']:
-                                        right_responsibility = check_cosine_similarity(file['245']['c'], publication_dict['title_dict']['responsibility_statement'], found_record, rejected_titles, lang)
+                                    '''if file['245']['c'] and publication_dict['title_dict']['responsibility_statement']:
+                                        responsibility_statement_similarity = check_cosine_similarity(file['245']['c'], publication_dict['title_dict']['responsibility_statement'], found_record, rejected_titles, lang)
+                                        print(responsibility_statement_similarity)
+                                        if responsibility_statement_similarity > 0.75:
+                                            right_responsibility = True
+                                        else:
+                                            right_responsibility = False
                                     else:
-                                        right_responsibility = True
-                                    if right_author and right_responsibility and right_year:
-                                        print('everything correct')
+                                        right_responsibility = True'''
+
+                                    if right_author and right_year:
                                         if found_record['id'] not in [entry['zenon_id'] for entry in additional_physical_form_entrys]:
                                             e_resource = False
                                             if file['337']:
@@ -383,11 +392,9 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                                                     subfield_i = 'Print version'
                                                 additional_physical_form_entrys.append({'zenon_id': found_record['id'],
                                                                                         'subfield_i': subfield_i})
-                                                # print('par found:', found_record['id'], publication_dict['table_of_contents_link'])
                                             elif not par:
                                                 if found_record['id'] not in all_results:
                                                     all_results.append(found_record['id'])
-                                                # print('doublet found:', found_record['id'], publication_dict['table_of_contents_link'])
                                             else:
                                                 rejected_titles.append(found_record["id"] + title_found)
                         except Exception as e:
@@ -396,9 +403,9 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
                             print(exc_type, fname, exc_tb.tb_lineno)
                             print(found_record['id'])
-            if all_results:
+            if all_results and additional_physical_form_entrys:
                 break
-        return all_results
+        return all_results, rejected_titles, additional_physical_form_entrys
     except Exception as e:
         print('Error! Code: {c}, Message, {m}'.format(c=type(e).__name__, m=str(e)))
         exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -435,14 +442,14 @@ def find(title, authors, year, default_lang, possible_host_items, publication_di
         # Generierung eines bereinigten Suchtitels
         search_title = search_title.strip("+")
         if word_nr >= 1:
-            all_results = swagger_find(search_title, search_authors, year, title, rejected_titles, possible_host_items,
+            all_results, rejected_titles, additional_physical_form_entrys = swagger_find(search_title, search_authors, year, title, rejected_titles, possible_host_items,
                                        lang, authors, additional_physical_form_entrys, publication_dict, all_results)
             # Suche mit vollständigen Daten
             if not all_results:
                 all_results = []
             if len(all_results) == 0:
                 search_authors = search_authors.split("+")[0]
-                all_results = swagger_find(search_title, search_authors, year, title, rejected_titles,
+                all_results, rejected_titles, additional_physical_form_entrys = swagger_find(search_title, search_authors, year, title, rejected_titles,
                                            possible_host_items,
                                            lang, authors, additional_physical_form_entrys, publication_dict, all_results)
                 # Suche nur mit dem ersten Autoren
@@ -459,13 +466,13 @@ def find(title, authors, year, default_lang, possible_host_items, publication_di
                             continue
                         search_title = search_title + "+" + word
                 search_title = search_title.strip("+")
-                all_results = swagger_find(search_title, search_authors, year, title, rejected_titles,
+                all_results, rejected_titles, additional_physical_form_entrys = swagger_find(search_title, search_authors, year, title, rejected_titles,
                                            possible_host_items,
                                            lang, authors, additional_physical_form_entrys, publication_dict, all_results)
                 # Suche mit verkürztem Titel
             if len(all_results) == 0:
                 search_authors = ""
-                all_results = swagger_find(search_title, search_authors, year, title, rejected_titles,
+                all_results, rejected_titles, additional_physical_form_entrys = swagger_find(search_title, search_authors, year, title, rejected_titles,
                                            possible_host_items,
                                            lang, authors, additional_physical_form_entrys, publication_dict, all_results)
                 # Suche ohne Autorennamen
@@ -479,7 +486,7 @@ def find(title, authors, year, default_lang, possible_host_items, publication_di
                             search_title_without_words = search_title_without_words.replace(word, '').replace('++',
                                                                                                               '+').strip(
                                 '+')
-                        all_results = swagger_find(search_title_without_words, search_authors, year, title,
+                        all_results, rejected_titles, additional_physical_form_entrys = swagger_find(search_title_without_words, search_authors, year, title,
                                                    rejected_titles,
                                                    possible_host_items, lang, authors, additional_physical_form_entrys, publication_dict, all_results)
                 else:
@@ -490,7 +497,7 @@ def find(title, authors, year, default_lang, possible_host_items, publication_di
                         search_title_without_words = search_title_without_words.replace(word, '').replace('++',
                                                                                                           '+').strip(
                             '+')
-                        all_results = swagger_find(search_title_without_words, search_authors, year, title,
+                        all_results, rejected_titles, additional_physical_form_entrys = swagger_find(search_title_without_words, search_authors, year, title,
                                                    rejected_titles,
                                                    possible_host_items, lang, authors, additional_physical_form_entrys, publication_dict, all_results)
                 # Suche unter Ausschluss von einem oder zwei Suchbegriffen je nach Länge des Titels
@@ -534,13 +541,13 @@ def find_review(authors, year, default_lang, possible_host_items, publication_di
                 search_title = search_title.strip("+")
                 if word_nr >= 1:
                     all_results += swagger_find(search_title, search_authors, year, title, rejected_titles, possible_host_items,
-                                               lang, authors, additional_physical_form_entrys, publication_dict, all_results)
+                                               lang, authors, additional_physical_form_entrys, publication_dict, all_results)[0]
                     # Suche mit vollständigen Daten
                     if len(all_results) == 0:
                         search_authors = search_authors.split("+")[0]
                         all_results += swagger_find(search_title, search_authors, year, title, rejected_titles,
                                                    possible_host_items,
-                                                   lang, authors, additional_physical_form_entrys, publication_dict, all_results)
+                                                   lang, authors, additional_physical_form_entrys, publication_dict, all_results)[0]
                         # Suche nur mit dem ersten Autoren
                     if len(all_results) == 0:
                         word_nr = 0
@@ -558,13 +565,13 @@ def find_review(authors, year, default_lang, possible_host_items, publication_di
                         search_title = search_title.strip("+")
                         all_results += swagger_find(search_title, search_authors, year, title, rejected_titles,
                                                    possible_host_items,
-                                                   lang, authors, additional_physical_form_entrys, publication_dict, all_results)
+                                                   lang, authors, additional_physical_form_entrys, publication_dict, all_results)[0]
                         # Suche mit verkürztem Titel
                     if len(all_results) == 0:
                         search_authors = ""
                         all_results += swagger_find(search_title, search_authors, year, title, rejected_titles,
                                                    possible_host_items,
-                                                   lang, authors, additional_physical_form_entrys, publication_dict, all_results)
+                                                   lang, authors, additional_physical_form_entrys, publication_dict, all_results)[0]
                         # Suche ohne Autorennamen
                     if len(all_results) == 0:
                         if len(search_title.split('+')) > 5:
@@ -578,7 +585,7 @@ def find_review(authors, year, default_lang, possible_host_items, publication_di
                                         '+')
                                 all_results += swagger_find(search_title_without_words, search_authors, year, title,
                                                            rejected_titles,
-                                                           possible_host_items, lang, authors, additional_physical_form_entrys, publication_dict, all_results)
+                                                           possible_host_items, lang, authors, additional_physical_form_entrys, publication_dict, all_results)[0]
                         else:
                             for word in search_title.split("+"):
                                 search_title_without_words = search_title
@@ -589,7 +596,7 @@ def find_review(authors, year, default_lang, possible_host_items, publication_di
                                     '+')
                                 all_results += swagger_find(search_title_without_words, search_authors, year, title,
                                                            rejected_titles,
-                                                           possible_host_items, lang, authors, additional_physical_form_entrys, publication_dict, all_results)
+                                                           possible_host_items, lang, authors, additional_physical_form_entrys, publication_dict, all_results)[0]
                         # Suche unter Ausschluss von einem oder zwei Suchbegriffen je nach Länge des Titels
         else:
             for title in create_response_titles_for_response_search(publication_dict['response_list']):
@@ -618,13 +625,13 @@ def find_review(authors, year, default_lang, possible_host_items, publication_di
                 search_title = search_title.strip("+")
                 if word_nr >= 1:
                     all_results += swagger_find(search_title, search_authors, year, title, rejected_titles, possible_host_items,
-                                                lang, authors, additional_physical_form_entrys, publication_dict, all_results)
+                                                lang, authors, additional_physical_form_entrys, publication_dict, all_results)[0]
                     # Suche mit vollständigen Daten
                     if len(all_results) == 0:
                         search_authors = search_authors.split("+")[0]
                         all_results += swagger_find(search_title, search_authors, year, title, rejected_titles,
                                                     possible_host_items,
-                                                    lang, authors, additional_physical_form_entrys, publication_dict, all_results)
+                                                    lang, authors, additional_physical_form_entrys, publication_dict, all_results)[0]
                         # Suche nur mit dem ersten Autoren
                     if len(all_results) == 0:
                         word_nr = 0
@@ -642,13 +649,13 @@ def find_review(authors, year, default_lang, possible_host_items, publication_di
                         search_title = search_title.strip("+")
                         all_results += swagger_find(search_title, search_authors, year, title, rejected_titles,
                                                     possible_host_items,
-                                                    lang, authors, additional_physical_form_entrys, publication_dict, all_results)
+                                                    lang, authors, additional_physical_form_entrys, publication_dict, all_results)[0]
                         # Suche mit verkürztem Titel
                     if len(all_results) == 0:
                         search_authors = ""
                         all_results += swagger_find(search_title, search_authors, year, title, rejected_titles,
                                                     possible_host_items,
-                                                    lang, authors, additional_physical_form_entrys, publication_dict, all_results)
+                                                    lang, authors, additional_physical_form_entrys, publication_dict, all_results)[0]
                         # Suche ohne Autorennamen
                     if len(all_results) == 0:
                         if len(search_title.split('+')) > 5:
@@ -662,7 +669,7 @@ def find_review(authors, year, default_lang, possible_host_items, publication_di
                                         '+')
                                 all_results += swagger_find(search_title_without_words, search_authors, year, title,
                                                             rejected_titles,
-                                                            possible_host_items, lang, authors, additional_physical_form_entrys, publication_dict, all_results)
+                                                            possible_host_items, lang, authors, additional_physical_form_entrys, publication_dict, all_results)[0]
                         else:
                             for word in search_title.split("+"):
                                 search_title_without_words = search_title
@@ -673,7 +680,7 @@ def find_review(authors, year, default_lang, possible_host_items, publication_di
                                     '+')
                                 all_results += swagger_find(search_title_without_words, search_authors, year, title,
                                                             rejected_titles,
-                                                            possible_host_items, lang, authors, additional_physical_form_entrys, publication_dict, all_results)
+                                                            possible_host_items, lang, authors, additional_physical_form_entrys, publication_dict, all_results)[0]
                         # Suche unter Ausschluss von einem oder zwei Suchbegriffen je nach Länge des Titels
                 if all_results:
                     break

@@ -14,9 +14,9 @@ def harvest_records(path: str, short_name: str, real_name: str, create_publicati
     return_string = ''
     try:
         try:
-            with open('logfiles/' + short_name + '_logfile.json', 'r') as log_file:
+            with open('log.json', 'r') as log_file:
                 log_dict = json.load(log_file)
-                last_item_harvested_in_last_session = log_dict['last_item_harvested']
+                last_item_harvested_in_last_session = log_dict[short_name]['last_item_harvested']
                 write_error_to_logfile.comment('Letztes geharvestetes Heft von ' + real_name + ': ' + str(last_item_harvested_in_last_session))
             out = open(path + short_name + '_' + timestampStr + '.mrc', 'wb')
             pub_nr = 0
@@ -39,8 +39,8 @@ def harvest_records(path: str, short_name: str, real_name: str, create_publicati
         write_error_to_logfile.comment('Es wurden ' + str(pub_nr) + ' neue Records für ' + real_name + ' erstellt.')
         return_string += 'Es wurden ' + str(pub_nr) + ' neue Records für ' + real_name + ' erstellt.\n'
         if issues_harvested and pub_nr:
-            with open('records/' + short_name + '/' + short_name + '_logfile.json', 'w') as log_file:
-                log_dict = {"last_item_harvested": max(issues_harvested)}
+            with open('log.json', 'w') as log_file:
+                log_dict[short_name] = {"last_item_harvested": max(issues_harvested)}
                 json.dump(log_dict, log_file)
                 write_error_to_logfile.comment('Log-File wurde auf ' + str(max(issues_harvested)) + ' geupdated.')
         else:

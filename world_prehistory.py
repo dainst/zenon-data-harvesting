@@ -27,6 +27,8 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                 empty_page = True
             page_nr += 50
             for article in json_response['records']:
+                if not article['number']:
+                    continue
                 if 'coverDate' in article:
                     publication_year = article['coverDate'][:4]
                     issue = str(article['number'])

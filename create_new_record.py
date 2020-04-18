@@ -2,6 +2,7 @@ import urllib.parse
 import urllib.request
 from pymarc import Record
 from pymarc import Field
+from pymarc import MARCReader
 import arrow
 import language_codes
 from langdetect import detect
@@ -9,7 +10,6 @@ import find_reviewed_title
 import find_existing_doublets
 import re
 import write_error_to_logfile
-import probablepeople
 
 
 rda_codes = {'rdacarrier': {'sg': 'audio cartridge', 'sb': 'audio belt', 'se': 'audio cylinder', 'sd': 'audio disc',
@@ -203,7 +203,8 @@ publication_dict_template = {'title_dict':
                                    'year_of_publication': '',
                                    # Erscheinungsjahr der rezensierten Publikation, muss nicht gesetzt werden, falls
                                    # verfügbar, verbessert es jedoch die Suche nach der rezensierten Publikation
-                                   }]}
+                                   }],
+                             'edit_names': False}
 
 
 def add_field_from_record_to_publication_dict(publication_dict, record, field_list):
@@ -387,6 +388,26 @@ def create_lkr_ana(recent_record, publication_dict, volume, review, response):
         write_error_to_logfile.write(e)
         write_error_to_logfile.comment(publication_dict)
 
+
+def add_subject_from_additional_physical_form_entry(additional_physical_form_entrys, recent_record, publication_dict):
+    try:
+        all_par_subjects = {}
+        for par in additional_physical_form_entrys:
+            webfile = urllib.request.urlopen(
+                "https://zenon.dainst.org/Record/" + par['zenon_id'] + "/Export?style=MARC")
+            new_reader = MARCReader(webfile)
+            for file in new_reader:
+                all_par_subjects[par['zenon_id']] = file.get_fields('999', '600', '610', '611', '630', '647', '648', '650', '651') if file.get_fields('999', '600', '610', '611', '630', '647', '648', '650', '651') else {}
+            for entry in all_par_subjects:
+                for field in all_par_subjects[entry]:
+                    if field.tag in ['600', '610', '611', '630', '647', '648', '650', '651']:
+                        recent_record.add_field(field)
+                    else:
+                        field.tag = 'THS'
+                        recent_record.add_field(field)
+    except Exception as e:
+        write_error_to_logfile.write(e)
+        write_error_to_logfile.comment(publication_dict)
 
 def check_publication_dict_for_completeness_and_validity(publication_dict):
     try:
@@ -875,6 +896,8 @@ def create_new_record(out, publication_dict):
                             recent_record.add_field(Field(tag='LKR', indicators=[' ', ' '],
                                                           subfields=['a', 'UP', 'b', reviewed_title_id, 'l', 'DAI01',
                                                                      'm', 'Rezension', 'n', publication_dict['title_dict']['main_title']]))
+            if additional_physical_form_entrys:
+                add_subject_from_additional_physical_form_entry(additional_physical_form_entrys, recent_record, publication_dict)
             print(recent_record)
             out.write(recent_record.as_marc21())
             created = 1
@@ -905,44 +928,37 @@ def create_new_record(out, publication_dict):
 
 # falls verschiedene Publikationsangaben berücksichtigt werden sollen.
 
-''''subject_added_entries': [{'type': '', 'text': '', 'source': ''}],
-     # type MUSS aus der Liste ['Person', 'Corporation', 'Event', 'Chronology', 'Topic', 'Geography']
-     # source wird mit dem Code für den verwendeten Thesaurus angegeben, falls dieser in
-     # https://www.loc.gov/standards/sourcelist/subject.html angegeben wird.
-     # Thesaurus-Schlagwörter werden separat in THS angegeben.
-     # sollte noch überarbeitet werden!!!'''
-
-# 6**-Felder auch einfügen.
-
-'''subject_info = article_xml.find('mods:subject')
-                if subject_info!=None:
-                    persons = subject_info.find_all('mods:name', type='personal')
-                    for person in persons:
-                        person_name = person.find('mods:displayForm').text
-                        if ',' in person_name:
-                            first_indicator = '1'
-                        else:
-                            first_indicator = '0'
-                        person_authority = person['authority']
-                        recent_record.add_field(Field(tag='600', indicators=[first_indicator, '7'],
-                                                      subfields=['a', person_name, '2', person_authority]))
-                    corporations = subject_info.find_all('mods:name', type='corporate')
-                    for corporation in corporations:
-                        corporation_name = corporation.find('mods:displayForm').text
-                        corporation_authority = corporation['authority']
-                        recent_record.add_field(Field(tag='610', indicators=['2', '7'],
-                                                      subfields=['a', corporation_name, '2', corporation_authority]))
-                    geographics = subject_info.find_all('mods:geographic')
-                    for geographic in geographics:
-                        geographic_name = geographic.text
-                        geographic_authority = geographic['authority']
-                        recent_record.add_field(Field(tag='651', indicators=[' ', '7'],
-                                                      subfields=['a', geographic_name, '2', geographic_authority]))
-                    topics = subject_info.find_all('mods:topic')
-                    for topic in topics:
-                        topic_name = topic.text
-                        topic_authority = topic['authority']
-                        recent_record.add_field(Field(tag='650', indicators=[' ', '7'],
-                                                      subfields=['a', topic_name, '2', topic_authority]))'''
 
 # Umgang mit Körperschaften
+
+subject_added_entries = [{'type': '', 'text': '', 'source': ''}]
+# type MUSS aus der Liste ['Person', 'Corporation', 'Event', 'Chronology', 'Topic', 'Geography']
+# source wird mit dem Code für den verwendeten Thesaurus angegeben, falls dieser in
+# https://www.loc.gov/standards/sourcelist/subject.html angegeben wird.
+# Thesaurus-Schlagwörter werden separat in THS angegeben.
+# sollte noch überarbeitet werden!!!
+# 6**-Felder auch einfügen.
+'''
+persons = []
+for person in persons:
+    recent_record.add_field(Field(tag='600', indicators=[first_indicator, '7'],
+                                  subfields=['a', person_name, '2', person_authority]))
+corporations = []
+for corporation in corporations:
+    corporation_name = corporation.find('mods:displayForm').text
+    corporation_authority = corporation['authority']
+    recent_record.add_field(Field(tag='610', indicators=['2', '7'],
+                                  subfields=['a', corporation_name, '2', corporation_authority]))
+geographics = []
+for geographic in geographics:
+    geographic_name = geographic.text
+    geographic_authority = geographic['authority']
+    recent_record.add_field(Field(tag='651', indicators=[' ', '7'],
+                                  subfields=['a', geographic_name, '2', geographic_authority]))
+topics = []
+for topic in topics:
+    topic_name = topic.text
+    topic_authority = topic['authority']
+    recent_record.add_field(Field(tag='650', indicators=[' ', '7'],
+                                  subfields=['a', topic_name, '2', topic_authority]))
+'''

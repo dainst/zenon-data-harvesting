@@ -1,8 +1,8 @@
 from pymarc import MARCReader
 
-filestring = 'records/world_prehistory/world_prehistory_12-Feb-2020'
+filestring = 'records/world_prehistory/world_prehistory_06-Mar-2020'
 count = 0
-out = open('records/gnomon/gnomon_12-Feb-2020' + '_' + str(count) + '.mrc', 'wb')
+out = open('records/world_prehistory/world_prehistory_06-Mar-2020' + '_' + str(count) + '.mrc', 'wb')
 print(filestring + '.mrc')
 with open(filestring + '.mrc', 'rb') as file:
     new_reader = MARCReader(file)
