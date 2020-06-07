@@ -27,8 +27,6 @@ import sardinia_corsica_baleares_modularized
 import gerion_modularized
 import zephyrus_modularized
 
-# logfiles vorhanden für:
-
 dateTimeObj = datetime.now()
 timestampStr = dateTimeObj.strftime("%d-%b-%Y")
 
