@@ -26,22 +26,18 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
             remaining_article_links = []
             item_to_append = last_item_harvested_in_last_session
             last_item_on_page = int(re.findall(r'[\d|.]{10,11}', article_links[-1])[0].replace('.', ''))
-            while item_to_append < last_item_on_page:
+            while item_to_append < (last_item_on_page - 1):
                 if int(str(item_to_append)[-2:]) < 55:
                     item_to_append += 1
                 else:
                     item_to_append += 46
                 remaining_article_links.append('http://bmcr.brynmawr.edu/' + str(item_to_append)[:4] + '/' + '.'.join(re.findall(r'^(\d{4})(\d{2})(\d{2})$', str(item_to_append))[0]))
-            print(len(article_links))
-            print(len(remaining_article_links))
             article_links = remaining_article_links + article_links
-            print(len(article_links))
         for article_link in article_links:
             current_item = int(re.findall(r'[\d|.]{10,11}', article_link)[0].replace('.', ''))
             if current_item <= last_item_harvested_in_last_session:
                 break
             else:
-                print(article_link)
                 with open('publication_dict.json', 'r') as publication_dict_template:
                     publication_dict = json.load(publication_dict_template)
                 req = urllib.request.Request(article_link)
