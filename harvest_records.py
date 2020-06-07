@@ -3,6 +3,7 @@ from datetime import datetime
 import json
 import write_error_to_logfile
 import os
+from pymarc import MARCReader
 
 dateTimeObj = datetime.now()
 timestampStr = dateTimeObj.strftime("%d-%b-%Y")
@@ -36,6 +37,17 @@ def harvest_records(path: str, short_name: str, real_name: str, create_publicati
         if not pub_nr:
             if os.path.exists(path + short_name + '_' + timestampStr + '.mrc'):
                 os.remove(path + short_name + '_' + timestampStr + '.mrc')
+        if pub_nr > 25:
+            filestring = path + short_name + '_' + timestampStr
+            count = 0
+            out = open(path + short_name + '_' + timestampStr + '_' + str(count) + '.mrc', 'wb')
+            with open(filestring + '.mrc', 'rb') as file:
+                new_reader = MARCReader(file)
+                for record in new_reader:
+                    if count % 25 == 0:
+                        out = open(filestring + '_' + str(count) + '.mrc', 'wb')
+                    out.write(record.as_marc21())
+                    count += 1
         write_error_to_logfile.comment('Es wurden ' + str(pub_nr) + ' neue Records für ' + real_name + ' erstellt.')
         return_string += 'Es wurden ' + str(pub_nr) + ' neue Records für ' + real_name + ' erstellt.\n'
         if issues_harvested and pub_nr:
@@ -48,6 +60,6 @@ def harvest_records(path: str, short_name: str, real_name: str, create_publicati
                 os.remove(path + short_name + '_' + timestampStr + '.mrc')
     except Exception as e:
         write_error_to_logfile.write(e)
-        write_error_to_logfile.comment('Es konnten keine Records für' + real_name + ' erstellt werden.')
-        return_string += 'Es konnten keine Records für' + real_name + ' erstellt werden.'
+        write_error_to_logfile.comment('Es konnten keine Records für ' + real_name + ' erstellt werden.')
+        return_string += 'Es konnten keine Records für ' + real_name + ' erstellt werden.'
     return return_string
