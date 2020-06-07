@@ -15,29 +15,42 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
     publication_dicts = []
     items_harvested = []
     try:
-        page = 0
-        page_not_harvested = True
-        while page_not_harvested:
-            page += 1
-            url = 'https://bmcr.brynmawr.edu/publications?page=' + str(page)
-            req = urllib.request.Request(url)
-            with urllib.request.urlopen(req) as response:
-                journal_page = response.read()
-            journal_page = journal_page.decode('utf-8')
-            journal_soup = BeautifulSoup(journal_page, 'html.parser')
-            article_links = [tag['href'] for tag in journal_soup.find_all('a', class_='ref-wrapper') if tag.find('p', class_='ref-details')]
-            for article_link in article_links:
-                current_item = int(re.findall(r'[\d|.]{10,11}', article_link)[0].replace('.', ''))
-                if current_item <= last_item_harvested_in_last_session:
-                    page_not_harvested = False
-                    break
+        url = 'https://bmcr.brynmawr.edu/publications?page=1'
+        req = urllib.request.Request(url)
+        with urllib.request.urlopen(req) as response:
+            journal_page = response.read()
+        journal_page = journal_page.decode('utf-8')
+        journal_soup = BeautifulSoup(journal_page, 'html.parser')
+        article_links = [tag['href'] for tag in journal_soup.find_all('a', class_='ref-wrapper') if tag.find('p', class_='ref-details')]
+        if int(re.findall(r'[\d|.]{10,11}', article_links[-1])[0].replace('.', '')) > last_item_harvested_in_last_session:
+            remaining_article_links = []
+            item_to_append = last_item_harvested_in_last_session
+            last_item_on_page = int(re.findall(r'[\d|.]{10,11}', article_links[-1])[0].replace('.', ''))
+            while item_to_append < last_item_on_page:
+                if int(str(item_to_append)[-2:]) < 55:
+                    item_to_append += 1
                 else:
-                    with open('publication_dict.json', 'r') as publication_dict_template:
-                        publication_dict = json.load(publication_dict_template)
-                    req = urllib.request.Request(article_link)
+                    item_to_append += 46
+                remaining_article_links.append('http://bmcr.brynmawr.edu/' + str(item_to_append)[:4] + '/' + '.'.join(re.findall(r'^(\d{4})(\d{2})(\d{2})$', str(item_to_append))[0]))
+            print(len(article_links))
+            print(len(remaining_article_links))
+            article_links = remaining_article_links + article_links
+            print(len(article_links))
+        for article_link in article_links:
+            current_item = int(re.findall(r'[\d|.]{10,11}', article_link)[0].replace('.', ''))
+            if current_item <= last_item_harvested_in_last_session:
+                break
+            else:
+                print(article_link)
+                with open('publication_dict.json', 'r') as publication_dict_template:
+                    publication_dict = json.load(publication_dict_template)
+                req = urllib.request.Request(article_link)
+                try:
                     with urllib.request.urlopen(req) as response:
                         article_page = response.read()
                     article_soup = BeautifulSoup(article_page, 'html.parser')
+                    if not article_soup.find('span', itemprop='name'):
+                        continue
                     review_author = article_soup.find('span', itemprop='name').text
                     review_tag = [tag.text for tag in article_soup.find_all('h4') if not tag.attrs and 'Review by' in tag.text]
                     response_tag = [tag.text for tag in article_soup.find_all('h4') if not tag.attrs and 'Response by' in tag.text]
@@ -64,7 +77,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                             else:
                                 publication_year = ''
                             reviewed_authors = [string.strip().strip(',') for string in
-                                                    pub.find('div', class_='entry-citation').text.split(title_reviewed)[0].replace('\t', '').split('\n') if string.strip()]
+                                                pub.find('div', class_='entry-citation').text.split(title_reviewed)[0].replace('\t', '').split('\n') if string.strip()]
                             reviewed_authors = [HumanName(reviewed_author).last + ', ' + HumanName(reviewed_author).first for reviewed_author in reviewed_authors]
                             publication_dict['review_list'].append({'reviewed_title': title_reviewed,
                                                                     'reviewed_authors': reviewed_authors,
@@ -90,6 +103,9 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                     publication_dict['default_language'] = 'en'
                     publication_dicts.append(publication_dict)
                     items_harvested.append(current_item)
+                except Exception as e:
+                    write_error_to_logfile.write(e)
+                    write_error_to_logfile.comment('URL nicht vorhanden.')
     except Exception as e:
         write_error_to_logfile.write(e)
         write_error_to_logfile.comment('Es konnten keine Artikel für BMCR geharvested werden.')
