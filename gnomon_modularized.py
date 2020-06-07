@@ -65,7 +65,8 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                             title_soup = BeautifulSoup(title_page, 'html.parser').find('head')
                             with open('publication_dict.json', 'r') as publication_dict_template:
                                 publication_dict = json.load(publication_dict_template)
-                            print(title_url)
+                            if 'VORLAGEN UND NACHRICHTEN' in title_soup.find('title').text:
+                                continue
                             publication_dict['title_dict']['main_title'] = title_soup.find('meta', attrs={'name': 'citation_title'})['content']
                             publication_dict['volume'] = title_soup.find('meta', attrs={'name': 'citation_volume'})['content']
                             publication_dict['rdacontent'] = 'txt'
