@@ -7,6 +7,7 @@ import re
 import write_error_to_logfile
 import find_sysnumbers_of_volumes
 from harvest_records import harvest_records
+import gnd_request_for_cor
 
 
 def create_publication_dicts(last_item_harvested_in_last_session, *other):
@@ -56,10 +57,12 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                         publication_dict = json.load(publication_dict_template)
                     title = title_and_author_info.find('em').text
                     authors = [author.split('/')[0] for author in title_and_author_info.text.replace(title, '').replace('\n', '').split(', ')]
+                    authors = [author for author in authors if author]
+                    publication_dict['authors_list'] = [HumanName(author).last + ', ' + HumanName(author).first if gnd_request_for_cor.check_gnd_for_name(author) == False
+                                                        else author for author in authors ]
                     pages = re.findall(r'\d{1,3}-\d{1,3}', article_info.text.split('Pagine:')[1].split('Prezzo:')[0])[0]
                     publication_dict['volume'] = volume_name
-                    publication_dict['authors_list'] = [HumanName(author).last + ', ' + HumanName(author).first
-                                                        for author in authors if author]
+
                     publication_dict['host_item']['name'] = 'Kókalos'
                     publication_dict['host_item']['sysnumber'] = volumes_sysnumbers[volume_year]
                     publication_dict['title_dict']['main_title'] = title

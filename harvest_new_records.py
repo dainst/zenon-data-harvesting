@@ -5,6 +5,7 @@ from datetime import datetime
 
 import aegyptiaca_modularized
 import antiquite_modularized
+# import athener_mitteilungen
 import berrgk_modularized
 # import bjb_modularized
 import BMCR_modularized
@@ -16,8 +17,7 @@ import eperiodica_snr_003_modularized
 import germania_modularized
 import gnomon_modularized
 import hsozkult_modularized
-import jdI_erganzungshefte
-# import jdi_modularized
+import athener_mitteilungen
 import late_antiquity_modularized_new
 import maa_journal_current_modularized
 import groma_modularized
@@ -52,7 +52,7 @@ for harvesting_script in [aegyptiaca_modularized, antiquite_modularized, berrgk_
                           kokalos,
                           world_prehistory,
                           germania_modularized,
-                          jdI_erganzungshefte,
+                          # athener_mitteilungen,
                           zephyrus_modularized
                           ]:  # bjb_modularized
     try:

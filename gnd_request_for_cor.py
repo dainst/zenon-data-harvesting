@@ -1,6 +1,5 @@
 import urllib.request
 import json
-import time
 import write_error_to_logfile
 import unidecode
 
@@ -21,7 +20,7 @@ def check_gnd_for_name(name_to_check: str):
             json_response=json_response.decode('utf-8')
             json_response=json.loads(json_response)
             if json_response['totalItems'] > 0:
-                member_nr = 0
+                member_nr = 1
                 cor_nr = 0
                 for member in json_response['member']:
                     member_nr += 1

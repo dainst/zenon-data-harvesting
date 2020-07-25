@@ -48,6 +48,7 @@ def harvest_records(path: str, short_name: str, real_name: str, create_publicati
                         out = open(filestring + '_' + str(count) + '.mrc', 'wb')
                     out.write(record.as_marc21())
                     count += 1
+            os.remove(filestring + '.mrc')
         write_error_to_logfile.comment('Es wurden ' + str(pub_nr) + ' neue Records für ' + real_name + ' erstellt.')
         return_string += 'Es wurden ' + str(pub_nr) + ' neue Records für ' + real_name + ' erstellt.\n'
         if issues_harvested and pub_nr:

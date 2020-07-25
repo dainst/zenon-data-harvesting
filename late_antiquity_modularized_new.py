@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 import language_codes
 import find_sysnumbers_of_volumes
 from harvest_records import harvest_records
+import gnd_request_for_cor
 
 
 def create_review_dict(review_title):
@@ -30,7 +31,8 @@ def create_review_dict(review_title):
             new_review['reviewed_editors'] = []
         for responsibles in ['reviewed_editors', 'reviewed_authors']:
             if new_review[responsibles]:
-                new_review[responsibles] = [(HumanName(person).last+", "+HumanName(person).first).strip() for person in new_review[responsibles].split(', ')[0].split(' and ')]
+                new_review[responsibles] = [(HumanName(person).last+", "+HumanName(person).first).strip() if gnd_request_for_cor.check_gnd_for_name(person) else person.strip()
+                                            for person in new_review[responsibles].split(', ')[0].split(' and ')]
         review_list.append(new_review)
     return review_list
 

@@ -9,6 +9,7 @@ from nameparser import HumanName
 import language_codes
 import find_sysnumbers_of_volumes
 from harvest_records import harvest_records
+import gnd_request_for_cor
 
 
 def create_publication_dicts(last_item_harvested_in_last_session, *other):
@@ -44,6 +45,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                 volume_soup = BeautifulSoup(volume_page, 'html.parser')
                 issue_urls = ['https://elibrary.chbeck.de' + issue_link['href'] for issue_link in volume_soup.find('div', class_='journal').find_all('a')]
                 for issue_url in issue_urls:
+                    print(issue_url)
                     issue_req = urllib.request.Request(issue_url)
                     with urllib.request.urlopen(issue_req) as issue_response:
                         issue_page = issue_response.read()
@@ -52,10 +54,13 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                     issue = issue_soup.find('meta', attrs={'name': 'citation_issue'})['content']
                     publication_year = re.findall(r'\d{4}', issue_soup.find('meta', attrs={'name': 'citation_publication_date'})['content'])[0]
                     current_item = int(publication_year + volume.zfill(3) + issue.zfill(3))
-                    if current_item > last_item_harvested_in_last_session:
+                    if current_item <= last_item_harvested_in_last_session:
+                        break
+                    else:
                         titles_urls = [div.find('a')['href'] for div in issue_soup.find('div', id="toc-panel-body").find_all('div') if div.find('a')]
                         titles_urls = ['https://elibrary.chbeck.de' + title_url for title_url in titles_urls if re.findall(r'-\d+-\d+?/', title_url)]
                         for title_url in titles_urls:
+                            print(title_url)
                             if '/vorlagen-und-nachrichten-jahrgang-' in title_url \
                                     or '/bibliographische-beilage' in title_url or 'titelei-jahrgang' in title_url:
                                 continue
@@ -73,6 +78,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                             publication_dict['rdamedia'] = 'n'
                             publication_dict['rdacarrier'] = 'nc'
                             publication_dict['authors_list'] = [HumanName(author_tag['content']).last + ', ' + HumanName(author_tag['content']).first
+                                                                if gnd_request_for_cor.check_gnd_for_name(author_tag['content']) else author_tag['content']
                                                                 for author_tag in title_soup.find_all('meta', attrs={'name': 'citation_author'})]
                             publication_dict['host_item']['name'] = 'Gnomon'
                             publication_dict['host_item']['sysnumber'] = volumes_sysnumbers[publication_year]
@@ -109,9 +115,9 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                                     reviewed_authors_string, reviewed_title = reviewed_title.split(': ', 1)
                                     reviewed_authors = reviewed_authors_string.split(', ')
                             reviewed_authors = [HumanName(reviewed_person).last + ', ' + HumanName(reviewed_person).first
-                                                for reviewed_person in reviewed_authors]
+                                                if gnd_request_for_cor.check_gnd_for_name(reviewed_person) else reviewed_person for reviewed_person in reviewed_authors]
                             reviewed_editors = [HumanName(reviewed_person).last + ', ' + HumanName(reviewed_person).first
-                                                for reviewed_person in reviewed_editors]
+                                                if gnd_request_for_cor.check_gnd_for_name(reviewed_person) else reviewed_person for reviewed_person in reviewed_editors]
                             publication_dict['review_list'].append({'reviewed_title': reviewed_title,
                                                                     'reviewed_authors': reviewed_authors,
                                                                     'reviewed_editors': reviewed_editors,

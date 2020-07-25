@@ -9,6 +9,7 @@ from nameparser import HumanName
 import language_codes
 import find_sysnumbers_of_volumes
 from harvest_records import harvest_records
+import gnd_request_for_cor
 
 
 def create_publication_dicts(last_item_harvested_in_last_session, *other):
@@ -49,7 +50,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                     publication_dict['rdamedia'] = 'c'
                     publication_dict['rdacarrier'] = 'cr'
                     publication_dict['authors_list'] = [HumanName(author_tag['content']).last + ', ' + HumanName(author_tag['content']).first
-                                                        for author_tag in article_soup.find_all('meta', attrs={'name': 'DC.Creator.PersonalName'})]
+                                                        if gnd_request_for_cor.check_gnd_for_name(author_tag['content']) else author_tag['content'] for author_tag in article_soup.find_all('meta', attrs={'name': 'DC.Creator.PersonalName'})]
                     publication_dict['host_item']['name'] = 'Groma : documenting archaeology'
                     publication_dict['host_item']['sysnumber'] = volumes_sysnumbers[publication_year]
                     publication_dict['publication_year'] = publication_year
@@ -87,11 +88,11 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                         if any([editorship_word in authorship for editorship_word in ['(ed.)', '(ed)', '(eds.)', '(eds)']]):
                             editorstring = re.sub(r' *\(.+\)', '', authorship)
                             reviewed_editors = [HumanName(editor).last + ', ' + HumanName(editor).first
-                                                for editor in editorstring.split(',')]
+                                                if gnd_request_for_cor.check_gnd_for_name(editor) else editor for editor in editorstring.split(',')]
                         elif authorship:
                             authorstring = authorship
                             reviewed_authors = [HumanName(author).last + ', ' + HumanName(author).first
-                                                for author in authorstring.split(',')]
+                                                if gnd_request_for_cor.check_gnd_for_name(author) else author for author in authorstring.split(',')]
                         publication_dict['review'] = True
                         publication_dict['review_list'].append({'reviewed_title': reviewed_title,
                                                                 'reviewed_authors': reviewed_authors,

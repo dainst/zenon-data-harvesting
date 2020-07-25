@@ -7,7 +7,7 @@ from datetime import datetime
 logging.getLogger('chardet.charsetprober').setLevel(logging.INFO)
 
 dateTimeObj = datetime.now()
-timestampStr = dateTimeObj.strftime("%d-%b-%Y %H:%M")
+timestampStr = dateTimeObj.strftime("%d-%b-%Y")
 
 logfile = 'logfiles_debugging/logfile_' + timestampStr
 

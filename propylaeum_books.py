@@ -102,6 +102,34 @@ def harvest(path):
     return_string = harvest_records(path, 'propylaeum_ebooks', 'Propylaeum Ebooks', create_publication_dicts)
     return return_string
 
+def get_series_names():
+    url = 'https://books.ub.uni-heidelberg.de/propylaeum/series'
+    req = urllib.request.Request(url)
+    with urllib.request.urlopen(req) as response:
+        series_page = response.read()
+    series_page = series_page.decode('utf-8')
+    series_soup = BeautifulSoup(series_page, 'html.parser')
+    for item in [article for article in series_soup.find_all('article') if not article.find_all('div', class_='post-image')]:
+        error = False
+        if item.find('h3') and item.find('h4').string:
+            print(item.find('h3').string.strip() + ':', item.find('h4').string)
+        elif item.find('h3'):
+            print(item.find('h3').string.strip())
+        else:
+            error = True
+        print()
+        if item.find('span'):
+            print('Beschreibung:', item.find('span').string)
+        elif item.find('p'):
+            print('Beschreibung:', item.find('p').text.strip())
+        else:
+            error = True
+        url = [url for url in item.find_all('a') if 'propylaeum/catalog/series' in url['href']][0]
+        print(url)
+        print('----')
+
+
 
 if __name__ == '__main__':
-    harvest_records('records/propylaeum_ebooks/', 'propylaeum_ebooks', 'Propylaeum Ebooks', create_publication_dicts)
+    get_series_names()
+    # harvest_records('records/propylaeum_ebooks/', 'propylaeum_ebooks', 'Propylaeum Ebooks', create_publication_dicts)

@@ -4,14 +4,13 @@ from langdetect import detect
 from nltk.tokenize import RegexpTokenizer
 import json
 import re
-import os
-import sys
 from nltk.corpus import stopwords
 from scipy import spatial
 import itertools
 from pymarc import MARCReader
 import math
 import unidecode
+import write_error_to_logfile
 
 rda_codes = {'rdacarrier': {'sg': 'audio cartridge', 'sb': 'audio belt', 'se': 'audio cylinder', 'sd': 'audio disc',
                             'si': 'sound track reel', 'sq': 'audio roll', 'sw': 'audio wire reel',
@@ -70,10 +69,7 @@ def typewriter_distance(letter1, letter2):
             distance = 1
         return distance
     except Exception as e:
-        print('Error! Code: {c}, Message, {m}'.format(c=type(e).__name__, m=str(e)))
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print(exc_type, fname, exc_tb.tb_lineno)
+        write_error_to_logfile.write(e)
 
 
 def iterative_levenshtein(s, t):
@@ -94,10 +90,7 @@ def iterative_levenshtein(s, t):
                                      dist[row - 1][col - 1] + typewriter_distance(s[row - 1], t[col - 1]))
         return dist[len(s)][len(t)]
     except Exception as e:
-        print('Error! Code: {c}, Message, {m}'.format(c=type(e).__name__, m=str(e)))
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print(exc_type, fname, exc_tb.tb_lineno)
+        write_error_to_logfile.write(e)
 
 
 def check_cosine_similarity(title, found_title, found_record, rejected_titles, lang):
@@ -132,7 +125,7 @@ def check_cosine_similarity(title, found_title, found_record, rejected_titles, l
             if similarity > 0.6:
                 print(title_list, found_title_list)
                 print('similarity:', similarity)
-            if similarity <= 0.65:
+            if (similarity <= 0.65) and (similarity >= 0.5):
                 for word in title_list:
                     for found_word in found_title_list:
                         if (iterative_levenshtein(word, found_word)) < (len(word)/4) and iterative_levenshtein(word, found_word) > 0:
@@ -178,10 +171,7 @@ def check_cosine_similarity(title, found_title, found_record, rejected_titles, l
                                 rejected_titles.append(found_record["id"] + found_title)
         return False
     except Exception as e:
-        print('Error! Code: {c}, Message, {m}'.format(c=type(e).__name__, m=str(e)))
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print(exc_type, fname, exc_tb.tb_lineno)
+        write_error_to_logfile.write(e)
 
 
 def create_review_titles_for_review_search(review_dict):
@@ -398,19 +388,12 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                                             else:
                                                 rejected_titles.append(found_record["id"] + title_found)
                         except Exception as e:
-                            print('Error! Code: {c}, Message, {m}'.format(c=type(e).__name__, m=str(e)))
-                            exc_type, exc_obj, exc_tb = sys.exc_info()
-                            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                            print(exc_type, fname, exc_tb.tb_lineno)
-                            print(found_record['id'])
+                            write_error_to_logfile.write(e)
             if all_results and additional_physical_form_entrys:
                 break
         return all_results, rejected_titles, additional_physical_form_entrys
     except Exception as e:
-        print('Error! Code: {c}, Message, {m}'.format(c=type(e).__name__, m=str(e)))
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print(exc_type, fname, exc_tb.tb_lineno)
+        write_error_to_logfile.write(e)
 
 
 def find(title, authors, year, default_lang, possible_host_items, publication_dict):
@@ -501,12 +484,9 @@ def find(title, authors, year, default_lang, possible_host_items, publication_di
                                                    rejected_titles,
                                                    possible_host_items, lang, authors, additional_physical_form_entrys, publication_dict, all_results)
                 # Suche unter Ausschluss von einem oder zwei Suchbegriffen je nach Länge des Titels
-            return all_results, additional_physical_form_entrys
+        return all_results, additional_physical_form_entrys
     except Exception as e:
-        print('Error! Code: {c}, Message, {m}'.format(c=type(e).__name__, m=str(e)))
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print(exc_type, fname, exc_tb.tb_lineno)
+        write_error_to_logfile.write(e)
 
 
 def find_review(authors, year, default_lang, possible_host_items, publication_dict):
@@ -686,13 +666,11 @@ def find_review(authors, year, default_lang, possible_host_items, publication_di
                     break
         return all_results, additional_physical_form_entrys
     except Exception as e:
-        print('Error! Code: {c}, Message, {m}'.format(c=type(e).__name__, m=str(e)))
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print(exc_type, fname, exc_tb.tb_lineno)
+        write_error_to_logfile.write(e)
 
 
 # Spracherkennung verbessern!
 # Behandlung bei der Suche nach Rezensionsdubletten UND rezensierten Titeln verbessern!!!
 # hier noch Möglichkeiten für hidden filters einbauen?
 # Problem: bei sehr kurzen "Haupttiteln" werden zu kurze Dublettentitel gefunden.
+# Korrektur: aussortierte Worte zulassen, falls gar keine Worte für die Suche vorhanden sind.

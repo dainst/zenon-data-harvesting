@@ -1,14 +1,12 @@
 import urllib.parse, urllib.request
 import csv
 from bs4 import BeautifulSoup
-import create_new_record
 from nameparser import HumanName
-import find_existing_doublets
 import json
 import re
 import write_error_to_logfile
 from harvest_records import harvest_records
-from pymarc import MARCReader
+import gnd_request_for_cor
 
 
 def create_publication_dicts(last_item_harvested_in_last_session, *other):
@@ -37,14 +35,15 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                     responisibility_statement = responisibility_statement.split(', with contributions by')[0].split(', met bijdragen van')[0].split(' (edited by')[0]
                     for responsibility_word in ['Edited by ', 'edited by ', ' (ed.)', 'Introduction, translation and discussion ']:
                         if responsibility_word in responisibility_statement:
-                            publication_dict['editors_list'] = [HumanName(e).last + ', ' +HumanName(e).first for editor in responisibility_statement.replace(responsibility_word, '').split(', and ') for edit in editor.split(' & ') for ed in edit.split(', ') for e in ed.split(' and ')]
+                            publication_dict['editors_list'] = [HumanName(e).last + ', ' +HumanName(e).first if gnd_request_for_cor.check_gnd_for_name(e) else e
+                                                                for editor in responisibility_statement.replace(responsibility_word, '').split(', and ') for edit in editor.split(' & ') for ed in edit.split(', ') for e in ed.split(' and ')]
                             break
                     for responsibility_word in ['Redactie: ', 'Onder redactie van ', 'Uitgegeven door ', 'Bewerkt door ', 'Bezorgd door ']:
                         if responsibility_word in responisibility_statement:
-                            publication_dict['editors_list'] = [HumanName(edit).last + ', ' + HumanName(edit).first for editor in responisibility_statement.replace(responsibility_word, '').split(' en ') for edit in editor.split(', ')]
+                            publication_dict['editors_list'] = [HumanName(edit).last + ', ' + HumanName(edit).first if gnd_request_for_cor.check_gnd_for_name(edit) else edit for editor in responisibility_statement.replace(responsibility_word, '').split(' en ') for edit in editor.split(', ')]
                             break
                     if not publication_dict['editors_list']:
-                        publication_dict['authors_list'] = [HumanName(ed).last + ', ' + HumanName(ed).first for editor in responisibility_statement.replace(responsibility_word, '').split(' & ') if responisibility_statement for edit in editor.split(' en ') for ed in edit.split(', ')]
+                        publication_dict['authors_list'] = [HumanName(ed).last + ', ' + HumanName(ed).first if gnd_request_for_cor.check_gnd_for_name(ed) else ed for editor in responisibility_statement.replace(responsibility_word, '').split(' & ') if responisibility_statement for edit in editor.split(' en ') for ed in edit.split(', ')]
                     sub_title = ''
                     if '. ' in title:
                         if ' av. n. è.' in title and 'Ldkr. ' in title and ' (c. ' in title:

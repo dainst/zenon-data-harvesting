@@ -6,6 +6,7 @@ import json
 import re
 import write_error_to_logfile
 from harvest_records import harvest_records
+import gnd_request_for_cor
 
 nlp_dict = {'de': 'de_core_news_sm', 'en': 'en_core_web_sm', 'fr': 'fr_core_news_sm',
             'es': 'es_core_news_sm', 'it': 'it_core_news_sm', 'nl': 'nl_core_news_sm', 'xx': 'xx_ent_wiki_sm'}
@@ -55,7 +56,8 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                     elif response_tag:
                         publication_dict['response'] = True
                     if review_author:
-                        publication_dict['authors_list'] = [(HumanName(author).last + ', ' + HumanName(author).first + ' ' + HumanName(author).middle).strip() for and_seperated_authors in
+                        publication_dict['authors_list'] = [(HumanName(author).last + ', ' + HumanName(author).first + ' ' + HumanName(author).middle).strip()
+                                                            if gnd_request_for_cor.check_gnd_for_name(author) else author for and_seperated_authors in
                                                             review_author.split(', ') for author in and_seperated_authors.split(' and ')]
                         publication_year = ''
                     publication_dict['text_body_for_lang_detection'] = article_soup.find_all('div', itemprop='reviewBody')[0].text.strip()
@@ -74,7 +76,9 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                                 publication_year = ''
                             reviewed_authors = [string.strip().strip(',') for string in
                                                 pub.find('div', class_='entry-citation').text.split(title_reviewed)[0].replace('\t', '').split('\n') if string.strip()]
-                            reviewed_authors = [HumanName(reviewed_author).last + ', ' + HumanName(reviewed_author).first for reviewed_author in reviewed_authors]
+                            reviewed_authors = [HumanName(reviewed_author).last + ', ' + HumanName(reviewed_author).first
+                                                if gnd_request_for_cor.check_gnd_for_name(reviewed_author) else reviewed_author
+                                                for reviewed_author in reviewed_authors]
                             publication_dict['review_list'].append({'reviewed_title': title_reviewed,
                                                                     'reviewed_authors': reviewed_authors,
                                                                     'reviewed_editors': [],

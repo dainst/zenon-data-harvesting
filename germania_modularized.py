@@ -10,6 +10,7 @@ import json
 import write_error_to_logfile
 from harvest_records import harvest_records
 from find_sysnumbers_of_volumes import find_sysnumbers
+import gnd_request_for_cor
 
 unresolved_titles = {
     "H. G. Bandi und J. Maringer, Kunst der Eiszeit. Levantekunst. Arktische Kunst": "H. G. Bandi und J. Maringer",
@@ -104,6 +105,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                             publication_dict['rdamedia'] = 'c'
                             publication_dict['rdacarrier'] = 'cr'
                             publication_dict['authors_list'] = [HumanName(author_tag['content']).last + ', ' + HumanName(author_tag['content']).first
+                                                                if gnd_request_for_cor.check_gnd_for_name(author_tag['content']) else author_tag['content']
                                                                 for author_tag in article_soup.find_all('meta', attrs={'name': 'citation_author'})]
                             publication_dict['host_item']['name'] = 'Germania'
                             publication_dict['host_item']['sysnumber'] = volumes_sysnumbers[publication_year]
@@ -166,7 +168,8 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                                     editorship = False
                                     publication_dict['review'] = True
                                     if ' / ' in title:
-                                        persons = [HumanName(person).last + ', ' + HumanName(person).first for person in title.split(' / ', title.count(' / '))[:-1]]
+                                        persons = [HumanName(person).last + ', ' + HumanName(person).first if gnd_request_for_cor.check_gnd_for_name(person) else person
+                                                   for person in title.split(' / ', title.count(' / '))[:-1]]
                                         title = title.split(' / ', title.count(' / '))[-1]
                                     for editorship_word in [" (Red.)", " (Hrsg.)", " (ed.)", " (eds)"]:
                                         if editorship_word in title:
@@ -213,7 +216,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
 
                                     if last_person:
                                         title = title.replace(last_person + ", ", "")
-                                        persons.append(HumanName(last_person).last + ', ' + HumanName(last_person).first)
+                                        persons.append(HumanName(last_person).last + ', ' + HumanName(last_person).first if gnd_request_for_cor.check_gnd_for_name(last_person) else last_person)
                                         if editorship:
                                             rev_editors = persons
                                         else:
