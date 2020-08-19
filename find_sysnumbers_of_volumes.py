@@ -1,5 +1,7 @@
 import urllib.request
 import json
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
 
 def find_sysnumbers(sysnumber_host_item):
     volumes_sysnumbers = {}
@@ -21,3 +23,5 @@ def find_sysnumbers(sysnumber_host_item):
             for date in result['publicationDates']:
                 volumes_sysnumbers[date] = result['id']
     return volumes_sysnumbers
+
+find_sysnumbers('000594790')
