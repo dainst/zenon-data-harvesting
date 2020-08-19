@@ -12,6 +12,8 @@ import math
 import unidecode
 import write_error_to_logfile
 import find_existing_doublets
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
 
 rda_codes = {'rdacarrier': {'sg': 'audio cartridge', 'sb': 'audio belt', 'se': 'audio cylinder', 'sd': 'audio disc',
                             'si': 'sound track reel', 'sq': 'audio roll', 'sw': 'audio wire reel',
