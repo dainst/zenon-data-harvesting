@@ -23,5 +23,3 @@ def find_sysnumbers(sysnumber_host_item):
             for date in result['publicationDates']:
                 volumes_sysnumbers[date] = result['id']
     return volumes_sysnumbers
-
-find_sysnumbers('000594790')
