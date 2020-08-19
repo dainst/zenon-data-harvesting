@@ -77,7 +77,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                             publication_dict['rdamedia'] = 'c'
                             publication_dict['rdacarrier'] = 'cr'
                             publication_dict['authors_list'] = [HumanName(author_tag['content']).last + ', ' + HumanName(author_tag['content']).first
-                                                                if gnd_request_for_cor.check_gnd_for_name(author_tag['content']) else author_tag['content'] for author_tag in article_soup.find_all('meta', attrs={'name': 'citation_author'})]
+                                                                if not gnd_request_for_cor.check_gnd_for_name(author_tag['content']) else author_tag['content'] for author_tag in article_soup.find_all('meta', attrs={'name': 'citation_author'})]
                             publication_dict['host_item']['name'] = volume_name
                             publication_dict['host_item']['sysnumber'] = '001527029'
                             publication_dict['title_dict']['main_title'] = article_soup.find('meta', attrs={'name': 'citation_title'})['content']
@@ -157,11 +157,11 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                                     if rev_editors:
                                         title = title.split(editorship_word)[0]
                                         title.strip()
-                                        rev_editors = [HumanName(edit).last + ', ' + HumanName(edit).first if gnd_request_for_cor.check_gnd_for_name(edit) else edit for edit in rev_editors.split(" und ")]
+                                        rev_editors = [HumanName(edit).last + ', ' + HumanName(edit).first if not gnd_request_for_cor.check_gnd_for_name(edit) else edit for edit in rev_editors.split(" und ")]
                                         rev_authors = ''
                                     if rev_authors:
                                         title = title.replace(rev_authors + ", ", "")
-                                        rev_authors = [HumanName(auth).last + ', ' + HumanName(auth).first if gnd_request_for_cor.check_gnd_for_name(auth) else auth for auth in rev_authors.split(" und ")]
+                                        rev_authors = [HumanName(auth).last + ', ' + HumanName(auth).first if not gnd_request_for_cor.check_gnd_for_name(auth) else auth for auth in rev_authors.split(" und ")]
                                     publication_dict['review_list'].append({'reviewed_title': title,
                                                                             'reviewed_authors': rev_authors,
                                                                             'reviewed_editors': rev_editors,

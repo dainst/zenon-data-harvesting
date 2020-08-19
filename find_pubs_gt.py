@@ -14,6 +14,7 @@ import write_error_to_logfile
 import csv
 from nameparser import HumanName
 import ssl
+import find_sysnumbers_of_volumes
 
 months_and_seasons = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'August', 'September',
                       'Oktober', 'November', 'Dezember', 'Frühling', 'Sommer', 'Herbst', 'Winter',
@@ -107,16 +108,15 @@ def check_cosine_similarity(title, found_title, found_record, rejected_titles, l
         else:
             similarity = 1 - spatial.distance.cosine(title_list_count, found_title_list_count)
             if similarity > 0.6:
-                print(title_list, found_title_list)
-                print('similarity:', similarity)
-            if (similarity <= 0.65) and (similarity >= 0.5):
+                pass
+            '''if (similarity <= 0.65) and (similarity >= 0.5):
                 for word in title_list:
                     for found_word in found_title_list:
                         if (iterative_levenshtein(word, found_word)) < (len(word)/4) and iterative_levenshtein(word, found_word) > 0:
                             print('levenshtein_title_test')
                             print(word, found_word, iterative_levenshtein(word, found_word))
                             print(title)
-                            print(found_title)
+                            print(found_title)'''
             if similarity > 0.65:
                 skipped_word_nr = 0
                 mismatches_nr = 0
@@ -141,7 +141,9 @@ def check_cosine_similarity(title, found_title, found_record, rejected_titles, l
                 if skipped_word_nr >= (len(title_list) / 3):
                     return 0, False
                 if matches_nr > mismatches_nr * 2:
-                    if similarity > 0.77:
+                    if similarity > 0.79:
+                        print(title_list, found_title_list)
+                        print('similarity:', similarity)
                         return similarity, True
                     else:
                         print(lang)
@@ -159,7 +161,7 @@ def check_cosine_similarity(title, found_title, found_record, rejected_titles, l
 
 
 
-def swagger_find(search_title, search_authors, year, title, rejected_titles, possible_host_items, lang, authors, additional_physical_form_entrys, all_results, all_sims):
+def swagger_find(search_title, search_authors, year, title, rejected_titles, possible_host_items, lang, authors, additional_physical_form_entrys, all_results, all_sims, is_host_item = False):
     try:
         page_nr = 0
         empty_page = False
@@ -191,6 +193,7 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                     right_author = False
                     right_year = False
                     if similarity:
+                        print(found_record['id'])
                         try:
                             print('title is similar')
                             webfile = urllib.request.urlopen(
@@ -233,37 +236,26 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                                         right_year = True
                                 if not found_year and not year:
                                     right_year = True
+                                all_child_records = find_sysnumbers_of_volumes.find_sysnumbers(found_record['id'])
+                                print(all_child_records)
+                                parent_webfile = urllib.request.urlopen(
+                                    "https://zenon.dainst.org/Record/" + found_record['id'] + "/Export?style=MARC")
+                                new_reader = MARCReader(parent_webfile)
+                                record_type = ''
+                                for file in new_reader:
+                                    record_type = file.leader[7]
                                 if right_author and right_year:
-
-                                    if found_record['id'] not in [entry['zenon_id'] for entry in additional_physical_form_entrys]:
-                                        e_resource = False
-                                        if file['337']:
-                                            if file['337']['b'] == 'c' or file['337']['a'] == 'computer':
-                                                e_resource = True
-                                        if file['338']:
-                                            if file['338']['b'] == 'cr' or file['338']['a'] == 'online resource':
-                                                e_resource = True
-                                        if file['006']:
-                                            if str(file['006'].data)[0] == 'm':
-                                                e_resource = True
-                                        if file['007']:
-                                            if str(file['007'].data)[0] == 'c':
-                                                e_resource = True
-                                        if file['856']:
-                                                if 'online' in str(file['856']['z']).lower():
-                                                    e_resource = True
-                                        if file['300']:
-                                            if ('online' in str(file['300']['a']).lower()):
-                                                e_resource = True
-                                            if file['533']:
-                                                if ('online' in str(file['533']['a']).lower()):
-                                                    e_resource = True
-                                            if file['590']:
-                                                if [str(field['a']).lower() for field in file.get_fields('590') if 'online' in str(field['a']) or 'ebook' in str(field['a'])]:
-                                                    e_resource = True
                                     if found_record['id'] not in all_results:
                                         all_results.append(found_record['id'])
                                         all_sims.append(sim)
+                                elif is_host_item and year in all_child_records:
+                                    all_results.append(all_child_records[year])
+                                elif is_host_item and all_child_records:
+                                    if found_record['id'] not in all_results:
+                                        all_results.append(found_record['id'])
+                                        all_sims.append(sim)
+                                elif is_host_item and (record_type in ['s', 'm']):
+                                    all_results.append(found_record['id'])
 
                         except Exception as e:
                             write_error_to_logfile.write(e)
@@ -274,13 +266,16 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
         write_error_to_logfile.write(e)
 
 
-def find(title, authors, year, default_lang, possible_host_items):
+def find(title, authors, year, default_lang, possible_host_items, is_host_item = False):
     try:
         print(possible_host_items)
         all_sims = []
         all_results = []
         title = unidecode.unidecode(title)
-        lang = detect(title)
+        try:
+            lang = detect(title)
+        except:
+            lang = default_lang
         if lang not in stopwords_dict:
             lang = default_lang
         rejected_titles = []
@@ -306,7 +301,7 @@ def find(title, authors, year, default_lang, possible_host_items):
         search_title = search_title.strip("+")
         if word_nr >= 1:
             all_sims, all_results, rejected_titles, additional_physical_form_entrys = swagger_find(search_title, search_authors, year, title, rejected_titles, possible_host_items,
-                                                                                         lang, authors, additional_physical_form_entrys, all_sims, all_results)
+                                                                                         lang, authors, additional_physical_form_entrys, all_sims, all_results, is_host_item)
             # Suche mit vollständigen Daten
             if not all_results:
                 all_results = []
@@ -314,7 +309,7 @@ def find(title, authors, year, default_lang, possible_host_items):
                 search_authors = search_authors.split("+")[0]
                 all_sims, all_results, rejected_titles, additional_physical_form_entrys = swagger_find(search_title, search_authors, year, title, rejected_titles,
                                                                                              possible_host_items,
-                                                                                             lang, authors, additional_physical_form_entrys, all_sims, all_results)
+                                                                                             lang, authors, additional_physical_form_entrys, all_sims, all_results, is_host_item)
                 # Suche nur mit dem ersten Autoren
             if len(all_results) == 0:
                 search_title = ""
@@ -331,13 +326,13 @@ def find(title, authors, year, default_lang, possible_host_items):
                 search_title = search_title.strip("+")
                 all_sims, all_results, rejected_titles, additional_physical_form_entrys = swagger_find(search_title, search_authors, year, title, rejected_titles,
                                                                                              possible_host_items,
-                                                                                             lang, authors, additional_physical_form_entrys, all_sims, all_results)
+                                                                                             lang, authors, additional_physical_form_entrys, all_sims, all_results, is_host_item)
                 # Suche mit verkürztem Titel
             if len(all_results) == 0:
                 search_authors = ""
                 all_sims, all_results, rejected_titles, additional_physical_form_entrys = swagger_find(search_title, search_authors, year, title, rejected_titles,
                                                                                              possible_host_items,
-                                                                                             lang, authors, additional_physical_form_entrys, all_sims, all_results)
+                                                                                             lang, authors, additional_physical_form_entrys, all_sims, all_results, is_host_item)
                 # Suche ohne Autorennamen
             if len(all_results) == 0:
                 if len(search_title.split('+')) > 5:
@@ -351,7 +346,7 @@ def find(title, authors, year, default_lang, possible_host_items):
                                 '+')
                         all_sims, all_results, rejected_titles, additional_physical_form_entrys = swagger_find(search_title_without_words, search_authors, year, title,
                                                                                                      rejected_titles,
-                                                                                                     possible_host_items, lang, authors, additional_physical_form_entrys, all_sims, all_results)
+                                                                                                     possible_host_items, lang, authors, additional_physical_form_entrys, all_sims, all_results, is_host_item)
                 else:
                     for word in search_title.split("+"):
                         search_title_without_words = search_title
@@ -362,7 +357,7 @@ def find(title, authors, year, default_lang, possible_host_items):
                             '+')
                         all_sims, all_results, rejected_titles, additional_physical_form_entrys = swagger_find(search_title_without_words, search_authors, year, title,
                                                                                                      rejected_titles,
-                                                                                                     possible_host_items, lang, authors, additional_physical_form_entrys, all_sims, all_results)
+                                                                                                     possible_host_items, lang, authors, additional_physical_form_entrys, all_sims, all_results, is_host_item)
                 # Suche unter Ausschluss von einem oder zwei Suchbegriffen je nach Länge des Titels
         return all_results, additional_physical_form_entrys, all_sims
     except Exception as e:
@@ -375,6 +370,7 @@ def get_articles_zenon_ids():
         row_nr = 0
         for row in lkr_reader:
             row_nr += 1
+            print('searching new record: row_nr', row_nr, row)
             authors_string = row[0]
             splitted = [a.strip() for author in authors_string.split(' and ') for auth in author.split(' und ') for aut in auth.split('; ') for a in aut.split(' – ')]
             splitted_by_komma = list(set([a if aut.count(' ') > aut.count(', ') else aut for aut in splitted for a in aut.split(', ')]))
@@ -401,14 +397,10 @@ def get_articles_zenon_ids():
                 title_string = title_string_splitted_list[0]
             all_resutls, adds, all_sims = find(title_string, authors, year, 'de', [])  # title, authors, year, default_lang, possible_host_items
             if all_resutls:
-                # print('found matching record: ', all_resutls)
-                # if len(all_resutls) > 1:
-                    # print('multiple matching records found')
+                print('found matching record: ', all_resutls)
                 all_found_records[str(row_nr)] = [all_resutls, all_sims]
             else:
                 print('no matching record found')
-
-
                 # Suche nach host items:
                 title_string = row[1].replace('\n', '')
                 for string in pages:
@@ -478,9 +470,9 @@ def get_articles_zenon_ids():
                             title_string = title_string.replace(',' + entry, '')
                     host_item = title_string.rsplit(', ', 1)[-1].rsplit('. ')[-1]
                 host_item = host_item.strip()
-                all_resutls, adds, all_sims =  find(host_item, [], year, 'de', [])
+                print('host item name:', host_item)
+                all_resutls, adds, all_sims =  find(host_item, [], year, 'de', [], is_host_item=True)
                 print('host_item:', all_resutls)
-    print(all_found_records)
     return all_found_records
 
 

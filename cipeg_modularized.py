@@ -71,7 +71,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                             publication_dict['rdamedia'] = 'c'
                             publication_dict['rdacarrier'] = 'cr'
                             publication_dict['authors_list'] = [HumanName(author_tag['content']).last + ', ' + HumanName(author_tag['content']).first
-                                                                if gnd_request_for_cor.check_gnd_for_name(author_tag['content']) else author_tag['content'] for author_tag in article_soup.find_all('meta', attrs={'name': 'citation_author'})]
+                                                                if not gnd_request_for_cor.check_gnd_for_name(author_tag['content']) else author_tag['content'] for author_tag in article_soup.find_all('meta', attrs={'name': 'citation_author'})]
                             publication_dict['host_item']['name'] = 'CIPEG journal : Ancient Egyptian & Sudanese collections and museums'
                             publication_dict['host_item']['sysnumber'] = '001577954'
                             publication_dict['title_dict']['main_title'] = article_soup.find('meta', attrs={'name': 'citation_title'})['content']

@@ -71,7 +71,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                 publication_dict['rdamedia'] = 'c'
                 publication_dict['rdacarrier'] = 'cr'
                 publication_dict['authors_list'] = [HumanName(author_tag['content']).last + ', ' + HumanName(author_tag['content']).first
-                                                    if gnd_request_for_cor.check_gnd_for_name(author_tag['content']) else author_tag['content']
+                                                    if not gnd_request_for_cor.check_gnd_for_name(author_tag['content']) else author_tag['content']
                                                     for author_tag in article_soup.find_all('meta', attrs={'name': 'citation_author'})]
                 publication_dict['host_item']['name'] = volume_title
                 publication_dict['volume_year'] = volume_year
@@ -117,11 +117,11 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                     if re.findall(r'\(.+?\)', reviewed_persons):
                         reviewed_persons = re.sub(r'\(.+?\)', '', reviewed_persons)
                         reviewed_persons = reviewed_persons.strip()
-                        reviewed_editors = [HumanName(author).last + ', ' + HumanName(author).first if gnd_request_for_cor.check_gnd_for_name(author) else author
+                        reviewed_editors = [HumanName(author).last + ', ' + HumanName(author).first if not gnd_request_for_cor.check_gnd_for_name(author) else author
                                             for author in re.split(r' *– *', reviewed_persons)]
                     else:
                         reviewed_persons = reviewed_persons.strip()
-                        reviewed_authors = [HumanName(author).last + ', ' + HumanName(author).first if gnd_request_for_cor.check_gnd_for_name(author) else author
+                        reviewed_authors = [HumanName(author).last + ', ' + HumanName(author).first if not gnd_request_for_cor.check_gnd_for_name(author) else author
                                             for author in re.split(r' *– *', reviewed_persons)]
                     publication_dict['review'] = True
                     publication_dict['review_list'].append({'reviewed_title': reviewed_title, 'reviewed_authors': reviewed_authors,

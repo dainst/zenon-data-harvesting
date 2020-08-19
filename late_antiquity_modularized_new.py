@@ -31,7 +31,7 @@ def create_review_dict(review_title):
             new_review['reviewed_editors'] = []
         for responsibles in ['reviewed_editors', 'reviewed_authors']:
             if new_review[responsibles]:
-                new_review[responsibles] = [(HumanName(person).last+", "+HumanName(person).first).strip() if gnd_request_for_cor.check_gnd_for_name(person) else person.strip()
+                new_review[responsibles] = [(HumanName(person).last+", "+HumanName(person).first).strip() if not gnd_request_for_cor.check_gnd_for_name(person) else person.strip()
                                             for person in new_review[responsibles].split(', ')[0].split(' and ')]
         review_list.append(new_review)
     return review_list

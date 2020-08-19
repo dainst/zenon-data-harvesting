@@ -59,7 +59,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                     authors = [author.split('/')[0] for author in title_and_author_info.text.replace(title, '').replace('\n', '').split(', ')]
                     pages = re.findall(r'\d{1,3}-\d{1,3}', article_info.text.split('Pagine:')[1].split('Prezzo:')[0])[0]
                     publication_dict['volume'] = volume_name
-                    publication_dict['authors_list'] = [HumanName(author).last + ', ' + HumanName(author).first if gnd_request_for_cor.check_gnd_for_name(author) else author
+                    publication_dict['authors_list'] = [HumanName(author).last + ', ' + HumanName(author).first if not gnd_request_for_cor.check_gnd_for_name(author) else author
                                                         for author in authors if author]
                     publication_dict['host_item']['name'] = 'Sardinia, Corsica et Baleares antiquae'
                     publication_dict['host_item']['sysnumber'] = volumes_sysnumbers[volume_year]

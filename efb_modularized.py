@@ -49,7 +49,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                     if article.find('div', class_='tocGalleys').find('a')['href']:
                         publication_dict['pdf_links'].append(article.find('div', class_='tocGalleys').find('a')['href'].strip().replace("view", "download"))
                         publication_dict['authors_list'] = \
-                            [HumanName(edit['content']).last + ', ' + HumanName(edit['content']).first if gnd_request_for_cor.check_gnd_for_name(edit) else edit for edit in article_soup.find_all('meta', attrs={'name': 'citation_author'})]
+                            [HumanName(edit['content']).last + ', ' + HumanName(edit['content']).first if not gnd_request_for_cor.check_gnd_for_name(edit) else edit for edit in article_soup.find_all('meta', attrs={'name': 'citation_author'})]
                         publication_dict['additional_content'] = {'type': 'Abstract', 'text': article_soup.find('meta', attrs={'name': 'DC.Description'})['content']}
                         publication_dict['rdacontent'] = 'txt'
                         publication_dict['rdamedia'] = 'c'

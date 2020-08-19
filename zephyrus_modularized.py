@@ -43,7 +43,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                             publication_dict = json.load(publication_dict_template)
                         publication_dict['title_dict']['main_title'] = item['bibjson']['title']
                         publication_dict['authors_list'] = [HumanName(author['name']).last.capitalize() + ', ' + HumanName(author['name']).first
-                                                            if gnd_request_for_cor.check_gnd_for_name(author) else author for author in item['bibjson']['author']]
+                                                            if not gnd_request_for_cor.check_gnd_for_name(author) else author for author in item['bibjson']['author']]
                         publication_dict['html_links'] = ([link['url'] for link in item['bibjson']['link'] if link['content_type'] == 'html'])
                         publication_dict['issue'] = issue
                         if [identifier['id'] for identifier in item['bibjson']['identifier'] if identifier == 'doi']:

@@ -1,17 +1,10 @@
 import urllib.parse, urllib.request
-from bs4 import BeautifulSoup
-import re
 import urllib.parse, urllib.request
-import csv
 from bs4 import BeautifulSoup
-import create_new_record
-from nameparser import HumanName
-import find_existing_doublets
 import json
 import re
 import write_error_to_logfile
 from harvest_records import harvest_records
-from pymarc import MARCReader
 
 
 def create_publication_dicts(last_item_harvested_in_last_session, *other):
