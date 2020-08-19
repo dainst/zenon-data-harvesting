@@ -375,15 +375,13 @@ def create_lkr_ana(recent_record, publication_dict, volume, review, response):
         elif response:
             lkr_subfield_n = '[Response in]: ' + lkr_subfield_n
         if publication_dict['host_item']['issn']:
-            recent_record.add_field(Field(tag='LKR', indicators=[' ', ' '],
-                                          subfields=['a', 'ANA', 'b', publication_dict['host_item']['sysnumber'],
-                                                     'l', 'DAI01', 'm', recent_record['245']['a'],
-                                                     'n', lkr_subfield_n, 'x', publication_dict['host_item']['issn']]))
+            recent_record.add_field(Field(tag='773', indicators=['0', '8'],
+                                          subfields=['a', 'ANA', 'w', publication_dict['host_item']['sysnumber'],
+                                                     't', lkr_subfield_n, 'x', publication_dict['host_item']['issn']]))
         else:
-            recent_record.add_field(Field(tag='LKR', indicators=[' ', ' '],
-                                          subfields=['a', 'ANA', 'b', publication_dict['host_item']['sysnumber'],
-                                                     'l', 'DAI01', 'm', recent_record['245']['a'],
-                                                     'n', lkr_subfield_n]))
+            recent_record.add_field(Field(tag='773', indicators=['0', '8'],
+                                          subfields=['a', 'ANA', 'w', publication_dict['host_item']['sysnumber'],
+                                                     't', lkr_subfield_n]))
     except Exception as e:
         write_error_to_logfile.write(e)
         write_error_to_logfile.comment(publication_dict)
@@ -885,17 +883,18 @@ def create_new_record(out, publication_dict):
                         for reviewed_title_id in reviewed_title_ids:
                             # print(publication_dict['review_list'])
                             # print(reviewed_title_ids)
-                            recent_record.add_field(Field(tag='LKR', indicators=[' ', ' '],
-                                                          subfields=['a', 'UP', 'b', reviewed_title_id, 'l', 'DAI01', 'm', 'Rezension',
-                                                                     'n', review_titles[reviewed_title_ids.index(reviewed_title_id)][0]]))
+                            recent_record.add_field(Field(tag='787', indicators=['0', '8'],
+                                                          subfields=['w', reviewed_title_id,
+                                                                     't', review_titles[reviewed_title_ids.index(reviewed_title_id)][0]]))
             if publication_dict['response']:
                 for reviewed_title in publication_dict['response_list']:
                     if reviewed_title['reviewed_title']:
                         reviewed_title_ids, review_titles = find_reviewed_title.find(reviewed_title, publication_dict['publication_year'], 'en')
                         for reviewed_title_id in reviewed_title_ids:
-                            recent_record.add_field(Field(tag='LKR', indicators=[' ', ' '],
-                                                          subfields=['a', 'UP', 'b', reviewed_title_id, 'l', 'DAI01',
-                                                                     'm', 'Rezension', 'n', publication_dict['title_dict']['main_title']]))
+                            recent_record.add_field(Field(tag='787', indicators=['0', '8'],
+                                                         subfields=['w', reviewed_title_id,
+                                                                    't', publication_dict['title_dict']['main_title'][0]]))
+
             if additional_physical_form_entrys:
                 add_subject_from_additional_physical_form_entry(additional_physical_form_entrys, recent_record, publication_dict)
             print(recent_record)
