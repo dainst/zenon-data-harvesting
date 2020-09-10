@@ -229,14 +229,28 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                 response = response.read()
             response = response.decode('utf-8')
             json_response = json.loads(response)
-            upper_host_items = []
+            host_items_pars = []
+            upper_host_items = [] # enthält die übergeordneten Aufnahmen der übergeordneten Aufnahmen für den neuen Record
+            upper_host_items_pars = [] # enthält deren Parallele Manifestationen.
             for host_item in possible_host_items:
                 webfile = urllib.request.urlopen(
                     "https://zenon.dainst.org/Record/" + host_item + "/Export?style=MARC")
                 new_reader = MARCReader(webfile)
                 for file in new_reader:
-                    for host_item_id in [field['b'] for field in file.get_fields('995') if field['b'] and field['a'] == 'ANA']:
+                    for host_item_id in [field['w'] for field in file.get_fields('773') if field['w']]:
                         upper_host_items.append(host_item_id)
+                    for par_item_id in [field['w'] for field in file.get_fields('776') if field['w']]:
+                        host_items_pars.append(par_item_id)
+            for upper_host_item in upper_host_items:
+                webfile = urllib.request.urlopen(
+                    "https://zenon.dainst.org/Record/" + upper_host_item + "/Export?style=MARC")
+                new_reader = MARCReader(webfile)
+                for file in new_reader:
+                    for par_item_id in [field['w'].replace('(DE-2553)', '') for field in file.get_fields('776') if field['w']]:
+                        upper_host_items_pars.append(par_item_id)
+            print('host_items_pars', host_items_pars)
+            print('upper_host_items', upper_host_items)
+            print('upper_host_items_pars', upper_host_items_pars)
             if 'records' not in json_response:
                 empty_page = True
                 continue
@@ -263,27 +277,40 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                                     [possible_host_items.remove(item) for item in possible_host_items if not item]
                                     if possible_host_items:
                                         right_host_item = False
-                                        print('found host items:', [field['b'] for field in file.get_fields('995') if field['b'] and field['a'] == 'ANA'])
-                                        if [field['b'] for field in file.get_fields('995') if field['b'] and field['a'] == 'ANA']:
-                                            if [field['b'] for field in file.get_fields('995') if field['b'] and field['a'] == 'ANA'][0] in possible_host_items:
+                                        print('found host items:', [field['w'] for field in file.get_fields('773') if field['w']])
+                                        if [field['w'] for field in file.get_fields('773') if field['w']]:
+                                            if any([field['w'] in possible_host_items for field in file.get_fields('773') if field['w']]):
                                                 right_host_item = True
                                                 print(right_host_item)
                                             else:
                                                 try:
-                                                    print("https://zenon.dainst.org/Record/" + file['995'][
-                                                            'b'] + "/Export?style=MARC")
+                                                    print("https://zenon.dainst.org/Record/" + file['773'][
+                                                            'w'] + "/Export?style=MARC")
                                                     parent_webfile = urllib.request.urlopen(
-                                                        "https://zenon.dainst.org/Record/" + file['995'][
-                                                            'b'] + "/Export?style=MARC")
+                                                        "https://zenon.dainst.org/Record/" + file['773'][
+                                                            'w'] + "/Export?style=MARC")
                                                     new_reader = MARCReader(parent_webfile)
+                                                    # öffnet übergeordnete Aufnahme
                                                     for parent_file in new_reader:
                                                         print('parent_file:', parent_file['001'])
-                                                        print([field['b'] for field in file.get_fields('995') if field['b'] and field['a'] == 'ANA'])
-                                                        if [field['b'] for field in parent_file.get_fields('995') if field['b'] and field['a'] == 'ANA']:
-                                                            if [field['b'] for field in parent_file.get_fields('995') if field['b'] and field['a'] == 'ANA'][0] in possible_host_items:
+                                                        print([field['w'] for field in parent_file.get_fields('773') if field['w']])
+                                                        if [field['w'] for field in parent_file.get_fields('773') if field['w']]:
+                                                            if any([field['w'] in upper_host_items for field in parent_file.get_fields('773') if field['w']]):
                                                                 right_host_item = True
-                                                            if [field['b'] for field in parent_file.get_fields('995') if field['b'] and field['a'] == 'ANA'][0] in upper_host_items:
+                                                            elif any([field['w'].replace('(DE-2553)', '') in possible_host_items for field in parent_file.get_fields('776') if field['w']]):
                                                                 right_host_item = True
+                                                            elif parent_file['001'].data in host_items_pars:
+                                                                right_host_item = True
+                                                            else:
+                                                                upper_parent_webfile = urllib.request.urlopen(
+                                                                    "https://zenon.dainst.org/Record/" + file['773'][
+                                                                        'w'] + "/Export?style=MARC")
+                                                                new_reader = MARCReader(upper_parent_webfile)
+                                                                for upper_parent_file in new_reader:
+                                                                    upper_parent_file_pars = [field['w'].replace('(DE-2553)', '') for field in upper_parent_file.get_fields('776') if field['w']]
+                                                                    print('upper_parent_file_pars', upper_parent_file_pars)
+                                                                    if any([upper_parent_file_par in upper_host_items_pars for upper_parent_file_par in upper_parent_file_pars]):
+                                                                        right_host_item = True
                                                 except:
                                                     print('Das Host-Item von', found_record['id'], 'hat ein ungültiges Host-Item bzw. es gibt ein Problem mit der Weiterleitung.')
                                         if right_host_item is False:
