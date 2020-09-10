@@ -112,7 +112,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                 publication_dict['rdacontent'] = 'txt'
                 publication_dict['rdamedia'] = 'c'
                 publication_dict['rdacarrier'] = 'cr'
-                publication_dict['fields_590'] = ['arom', 'Online publication', '2020xhnxhsoz']
+                publication_dict['fields_590'] = ['arom', 'Online publication', '2020xhnxhsozk']
                 publication_dict['volume'] = ''
                 publication_dict['volume_year'] = ''
                 publication_dict['issue'] = ''

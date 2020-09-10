@@ -134,7 +134,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                                      'date_published_online': article_soup.find('div', class_='published').find('div', class_='value').text.strip()}
                                 publication_dict['default_language'] = language_codes.resolve(article_soup.find('meta', attrs={'name': 'DC.Language'})['content'])
                             publication_dict['field_008_18-34'] = 'gr poo||||||   b|'
-                            publication_dict['fields_590'] = ['arom', '2020xhnxgerm', 'Online publication', 'daiauf8']
+                            publication_dict['fields_590'] = ['arom', '2020xhnxgermk', 'Online publication', 'daiauf8']
                             publication_dict['original_cataloging_agency'] = 'DE-16'
                             publication_dict['publication_etc_statement']['publication'] = {'place': 'Heidelberg',
                                                                                             'responsible': 'Propylaeum',

@@ -376,11 +376,11 @@ def create_lkr_ana(recent_record, publication_dict, volume, review, response):
             lkr_subfield_n = '[Response in]: ' + lkr_subfield_n
         if publication_dict['host_item']['issn']:
             recent_record.add_field(Field(tag='773', indicators=['0', '8'],
-                                          subfields=['a', 'ANA', 'w', publication_dict['host_item']['sysnumber'],
+                                          subfields=['w', publication_dict['host_item']['sysnumber'],
                                                      't', lkr_subfield_n, 'x', publication_dict['host_item']['issn']]))
         else:
             recent_record.add_field(Field(tag='773', indicators=['0', '8'],
-                                          subfields=['a', 'ANA', 'w', publication_dict['host_item']['sysnumber'],
+                                          subfields=['w', publication_dict['host_item']['sysnumber'],
                                                      't', lkr_subfield_n]))
     except Exception as e:
         write_error_to_logfile.write(e)
@@ -873,6 +873,7 @@ def create_new_record(out, publication_dict):
                     recent_record.add_field(Field(tag=field['tag'], indicators=field['indicators'],
                                                   subfields=field['subfields']))
             if publication_dict['review']:
+                print(publication_dict['review_list'])
                 for reviewed_title in publication_dict['review_list']:
                     if reviewed_title['reviewed_title']:
                         reviewed_title_ids, review_titles = find_reviewed_title.find(reviewed_title, publication_dict['publication_year'], 'en')

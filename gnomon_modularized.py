@@ -91,7 +91,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                             publication_dict['default_language'] = language_codes.resolve(title_soup.find('meta', attrs={'name': 'citation_language'})['content'])
                             publication_dict['do_detect_lang'] = False
                             publication_dict['field_008_18-34'] = 'zr p| ||||||   b|'
-                            publication_dict['fields_590'] = ['arom', '2020xhnxgnomon']
+                            publication_dict['fields_590'] = ['arom', '2020xhnxgnomonk']
                             publication_dict['original_cataloging_agency'] = 'C.H.Beck eLibrary'
                             publication_dict['publication_etc_statement']['publication'] = {'place': 'München',
                                                                                             'responsible': "C. H. Beck'sche Verlagsbuchhandlung",

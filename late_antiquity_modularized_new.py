@@ -93,7 +93,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                         publication_dict['LDR_06_07'] = 'ab'
                         publication_dict['do_detect_lang'] = False
                         publication_dict['default_language'] = language_codes.resolve(item['language'])
-                        publication_dict['fields_590'] = ['arom', '2020xhnxjola']
+                        publication_dict['fields_590'] = ['arom', '2020xhnxjolak']
                         publication_dict['original_cataloging_agency'] = 'Crossref'
                         publication_dict['publication_year'] = year_of_publication
                         publication_dict['publication_etc_statement']['publication'] = {'place': 'Baltimore, MD', 'responsible': 'Johns Hopkins University Press', 'country_code': 'mdu'}

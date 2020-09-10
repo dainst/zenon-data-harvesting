@@ -47,7 +47,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
             publication_dict['abstract_link'] = publication_url
             publication_dict['publication_year'] = publication_soup.find('meta', attrs={'name': 'DC.date'})['content']
             publication_dict['original_cataloging_agency'] = 'AT-UBW-002'
-            publication_dict['fields_590'] = ['Online publication', '2020xhnxuniw', 'ebookoa0420']
+            publication_dict['fields_590'] = ['Online publication', '2020xhnxuniwk', 'ebookoa0420']
             publication_dict['field_300'] = '1 online ressource , ' + publication_soup.find('meta', attrs={'name':'eprints.pages'})['content']
             publication_dict['publication_etc_statement']['publication'] = {'place': 'Wien', 'responsible': 'Universität Wien', 'country_code': 'au '}
             publication_dict['rdacarrier'] = 'cr'

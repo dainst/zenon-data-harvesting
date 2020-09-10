@@ -90,7 +90,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                     publication_dict['table_of_contents_link'] = issue_url
                     publication_dict['default_language'] = 'eng'
                     publication_dict['do_detect_lang'] = True
-                    publication_dict['fields_590'] = ['arom', '2020xhnxmaa']
+                    publication_dict['fields_590'] = ['arom', '2020xhnxmaak']
                     publication_dict['original_cataloging_agency'] = 'MAA'
                     publication_dict['publication_year'] = year
                     publication_dict['publication_etc_statement']['publication'] = {'place': 'Rhodes', 'responsible': 'University of the Aegean', 'country_code': 'gr '}

@@ -18,6 +18,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
     try:
         dateTimeObj = datetime.now()
         volumes_sysnumbers = find_sysnumbers_of_volumes.find_sysnumbers('001597435')
+        print(volumes_sysnumbers)
         url = 'http://groma.unibo.it/issue.all'
         issue_req = urllib.request.Request(url)
         with urllib.request.urlopen(issue_req) as issue_response:
@@ -30,7 +31,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
         articles = issue_soup.find('section', class_='toc').find_all('article')
         article_urls = ['http://groma.unibo.it/' + article.find('a')['href'] for article in articles]
         current_item = int(publication_year + issue.zfill(3))
-        if publication_year not in volumes_sysnumbers:
+        if (publication_year not in volumes_sysnumbers) and (max([timestamp['datetime'][:4] for timestamp in issue_soup.find_all('time')]) not in volumes_sysnumbers):
             print('Reviews von Groma konnten teilweise nicht geharvestet werden, da keine übergeordnete Aufnahme für das Jahr', dateTimeObj.strftime("%Y"), 'existiert.')
             print('Bitte erstellen Sie eine neue übergeordnete Aufnahme für das Jahr', dateTimeObj.strftime("%Y"), '.')
         else:
@@ -52,6 +53,9 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                     publication_dict['authors_list'] = [HumanName(author_tag['content']).last + ', ' + HumanName(author_tag['content']).first
                                                         if not gnd_request_for_cor.check_gnd_for_name(author_tag['content']) else author_tag['content'] for author_tag in article_soup.find_all('meta', attrs={'name': 'DC.Creator.PersonalName'})]
                     publication_dict['host_item']['name'] = 'Groma : documenting archaeology'
+                    if max([timestamp['datetime'][:4] for timestamp in issue_soup.find_all('time')]) != publication_year:
+                        if publication_year not in volumes_sysnumbers:
+                            publication_year = max([timestamp['datetime'][:4] for timestamp in issue_soup.find_all('time')])
                     publication_dict['host_item']['sysnumber'] = volumes_sysnumbers[publication_year]
                     publication_dict['publication_year'] = publication_year
                     if article_soup.find('meta', attrs={'name': 'DC.Identifier.DOI'}):
@@ -61,7 +65,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                     publication_dict['default_language'] = language_codes.resolve(article_soup.find('meta', attrs={'name': 'DC.Language'})['content'])
                     publication_dict['do_detect_lang'] = True
                     publication_dict['field_008_18-34'] = 'ar p|o||||||   b|'
-                    publication_dict['fields_590'] = ['arom', '2020xhnxgroma']
+                    publication_dict['fields_590'] = ['arom', '2020xhnxgromak']
                     publication_dict['original_cataloging_agency'] = 'BraDypUS'
                     publication_dict['publication_etc_statement']['publication'] = {'place': 'Roma',
                                                                                     'responsible': 'BraDypUS',

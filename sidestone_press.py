@@ -59,7 +59,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                     publication_dict['table_of_contents_link'] = url
                     if book_soup.find('a', class_='hide-for-large expanded small hollow buy button elibrarymediumsmall blacklabel'):
                         publication_dict['html_links'].append(book_soup.find('a', class_='hide-for-large expanded small hollow buy button elibrarymediumsmall blacklabel')['href'])
-                    publication_dict['fields_590'] = ['Online publication', '2020xhnxsist', 'ebook0420']
+                    publication_dict['fields_590'] = ['Online publication', '2020xhnxsistk', 'ebook0420']
                     publication_dict['original_cataloging_agency'] = 'Sidestone Press'
                     publication_dict['publication_year'] = re.findall(r'\d{4}', book_soup.find('meta', attrs={'name':'citation_publication_date'})['content'])[0]
                     publication_dict['field_300'] = '1 online ressource'

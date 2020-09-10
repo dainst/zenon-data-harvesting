@@ -90,7 +90,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                 publication_dict['field_006'] = 'm     o  d |      '
                 publication_dict['field_007'] = 'cr uuu   uuuuu'
                 publication_dict['field_008_18-34'] = 'gr p|o||||||   b|'
-                publication_dict['fields_590'] = ['arom', '2020xhnxgeri', 'Online publication']
+                publication_dict['fields_590'] = ['arom', '2020xhnxgerik', 'Online publication']
                 publication_dict['original_cataloging_agency'] = 'Universidad Complutense Madrid'
                 publication_dict['publication_etc_statement']['publication'] = {'place': 'Madrid',
                                                                                 'responsible': 'Universidad Complutense Madrid',

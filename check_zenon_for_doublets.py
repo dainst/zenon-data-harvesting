@@ -4,6 +4,8 @@ from pymarc import MARCReader
 import json
 import find_existing_doublets
 import write_error_to_logfile
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
 
 
 page = 0

@@ -229,6 +229,14 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                 response = response.read()
             response = response.decode('utf-8')
             json_response = json.loads(response)
+            upper_host_items = []
+            for host_item in possible_host_items:
+                webfile = urllib.request.urlopen(
+                    "https://zenon.dainst.org/Record/" + host_item + "/Export?style=MARC")
+                new_reader = MARCReader(webfile)
+                for file in new_reader:
+                    for host_item_id in [field['b'] for field in file.get_fields('995') if field['b'] and field['a'] == 'ANA']:
+                        upper_host_items.append(host_item_id)
             if 'records' not in json_response:
                 empty_page = True
                 continue
@@ -244,6 +252,8 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                     if similarity:
                         try:
                             print('title is similar')
+                            print('upper:', upper_host_items)
+                            print('possible host items:', possible_host_items)
                             webfile = urllib.request.urlopen(
                                 "https://zenon.dainst.org/Record/" + found_record['id'] + "/Export?style=MARC")
                             new_reader = MARCReader(webfile)
@@ -253,18 +263,26 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                                     [possible_host_items.remove(item) for item in possible_host_items if not item]
                                     if possible_host_items:
                                         right_host_item = False
+                                        print('found host items:', [field['b'] for field in file.get_fields('995') if field['b'] and field['a'] == 'ANA'])
                                         if [field['b'] for field in file.get_fields('995') if field['b'] and field['a'] == 'ANA']:
                                             if [field['b'] for field in file.get_fields('995') if field['b'] and field['a'] == 'ANA'][0] in possible_host_items:
                                                 right_host_item = True
+                                                print(right_host_item)
                                             else:
                                                 try:
+                                                    print("https://zenon.dainst.org/Record/" + file['995'][
+                                                            'b'] + "/Export?style=MARC")
                                                     parent_webfile = urllib.request.urlopen(
                                                         "https://zenon.dainst.org/Record/" + file['995'][
                                                             'b'] + "/Export?style=MARC")
                                                     new_reader = MARCReader(parent_webfile)
                                                     for parent_file in new_reader:
+                                                        print('parent_file:', parent_file['001'])
+                                                        print([field['b'] for field in file.get_fields('995') if field['b'] and field['a'] == 'ANA'])
                                                         if [field['b'] for field in parent_file.get_fields('995') if field['b'] and field['a'] == 'ANA']:
                                                             if [field['b'] for field in parent_file.get_fields('995') if field['b'] and field['a'] == 'ANA'][0] in possible_host_items:
+                                                                right_host_item = True
+                                                            if [field['b'] for field in parent_file.get_fields('995') if field['b'] and field['a'] == 'ANA'][0] in upper_host_items:
                                                                 right_host_item = True
                                                 except:
                                                     print('Das Host-Item von', found_record['id'], 'hat ein ungültiges Host-Item bzw. es gibt ein Problem mit der Weiterleitung.')
@@ -276,13 +294,20 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                                         if 'primary' in found_record['authors']:
                                             for primary_author in found_record['authors']['primary']:
                                                 found_authors.append(primary_author.split(', ')[0])
+                                                if ' ' in primary_author.split(', ')[0]:
+                                                    found_authors.append(primary_author.split(', ')[0].replace(' ', '-'))
                                         if 'secondary' in found_record['authors']:
                                             for secondary_author in found_record['authors']['secondary']:
                                                 found_authors.append(secondary_author.split(', ')[0])
+                                                if ' ' in secondary_author.split(', ')[0]:
+                                                    found_authors.append(secondary_author.split(', ')[0].replace(' ', '-'))
                                         if 'corporate' in found_record['authors']:
-                                            for primary_author in found_record['authors']['secondary']:
-                                                found_authors.append(primary_author.split(', ')[0])
+                                            for corporate_author in found_record['authors']['corporate']:
+                                                found_authors.append(corporate_author.split(', ')[0])
+                                                if ' ' in corporate_author.split(', ')[0]:
+                                                    found_authors.append(corporate_author.split(', ')[0].replace(' ', '-'))
                                         print('authors', authors)
+                                        print('found_authors', found_authors)
                                         if authors:
                                             for found_author in [aut for found_author in found_authors for aut in found_author.split()]:
                                                 if found_author in authors:
@@ -291,13 +316,12 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                                                 if right_author:
                                                     break
                                                 if [iterative_levenshtein(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author)) for x in authors for splitted_author in x.split()]:
-                                                    print([iterative_levenshtein(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author)) for x in authors for splitted_author in x.split()])
+                                                    print({found_author + '+' + splitted_author: iterative_levenshtein(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author)) for x in authors for splitted_author in x.split()})
                                                     if min([iterative_levenshtein(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author)) for x in authors for splitted_author in x.split()]) <= (len(found_author)/3):
                                                         # Vorsicht vor impliziten Typkonvertierungen von Zahlen zu bool
                                                         right_author = True
-                                        else:
-                                            if not found_authors:
-                                                right_author = True
+                                    else:
+                                        right_author = True
                                     found_year = [min([int(year) for year in re.findall(r'\d{4}', field)]) for field in [field['c'] for field in file.get_fields('260', '264') if field['c']] if '©' not in field and re.findall(r'\d{4}', field)]
                                     print(found_year, year)
                                     if found_year and year:
@@ -382,9 +406,11 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                                                     subfield_i = 'Print version'
                                                 additional_physical_form_entrys.append({'zenon_id': found_record['id'],
                                                                                         'subfield_i': subfield_i})
+                                                print('additional entry:', found_record['id'])
                                             elif not par:
                                                 if found_record['id'] not in all_results:
                                                     all_results.append(found_record['id'])
+                                                    print('doublet:', found_record['id'])
                                             else:
                                                 rejected_titles.append(found_record["id"] + title_found)
                         except Exception as e:
@@ -674,3 +700,7 @@ def find_review(authors, year, default_lang, possible_host_items, publication_di
 # hier noch Möglichkeiten für hidden filters einbauen?
 # Problem: bei sehr kurzen "Haupttiteln" werden zu kurze Dublettentitel gefunden.
 # Korrektur: aussortierte Worte zulassen, falls gar keine Worte für die Suche vorhanden sind.
+
+
+# Host-Items von Host-Items berücksichtigen! wenn beide im gleichen Host-Item sind
+# ODER es par-Titel von Host-Items gibt, dann einbeziehen.

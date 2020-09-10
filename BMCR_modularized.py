@@ -41,6 +41,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
             else:
                 with open('publication_dict.json', 'r') as publication_dict_template:
                     publication_dict = json.load(publication_dict_template)
+                print(article_link)
                 req = urllib.request.Request(article_link)
                 try:
                     with urllib.request.urlopen(req) as response:
@@ -63,7 +64,8 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                     publication_dict['text_body_for_lang_detection'] = article_soup.find_all('div', itemprop='reviewBody')[0].text.strip()
                     if publication_dict['review']:
                         for pub in article_soup.find_all('div', class_='entry-header row'):
-                            title_reviewed = pub.find_all('em', itemprop='itemReviewed')[0].text
+                            title_reviewed = pub.find('h1', class_="entry-title", itemprop="name").text
+                            print(title_reviewed)
                             if re.findall(r'.Bd\..', title_reviewed):
                                 if len(re.findall(r'.Bd\..*?:', title_reviewed)) == 0:
                                     title_reviewed = title_reviewed.rsplit('Bd.', 1)[0]
@@ -74,8 +76,10 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                                 publication_year = re.findall(r'[^\d](\d{4})[^\d]', pub.find('div', class_='entry-citation').text)[0]
                             else:
                                 publication_year = ''
-                            reviewed_authors = [string.strip().strip(',') for string in
-                                                pub.find('div', class_='entry-citation').text.split(title_reviewed)[0].replace('\t', '').split('\n') if string.strip()]
+                            print(publication_year)
+                            reviewed_authors = [tag.text for tag in
+                                                pub.find('div', class_='entry-citation').find_all('span', itemprop="author") if tag.text]
+                            print(reviewed_authors)
                             reviewed_authors = [HumanName(reviewed_author).last + ', ' + HumanName(reviewed_author).first
                                                 if not gnd_request_for_cor.check_gnd_for_name(reviewed_author) else reviewed_author
                                                 for reviewed_author in reviewed_authors]
@@ -97,7 +101,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                     publication_dict['rdacontent'] = 'txt'
                     publication_dict['rdamedia'] = 'c'
                     publication_dict['rdacarrier'] = 'cr'
-                    publication_dict['fields_590'] = ['arom', 'Online publication', '2020xhnxbmcr']
+                    publication_dict['fields_590'] = ['arom', 'Online publication', '2020xhnxbmcrk']
                     publication_dict['html_links'].append(article_link)
                     publication_dict['host_item'] = {'name': 'Bryn Mawr Classical Review', 'sysnumber': '000810352', 'issn': ''}
                     publication_dict['default_language'] = 'en'

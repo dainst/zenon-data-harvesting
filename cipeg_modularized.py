@@ -90,7 +90,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                             publication_dict['default_language'] = language_codes.resolve(article_soup.find('meta', attrs={'name': 'DC.Language'})['content'])
                             publication_dict['do_detect_lang'] = False
                             publication_dict['field_008_18-34'] = 'ar poo||||||   b|'
-                            publication_dict['fields_590'] = ['arom', '2020xhnxcipeg', 'Online publication']
+                            publication_dict['fields_590'] = ['arom', '2020xhnxcipegk', 'Online publication']
                             publication_dict['original_cataloging_agency'] = 'DE-16'
                             publication_dict['publication_etc_statement']['publication'] = {'place': 'Heidelberg',
                                                                                             'responsible': 'Propylaeum',

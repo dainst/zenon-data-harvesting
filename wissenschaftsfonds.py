@@ -47,7 +47,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                     publication_dict['title_dict']['main_title'], publication_dict['title_dict']['sub_title'] = title_list
                 publication_dict['abstract_link'] = url
                 publication_dict['table_of_contents_link'] = url
-                publication_dict['fields_590'] = ['Online publication', '2020xhnxwifo', 'ebookoa0520']
+                publication_dict['fields_590'] = ['Online publication', '2020xhnxwifok', 'ebookoa0520']
                 publication_dict['original_cataloging_agency'] = 'FWF Der Wissenschaftsfonds'
                 pos_isbn_list = [re.findall(r'[\d|-]+', tag.text) for tag in book_soup.find_all('dc:identifier') if 'http' not in tag.text][0] if [tag.text.strip('ISBN: ') for tag in book_soup.find_all('dc:identifier') if 'http' not in tag.text] else []
                 publication_dict['isbn'] = [num for num in pos_isbn_list if len(re.findall(r'\d{1}', num)) in [10, 13]][0] \
