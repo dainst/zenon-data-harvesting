@@ -1,0 +1,25 @@
+im Ordner: /connecttunnel/usr/local/Aventail$ bash startct.sh
+
+Auf den Server kommen:
+
+sshfs kohadev.dainst.org:/zenon Development/koha-basic-install-dev-server/
+
+ssh kohadev.dainst.org
+
+cd /zenon
+
+neue Datei anlegen im Ordner zenon:
+in den eigenen Ordner Development/koha-basic-install-dev-server die entsprechenden Dateien legen
+/ hier Dateien modifizieren.
+
+./run_serials_update.sh (Beispiel zum starten einer sh-Datei)
+
+meine Skripte liegen in: import/zenon-data-harvesting.
+
+bash run_marc_updates_export.sh > dieses Skript startet das andere:
+export/export_updated_marc_data.sh
+>> dieses Skript legt die Daten in die Staging-Area
+
+
+hier sollten die bereitgestellten Datensätze dann liegen:
+https://kohadev.dainst.org:8443/cgi-bin/koha/tools/manage-marc-import.pl
