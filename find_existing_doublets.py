@@ -180,15 +180,15 @@ def create_review_titles_for_review_search(review_dict):
     reviewed_responsibles = review_dict['reviewed_authors'] + review_dict['reviewed_editors']
     if reviewed_responsibles:
         for person in reviewed_responsibles:
-            possible_review_titles.append('[Rez.zu]:' + person + ': ' + reviewed_title)
+            possible_review_titles.append('[Rez.zu]: ' + person + ': ' + reviewed_title)
     if len(reviewed_responsibles) >= 2:
         for pair in itertools.combinations(reviewed_responsibles, 2):
-            possible_review_titles.append('[Rez.zu]:' + ', '.join(pair) + ': ' + reviewed_title)
+            possible_review_titles.append('[Rez.zu]: ' + ', '.join(pair) + ': ' + reviewed_title)
         reviewed_responsibles.reverse()
         for pair in itertools.combinations(reviewed_responsibles, 2):
-            possible_review_titles.append('[Rez.zu]:' + ', '.join(pair) + ': ' + reviewed_title)
+            possible_review_titles.append('[Rez.zu]: ' + ', '.join(pair) + ': ' + reviewed_title)
     else:
-        possible_review_titles.append('[Rez.zu]:' + reviewed_title)
+        possible_review_titles.append('[Rez.zu]: ' + reviewed_title)
     return possible_review_titles
 
 
@@ -198,15 +198,15 @@ def create_response_titles_for_response_search(review_list):
     reviewed_responsibles = review_list[0]['reviewed_authors'] + review_list[1]['reviewed_editors']
     if reviewed_responsibles:
         for person in reviewed_responsibles:
-            possible_review_titles.append('[Response to]:[Rez.zu]:' + person + ': ' + reviewed_title)
+            possible_review_titles.append('[Response to]:[Rez.zu] :' + person + ': ' + reviewed_title)
     if len(reviewed_responsibles) >= 2:
         for pair in itertools.combinations(reviewed_responsibles, 2):
-            possible_review_titles.append('[Response to]:[Rez.zu]:' + ', '.join(pair) + ': ' + reviewed_title)
+            possible_review_titles.append('[Response to]:[Rez.zu] :' + ', '.join(pair) + ': ' + reviewed_title)
         reviewed_responsibles.reverse()
         for pair in itertools.combinations(reviewed_responsibles, 2):
-            possible_review_titles.append('[Response to]:[Rez.zu]:' + ', '.join(pair) + ': ' + reviewed_title)
+            possible_review_titles.append('[Response to]:[Rez.zu] :' + ', '.join(pair) + ': ' + reviewed_title)
     else:
-        possible_review_titles.append('[Response to]:[Rez.zu]:' + reviewed_title)
+        possible_review_titles.append('[Response to]:[Rez.zu]: ' + reviewed_title)
     return possible_review_titles
 
 
@@ -233,14 +233,15 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
             upper_host_items = [] # enthält die übergeordneten Aufnahmen der übergeordneten Aufnahmen für den neuen Record
             upper_host_items_pars = [] # enthält deren Parallele Manifestationen.
             for host_item in possible_host_items:
-                webfile = urllib.request.urlopen(
-                    "https://zenon.dainst.org/Record/" + host_item + "/Export?style=MARC")
-                new_reader = MARCReader(webfile)
-                for file in new_reader:
-                    for host_item_id in [field['w'] for field in file.get_fields('773') if field['w']]:
-                        upper_host_items.append(host_item_id)
-                    for par_item_id in [field['w'] for field in file.get_fields('776') if field['w']]:
-                        host_items_pars.append(par_item_id)
+                if host_item:
+                    webfile = urllib.request.urlopen(
+                        "https://zenon.dainst.org/Record/" + host_item + "/Export?style=MARC")
+                    new_reader = MARCReader(webfile)
+                    for file in new_reader:
+                        for host_item_id in [field['w'] for field in file.get_fields('773') if field['w']]:
+                            upper_host_items.append(host_item_id)
+                        for par_item_id in [field['w'] for field in file.get_fields('776') if field['w']]:
+                            host_items_pars.append(par_item_id)
             for upper_host_item in upper_host_items:
                 webfile = urllib.request.urlopen(
                     "https://zenon.dainst.org/Record/" + upper_host_item + "/Export?style=MARC")
@@ -248,9 +249,6 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                 for file in new_reader:
                     for par_item_id in [field['w'].replace('(DE-2553)', '') for field in file.get_fields('776') if field['w']]:
                         upper_host_items_pars.append(par_item_id)
-            print('host_items_pars', host_items_pars)
-            print('upper_host_items', upper_host_items)
-            print('upper_host_items_pars', upper_host_items_pars)
             if 'records' not in json_response:
                 empty_page = True
                 continue
