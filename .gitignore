@@ -9,6 +9,7 @@ __pycache__/
 # Results
 records/
 *.json
+*.mrk
 
 # Datenpruefung
 datenpruefung/
