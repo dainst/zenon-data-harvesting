@@ -63,8 +63,8 @@ def typewriter_distance(letter1, letter2):
             typewriter_list.index(row), row.index(letter) + 0.5) for letter in [letter1, letter2]
             for row in typewriter_list if (letter in row)]
         try:
-            distance = math.sqrt((abs(typewriter_position[0][0] - typewriter_position[1][0])) ** 2 + (
-                abs(typewriter_position[0][1] - typewriter_position[1][1])) ** 2)
+            distance = 1 + (math.sqrt((abs(typewriter_position[0][0] - typewriter_position[1][0])) ** 2 + (
+                abs(typewriter_position[0][1] - typewriter_position[1][1])) ** 2))/10
         except:
             distance = 1
         return distance
@@ -129,10 +129,8 @@ def check_cosine_similarity(title, found_title, found_record, rejected_titles, l
                 for word in title_list:
                     for found_word in found_title_list:
                         if (iterative_levenshtein(word, found_word)) < (len(word)/4) and iterative_levenshtein(word, found_word) > 0:
-                            print('levenshtein_title_test')
-                            print(word, found_word, iterative_levenshtein(word, found_word))
-                            print(title)
-                            print(found_title)
+                            pass
+                            # hier noch anpassen, dass die Suche nach den Worten fuzzy wird! Oder lieber oben!
             if similarity > 0.65:
                 skipped_word_nr = 0
                 mismatches_nr = 0
