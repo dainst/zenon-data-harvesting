@@ -217,13 +217,8 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
         while not empty_page:
             page_nr += 1
             search_authors = search_authors.replace(" ", "+")
-            if year:
-                url = u'https://zenon.dainst.org/api/v1/search?join=AND&lookfor0%5B%5D=' + search_title + '&type0%5B%5D=Title&lookfor0%5B%5D=' + search_authors \
-                      + '&type0%5B%5D=Author&lookfor0%5B%5D=&type0%5B%5D=year&bool0%5B%5D=AND&illustration=-1&daterange%5B%5D=publishDate&publishDatefrom=' \
-                      + str(int(year) - 1) + '&publishDateto=' + str(int(year) + 1) + '&page=' + str(page_nr)
-            else:
-                url = u'https://zenon.dainst.org/api/v1/search?join=AND&lookfor0%5B%5D=' + search_title + '&type0%5B%5D=Title&lookfor0%5B%5D=' + search_authors \
-                      + '&type0%5B%5D=Author&bool0%5B%5D=AND&illustration=-1&daterange%5B%5D=publishDate&publishDatefrom=&publishDateto=' + '&page=' + str(page_nr)
+            url = u'https://zenon.dainst.org/api/v1/search?join=AND&lookfor0%5B%5D=' + search_title + '&type0%5B%5D=Title&lookfor0%5B%5D=' + search_authors \
+                      + '&type0%5B%5D=Author&lookfor0%5B%5D=&type0%5B%5D=year&bool0%5B%5D=AND&illustration=-1' + '&page=' + str(page_nr)
             req = urllib.request.Request(url)
             with urllib.request.urlopen(req) as response:
                 response = response.read()
@@ -263,181 +258,180 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                     right_year = False
                     if similarity:
                         try:
-                            print('title is similar')
-                            print('upper:', upper_host_items)
-                            print('possible host items:', possible_host_items)
                             webfile = urllib.request.urlopen(
                                 "https://zenon.dainst.org/Record/" + found_record['id'] + "/Export?style=MARC")
                             new_reader = MARCReader(webfile)
                             for file in new_reader:
-                                # if publication_dict['LDR_06_07'][1] == file.leader[7]:
-                                    par = False
-                                    [possible_host_items.remove(item) for item in possible_host_items if not item]
-                                    if possible_host_items:
-                                        right_host_item = False
-                                        print('found host items:', [field['w'] for field in file.get_fields('773') if field['w']])
-                                        if [field['w'] for field in file.get_fields('773') if field['w']]:
-                                            if any([field['w'] in possible_host_items for field in file.get_fields('773') if field['w']]):
-                                                right_host_item = True
-                                                print(right_host_item)
-                                            else:
-                                                try:
-                                                    print("https://zenon.dainst.org/Record/" + file['773'][
-                                                            'w'] + "/Export?style=MARC")
-                                                    parent_webfile = urllib.request.urlopen(
-                                                        "https://zenon.dainst.org/Record/" + file['773'][
-                                                            'w'] + "/Export?style=MARC")
-                                                    new_reader = MARCReader(parent_webfile)
-                                                    # öffnet übergeordnete Aufnahme
-                                                    for parent_file in new_reader:
-                                                        print('parent_file:', parent_file['001'])
-                                                        print([field['w'] for field in parent_file.get_fields('773') if field['w']])
-                                                        if [field['w'] for field in parent_file.get_fields('773') if field['w']]:
-                                                            if any([field['w'] in upper_host_items for field in parent_file.get_fields('773') if field['w']]):
-                                                                right_host_item = True
-                                                            elif any([field['w'].replace('(DE-2553)', '') in possible_host_items for field in parent_file.get_fields('776') if field['w']]):
-                                                                right_host_item = True
-                                                            elif parent_file['001'].data in host_items_pars:
-                                                                right_host_item = True
-                                                            else:
-                                                                upper_parent_webfile = urllib.request.urlopen(
-                                                                    "https://zenon.dainst.org/Record/" + file['773'][
-                                                                        'w'] + "/Export?style=MARC")
-                                                                new_reader = MARCReader(upper_parent_webfile)
-                                                                for upper_parent_file in new_reader:
-                                                                    upper_parent_file_pars = [field['w'].replace('(DE-2553)', '') for field in upper_parent_file.get_fields('776') if field['w']]
-                                                                    print('upper_parent_file_pars', upper_parent_file_pars)
-                                                                    if any([upper_parent_file_par in upper_host_items_pars for upper_parent_file_par in upper_parent_file_pars]):
-                                                                        right_host_item = True
-                                                except:
-                                                    print('Das Host-Item von', found_record['id'], 'hat ein ungültiges Host-Item bzw. es gibt ein Problem mit der Weiterleitung.')
-                                        if right_host_item is False:
-                                            rejected_titles.append(found_record["id"] + title_found)
-                                            continue
-                                    if 'authors' in found_record:
-                                        found_authors = []
-                                        if 'primary' in found_record['authors']:
-                                            for primary_author in found_record['authors']['primary']:
-                                                found_authors.append(primary_author.split(', ')[0])
-                                                if ' ' in primary_author.split(', ')[0]:
-                                                    found_authors.append(primary_author.split(', ')[0].replace(' ', '-'))
-                                        if 'secondary' in found_record['authors']:
-                                            for secondary_author in found_record['authors']['secondary']:
-                                                found_authors.append(secondary_author.split(', ')[0])
-                                                if ' ' in secondary_author.split(', ')[0]:
-                                                    found_authors.append(secondary_author.split(', ')[0].replace(' ', '-'))
-                                        if 'corporate' in found_record['authors']:
-                                            for corporate_author in found_record['authors']['corporate']:
-                                                found_authors.append(corporate_author.split(', ')[0])
-                                                if ' ' in corporate_author.split(', ')[0]:
-                                                    found_authors.append(corporate_author.split(', ')[0].replace(' ', '-'))
-                                        print('authors', authors)
-                                        print('found_authors', found_authors)
-                                        if authors:
-                                            for found_author in [aut for found_author in found_authors for aut in found_author.split()]:
-                                                if found_author in authors:
-                                                    print('found in authors')
+                                par = False
+                                found_authors = []
+                                if 'authors' in found_record:
+                                    if 'primary' in found_record['authors']:
+                                        for primary_author in found_record['authors']['primary']:
+                                            found_authors.append(primary_author.split(', ')[0])
+                                            if ' ' in primary_author.split(', ')[0]:
+                                                found_authors.append(primary_author.split(', ')[0].replace(' ', '-'))
+                                    if 'secondary' in found_record['authors']:
+                                        for secondary_author in found_record['authors']['secondary']:
+                                            found_authors.append(secondary_author.split(', ')[0])
+                                            if ' ' in secondary_author.split(', ')[0]:
+                                                found_authors.append(secondary_author.split(', ')[0].replace(' ', '-'))
+                                    if 'corporate' in found_record['authors']:
+                                        for corporate_author in found_record['authors']['corporate']:
+                                            found_authors.append(corporate_author.split(', ')[0])
+                                            if ' ' in corporate_author.split(', ')[0]:
+                                                found_authors.append(corporate_author.split(', ')[0].replace(' ', '-'))
+                                    if authors:
+                                        for found_author in [aut for found_author in found_authors for aut in found_author.split()]:
+                                            if found_author in authors:
+                                                print('found in authors')
+                                                right_author = True
+                                            if right_author:
+                                                break
+                                            if [iterative_levenshtein(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author)) for x in authors for splitted_author in x.split()]:
+                                                print({found_author + '+' + splitted_author: iterative_levenshtein(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author)) for x in authors for splitted_author in x.split()})
+                                                if min([iterative_levenshtein(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author)) for x in authors for splitted_author in x.split()]) <= (len(found_author)/3):
+                                                    # Vorsicht vor impliziten Typkonvertierungen von Zahlen zu bool
                                                     right_author = True
-                                                if right_author:
-                                                    break
-                                                if [iterative_levenshtein(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author)) for x in authors for splitted_author in x.split()]:
-                                                    print({found_author + '+' + splitted_author: iterative_levenshtein(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author)) for x in authors for splitted_author in x.split()})
-                                                    if min([iterative_levenshtein(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author)) for x in authors for splitted_author in x.split()]) <= (len(found_author)/3):
-                                                        # Vorsicht vor impliziten Typkonvertierungen von Zahlen zu bool
-                                                        right_author = True
-                                    else:
-                                        right_author = True
-                                    found_year = [min([int(year) for year in re.findall(r'\d{4}', field)]) for field in [field['c'] for field in file.get_fields('260', '264') if field['c']] if '©' not in field and re.findall(r'\d{4}', field)]
-                                    print(found_year, year)
-                                    if found_year and year:
-                                        if found_year[0] in [int(year)-1, int(year), int(year)+1]:
-                                            right_year = True
-                                    if not found_year and not year:
+                                else:
+                                    right_author = True
+                                found_year = [min([int(year) for year in re.findall(r'\d{4}', field)]) for field in [field['c'] for field in file.get_fields('260', '264') if field['c']] if '©' not in field and re.findall(r'\d{4}', field)]
+                                if found_year and year:
+                                    if found_year[0] in [int(year)-1, int(year), int(year)+1]:
                                         right_year = True
-                                    '''if file['245']['c'] and publication_dict['title_dict']['responsibility_statement']:
-                                        responsibility_statement_similarity = check_cosine_similarity(file['245']['c'], publication_dict['title_dict']['responsibility_statement'], found_record, rejected_titles, lang)
-                                        print(responsibility_statement_similarity)
-                                        if responsibility_statement_similarity > 0.75:
-                                            right_responsibility = True
+                                if not found_year and not year:
+                                    right_year = True
+                                [possible_host_items.remove(item) for item in possible_host_items if not item]
+                                if right_author or right_year:
+                                    print(found_year, year)
+                                    print('authors:', authors, 'found_authors:', found_authors)
+                                    print(found_record['id'])
+                                    print('upper:', upper_host_items)
+                                    print('possible host items:', possible_host_items)
+                                if possible_host_items:
+                                    right_host_item = False
+                                    print('found host items:', [field['w'].replace('(DE-2553)', '') for field in file.get_fields('773') if field['w']])
+                                    if [field['w'].replace('(DE-2553)', '') for field in file.get_fields('773') if field['w']]:
+                                        if any([field['w'].replace('(DE-2553)', '') in possible_host_items for field in file.get_fields('773') if field['w']]):
+                                            right_host_item = True
                                         else:
-                                            right_responsibility = False
-                                    else:
-                                        right_responsibility = True'''
+                                            try:
+                                                print("https://zenon.dainst.org/Record/" + file['773'][
+                                                        'w'].replace('(DE-2553)', '') + "/Export?style=MARC")
+                                                parent_webfile = urllib.request.urlopen(
+                                                    "https://zenon.dainst.org/Record/" + file['773'][
+                                                        'w'].replace('(DE-2553)', '') + "/Export?style=MARC")
+                                                new_reader = MARCReader(parent_webfile)
+                                                # öffnet übergeordnete Aufnahme
+                                                for parent_file in new_reader:
+                                                    print('parent_file:', parent_file['001'])
+                                                    print([field['w'].replace('(DE-2553)', '') for field in parent_file.get_fields('773') if field['w']])
+                                                    if [field['w'].replace('(DE-2553)', '') for field in parent_file.get_fields('773') if field['w']]:
+                                                        if any([field['w'].replace('(DE-2553)', '') in upper_host_items for field in parent_file.get_fields('773') if field['w']]):
+                                                            right_host_item = True
+                                                        elif any([field['w'].replace('(DE-2553)', '') in possible_host_items for field in parent_file.get_fields('776') if field['w']]):
+                                                            right_host_item = True
+                                                        elif parent_file['001'].data in host_items_pars:
+                                                            right_host_item = True
+                                                        else:
+                                                            upper_parent_webfile = urllib.request.urlopen(
+                                                                "https://zenon.dainst.org/Record/" + file['773'][
+                                                                    'w'].replace('(DE-2553)', '') + "/Export?style=MARC")
+                                                            new_reader = MARCReader(upper_parent_webfile)
+                                                            for upper_parent_file in new_reader:
+                                                                upper_parent_file_pars = [field['w'].replace('(DE-2553)', '') for field in upper_parent_file.get_fields('776') if field['w']]
+                                                                print('upper_parent_file_pars', upper_parent_file_pars)
+                                                                if any([upper_parent_file_par in upper_host_items_pars for upper_parent_file_par in upper_parent_file_pars]):
+                                                                    right_host_item = True
+                                            except:
+                                                print('Das Host-Item von', found_record['id'], 'hat ein ungültiges Host-Item bzw. es gibt ein Problem mit der Weiterleitung.')
+                                    if right_host_item is False:
+                                        rejected_titles.append(found_record["id"] + title_found)
+                                        continue
 
-                                    if right_author and right_year:
-                                        if found_record['id'] not in [entry['zenon_id'] for entry in additional_physical_form_entrys]:
-                                            e_resource = False
-                                            if file['337']:
-                                                if (file['337']['b'] != publication_dict['rdamedia']) or (file['337']['a'] != rda_codes['rdamedia'][publication_dict['rdamedia']]):
-                                                    par = True
-                                                    if file['337']['b'] == 'c' or file['337']['a'] == 'computer':
-                                                        e_resource = True
-                                            if file['338']:
-                                                if (file['338']['b'] != publication_dict['rdacarrier']) or (file['338']['a'] != rda_codes['rdacarrier'][publication_dict['rdacarrier']]):
-                                                    par = True
-                                                    if file['338']['b'] == 'cr' or file['338']['a'] == 'online resource':
-                                                        e_resource = True
-                                            if file['006'] and publication_dict['field_006']:
-                                                if publication_dict['field_006'][0] != str(file['006'].data)[0]:
-                                                    par = True
-                                                    if str(file['006'].data)[0] == 'm':
-                                                        e_resource = True
-                                            if file['007']:
-                                                if publication_dict['field_007'][0] != str(file['007'].data)[0]:
-                                                    par = True
-                                                    if str(file['007'].data)[0] == 'c':
-                                                        e_resource = True
-                                            if publication_dict['pdf_links'] or publication_dict['html_links'] \
-                                                    or [link for link in publication_dict['other_links_with_public_note'] if 'online' in link['public_note']]:
-                                                if file['856']:
-                                                    if 'online' in str(file['856']['z']).lower():
-                                                        par = False
-                                                    else:
-                                                        par = True
+                                '''if file['245']['c'] and publication_dict['title_dict']['responsibility_statement']:
+                                    responsibility_statement_similarity = check_cosine_similarity(file['245']['c'], publication_dict['title_dict']['responsibility_statement'], found_record, rejected_titles, lang)
+                                    print(responsibility_statement_similarity)
+                                    if responsibility_statement_similarity > 0.75:
+                                        right_responsibility = True
+                                    else:
+                                        right_responsibility = False
+                                else:
+                                    right_responsibility = True'''
+
+                                if right_author:
+                                    if found_record['id'] not in [entry['zenon_id'] for entry in additional_physical_form_entrys]:
+                                        e_resource = False
+                                        if file['337']:
+                                            if (file['337']['b'] != publication_dict['rdamedia']) or (file['337']['a'] != rda_codes['rdamedia'][publication_dict['rdamedia']]):
+                                                par = True
+                                                if file['337']['b'] == 'c' or file['337']['a'] == 'computer':
+                                                    e_resource = True
+                                        if file['338']:
+                                            if (file['338']['b'] != publication_dict['rdacarrier']) or (file['338']['a'] != rda_codes['rdacarrier'][publication_dict['rdacarrier']]):
+                                                par = True
+                                                if file['338']['b'] == 'cr' or file['338']['a'] == 'online resource':
+                                                    e_resource = True
+                                        if file['006'] and publication_dict['field_006']:
+                                            if publication_dict['field_006'][0] != str(file['006'].data)[0]:
+                                                par = True
+                                                if str(file['006'].data)[0] == 'm':
+                                                    e_resource = True
+                                        if file['007']:
+                                            if publication_dict['field_007'][0] != str(file['007'].data)[0]:
+                                                par = True
+                                                if str(file['007'].data)[0] == 'c':
+                                                    e_resource = True
+                                        if publication_dict['pdf_links'] or publication_dict['html_links'] \
+                                                or [link for link in publication_dict['other_links_with_public_note'] if 'online' in link['public_note']]:
+                                            if file['856']:
+                                                if 'online' in str(file['856']['z']).lower():
+                                                    par = False
                                                 else:
                                                     par = True
                                             else:
-                                                if file['856']:
-                                                    if 'online' in str(file['856']['z']).lower():
-                                                        par = True
-                                                        e_resource = True
-                                            if publication_dict['rdamedia'] != 'c':
-                                                if file['300']:
-                                                    if ('online' in str(file['300']['a']).lower()):
-                                                        par = True
-                                                        e_resource = True
-                                                if file['533']:
-                                                    if ('online' in str(file['533']['a']).lower()):
-                                                        par = True
-                                                        e_resource = True
-                                                if file['590']:
-                                                    if [str(field['a']).lower() for field in file.get_fields('590') if 'online' in str(field['a']) or 'ebook' in str(field['a'])]:
-                                                        par = True
-                                                        e_resource = True
+                                                par = True
+                                        else:
+                                            if file['856']:
+                                                if 'online' in str(file['856']['z']).lower():
+                                                    par = True
+                                                    e_resource = True
+                                        if publication_dict['rdamedia'] != 'c':
+                                            if file['300']:
+                                                if ('online' in str(file['300']['a']).lower()):
+                                                    par = True
+                                                    e_resource = True
+                                            if file['533']:
+                                                if ('online' in str(file['533']['a']).lower()):
+                                                    par = True
+                                                    e_resource = True
+                                            if file['590']:
+                                                if [str(field['a']).lower() for field in file.get_fields('590') if 'online' in str(field['a']) or 'ebook' in str(field['a'])]:
+                                                    par = True
+                                                    e_resource = True
+                                        else:
+                                            if file['300']:
+                                                if 'online' in str(file['300']['a']).lower():
+                                                    par = False
+                                            if file['533']:
+                                                if 'online' in str(file['533']['a']).lower():
+                                                    par = False
+                                            if file['590']:
+                                                if [str(field['a']).lower() for field in file.get_fields('590') if 'online' in str(field['a'].lower()) or 'ebook' in str(field['a'].lower())]:
+                                                    par = False
+                                        if par:
+                                            if e_resource:
+                                                subfield_i = 'Online version'
                                             else:
-                                                if file['300']:
-                                                    if 'online' in str(file['300']['a']).lower():
-                                                        par = False
-                                                if file['533']:
-                                                    if 'online' in str(file['533']['a']).lower():
-                                                        par = False
-                                                if file['590']:
-                                                    if [str(field['a']).lower() for field in file.get_fields('590') if 'online' in str(field['a'].lower()) or 'ebook' in str(field['a'].lower())]:
-                                                        par = False
-                                            if par:
-                                                if e_resource:
-                                                    subfield_i = 'Online version'
-                                                else:
-                                                    subfield_i = 'Print version'
-                                                additional_physical_form_entrys.append({'zenon_id': found_record['id'],
-                                                                                        'subfield_i': subfield_i})
-                                                print('additional entry:', found_record['id'])
-                                            elif not par:
-                                                if found_record['id'] not in all_results:
-                                                    all_results.append(found_record['id'])
-                                                    print('doublet:', found_record['id'])
-                                            else:
-                                                rejected_titles.append(found_record["id"] + title_found)
+                                                subfield_i = 'Print version'
+                                            additional_physical_form_entrys.append({'zenon_id': found_record['id'],
+                                                                                    'subfield_i': subfield_i})
+                                            print('additional entry:', found_record['id'])
+                                        elif right_year:
+                                            if found_record['id'] not in all_results:
+                                                all_results.append(found_record['id'])
+                                                print('doublet:', found_record['id'])
+                                        else:
+                                            rejected_titles.append(found_record["id"] + title_found)
                         except Exception as e:
                             write_error_to_logfile.write(e)
             if all_results and additional_physical_form_entrys:
