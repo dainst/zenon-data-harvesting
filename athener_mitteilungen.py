@@ -113,6 +113,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                     else:
                         publication_dict['host_item']['name'] = 'Mitteilungen des Deutschen Archäologischen Instituts, Athenische Abteilung'
                     publication_dict['host_item']['sysnumber'] = sysnumbers[date_of_publication]
+                    publication_dict['host_item_is_volume'] = True
                     publication_dict['publication_year'] = date_of_publication
                     place_of_publication = ''
                     publisher = ''

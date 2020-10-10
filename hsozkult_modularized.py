@@ -123,6 +123,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                 publication_dict['host_item']['name'] = 'Historische Literatur: Rezensionszeitschrift von H-Soz-u-Kult'
                 publication_dict['host_item']['sysnumber'] = volumes_sysnumbers[publication_dict['publication_year']]
                 publication_dict['host_item']['issn'] = '2196-5307'
+                publication_dict['host_item_is_volume'] = True
                 publication_dict['terms_of_use_and_reproduction'] = \
                     {'terms_note':
                         'Für eine Zweitveröffentlichung von H-Soz-Kult Beiträgen benötigen Sie die Genehmigung sowohl des Autors/der Autorin als auch der Redaktion. '

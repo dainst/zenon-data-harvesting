@@ -57,6 +57,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                         if publication_year not in volumes_sysnumbers:
                             publication_year = max([timestamp['datetime'][:4] for timestamp in issue_soup.find_all('time')])
                     publication_dict['host_item']['sysnumber'] = volumes_sysnumbers[publication_year]
+                    publication_dict['host_item_is_volume'] = True
                     publication_dict['publication_year'] = publication_year
                     if article_soup.find('meta', attrs={'name': 'DC.Identifier.DOI'}):
                         publication_dict['doi'] = article_soup.find('meta', attrs={'name': 'DC.Identifier.DOI'})['content']

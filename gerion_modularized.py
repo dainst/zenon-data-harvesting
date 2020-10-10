@@ -76,6 +76,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                 publication_dict['host_item']['name'] = volume_title
                 publication_dict['volume_year'] = volume_year
                 publication_dict['host_item']['sysnumber'] = volumes_sysnumbers[volume_year]
+                publication_dict['host_item_is_volume'] = True
                 publication_dict['title_dict']['main_title'] = article_soup.find('meta', attrs={'name': 'citation_title'})['content']
                 publication_dict['publication_year'] = article_soup.find('meta', attrs={'name': 'citation_date'})['content'].split('/')[0]
                 if article_soup.find('meta', attrs={'name': 'citation_doi'}):

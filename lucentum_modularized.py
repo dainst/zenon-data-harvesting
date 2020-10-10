@@ -18,8 +18,6 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
     items_harvested = []
     try:
         volumes_sysnumbers = find_sysnumbers('000098920')
-        volumes_sysnumbers['2020'] = '000000001'
-        # ändern!!!
         current_year = int(dateTimeObj.strftime("%Y"))
         year = 2020
         while year > (current_year - 2):
@@ -37,7 +35,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                 volume = item['bibjson']['journal']['number']
                 issue = ''
                 if year_of_publication not in volumes_sysnumbers:
-                    write_error_to_logfile.comment('Artikel von lucentum konnten teilweise nicht geharvestet werden, da keine übergeordnete Aufnahme für das Jahr '
+                    write_error_to_logfile.comment('Artikel von Lucentum konnten teilweise nicht geharvestet werden, da keine übergeordnete Aufnahme für das Jahr '
                                                    + year_of_publication + ' existiert.')
                     write_error_to_logfile.comment('Bitte erstellen Sie eine neue übergeordnete Aufnahme für das Jahr ' + year_of_publication + '.')
                     break
@@ -65,12 +63,13 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                         publication_dict['rdacontent'] = 'txt'
                         publication_dict['rdamedia'] = 'c'
                         publication_dict['rdacarrier'] = 'cr'
-                        publication_dict['host_item'] = {'name': "", 'sysnumber': volumes_sysnumbers[year_of_publication]}
+                        publication_dict['host_item'] = {'name': "Lucentum : anales de la Universidad de Alicante", 'sysnumber': volumes_sysnumbers[year_of_publication]}
                         publication_dict['host_item']['issn'] = '1989-9904'
+                        publication_dict['host_item_is_volume'] = True
                         publication_dict['volume'] = volume
                         publication_dict['field_006'] = 'm     o  d |      '
                         publication_dict['field_007'] = 'cr uuu   uu|uu'
-                        publication_dict['field_008_18-34'] = 'gr p|o |||||   a|'
+                        publication_dict['field_008_18-34'] = 'ar p|o |||||   a|'
                         basic_url = 'https://doi.org/' + publication_dict['doi'][:-3]
                         publication_dict['table_of_contents_link'] = basic_url
                         year -= 1
@@ -79,6 +78,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                             response = response.read()
                         response = response.decode('utf-8')
                         volume_soup = BeautifulSoup(response, 'html.parser')
+                        print(basic_url)
                         if [pages.text.replace('\n', '').replace('\t', '') for pages in volume_soup.find('div', id='content').find_all('div', class_='tocPages') if pages.text.replace('\n', '').replace('\t', '').find(item['bibjson']['start_page']) == 0]:
                             pages = [pages.text.replace('\n', '').replace('\t', '') for pages in volume_soup.find('div', id='content').find_all('div', class_='tocPages') if pages.text.replace('\n', '').replace('\t', '').split('-')[0] == item['bibjson']['start_page']][0]
                             publication_dict['field_300'] = '1 online resource, pp. ' + pages

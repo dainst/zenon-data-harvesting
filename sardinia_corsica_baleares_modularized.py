@@ -55,19 +55,24 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                 if current_item > last_item_harvested_in_last_session:
                     with open('publication_dict.json', 'r') as publication_dict_template:
                         publication_dict = json.load(publication_dict_template)
-                    title = title_and_author_info.find('em').text
-                    authors = [author.split('/')[0] for author in title_and_author_info.text.replace(title, '').replace('\n', '').split(', ')]
                     pages = re.findall(r'\d{1,3}-\d{1,3}', article_info.text.split('Pagine:')[1].split('Prezzo:')[0])[0]
                     publication_dict['volume'] = volume_name
-                    publication_dict['authors_list'] = [HumanName(author).last + ', ' + HumanName(author).first if not gnd_request_for_cor.check_gnd_for_name(author) else author
-                                                        for author in authors if author]
                     publication_dict['host_item']['name'] = 'Sardinia, Corsica et Baleares antiquae'
                     publication_dict['host_item']['sysnumber'] = volumes_sysnumbers[volume_year]
-                    publication_dict['title_dict']['main_title'] = title
+                    publication_dict['host_item_is_volume'] = True
                     publication_dict['publication_year'] = volume_year
                     publication_dict['doi'] = doi
-                    publication_dict['abstract_link'] = article_url
-                    publication_dict['html_links'].append(article_url)
+                    metadata_url = 'https://www.medra.org/servlet/view?LANG=eng&doi=' + publication_dict['doi'] + '&format=html'
+                    req = urllib.request.Request(metadata_url)
+                    with urllib.request.urlopen(req) as response:
+                        meta_page = response.read().decode('utf-8')
+                    meta_info = BeautifulSoup(meta_page, 'html.parser')
+                    publication_dict['authors_list'] = [aut['content'] for aut in meta_info.find_all('meta', attrs={'name':"citation_author"})]
+                    publication_dict['title_dict']['main_title'] = [tit['content']
+                                                                    for tit in meta_info.find_all('meta', attrs={'name':"citation_title"})
+                                                                    if tit['content'] != 'Sardinia, Corsica et Baleares antiquae'][0]
+
+                    publication_dict['html_links'].append('https://www.doi.org/' + publication_dict['doi'])
                     publication_dict['pages'] = 'p. ' + pages
                     publication_dict['rdacarrier'] = 'cr'
                     publication_dict['rdamedia'] = 'c'
@@ -83,7 +88,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                                                                                     'country_code': 'it '}
                     publication_dict['table_of_contents_link'] = volume_url
                     publication_dict['abstract_link'] = article_url
-                    publication_dict['field_300'] = '1 online resource (p. ' + pages + ')'
+                    publication_dict['field_300'] = '1 online resource, pp. ' + pages
                     publication_dict['force_300'] = True
                     publication_dict['default_language'] = 'ita'
                     publication_dict['do_detect_lang'] = True

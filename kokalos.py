@@ -65,6 +65,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
 
                     publication_dict['host_item']['name'] = 'Kókalos'
                     publication_dict['host_item']['sysnumber'] = volumes_sysnumbers[volume_year]
+                    publication_dict['host_item_is_volume'] = True
                     publication_dict['title_dict']['main_title'] = title
                     publication_dict['publication_year'] = volume_year
                     publication_dict['doi'] = doi

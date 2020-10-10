@@ -102,6 +102,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                         publication_dict['rdacarrier'] = 'nc'
                         publication_dict['host_item'] = {'name': 'Journal of Late Antiquity', 'sysnumber': volumes_sysnumbers[year_of_publication]}
                         publication_dict['host_item']['issn'] = '1939-6716'
+                        publication_dict['host_item_is_volume'] = True
                         publication_dict['volume'] = volume
                         publication_dict['field_007'] = 'ta'
                         publication_dict['field_008_18-34'] = 'fr p|  |||||   a|'

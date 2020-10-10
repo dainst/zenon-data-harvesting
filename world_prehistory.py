@@ -67,6 +67,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                     publication_dict['rdacarrier'] = 'cr'
                     publication_dict['publication_etc_statement']['publication'] = {'place': 'Heidelberg', 'responsible': 'Springer', 'country_code': 'gw '}
                     publication_dict['host_item'] = {'name': "Journal of World Prehistory", 'sysnumber': volumes_sysnumbers[publication_year], 'issn': '1573-7802'}
+                    publication_dict['host_item_is_volume'] = True
                     publication_dict['volume'] = volume
                     publication_dict['field_006'] = 'm     o  d |      '
                     publication_dict['field_007'] = 'cr uuu   uu|uu'

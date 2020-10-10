@@ -100,6 +100,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                     publication_dict['host_item']['name'] = 'Mediterranean Archaeology & Archaeometry'
                     publication_dict['host_item']['sysnumber'] = volumes_sysnumbers[year]
                     publication_dict['host_item']['issn'] = '1108-9628'
+                    publication_dict['host_item_is_volume'] = True
                     publication_dict['volume'] = volume_nr
                     publication_dict['issue'] = issue_nr
                     publication_dict['LDR_06_07'] = 'ab'
