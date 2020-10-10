@@ -10,6 +10,7 @@ import find_reviewed_title
 import find_existing_doublets
 import re
 import write_error_to_logfile
+from gnd_request_for_cor import check_gnd_for_name
 
 
 rda_codes = {'rdacarrier': {'sg': 'audio cartridge', 'sb': 'audio belt', 'se': 'audio cylinder', 'sd': 'audio disc',
@@ -742,21 +743,36 @@ def create_new_record(out, publication_dict):
                 subfields = [y for publication_dict['language_field']['language_of_resource'] in publication_dict['language_field']['language_of_resource'] for y in
                              ['language_of_resource', publication_dict['language_field']['language_of_resource']]] + ['h', publication_dict['language_field']['language_of_original_item']]
                 recent_record.add_field(Field(tag='041', indicators=[str(int(bool(publication_dict['language_field']['language_of_original_item']))), ' '], subfields=subfields))
+            # 110 bzw. 710 2# $a
             author_nr = 0
             if publication_dict['authors_list']:
                 for author in publication_dict['authors_list']:
-                    if author_nr == 0:
-                        recent_record.add_field(Field(tag='100', indicators=['1', ' '], subfields=['a', author]))
-                        author_nr += 1
+                    if check_gnd_for_name(author):
+                        if author_nr == 0:
+                            recent_record.add_field(Field(tag='110', indicators=['2', ' '], subfields=['a', author]))
+                            author_nr += 1
+                        else:
+                            recent_record.add_field(Field(tag='710', indicators=['2', ' '], subfields=['a', author]))
                     else:
-                        recent_record.add_field(Field(tag='700', indicators=['1', ' '], subfields=['a', author]))
+                        if author_nr == 0:
+                            recent_record.add_field(Field(tag='100', indicators=['1', ' '], subfields=['a', author]))
+                            author_nr += 1
+                        else:
+                            recent_record.add_field(Field(tag='700', indicators=['1', ' '], subfields=['a', author]))
             elif publication_dict['editors_list']:
                 for author in publication_dict['editors_list']:
-                    if author_nr == 0:
-                        recent_record.add_field(Field(tag='100', indicators=['1', ' '], subfields=['a', author]))
-                        author_nr += 1
+                    if check_gnd_for_name(author):
+                        if author_nr == 0:
+                            recent_record.add_field(Field(tag='110', indicators=['2', ' '], subfields=['a', author]))
+                            author_nr += 1
+                        else:
+                            recent_record.add_field(Field(tag='710', indicators=['2', ' '], subfields=['a', author]))
                     else:
-                        recent_record.add_field(Field(tag='700', indicators=['1', ' '], subfields=['a', author]))
+                        if author_nr == 0:
+                            recent_record.add_field(Field(tag='100', indicators=['1', ' '], subfields=['a', author]))
+                            author_nr += 1
+                        else:
+                            recent_record.add_field(Field(tag='700', indicators=['1', ' '], subfields=['a', author]))
             if publication_dict['review']:
                 create_245_and_246_for_review(recent_record, publication_dict['review_list'], author_nr)
             elif publication_dict['response']:
