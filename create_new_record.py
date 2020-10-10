@@ -204,16 +204,14 @@ publication_dict_template = {'title_dict':
                                    # Erscheinungsjahr der rezensierten Publikation, muss nicht gesetzt werden, falls
                                    # verfügbar, verbessert es jedoch die Suche nach der rezensierten Publikation
                                    }],
-                             'edit_names': False}
+                             'edit_names': False,
+                             'host_item_is_volume': False}
 
 
 def add_field_from_record_to_publication_dict(publication_dict, record, field_list):
     for field_nr in field_list:
         for field in record.get_fields(field_nr):
-            if field.tag == '999':
-                publication_dict['additional_fields'].append({'tag': 'THS', 'indicators': field.indicators, 'subfields': [subfield.strip('.').strip(' ; ') for subfield in field.subfields]})
-            else:
-                publication_dict['additional_fields'].append({'tag': field.tag, 'indicators': field.indicators, 'subfields': [subfield.strip('.').strip(' ; ') for subfield in field.subfields]})
+            publication_dict['additional_fields'].append({'tag': field.tag, 'indicators': field.indicators, 'subfields': [subfield.strip('.').strip(' ; ') for subfield in field.subfields]})
     return publication_dict
 
 # Die Funktion übernimmt Felder im ursprünglichen Record, die unverändert bleiben sollen, und fügt diese zum Publication-Dictionary hinzu.
@@ -358,30 +356,31 @@ def create_title_for_review_and_response_search(review_list, response_list):
     return title_list
 
 
-def create_lkr_ana(recent_record, publication_dict, volume, review, response):
+def create_773(recent_record, publication_dict, volume, review, response):
     try:
         if volume and publication_dict['volume_year']:
-            lkr_subfield_n = publication_dict['host_item']['name'] + ', ' + publication_dict['volume']\
-                             + ' (' + publication_dict['volume_year'] + ')'
+            location_in_host_item = publication_dict['volume'] \
+                                    + ' (' + publication_dict['volume_year'] + ')'
         elif volume:
-            lkr_subfield_n = publication_dict['host_item']['name'] + ', ' + publication_dict['volume'] \
-                             + ' (' + publication_dict['publication_year'] + ')'
+            location_in_host_item = publication_dict['volume'] \
+                                    + ' (' + publication_dict['publication_year'] + ')'
         elif publication_dict['volume_year']:
-            lkr_subfield_n = publication_dict['host_item']['name'] + ', ' + publication_dict['volume_year']
+            location_in_host_item = publication_dict['volume_year']
         else:
-            lkr_subfield_n = publication_dict['host_item']['name'] + ', ' + publication_dict['publication_year']
-        if review:
-            lkr_subfield_n = '[Rez.in]: ' + lkr_subfield_n
-        elif response:
-            lkr_subfield_n = '[Response in]: ' + lkr_subfield_n
+            location_in_host_item = publication_dict['publication_year']
+        if publication_dict['host_item_is_volume']:
+            recent_record.add_field(Field(tag='773', indicators=['0', '8'],
+                                          subfields=['w', publication_dict['host_item']['sysnumber'],
+                                                     't', publication_dict['host_item']['name'] + ', ' + location_in_host_item]))
+        else:
+            recent_record.add_field(Field(tag='773', indicators=['0', '8'],
+                                          subfields=['w', publication_dict['host_item']['sysnumber'],
+                                                     't', publication_dict['host_item']['name'], 'g', location_in_host_item]))
         if publication_dict['host_item']['issn']:
-            recent_record.add_field(Field(tag='773', indicators=['0', '8'],
-                                          subfields=['w', publication_dict['host_item']['sysnumber'],
-                                                     't', lkr_subfield_n, 'x', publication_dict['host_item']['issn']]))
-        else:
-            recent_record.add_field(Field(tag='773', indicators=['0', '8'],
-                                          subfields=['w', publication_dict['host_item']['sysnumber'],
-                                                     't', lkr_subfield_n]))
+            recent_record['773'].add_subfield('x', publication_dict['host_item']['issn'])
+
+        # wenn die ü.g eine ZS ist, dann sollte $g belegt und $t nur mit dem Titel belegt werden.
+        # publication_dict['host_item_is_volume'] = True
     except Exception as e:
         write_error_to_logfile.write(e)
         write_error_to_logfile.comment(publication_dict)
@@ -395,13 +394,10 @@ def add_subject_from_additional_physical_form_entry(additional_physical_form_ent
                 "https://zenon.dainst.org/Record/" + par['zenon_id'] + "/Export?style=MARC")
             new_reader = MARCReader(webfile)
             for file in new_reader:
-                all_par_subjects[par['zenon_id']] = file.get_fields('999', '600', '610', '611', '630', '647', '648', '650', '651') if file.get_fields('999', '600', '610', '611', '630', '647', '648', '650', '651') else {}
+                all_par_subjects[par['zenon_id']] = file.get_fields('600', '610', '611', '630', '647', '648', '650', '651') if file.get_fields('600', '610', '611', '630', '647', '648', '650', '651') else {}
             for entry in all_par_subjects:
                 for field in all_par_subjects[entry]:
                     if field.tag in ['600', '610', '611', '630', '647', '648', '650', '651']:
-                        recent_record.add_field(field)
-                    else:
-                        field.tag = 'THS'
                         recent_record.add_field(field)
     except Exception as e:
         write_error_to_logfile.write(e)
@@ -659,6 +655,7 @@ def create_new_record(out, publication_dict):
                 find_existing_doublets.find_review([person.split(', ')[0] for person in (publication_dict['authors_list'] + publication_dict['editors_list'])],
                                             publication_dict['publication_year'], 'en', [publication_dict['host_item']['sysnumber']], publication_dict)
         else:
+            print([publication_dict['host_item']['sysnumber']])
             all_doublets, additional_physical_form_entrys = \
                 find_existing_doublets.find((publication_dict['title_dict']['main_title']+' '+str(publication_dict['title_dict']['sub_title'])).replace('None', '').strip(),
                                             [person.split(', ')[0] for person in (publication_dict['authors_list'] + publication_dict['editors_list'])],
@@ -859,7 +856,7 @@ def create_new_record(out, publication_dict):
                     recent_record.add_field(Field(tag='856', indicators=['4', '2'],
                                                   subfields=['z', link['public_note'], 'u', link['url']]))
             if publication_dict['host_item']['sysnumber']:
-                create_lkr_ana(recent_record, publication_dict, publication_dict['volume'], publication_dict['review'], publication_dict['response'])
+                create_773(recent_record, publication_dict, publication_dict['volume'], publication_dict['review'], publication_dict['response'])
             for additional_physical_form_entry in additional_physical_form_entrys:
                 recent_record.add_field(Field(tag='776', indicators=['0', '8'],
                                               subfields=['i', additional_physical_form_entry['subfield_i'], 't', recent_record['245']['a'].strip(' / ').strip(' : '), 'w',
@@ -935,8 +932,6 @@ subject_added_entries = [{'type': '', 'text': '', 'source': ''}]
 # type MUSS aus der Liste ['Person', 'Corporation', 'Event', 'Chronology', 'Topic', 'Geography']
 # source wird mit dem Code für den verwendeten Thesaurus angegeben, falls dieser in
 # https://www.loc.gov/standards/sourcelist/subject.html angegeben wird.
-# Thesaurus-Schlagwörter werden separat in THS angegeben.
-# sollte noch überarbeitet werden!!!
 # 6**-Felder auch einfügen.
 '''
 persons = []
