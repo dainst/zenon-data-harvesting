@@ -342,7 +342,7 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                                                                     right_host_item = True
                                             except:
                                                 print('Das Host-Item von', found_record['id'], 'hat ein ungültiges Host-Item bzw. es gibt ein Problem mit der Weiterleitung.')
-                                    if right_host_item is False:
+                                    if not right_host_item:
                                         rejected_titles.append(found_record["id"] + title_found)
                                         continue
 
@@ -432,6 +432,8 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                                             rejected_titles.append(found_record["id"] + title_found)
                         except Exception as e:
                             write_error_to_logfile.write(e)
+                    else:
+                        rejected_titles.append(found_record['id'])
             if all_results and additional_physical_form_entrys:
                 break
         return all_results, rejected_titles, additional_physical_form_entrys
