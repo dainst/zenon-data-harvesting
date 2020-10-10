@@ -14,63 +14,70 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
     items_harvested = []
     try:
         for publication_file in os.listdir('gai_metadata'):
-            with open('publication_dict.json', 'r') as publication_dict_template:
-                publication_dict = json.load(publication_dict_template)
-            publication_xml = open('gai_metadata/' + publication_file, encoding = "ISO-8859-1")
-            pub_string = publication_xml.read()
-            publication_soup = BeautifulSoup(pub_string, features="lxml").find('product')
-            publication_dict['default_language'] = \
-                publication_soup.find('languagecode').text.lower()
-            publication_dict['do_detect_lang'] = False
-            publication_dict['rdacarrier'] = 'cr'
-            publication_dict['rdamedia'] = 'c'
-            publication_dict['rdacontent'] = 'txt'
-            publication_dict['LDR_06_07'] = 'am'
-            publication_dict['field_007'] = 'cr uuu|||uuuuu'
-            publication_dict['field_008_18-34'] = '||||fom||||||| 0|'
-            publication_dict['field_006'] = 'm||||fom||||||| 0|'
-            publication_dict['fields_590'] = ['Online publication', '2020xhnxfb', 'ebookoa0920']
-            publication_dict['isbn'] = [tag.find('idvalue').text for tag in publication_soup.find_all('productidentifier')
-                                        if tag.find('productidtype').text == '03'][0]
-            publication_dict['original_cataloging_agency'] = 'Forgotten Books'
-            publication_dict['title_dict']['main_title'] = publication_soup.find('title').find('titletext').text
-            publication_dict['title_dict']['sub_title'] = publication_soup.find('title').find('subtitle').text
-            publication_dict['authors_list'] = [author_tag.find('keynames').text + ', ' + author_tag.find('namesbeforekey').text for author_tag in publication_soup.find_all('contributor') if author_tag.find('contributorrole').text == 'A01']
-            publication_dict['editors_list'] = [author_tag.find('keynames').text + ', ' + author_tag.find('namesbeforekey').text for author_tag in publication_soup.find_all('contributor') if author_tag.find('contributorrole').text != 'A01']
-
-            if publication_soup.find_all('illustrations'):
-                publication_dict['additional_fields'].append({'tag': '300', 'indicators': ['', ''], 'subfields': ['a', '1 online ressource , ' + publication_soup.find('numberofpages').text + ' pp.', 'b', 'illustrations'], 'data': ''})
-            if publication_soup.find_all('illustrations'):
-                publication_dict['additional_fields'].append({'tag': '300', 'indicators': ['', ''], 'subfields': ['a', '1 online ressource , ' + publication_soup.find('numberofpages').text + ' pp.'], 'data': ''})
-            publication_ids = [tag.find('idvalue').text for tag in publication_soup.find_all('productidentifier') if tag.find('productidtype').text == '01']
-            publication_dict['html_links'] = ['https://www.forgottenbooks.com/en/books/' + id for id in publication_ids]
-            print(publication_dict['html_links'])
-            publication_dict['pdf_links'] = ['https://www.forgottenbooks.com/en/download/' + id + '.pdf' for id in publication_ids]
-            publication_dict['terms_of_use_and_reproduction'] = \
-                {'terms_note':
-                     'The e-books may be copied or printed for personal or educational use only. '
-                     'None of the e-books or any part of our content may be sold individually or as part of a package, modified in any way or reverse engineered.',
-                 'use_and_reproduction_rights': '', 'terms_link': 'https://www.forgottenbooks.com/de/terms'}
-            publication_dict['additional_fields'].append({'tag': '650', 'indicators': ['', '7'], 'subfields': ['a', publication_soup.find('basicmainsubject').text, '2', 'bisacsh'], 'data': ''})
-            # https://bisg.org/page/History
             try:
-                with urllib.request.urlopen(publication_dict['html_links'][0]) as f:
-                    html = gzip.open(f)
-                    webpage_soup = BeautifulSoup(html.read(), 'html.parser')
-                    info = webpage_soup.find('meta', attrs={'name':'description'})['content']
-                    publication_dict['additional_fields'].append({'tag': '000', 'indicators': ['', ''], 'subfields': ['a', info], 'data': ''})
-                    # hier die entsprechenden Items löschen!
-                    # außerdem Subjects überprüfen.
+                with open('publication_dict.json', 'r') as publication_dict_template:
+                    publication_dict = json.load(publication_dict_template)
+                publication_xml = open('gai_metadata/' + publication_file, 'r')
+                pub_string = publication_xml.read()
+                publication_soup = BeautifulSoup(pub_string, features="lxml").find('product')
+                publication_dict['title_dict']['main_title'] = publication_soup.find('title').find('titletext').text.replace(' (Classic Reprint)', '')
+                # if publication_dict['title_dict']['main_title'] == 'Varroniana (Classic Reprint)':
+                    # start_harvesting = True
+                # if not start_harvesting:
+                    # continue
+                publication_dict['default_language'] = \
+                    publication_soup.find('languagecode').text.lower()
+                publication_dict['do_detect_lang'] = False
+                publication_dict['rdacarrier'] = 'cr'
+                publication_dict['rdamedia'] = 'c'
+                publication_dict['rdacontent'] = 'txt'
+                publication_dict['LDR_06_07'] = 'am'
+                publication_dict['field_007'] = 'cr uuu|||uuuuu'
+                publication_dict['field_008_18-34'] = '||||fom||||||| 0|'
+                publication_dict['field_006'] = 'm||||fom||||||| 0|'
+                publication_dict['fields_590'] = ['Online publication', '2020xhnxfb', 'ebookoa0920']
+                publication_dict['isbn'] = [tag.find('idvalue').text for tag in publication_soup.find_all('productidentifier')
+                                            if tag.find('productidtype').text == '03'][0]
+                publication_dict['original_cataloging_agency'] = 'Forgotten Books'
+                publication_dict['title_dict']['sub_title'] = publication_soup.find('title').find('subtitle').text
+                publication_dict['authors_list'] = [author_tag.find('keynames').text + ', ' + author_tag.find('namesbeforekey').text for author_tag in publication_soup.find_all('contributor') if author_tag.find('contributorrole').text == 'A01']
+                publication_dict['editors_list'] = [author_tag.find('keynames').text + ', ' + author_tag.find('namesbeforekey').text for author_tag in publication_soup.find_all('contributor') if author_tag.find('contributorrole').text != 'A01']
+                if publication_soup.find_all('illustrations'):
+                    publication_dict['additional_fields'].append({'tag': '300', 'indicators': ['', ''], 'subfields': ['a', '1 online ressource , ' + publication_soup.find('numberofpages').text + ' pp.', 'b', 'illustrations'], 'data': ''})
+                if publication_soup.find_all('illustrations'):
+                    publication_dict['additional_fields'].append({'tag': '300', 'indicators': ['', ''], 'subfields': ['a', '1 online ressource , ' + publication_soup.find('numberofpages').text + ' pp.'], 'data': ''})
+                publication_ids = [tag.find('idvalue').text for tag in publication_soup.find_all('productidentifier') if tag.find('productidtype').text == '01']
+                publication_dict['html_links'] = ['https://www.forgottenbooks.com/en/books/' + id for id in publication_ids]
+                publication_dict['pdf_links'] = ['https://www.forgottenbooks.com/en/download/' + id + '.pdf' for id in publication_ids]
+                publication_dict['terms_of_use_and_reproduction'] = \
+                    {'terms_note':
+                         'The e-books may be copied or printed for personal or educational use only. '
+                         'None of the e-books or any part of our content may be sold individually or as part of a package, modified in any way or reverse engineered.',
+                     'use_and_reproduction_rights': '', 'terms_link': 'https://www.forgottenbooks.com/de/terms'}
+                publication_dict['additional_fields'].append({'tag': '650', 'indicators': ['', '7'], 'subfields': ['a', publication_soup.find('basicmainsubject').text, '2', 'bisacsh'], 'data': ''})
+                # https://bisg.org/page/History
+                try:
+                    with urllib.request.urlopen(publication_dict['html_links'][0]) as f:
+                        html = gzip.open(f)
+                        webpage_soup = BeautifulSoup(html.read(), 'html.parser')
+                        info = webpage_soup.find('meta', attrs={'name':'description'})['content']
+                        publication_dict['additional_fields'].append({'tag': '698', 'indicators': [' ', ' '], 'subfields': ['a', info], 'data': ''})
+                        # hier die entsprechenden Items löschen!
+                        # außerdem Subjects überprüfen.
+                except Exception as e:
+                    publication_dict['additional_fields'].append({'tag': '698', 'indicators': [' ', ' '], 'subfields': ['a', publication_dict['html_links'][0]], 'data': ''})
+                    write_error_to_logfile.write(e)
+                    continue
+                publication_dict['publication_etc_statement']['publication'] = {'place': 'London', 'responsible': 'Forgotten Books', 'country_code': 'enk'}
+                publication_dict['publication_year'] = publication_soup.find('publicationdate').text[:4]
+
+
+
+                publication_dicts.append(publication_dict)
             except Exception as e:
-                publication_dict['additional_fields'].append({'tag': '000', 'indicators': ['', ''], 'subfields': ['a', publication_dict['html_links'][0]], 'data': ''})
                 write_error_to_logfile.write(e)
-                continue
-            publication_dict['publication_etc_statement']['publication'] = {'place': 'London', 'responsible': 'Forgotten Books', 'country_code': 'enk'}
-            publication_dict['publication_year'] = publication_soup.find('publicationdate').text[:4]
-
-
-
-            publication_dicts.append(publication_dict)
+                write_error_to_logfile.comment('Fehler bei der Datei: ' + publication_file)
+                items_harvested, publication_dicts = [], []
     except Exception as e:
         write_error_to_logfile.write(e)
         write_error_to_logfile.comment('Es konnten keine Artikel für Forgotten Books geharvested werden.')
