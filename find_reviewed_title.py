@@ -165,7 +165,6 @@ def swagger_find(search_title, search_authors, year, year_of_review, title, reje
     try:
         page_nr = 0
         empty_page = False
-        print(search_title, search_authors)
         while not empty_page:
             page_nr += 1
             search_authors = search_authors.replace(" ", "+")
