@@ -17,6 +17,7 @@ import eperiodica_snr_003_modularized
 import germania_modularized
 import gnomon_modularized
 import hsozkult_modularized
+import lucentum_modularized
 import athener_mitteilungen
 import late_antiquity_modularized_new
 import maa_journal_current_modularized
@@ -40,6 +41,7 @@ path_for_cumulus = '/home/hnebel/Programmierung/zenon-data-harvesting/records/' 
 path = '/home/hnebel/Programmierung/zenon-data-harvesting/records/' + new_dir + '/'
 for harvesting_script in [aegyptiaca_modularized, antiquite_modularized, berrgk_modularized, BMCR_modularized,
                           cipeg_modularized,
+                          lucentum_modularized,
                           efb_modularized,
                           eperiodica_akb_002_modularized, eperiodica_bat_001_modularized, eperiodica_snr_003_modularized,
                           gerion_modularized,
