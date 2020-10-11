@@ -877,7 +877,7 @@ def create_new_record(out, publication_dict):
                 recent_record.add_field(Field(tag='776', indicators=['0', '8'],
                                               subfields=['i', additional_physical_form_entry['subfield_i'], 't', recent_record['245']['a'].strip(' / ').strip(' : '), 'w',
                                                          '(DE-2553)' + additional_physical_form_entry['zenon_id']]))
-            for field in publication_dict['additional_fields']:
+            for field in list(set(publication_dict['additional_fields'])):
                 if field['data']:
                     recent_record.add_field(Field(tag=field['tag'], data=field['data']))
                 elif field['tag']:
