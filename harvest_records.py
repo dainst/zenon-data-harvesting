@@ -20,7 +20,6 @@ def harvest_records(path: str, short_name: str, real_name: str, create_publicati
                 log_dict = json.load(log_file)
                 last_item_harvested_in_last_session = log_dict[short_name]['last_item_harvested']
                 write_error_to_logfile.comment('Letztes geharvestetes Heft von ' + real_name + ': ' + str(last_item_harvested_in_last_session))
-            create_path(path)
             out = open(path + short_name + '_' + timestampStr + '.mrc', 'wb')
             pub_nr = 0
             publication_dicts, issues_harvested = create_publication_dicts(last_item_harvested_in_last_session, short_name, real_name, publisher, publication_place, default_language, time_interval,
