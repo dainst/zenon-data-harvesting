@@ -4,6 +4,8 @@ from langdetect import detect
 from nltk.tokenize import RegexpTokenizer
 import json
 import re
+import nltk
+nltk.download('stopwords')
 from nltk.corpus import stopwords
 from scipy import spatial
 import itertools
