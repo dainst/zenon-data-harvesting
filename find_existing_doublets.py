@@ -441,6 +441,7 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
         return all_results, rejected_titles, additional_physical_form_entrys
     except Exception as e:
         write_error_to_logfile.write(e)
+        return all_results, rejected_titles, additional_physical_form_entrys
 
 
 def find(title, authors, year, default_lang, possible_host_items, publication_dict):
