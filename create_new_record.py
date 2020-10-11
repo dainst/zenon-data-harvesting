@@ -11,6 +11,7 @@ import find_existing_doublets
 import re
 import write_error_to_logfile
 from gnd_request_for_cor import check_gnd_for_name
+import json
 
 
 rda_codes = {'rdacarrier': {'sg': 'audio cartridge', 'sb': 'audio belt', 'se': 'audio cylinder', 'sd': 'audio disc',
@@ -389,17 +390,19 @@ def create_773(recent_record, publication_dict, volume, review, response):
 
 def add_subject_from_additional_physical_form_entry(additional_physical_form_entrys, recent_record, publication_dict):
     try:
-        all_par_subjects = {}
+        all_par_subjects = []
         for par in additional_physical_form_entrys:
             webfile = urllib.request.urlopen(
                 "https://zenon.dainst.org/Record/" + par['zenon_id'] + "/Export?style=MARC")
             new_reader = MARCReader(webfile)
             for file in new_reader:
-                all_par_subjects[par['zenon_id']] = file.get_fields('600', '610', '611', '630', '647', '648', '650', '651') if file.get_fields('600', '610', '611', '630', '647', '648', '650', '651') else {}
-            for entry in all_par_subjects:
-                for field in all_par_subjects[entry]:
-                    if field.tag in ['600', '610', '611', '630', '647', '648', '650', '651']:
-                        recent_record.add_field(field)
+                all_par_subjects += [json.dumps(field) for field in file.as_dict()['fields'] if any(tag in field for tag in ['600', '610', '611', '630', '647', '648', '650', '651'])]
+        for subject_field in all_par_subjects:
+            subject_field = json.loads(subject_field)
+            subfield_list = [ entry for subfield in subject_field[list(subject_field.keys())[0]]['subfields']
+                    for entry in [list(subfield.keys())[0], subfield[list(subfield.keys())[0]]]]
+            recent_record.add_field(Field(tag=list(subject_field.keys())[0], indicators=[subject_field[list(subject_field.keys())[0]]['ind1'], subject_field[list(subject_field.keys())[0]]['ind2']],
+                                          subfields=subfield_list))
     except Exception as e:
         write_error_to_logfile.write(e)
         write_error_to_logfile.comment(publication_dict)
@@ -877,7 +880,7 @@ def create_new_record(out, publication_dict):
                 recent_record.add_field(Field(tag='776', indicators=['0', '8'],
                                               subfields=['i', additional_physical_form_entry['subfield_i'], 't', recent_record['245']['a'].strip(' / ').strip(' : '), 'w',
                                                          '(DE-2553)' + additional_physical_form_entry['zenon_id']]))
-            for field in list(set(publication_dict['additional_fields'])):
+            for field in publication_dict['additional_fields']:
                 if field['data']:
                     recent_record.add_field(Field(tag=field['tag'], data=field['data']))
                 elif field['tag']:
