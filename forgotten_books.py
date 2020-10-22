@@ -16,6 +16,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
         start_harvesting = False
         for publication_file in os.listdir('gai_metadata')[2:6]:
             try:
+                print(publication_file)
                 with open('publication_dict.json', 'r') as publication_dict_template:
                     publication_dict = json.load(publication_dict_template)
                 publication_xml = open('gai_metadata/' + publication_file, 'r')
