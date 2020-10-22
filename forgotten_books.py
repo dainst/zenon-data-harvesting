@@ -1,4 +1,5 @@
-import urllib.request
+import urllib.parse, urllib.request
+import urllib.parse, urllib.request
 from bs4 import BeautifulSoup
 import json
 import re
@@ -12,7 +13,8 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
     publication_dicts = []
     items_harvested = []
     try:
-        for publication_file in os.listdir('gai_metadata'):
+        start_harvesting = False
+        for publication_file in os.listdir('gai_metadata')[2:20]:
             try:
                 with open('publication_dict.json', 'r') as publication_dict_template:
                     publication_dict = json.load(publication_dict_template)
@@ -43,7 +45,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                 publication_dict['editors_list'] = [author_tag.find('keynames').text + ', ' + author_tag.find('namesbeforekey').text for author_tag in publication_soup.find_all('contributor') if author_tag.find('contributorrole').text != 'A01']
                 if publication_soup.find_all('illustrations'):
                     publication_dict['additional_fields'].append({'tag': '300', 'indicators': ['', ''], 'subfields': ['a', '1 online ressource , ' + publication_soup.find('numberofpages').text + ' pp.', 'b', 'illustrations'], 'data': ''})
-                if publication_soup.find_all('illustrations'):
+                else:
                     publication_dict['additional_fields'].append({'tag': '300', 'indicators': ['', ''], 'subfields': ['a', '1 online ressource , ' + publication_soup.find('numberofpages').text + ' pp.'], 'data': ''})
                 publication_ids = [tag.find('idvalue').text for tag in publication_soup.find_all('productidentifier') if tag.find('productidtype').text == '01']
                 publication_dict['html_links'] = ['https://www.forgottenbooks.com/en/books/' + id for id in publication_ids]
@@ -61,17 +63,12 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                         webpage_soup = BeautifulSoup(html.read(), 'html.parser')
                         info = webpage_soup.find('meta', attrs={'name':'description'})['content']
                         publication_dict['additional_fields'].append({'tag': '698', 'indicators': [' ', ' '], 'subfields': ['a', info], 'data': ''})
-                        # hier die entsprechenden Items löschen!
-                        # außerdem Subjects überprüfen.
                 except Exception as e:
                     publication_dict['additional_fields'].append({'tag': '698', 'indicators': [' ', ' '], 'subfields': ['a', publication_dict['html_links'][0]], 'data': ''})
                     write_error_to_logfile.write(e)
                     continue
                 publication_dict['publication_etc_statement']['publication'] = {'place': 'London', 'responsible': 'Forgotten Books', 'country_code': 'enk'}
                 publication_dict['publication_year'] = publication_soup.find('publicationdate').text[:4]
-
-
-
                 publication_dicts.append(publication_dict)
             except Exception as e:
                 write_error_to_logfile.write(e)
