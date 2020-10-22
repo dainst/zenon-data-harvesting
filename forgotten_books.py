@@ -58,6 +58,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                      'use_and_reproduction_rights': '', 'terms_link': 'https://www.forgottenbooks.com/de/terms'}
                 publication_dict['additional_fields'].append({'tag': '650', 'indicators': ['', '7'], 'subfields': ['a', publication_soup.find('basicmainsubject').text, '2', 'bisacsh'], 'data': ''})
                 # https://bisg.org/page/History
+                '''
                 try:
                     with urllib.request.urlopen(publication_dict['html_links'][0]) as f:
                         html = gzip.open(f)
@@ -68,6 +69,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                     publication_dict['additional_fields'].append({'tag': '698', 'indicators': [' ', ' '], 'subfields': ['a', publication_dict['html_links'][0]], 'data': ''})
                     write_error_to_logfile.write(e)
                     continue
+                '''
                 publication_dict['publication_etc_statement']['publication'] = {'place': 'London', 'responsible': 'Forgotten Books', 'country_code': 'enk'}
                 publication_dict['publication_year'] = publication_soup.find('publicationdate').text[:4]
                 publication_dicts.append(publication_dict)
