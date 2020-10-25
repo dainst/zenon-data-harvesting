@@ -901,7 +901,7 @@ def create_new_record(out, publication_dict):
                             # print(publication_dict['review_list'])
                             # print(reviewed_title_ids)
                             recent_record.add_field(Field(tag='787', indicators=['0', '8'],
-                                                          subfields=['w', reviewed_title_id,
+                                                          subfields=['w', '(DE-2553)' + reviewed_title_id,
                                                                      't', review_titles[reviewed_title_ids.index(reviewed_title_id)][0]]))
             if publication_dict['response']:
                 for reviewed_title in publication_dict['response_list']:
@@ -909,7 +909,7 @@ def create_new_record(out, publication_dict):
                         reviewed_title_ids, review_titles = find_reviewed_title.find(reviewed_title, publication_dict['publication_year'], 'en')
                         for reviewed_title_id in reviewed_title_ids:
                             recent_record.add_field(Field(tag='787', indicators=['0', '8'],
-                                                         subfields=['w', reviewed_title_id,
+                                                         subfields=['w', '(DE-2553)' + reviewed_title_id,
                                                                     't', publication_dict['title_dict']['main_title'][0]]))
 
             if additional_physical_form_entrys:
