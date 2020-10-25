@@ -372,11 +372,11 @@ def create_773(recent_record, publication_dict, volume, review, response):
             location_in_host_item = publication_dict['publication_year']
         if publication_dict['host_item_is_volume']:
             recent_record.add_field(Field(tag='773', indicators=['0', '8'],
-                                          subfields=['w', publication_dict['host_item']['sysnumber'],
+                                          subfields=['w', '(DE-2553)' + publication_dict['host_item']['sysnumber'],
                                                      't', publication_dict['host_item']['name'] + ', ' + location_in_host_item]))
         else:
             recent_record.add_field(Field(tag='773', indicators=['0', '8'],
-                                          subfields=['w', publication_dict['host_item']['sysnumber'],
+                                          subfields=['w', '(DE-2553)' + publication_dict['host_item']['sysnumber'],
                                                      't', publication_dict['host_item']['name'], 'g', location_in_host_item]))
         if publication_dict['host_item']['issn']:
             recent_record['773'].add_subfield('x', publication_dict['host_item']['issn'])
