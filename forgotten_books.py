@@ -14,19 +14,14 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
     items_harvested = []
     try:
         start_harvesting = False
-        for publication_file in os.listdir('gai_metadata')[0:20]:
+        for publication_file in os.listdir('gai_metadata'):
             try:
-                print(publication_file)
                 with open('publication_dict.json', 'r') as publication_dict_template:
                     publication_dict = json.load(publication_dict_template)
                 publication_xml = open('gai_metadata/' + publication_file, 'r')
                 pub_string = publication_xml.read()
                 publication_soup = BeautifulSoup(pub_string, features="lxml").find('product')
                 publication_dict['title_dict']['main_title'] = publication_soup.find('title').find('titletext').text.replace(' (Classic Reprint)', '')
-                # if publication_dict['title_dict']['main_title'] == 'Varroniana (Classic Reprint)':
-                    # start_harvesting = True
-                # if not start_harvesting:
-                    # continue
                 publication_dict['default_language'] = \
                     publication_soup.find('languagecode').text.lower()
                 publication_dict['do_detect_lang'] = False
@@ -68,7 +63,6 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                 except Exception as e:
                     publication_dict['additional_fields'].append({'tag': '698', 'indicators': [' ', ' '], 'subfields': ['a', publication_dict['html_links'][0]], 'data': ''})
                     write_error_to_logfile.write(e)
-                    continue
                 publication_dict['publication_etc_statement']['publication'] = {'place': 'London', 'responsible': 'Forgotten Books', 'country_code': 'enk'}
                 publication_dict['publication_year'] = publication_soup.find('publicationdate').text[:4]
                 publication_dicts.append(publication_dict)
