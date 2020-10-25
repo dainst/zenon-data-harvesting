@@ -4,8 +4,6 @@ from langdetect import detect
 from nltk.tokenize import RegexpTokenizer
 import json
 import re
-import nltk
-nltk.download('stopwords')
 from nltk.corpus import stopwords
 from scipy import spatial
 import itertools
@@ -13,6 +11,8 @@ from pymarc import MARCReader
 import math
 import unidecode
 import write_error_to_logfile
+from weighted_levenshtein import dam_lev
+import numpy as np
 import ssl
 ssl._create_default_https_context = ssl._create_unverified_context
 
@@ -56,19 +56,14 @@ unskippable_words = ['katalog', 'catalog', 'catalogue', 'catalogo', 'catalogus',
 stopwords_for_search_in_zenon = ['bd', 'band', 'vol', 'volume']
 
 
-def lower_list(input_list):
-    output_list = [word.lower() for word in input_list]
-    return output_list
-
-
 def typewriter_distance(letter1, letter2):
     try:
         typewriter_position = [(typewriter_list.index(row), row.index(letter)) if (typewriter_list.index(row) != 2) else (
             typewriter_list.index(row), row.index(letter) + 0.5) for letter in [letter1, letter2]
-            for row in typewriter_list if (letter in row)]
+                               for row in typewriter_list if (letter in row)]
         try:
-            distance = 1 + (math.sqrt((abs(typewriter_position[0][0] - typewriter_position[1][0])) ** 2 + (
-                abs(typewriter_position[0][1] - typewriter_position[1][1])) ** 2))/10
+            distance = (1 + (math.sqrt((abs(typewriter_position[0][0] - typewriter_position[1][0])) ** 2 + (
+                abs(typewriter_position[0][1] - typewriter_position[1][1])) ** 2))/10) / 1.5
         except:
             distance = 1
         return distance
@@ -76,25 +71,22 @@ def typewriter_distance(letter1, letter2):
         write_error_to_logfile.write(e)
 
 
-def iterative_levenshtein(s, t):
-    try:
-        s, t = [string.lower() for string in [s, t]]
-        rows = len(s) + 1
-        cols = len(t) + 1
-        deletes, inserts, substitutes = 1, 1, 1
-        dist = [[0.0 for x in range(cols)] for x in range(rows)]
-        for row in range(1, rows):
-            dist[row][0] = row * deletes
-        for col in range(1, cols):
-            dist[0][col] = col * inserts
-        for col in range(1, cols):
-            for row in range(1, rows):
-                dist[row][col] = min(dist[row - 1][col] + deletes,
-                                     dist[row][col - 1] + inserts,
-                                     dist[row - 1][col - 1] + typewriter_distance(s[row - 1], t[col - 1]))
-        return dist[len(s)][len(t)]
-    except Exception as e:
-        write_error_to_logfile.write(e)
+def get_matrices():
+    transpose_costs = np.full((128, 128), 0.75, dtype=np.float64)
+    substitute_costs = np.ones((128, 128), dtype=np.float64)  # make a 2D array of 1's
+    for character in [chr(ordinal) for ordinal in [i for i in range(48, 58)] + [i for i in range(97, 123)]]:
+        for second_character in [chr(ordinal) for ordinal in [i for i in range(48, 58)] + [i for i in range(97, 123)]]:
+            substitute_costs[ord(character), ord(second_character)] = typewriter_distance(character, second_character)
+            substitute_costs[ord(second_character), ord(character)] = typewriter_distance(character, second_character)
+    return substitute_costs, transpose_costs
+
+
+substitute_costs, transpose_costs = get_matrices()
+
+
+def lower_list(input_list):
+    output_list = [word.lower() for word in input_list]
+    return output_list
 
 
 def check_cosine_similarity(title, found_title, found_record, rejected_titles, lang):
@@ -119,44 +111,32 @@ def check_cosine_similarity(title, found_title, found_record, rejected_titles, l
         [title_list, found_title_list] = [a[:length] for a in [title_list, found_title_list]]
         title_list_count = [title_list.count(word) for word in title_list if (word not in stopwords_dict[lang])]
         found_title_list_count = [found_title_list.count(word) for word in title_list if (word not in stopwords_dict[lang])]
-        # print(title_list, found_title_list)
-        # hier muss irgendwie iterative levensthein rein!!!
-        # mehr Worte skippen und danach die Similarität und übriggebliebene Wortlänge vergleichen.
         if list(set(title_list_count)) == [0] or list(set(found_title_list_count)) == [0]:
             return False
         else:
             similarity = 1 - spatial.distance.cosine(title_list_count, found_title_list_count)
-            if similarity > 0.6:
-                print(title_list, found_title_list)
-                print('similarity:', similarity)
-            if (similarity <= 0.65) and (similarity >= 0.5):
-                for word in title_list:
-                    for found_word in found_title_list:
-                        if (iterative_levenshtein(word, found_word)) < (len(word)/4) and iterative_levenshtein(word, found_word) > 0:
-                            pass
-                            # hier noch anpassen, dass die Suche nach den Worten fuzzy wird! Oder lieber oben!
             if similarity > 0.65:
+                word_nr = 0
                 skipped_word_nr = 0
                 mismatches_nr = 0
                 matches_nr = 0
                 for word in title_list:
-                    if word in found_title_list:
-                        if any(index == found_title_list.index(word) for index in
-                               [title_list.index(word) + 1 + skipped_word_nr, title_list.index(word) + skipped_word_nr,
-                                title_list.index(word) - 1 + skipped_word_nr]):
+                    max_distance = len(word)/5 if (len(word) > 4) else 1
+                    if word in found_title_list[(word_nr - 1) if word_nr > 0 else word_nr:word_nr + 2]:
+                        if any(approximate_word_nr == found_title_list.index(word) for approximate_word_nr in
+                               [word_nr + 1, word_nr, word_nr - 1]):
                             matches_nr += 1
-                        else:
-                            mismatches_nr += 1
-                            skipped_word_nr += 1
-                            if word in unskippable_words and title_list.index(word) in [0, 1]:
-                                print(title_list)
-                                return False
+                    elif any(dam_lev(word, found_word, substitute_costs=substitute_costs, transpose_costs=transpose_costs) <= max_distance for found_word in
+                             [found_title_list[(word_nr - 1) if word_nr > 0 else word_nr], found_title_list[word_nr], found_title_list[(word_nr + 1) if word_nr + 1 < len(found_title_list) else word_nr]]):
+                        matches_nr += 1
                     else:
+                        mismatches_nr += 1
                         skipped_word_nr += 1
                         if word in unskippable_words and title_list.index(word) in [0, 1]:
                             print(title_list)
                             return False
-                if skipped_word_nr >= (len(title_list) / 3):
+                    word_nr += 1
+                if skipped_word_nr >= math.ceil(len(title_list) / 4):
                     return False
                 if matches_nr > mismatches_nr * 2:
                     if similarity > 0.77:
@@ -285,13 +265,12 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                                     if authors:
                                         for found_author in [aut for found_author in found_authors for aut in found_author.split()]:
                                             if found_author in authors:
-                                                print('found in authors')
                                                 right_author = True
                                             if right_author:
                                                 break
-                                            if [iterative_levenshtein(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author)) for x in authors for splitted_author in x.split()]:
-                                                print({found_author + '+' + splitted_author: iterative_levenshtein(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author)) for x in authors for splitted_author in x.split()})
-                                                if min([iterative_levenshtein(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author)) for x in authors for splitted_author in x.split()]) <= (len(found_author)/3):
+                                            if [dam_lev(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author), substitute_costs=substitute_costs, transpose_costs=transpose_costs) for x in authors for splitted_author in x.split()]:
+                                                print({found_author + '+' + splitted_author: dam_lev(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author), substitute_costs=substitute_costs, transpose_costs=transpose_costs) for x in authors for splitted_author in x.split()})
+                                                if min([dam_lev(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author), substitute_costs=substitute_costs, transpose_costs=transpose_costs) for x in authors for splitted_author in x.split()]) <= (len(found_author)/3):
                                                     # Vorsicht vor impliziten Typkonvertierungen von Zahlen zu bool
                                                     right_author = True
                                 else:
@@ -303,12 +282,6 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                                 if not found_year and not year:
                                     right_year = True
                                 [possible_host_items.remove(item) for item in possible_host_items if not item]
-                                if right_author or right_year:
-                                    print(found_year, year)
-                                    print('authors:', authors, 'found_authors:', found_authors)
-                                    print(found_record['id'])
-                                    print('upper:', upper_host_items)
-                                    print('possible host items:', possible_host_items)
                                 if possible_host_items:
                                     right_host_item = False
                                     print('found host items:', [field['w'].replace('(DE-2553)', '') for field in file.get_fields('773') if field['w']])
@@ -317,8 +290,6 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                                             right_host_item = True
                                         else:
                                             try:
-                                                print("https://zenon.dainst.org/Record/" + file['773'][
-                                                        'w'].replace('(DE-2553)', '') + "/Export?style=MARC")
                                                 parent_webfile = urllib.request.urlopen(
                                                     "https://zenon.dainst.org/Record/" + file['773'][
                                                         'w'].replace('(DE-2553)', '') + "/Export?style=MARC")
@@ -349,16 +320,6 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                                     if not right_host_item:
                                         rejected_titles.append(found_record["id"] + title_found)
                                         continue
-
-                                '''if file['245']['c'] and publication_dict['title_dict']['responsibility_statement']:
-                                    responsibility_statement_similarity = check_cosine_similarity(file['245']['c'], publication_dict['title_dict']['responsibility_statement'], found_record, rejected_titles, lang)
-                                    print(responsibility_statement_similarity)
-                                    if responsibility_statement_similarity > 0.75:
-                                        right_responsibility = True
-                                    else:
-                                        right_responsibility = False
-                                else:
-                                    right_responsibility = True'''
 
                                 if right_author:
                                     if found_record['id'] not in [entry['zenon_id'] for entry in additional_physical_form_entrys]:
@@ -724,7 +685,3 @@ def find_review(authors, year, default_lang, possible_host_items, publication_di
 # hier noch Möglichkeiten für hidden filters einbauen?
 # Problem: bei sehr kurzen "Haupttiteln" werden zu kurze Dublettentitel gefunden.
 # Korrektur: aussortierte Worte zulassen, falls gar keine Worte für die Suche vorhanden sind.
-
-
-# Host-Items von Host-Items berücksichtigen! wenn beide im gleichen Host-Item sind
-# ODER es par-Titel von Host-Items gibt, dann einbeziehen.
