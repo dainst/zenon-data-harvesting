@@ -66,6 +66,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                         publication_dict['field_008_18-34'] = 'gr p|o |||||   a|'
                         publication_dict['field_300'] = '1 online resource, pp. ' + item['bibjson']['start_page'] + '-' + item['bibjson']['end_page']
                         publication_dict['force_300'] = True
+                        publication_dict['check_for_doublets_and_pars'] = False
                         if 'abstract' not in item['bibjson']:
                             publication_dict['review'] = True
                             publication_dict['review_list'].append({"reviewed_title": publication_dict['title_dict']['main_title'], "reviewed_authors": [],

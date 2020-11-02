@@ -108,6 +108,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                             publication_dict['field_300'] = '1 online resource'
                             publication_dict['default_language'] = language_codes.resolve(article_soup.find('meta', attrs={'name': 'DC.Language'})['content'])
                             publication_dict['do_detect_lang'] = False
+                            publication_dict['check_for_doublets_and_pars'] = False
                             if category == "Reviews":
                                 rev_authors = ''
                                 rev_editors = ''

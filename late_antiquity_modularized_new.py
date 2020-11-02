@@ -106,6 +106,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                         publication_dict['volume'] = volume
                         publication_dict['field_007'] = 'ta'
                         publication_dict['field_008_18-34'] = 'fr p|  |||||   a|'
+                        publication_dict['check_for_doublets_and_pars'] = False
                         publication_dicts.append(publication_dict)
                         items_harvested.append(current_item)
     except Exception as e:

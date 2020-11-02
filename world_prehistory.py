@@ -75,6 +75,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                     publication_dict['field_300'] = '1 online resource, pp. ' + article['startingPage'] + '-' + article['endingPage']
                     publication_dict['force_300'] = True
                     publication_dict['text_body_for_lang_detection'] = article['abstract']
+                    publication_dict['check_for_doublets_and_pars'] = False
                     if int(publication_year) < 2003:
                         publication_dict['html_links'] = [url['value'] for url in article['url'] if 'html' in url['format'] == 'html']
                         publication_dict['pdf_links'] = [url['value'] for url in article['url'] if url['format'] == 'pdf']

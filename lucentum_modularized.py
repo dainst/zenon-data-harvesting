@@ -70,6 +70,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                         publication_dict['field_006'] = 'm     o  d |      '
                         publication_dict['field_007'] = 'cr uuu   uu|uu'
                         publication_dict['field_008_18-34'] = 'ar p|o |||||   a|'
+                        publication_dict['check_for_doublets_and_pars'] = False
                         basic_url = 'https://doi.org/' + publication_dict['doi'][:-3]
                         publication_dict['table_of_contents_link'] = basic_url
                         year -= 1

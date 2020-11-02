@@ -102,6 +102,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                                                             + title_soup.find('meta', attrs={'name': "citation_firstpage"})['content'] \
                                                             + '-' + title_soup.find('meta', attrs={'name': "citation_lastpage"})['content']
                             publication_dict['review'] = True
+                            publication_dict['check_for_doublets_and_pars'] = False
                             reviewed_title = publication_dict['title_dict']['main_title']
                             reviewed_authors = []
                             reviewed_editors = []

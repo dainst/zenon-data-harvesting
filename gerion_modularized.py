@@ -133,6 +133,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                     publication_dict['do_detect_lang'] = True
                 else:
                     publication_dict['do_detect_lang'] = False
+                publication_dict['check_for_doublets_and_pars'] = False
                 publication_dicts.append(publication_dict)
                 items_harvested.append(current_item)
     except Exception as e:

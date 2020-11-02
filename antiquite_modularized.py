@@ -25,6 +25,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
         while True:
             request_nr += 1
             req = urllib.request.Request(basic_url + next_cursor)
+            print(basic_url + next_cursor)
             with urllib.request.urlopen(req) as response:
                 response = response.read()
             response = response.decode('utf-8')
@@ -67,6 +68,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                         publication_dict['field_006'] = 'm     o  d |      '
                         publication_dict['field_007'] = 'cr uuu   uu|uu'
                         publication_dict['field_008_18-34'] = 'fr p|o |||||   a|'
+                        publication_dict['check_for_doublets_and_pars'] = False
                         publication_dicts.append(publication_dict)
                         items_harvested.append(current_item)
     except Exception as e:

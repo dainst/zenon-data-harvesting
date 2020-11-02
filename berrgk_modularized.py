@@ -121,6 +121,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                             publication_dict['table_of_contents_link'] = issue_url
                             publication_dict['volume_year'] = volume_year
                             publication_dict['copyright_year'] = re.findall(r'\d{4}', article_soup.find('meta', attrs={'name': 'DC.Rights'})['content'])[0]
+                            publication_dict['check_for_doublets_and_pars'] = True
                             if article_soup.find('meta', attrs={'name': 'citation_abstract_html_url'})['content']:
                                 publication_dict['abstract_link'] = article_soup.find('meta', attrs={'name': 'citation_abstract_html_url'})['content']
                             if category == "Reviews":

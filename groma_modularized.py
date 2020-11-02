@@ -75,6 +75,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                     publication_dict['field_006'] = 'm     o  d |      '
                     publication_dict['html_links'].append(article_url)
                     publication_dict['general_note'] = 'Die Seitenzahlen von Online- und Printausgabe können variieren'
+                    publication_dict['check_for_doublets_and_pars'] = False
                     if 'Review of' in publication_dict['title_dict']['main_title'] and '“' in \
                             publication_dict['title_dict']['main_title']:
                         publication_dict['title_dict']['main_title'] = \

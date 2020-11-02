@@ -81,6 +81,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                         publication_dict['field_300'] = 'Fasc. ' + issue + ', ' + article_soup.find('meta', attrs={'name': "DC.Identifier.pageNumber"})['content']
                         publication_dict['force_300'] = True
                         publication_dict['volume'] = 'Fasc. ' + issue
+                        publication_dict['check_for_doublets_and_pars'] = False
                         publication_dicts.append(publication_dict)
                         items_harvested.append(current_item)
     except Exception as e:

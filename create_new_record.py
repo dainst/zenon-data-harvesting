@@ -207,7 +207,8 @@ publication_dict_template = {'title_dict':
                                    # verfügbar, verbessert es jedoch die Suche nach der rezensierten Publikation
                                    }],
                              'edit_names': False,
-                             'host_item_is_volume': False}
+                             'host_item_is_volume': False,
+                             'check_for_doublets_and_pars': True}
 
 
 def add_field_from_record_to_publication_dict(publication_dict, record, field_list):
@@ -655,19 +656,14 @@ def create_new_record(out, publication_dict):
                 publication_dict['review_list'].remove(review_entry)
         if publication_dict['review'] or publication_dict['response']:
             publication_dict['title_dict']['main_title'] = create_title_for_review_and_response_search(publication_dict['review_list'], publication_dict['response_list'])[0]
+        if publication_dict['check_for_doublets_and_pars']:
             all_doublets, additional_physical_form_entrys = \
-                find_existing_doublets.find_review([person.split(', ')[0] for person in (publication_dict['authors_list'] + publication_dict['editors_list'])],
-                                            publication_dict['publication_year'], 'en', [publication_dict['host_item']['sysnumber']], publication_dict)
+                    find_existing_doublets.find([person.split(', ')[0] for person in (publication_dict['authors_list'] + publication_dict['editors_list'])],
+                                                publication_dict['publication_year'], 'en', [publication_dict['host_item']['sysnumber']], publication_dict)
         else:
-            print([publication_dict['host_item']['sysnumber']])
-            all_doublets, additional_physical_form_entrys = \
-                find_existing_doublets.find((publication_dict['title_dict']['main_title']+' '+str(publication_dict['title_dict']['sub_title'])).replace('None', '').strip(),
-                                            [person.split(', ')[0] for person in (publication_dict['authors_list'] + publication_dict['editors_list'])],
-                                            publication_dict['publication_year'], 'en', [publication_dict['host_item']['sysnumber']], publication_dict)
+            all_doublets, additional_physical_form_entrys = [], []
         if all_doublets:
             print('doublet found:', list(set(all_doublets)))
-            # print(publication_dict['title_dict'])
-            # print(publication_dict['authors_list'], publication_dict['editors_list'], publication_dict['publication_year'])
         elif additional_physical_form_entrys:
             print('additional physical form entry', additional_physical_form_entrys)
             print(publication_dict['title_dict'])
@@ -746,7 +742,6 @@ def create_new_record(out, publication_dict):
                 subfields = [y for publication_dict['language_field']['language_of_resource'] in publication_dict['language_field']['language_of_resource'] for y in
                              ['language_of_resource', publication_dict['language_field']['language_of_resource']]] + ['h', publication_dict['language_field']['language_of_original_item']]
                 recent_record.add_field(Field(tag='041', indicators=[str(int(bool(publication_dict['language_field']['language_of_original_item']))), ' '], subfields=subfields))
-            # 110 bzw. 710 2# $a
             author_nr = 0
             if publication_dict['authors_list']:
                 for author in publication_dict['authors_list']:

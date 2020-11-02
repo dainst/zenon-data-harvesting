@@ -105,6 +105,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                     publication_dict['html_links'].append(article_link)
                     publication_dict['host_item'] = {'name': 'Bryn Mawr Classical Review', 'sysnumber': '000810352', 'issn': ''}
                     publication_dict['default_language'] = 'en'
+                    publication_dict['check_for_doublets_and_pars'] = False
                     publication_dicts.append(publication_dict)
                     items_harvested.append(current_item)
                 except Exception as e:

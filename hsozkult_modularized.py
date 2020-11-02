@@ -173,6 +173,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                             publication_dict['default_language'] = language
                             publication_dict['do_detect_lang'] = False
                             publication_dict['text_body_for_lang_detection'] = ''
+                            publication_dict['check_for_doublets_and_pars'] = False
                         as_reserve.append(publication_dict)
                         saved_pub_nr += 1
                         with open('records/hsozkult/hsozkult_as_reserve.json', 'w') as hsozkult_as_reserve:
