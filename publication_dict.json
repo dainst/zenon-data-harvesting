@@ -57,5 +57,6 @@
 "force_300": false,
 "force_epub": false,
 "edit_names": false,
-"host_item_is_volume": false
+"host_item_is_volume": false,
+  "check_for_doublets_and_pars": true
 }
