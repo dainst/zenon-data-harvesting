@@ -1,20 +1,18 @@
 import urllib.parse
 import urllib.request
-from langdetect import detect
-from nltk.tokenize import RegexpTokenizer
 import json
 import re
-import nltk
-nltk.download('stopwords')
-from nltk.corpus import stopwords
-from scipy import spatial
 import itertools
-from pymarc import MARCReader
-import math
 import unidecode
 import write_error_to_logfile
 import find_existing_doublets
+from weighted_levenshtein import dam_lev
 import ssl
+from nltk.corpus import stopwords
+from find_existing_doublets import check_cosine_similarity
+from langdetect import detect
+from nltk.tokenize import RegexpTokenizer
+
 ssl._create_default_https_context = ssl._create_unverified_context
 
 rda_codes = {'rdacarrier': {'sg': 'audio cartridge', 'sb': 'audio belt', 'se': 'audio cylinder', 'sd': 'audio disc',
@@ -57,112 +55,6 @@ unskippable_words = ['katalog', 'catalog', 'catalogue', 'catalogo', 'catalogus',
 stopwords_for_search_in_zenon = ['bd', 'band', 'vol', 'volume']
 
 
-def lower_list(input_list):
-    output_list = [word.lower() for word in input_list]
-    return output_list
-
-
-def typewriter_distance(letter1, letter2):
-    try:
-        typewriter_position = [(typewriter_list.index(row), row.index(letter)) if (typewriter_list.index(row) != 2) else (
-            typewriter_list.index(row), row.index(letter) + 0.5) for letter in [letter1, letter2]
-            for row in typewriter_list if (letter in row)]
-        try:
-            distance = math.sqrt((abs(typewriter_position[0][0] - typewriter_position[1][0])) ** 2 + (
-                abs(typewriter_position[0][1] - typewriter_position[1][1])) ** 2)
-        except:
-            distance = 1
-        return distance
-    except Exception as e:
-        write_error_to_logfile.write(e)
-
-
-def iterative_levenshtein(s, t):
-    try:
-        s, t = [string.lower() for string in [s, t]]
-        rows = len(s) + 1
-        cols = len(t) + 1
-        deletes, inserts, substitutes = 1, 1, 1
-        dist = [[0.0 for x in range(cols)] for x in range(rows)]
-        for row in range(1, rows):
-            dist[row][0] = row * deletes
-        for col in range(1, cols):
-            dist[0][col] = col * inserts
-        for col in range(1, cols):
-            for row in range(1, rows):
-                dist[row][col] = min(dist[row - 1][col] + deletes,
-                                     dist[row][col - 1] + inserts,
-                                     dist[row - 1][col - 1] + typewriter_distance(s[row - 1], t[col - 1]))
-        return dist[len(s)][len(t)]
-    except Exception as e:
-        write_error_to_logfile.write(e)
-
-
-def check_cosine_similarity(title, found_title, found_record, rejected_titles, lang):
-    try:
-        found_title = unidecode.unidecode(found_title)
-        title = unidecode.unidecode(title)
-        title_list = RegexpTokenizer(r'\w+').tokenize(title)
-        found_title_list = RegexpTokenizer(r'\w+').tokenize(found_title)
-        [title_list, found_title_list] = [lower_list(a) for a in [title_list, found_title_list]]
-        title_list = [word for word in title_list if
-                      ((re.findall(r'^\d{1,2}$', word) == []) and (re.findall(r'^[ivxlcdm]*$', word) == []))]
-        found_title_list = [word for word in found_title_list if
-                            ((re.findall(r'^\d{1,2}$', word) == []) and (re.findall(r'^[ivxlcdm]*$', word) == []))]
-        title_list = [word for word in title_list if (word not in stopwords_for_search_in_zenon)]
-        found_title_list = [word for word in found_title_list if (word not in stopwords_for_search_in_zenon)]
-        [title_list, found_title_list] = [lower_list(a) for a in [title_list, found_title_list]]
-        title_list = [word for word in title_list if ((word not in stopwords_dict[lang]) and (len(word) > 2))]
-        found_title_list = [word for word in found_title_list if
-                            ((word not in stopwords_dict[lang]) and (len(word) > 2))]
-        length = min(len(title_list), len(found_title_list))
-        [title_list, found_title_list] = [a[:length] for a in [title_list, found_title_list]]
-        title_list_count = [title_list.count(word) for word in title_list if (word not in stopwords_dict[lang])]
-        found_title_list_count = [found_title_list.count(word) for word in title_list]
-        # hier muss irgendwie iterative levensthein rein!!!
-        if list(set(title_list_count)) == [0] or list(set(found_title_list_count)) == [0]:
-            return False
-        else:
-            similarity = 1 - spatial.distance.cosine(title_list_count, found_title_list_count)
-            if similarity > 0.65:
-                skipped_word_nr = 0
-                mismatches_nr = 0
-                matches_nr = 0
-                for word in title_list:
-                    if word in found_title_list:
-                        if any(index == found_title_list.index(word) for index in
-                               [title_list.index(word) + 1 + skipped_word_nr, title_list.index(word) + skipped_word_nr,
-                                title_list.index(word) - 1 + skipped_word_nr]):
-                            matches_nr += 1
-                        else:
-                            mismatches_nr += 1
-                            skipped_word_nr += 1
-                            if word in unskippable_words:
-                                return False
-                    else:
-                        skipped_word_nr += 1
-                        if word in unskippable_words:
-                            return False
-                if skipped_word_nr >= (len(title_list) / 3):
-                    return False
-                if matches_nr > mismatches_nr * 2:
-                    if similarity > 0.77:
-                        return True
-                    else:
-                        print(lang)
-                        print(title_list)
-                        print(found_title_list)
-                        print(similarity)
-                        if found_title == found_record['title']:
-                            if input("Handelt es sich tatsächlich um den rezensierten Titel? ") == "":
-                                return True
-                            else:
-                                rejected_titles.append(found_record["id"] + found_title)
-        return False
-    except Exception as e:
-        write_error_to_logfile.write(e)
-
-
 def swagger_find(search_title, search_authors, year, year_of_review, title, rejected_titles, lang, authors, all_results):
     try:
         page_nr = 0
@@ -199,35 +91,33 @@ def swagger_find(search_title, search_authors, year, year_of_review, title, reje
                     similarity = check_cosine_similarity(title, title_found, found_record, rejected_titles, lang)
                     right_author = False
                     if similarity:
-                        webfile = urllib.request.urlopen(
-                            "https://zenon.dainst.org/Record/" + found_record['id'] + "/Export?style=MARC")
-                        new_reader = MARCReader(webfile)
-                        for file in new_reader:
-                            if 'authors' in found_record:
-                                found_authors = []
-                                if 'primary' in found_record['authors']:
-                                    for primary_author in found_record['authors']['primary']:
-                                        found_authors.append(primary_author.split(', ')[0])
-                                if 'secondary' in found_record['authors']:
-                                    for secondary_author in found_record['authors']['secondary']:
-                                        found_authors.append(secondary_author.split(', ')[0])
-                                if 'corporate' in found_record['authors']:
-                                    for primary_author in found_record['authors']['secondary']:
-                                        found_authors.append(primary_author.split(', ')[0])
-                                if authors:
-                                    for found_author in [aut for found_author in found_authors for aut in found_author.split()]:
-                                        if right_author:
-                                            break
-                                        if min([iterative_levenshtein(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author)) for x in authors for splitted_author in x.split()]) <= (len(found_author)/3):
+                        if 'authors' in found_record:
+                            found_authors = []
+                            if 'primary' in found_record['authors']:
+                                for primary_author in found_record['authors']['primary']:
+                                    found_authors.append(primary_author.split(', ')[0])
+                            if 'secondary' in found_record['authors']:
+                                for secondary_author in found_record['authors']['secondary']:
+                                    found_authors.append(secondary_author.split(', ')[0])
+                            if 'corporate' in found_record['authors']:
+                                for primary_author in found_record['authors']['secondary']:
+                                    found_authors.append(primary_author.split(', ')[0])
+                            if authors:
+                                for found_author in [aut for found_author in found_authors for aut in found_author.split()]:
+                                    if right_author:
+                                        break
+                                    if [dam_lev(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author)) for x in authors for splitted_author in x.split()]:
+                                        print({found_author + '+' + splitted_author: dam_lev(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author)) for x in authors for splitted_author in x.split()})
+                                        if min([dam_lev(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author)) for x in authors for splitted_author in x.split()]) <= (len(found_author)/3):
                                             # Vorsicht vor impliziten Typkonvertierungen von Zahlen zu bool
                                             right_author = True
-                                else:
-                                    if not found_authors:
-                                        right_author = True
-                                if right_author:
-                                    all_results.append(found_record['id'])
-                                else:
-                                    rejected_titles.append(found_record["id"] + title_found)
+                            else:
+                                if not found_authors:
+                                    right_author = True
+                            if right_author:
+                                all_results.append(found_record['id'])
+                            else:
+                                rejected_titles.append(found_record["id"] + title_found)
         return all_results
     except Exception as e:
         write_error_to_logfile.write(e)

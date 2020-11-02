@@ -141,16 +141,6 @@ def check_cosine_similarity(title, found_title, found_record, rejected_titles, l
                 if matches_nr > mismatches_nr * 2:
                     if similarity > 0.77:
                         return True
-                    else:
-                        print(lang)
-                        print(title_list)
-                        print(found_title_list)
-                        print(similarity)
-                        if found_title == found_record['title']:
-                            if input("Handelt es sich tatsächlich um eine Dublette? ") == "":
-                                return True
-                            else:
-                                rejected_titles.append(found_record["id"] + found_title)
         return False
     except Exception as e:
         write_error_to_logfile.write(e)
@@ -192,15 +182,15 @@ def create_response_titles_for_response_search(review_list):
     return possible_review_titles
 
 
-def swagger_find(search_title, search_authors, year, title, rejected_titles, possible_host_items, lang, authors, additional_physical_form_entrys, publication_dict, all_results):
+def swagger_find(search_title, year, title, rejected_titles, possible_host_items, lang, authors,
+                 additional_physical_form_entrys, publication_dict, all_results):
     try:
         page_nr = 0
         empty_page = False
         while not empty_page:
             page_nr += 1
-            search_authors = search_authors.replace(" ", "+")
-            url = u'https://zenon.dainst.org/api/v1/search?join=AND&lookfor0%5B%5D=' + search_title + '&type0%5B%5D=Title&lookfor0%5B%5D=' + search_authors \
-                      + '&type0%5B%5D=Author&lookfor0%5B%5D=&type0%5B%5D=year&bool0%5B%5D=AND&illustration=-1' + '&page=' + str(page_nr)
+            url = u'https://zenon.dainst.org/api/v1/search?join=AND&lookfor0%5B%5D=' + search_title + '&type0%5B%5D=Title&lookfor0%5B%5D=' \
+                  '&type0%5B%5D=Author&lookfor0%5B%5D=&type0%5B%5D=year&bool0%5B%5D=AND&illustration=-1&page=' + str(page_nr)
             req = urllib.request.Request(url)
             with urllib.request.urlopen(req) as response:
                 response = response.read()
@@ -211,6 +201,7 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
             upper_host_items_pars = [] # enthält deren Parallele Manifestationen.
             for host_item in possible_host_items:
                 if host_item:
+                    host_item = host_item.zfill(9)
                     webfile = urllib.request.urlopen(
                         "https://zenon.dainst.org/Record/" + host_item + "/Export?style=MARC")
                     new_reader = MARCReader(webfile)
@@ -220,12 +211,14 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                         for par_item_id in [field['w'] for field in file.get_fields('776') if field['w']]:
                             host_items_pars.append(par_item_id)
             for upper_host_item in upper_host_items:
-                webfile = urllib.request.urlopen(
-                    "https://zenon.dainst.org/Record/" + upper_host_item + "/Export?style=MARC")
-                new_reader = MARCReader(webfile)
-                for file in new_reader:
-                    for par_item_id in [field['w'].replace('(DE-2553)', '') for field in file.get_fields('776') if field['w']]:
-                        upper_host_items_pars.append(par_item_id)
+                if upper_host_item:
+                    upper_host_item = upper_host_item.zfill(9)
+                    webfile = urllib.request.urlopen(
+                        "https://zenon.dainst.org/Record/" + upper_host_item + "/Export?style=MARC")
+                    new_reader = MARCReader(webfile)
+                    for file in new_reader:
+                        for par_item_id in [field['w'].replace('(DE-2553)', '') for field in file.get_fields('776') if field['w']]:
+                            upper_host_items_pars.append(par_item_id)
             if 'records' not in json_response:
                 empty_page = True
                 continue
@@ -233,8 +226,7 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                 if "title" not in found_record:
                     continue
                 title_found = found_record["title"]
-                if (found_record["id"] + title_found not in rejected_titles) and (found_record['id'] not in all_results) \
-                        and (found_record['id'] not in [par['zenon_id'] for par in additional_physical_form_entrys]):
+                if found_record["id"] not in (rejected_titles + all_results) and (found_record['id'] not in [par['zenon_id'] for par in additional_physical_form_entrys]):
                     similarity = check_cosine_similarity(title, title_found, found_record, rejected_titles, lang)
                     right_author = False
                     right_year = False
@@ -290,9 +282,9 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                                             right_host_item = True
                                         else:
                                             try:
+                                                parent_id = file['773']['w'].replace('(DE-2553)', '').zfill(9)
                                                 parent_webfile = urllib.request.urlopen(
-                                                    "https://zenon.dainst.org/Record/" + file['773'][
-                                                        'w'].replace('(DE-2553)', '') + "/Export?style=MARC")
+                                                    "https://zenon.dainst.org/Record/" + parent_id + "/Export?style=MARC")
                                                 new_reader = MARCReader(parent_webfile)
                                                 # öffnet übergeordnete Aufnahme
                                                 for parent_file in new_reader:
@@ -306,9 +298,9 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                                                         elif parent_file['001'].data in host_items_pars:
                                                             right_host_item = True
                                                         else:
+                                                            upper_parent_id = parent_file['773']['w'].replace('(DE-2553)', '').zfill(9)
                                                             upper_parent_webfile = urllib.request.urlopen(
-                                                                "https://zenon.dainst.org/Record/" + file['773'][
-                                                                    'w'].replace('(DE-2553)', '') + "/Export?style=MARC")
+                                                                "https://zenon.dainst.org/Record/" + upper_parent_id + "/Export?style=MARC")
                                                             new_reader = MARCReader(upper_parent_webfile)
                                                             for upper_parent_file in new_reader:
                                                                 upper_parent_file_pars = [field['w'].replace('(DE-2553)', '') for field in upper_parent_file.get_fields('776') if field['w']]
@@ -318,7 +310,7 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                                             except:
                                                 print('Das Host-Item von', found_record['id'], 'hat ein ungültiges Host-Item bzw. es gibt ein Problem mit der Weiterleitung.')
                                     if not right_host_item:
-                                        rejected_titles.append(found_record["id"] + title_found)
+                                        rejected_titles.append(found_record["id"])
                                         continue
 
                                 if right_author:
@@ -407,69 +399,38 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
         return all_results, rejected_titles, additional_physical_form_entrys
 
 
-def find(title, authors, year, default_lang, possible_host_items, publication_dict):
+def find(authors, year, default_lang, possible_host_items, publication_dict):
     try:
+        if publication_dict['review']:
+            titles = create_review_titles_for_review_search(publication_dict['review_list'][0])
+        elif publication_dict['response']:
+            titles = create_response_titles_for_response_search(publication_dict['response_list'][0])
+        else:
+            titles = [publication_dict['title_dict']['main_title']]
         all_results = []
-        title = unidecode.unidecode(title)
-        lang = detect(title)
-        if lang not in stopwords_dict:
-            lang = default_lang
         rejected_titles = []
         additional_physical_form_entrys = []
-        search_title = ""
-        search_authors = ""
-        word_nr = 0
-        author_nr = 0
-        for author in authors:
-            author = unidecode.unidecode(author)
-            if author_nr < 2 and ('ß' not in author):
-                search_authors = search_authors + "+" + author
-            author_nr += 1
-        search_authors = search_authors.strip("+")
-        for word in RegexpTokenizer(r'\w+').tokenize(title):
-            if ((not any(stopword in word for stopword in stopwords_for_search_in_zenon)) and (len(word) > 2) and (
-                    word not in stopwords_dict[lang]) and (re.findall(r'^\d{1,2}$', word) == []) and (
-                    re.findall(r'^[IVXLCDM]*$', word) == [])):
-                word = urllib.parse.quote(word, safe='')
-                search_title = search_title + "+" + word
-                word_nr += 1
-        # Generierung eines bereinigten Suchtitels
-        search_title = search_title.strip("+")
-        if word_nr >= 1:
-            all_results, rejected_titles, additional_physical_form_entrys = swagger_find(search_title, search_authors, year, title, rejected_titles, possible_host_items,
+        for title in titles:
+            title = unidecode.unidecode(title)
+            lang = detect(title)
+            if lang not in stopwords_dict:
+                lang = default_lang
+            search_title = ""
+            adjusted_title = title.split(":")[0].split(".")[0]
+            adjusted_title = adjusted_title.replace("...", " ")
+            for word in RegexpTokenizer(r'\w+').tokenize(adjusted_title):
+                if ((not any(stopword in word for stopword in stopwords_for_search_in_zenon)) and (
+                        len(word) > 2) and (word not in stopwords_dict[lang]) and (
+                        re.findall(r'^\d{1,2}$', word) == []) and (re.findall(r'^[IVXLCDM]*$', word) == [])):
+                    word = urllib.parse.quote(word, safe='')
+                    if '%' in word:
+                        continue
+                    search_title = search_title + "+" + word
+            search_title = search_title.strip("+")
+            all_results, rejected_titles, additional_physical_form_entrys = swagger_find(search_title, year, title, rejected_titles,
+                                       possible_host_items,
                                        lang, authors, additional_physical_form_entrys, publication_dict, all_results)
-            # Suche mit vollständigen Daten
-            if not all_results:
-                all_results = []
-            if len(all_results) == 0:
-                search_authors = search_authors.split("+")[0]
-                all_results, rejected_titles, additional_physical_form_entrys = swagger_find(search_title, search_authors, year, title, rejected_titles,
-                                           possible_host_items,
-                                           lang, authors, additional_physical_form_entrys, publication_dict, all_results)
-                # Suche nur mit dem ersten Autoren
-            if len(all_results) == 0:
-                search_title = ""
-                adjusted_title = title.split(":")[0].split(".")[0]
-                adjusted_title = adjusted_title.replace("...", " ")
-                for word in RegexpTokenizer(r'\w+').tokenize(adjusted_title):
-                    if ((not any(stopword in word for stopword in stopwords_for_search_in_zenon)) and (
-                            len(word) > 2) and (word not in stopwords_dict[lang]) and (
-                            re.findall(r'^\d{1,2}$', word) == []) and (re.findall(r'^[IVXLCDM]*$', word) == [])):
-                        word = urllib.parse.quote(word, safe='')
-                        if '%' in word:
-                            continue
-                        search_title = search_title + "+" + word
-                search_title = search_title.strip("+")
-                all_results, rejected_titles, additional_physical_form_entrys = swagger_find(search_title, search_authors, year, title, rejected_titles,
-                                           possible_host_items,
-                                           lang, authors, additional_physical_form_entrys, publication_dict, all_results)
-                # Suche mit verkürztem Titel
-            if len(all_results) == 0:
-                search_authors = ""
-                all_results, rejected_titles, additional_physical_form_entrys = swagger_find(search_title, search_authors, year, title, rejected_titles,
-                                           possible_host_items,
-                                           lang, authors, additional_physical_form_entrys, publication_dict, all_results)
-                # Suche ohne Autorennamen
+            # Suche mit verkürztem Titel
             if len(all_results) == 0:
                 if len(search_title.split('+')) > 5:
                     for pair in itertools.combinations(search_title.split("+"), 2):
@@ -480,7 +441,7 @@ def find(title, authors, year, default_lang, possible_host_items, publication_di
                             search_title_without_words = search_title_without_words.replace(word, '').replace('++',
                                                                                                               '+').strip(
                                 '+')
-                        all_results, rejected_titles, additional_physical_form_entrys = swagger_find(search_title_without_words, search_authors, year, title,
+                        all_results, rejected_titles, additional_physical_form_entrys = swagger_find(search_title_without_words, year, title,
                                                    rejected_titles,
                                                    possible_host_items, lang, authors, additional_physical_form_entrys, publication_dict, all_results)
                 else:
@@ -489,192 +450,11 @@ def find(title, authors, year, default_lang, possible_host_items, publication_di
                         if len(all_results) > 0:
                             break
                         search_title_without_words = search_title_without_words.replace(word, '').replace('++',
-                                                                                                          '+').strip(
-                            '+')
-                        all_results, rejected_titles, additional_physical_form_entrys = swagger_find(search_title_without_words, search_authors, year, title,
+                                                                                                          '+').strip('+')
+                        all_results, rejected_titles, additional_physical_form_entrys = swagger_find(search_title_without_words, year, title,
                                                    rejected_titles,
                                                    possible_host_items, lang, authors, additional_physical_form_entrys, publication_dict, all_results)
                 # Suche unter Ausschluss von einem oder zwei Suchbegriffen je nach Länge des Titels
-        return all_results, additional_physical_form_entrys
-    except Exception as e:
-        write_error_to_logfile.write(e)
-
-
-def find_review(authors, year, default_lang, possible_host_items, publication_dict):
-    try:
-        all_results = []
-        rejected_titles = []
-        additional_physical_form_entrys = []
-        if publication_dict['review']:
-            for title in create_review_titles_for_review_search(publication_dict['review_list'][0]):
-                title = unidecode.unidecode(title)
-                lang = detect(title)
-                if lang not in stopwords_dict:
-                    lang = default_lang
-                search_title = ""
-                search_authors = ""
-                word_nr = 0
-                author_nr = 0
-                for author in authors:
-                    author = unidecode.unidecode(author)
-                    if author_nr < 2 and ('ß' not in author):
-                        search_authors = search_authors + "+" + author
-                    author_nr += 1
-                search_authors = search_authors.strip("+")
-                for word in RegexpTokenizer(r'\w+').tokenize(title):
-                    if ((not any(stopword in word for stopword in stopwords_for_search_in_zenon)) and (len(word) > 2) and (
-                            word not in stopwords_dict[lang]) and (re.findall(r'^\d{1,2}$', word) == []) and (
-                            re.findall(r'^[IVXLCDM]*$', word) == [])):
-                        word = urllib.parse.quote(word, safe='')
-                        search_title = search_title + "+" + word
-                        word_nr += 1
-                # Generierung eines bereinigten Suchtitels
-                search_title = search_title.strip("+")
-                if word_nr >= 1:
-                    all_results += swagger_find(search_title, search_authors, year, title, rejected_titles, possible_host_items,
-                                               lang, authors, additional_physical_form_entrys, publication_dict, all_results)[0]
-                    # Suche mit vollständigen Daten
-                    if len(all_results) == 0:
-                        search_authors = search_authors.split("+")[0]
-                        all_results += swagger_find(search_title, search_authors, year, title, rejected_titles,
-                                                   possible_host_items,
-                                                   lang, authors, additional_physical_form_entrys, publication_dict, all_results)[0]
-                        # Suche nur mit dem ersten Autoren
-                    if len(all_results) == 0:
-                        word_nr = 0
-                        search_title = ""
-                        for word in RegexpTokenizer(r'\w+').tokenize(title):
-                            if ((not any(stopword in word for stopword in stopwords_for_search_in_zenon)) and (
-                                    len(word) > 2) and (word not in stopwords_dict[lang]) and (
-                                    re.findall(r'^\d{1,2}$', word) == []) and (re.findall(r'^[IVXLCDM]*$', word) == [])):
-                                word = urllib.parse.quote(word, safe='')
-                                if '%' in word:
-                                    continue
-                                search_title = search_title + "+" + word
-                            if word_nr > 8:
-                                break
-                        search_title = search_title.strip("+")
-                        all_results += swagger_find(search_title, search_authors, year, title, rejected_titles,
-                                                   possible_host_items,
-                                                   lang, authors, additional_physical_form_entrys, publication_dict, all_results)[0]
-                        # Suche mit verkürztem Titel
-                    if len(all_results) == 0:
-                        search_authors = ""
-                        all_results += swagger_find(search_title, search_authors, year, title, rejected_titles,
-                                                   possible_host_items,
-                                                   lang, authors, additional_physical_form_entrys, publication_dict, all_results)[0]
-                        # Suche ohne Autorennamen
-                    if len(all_results) == 0:
-                        if len(search_title.split('+')) > 5:
-                            for pair in itertools.combinations(search_title.split("+"), 2):
-                                search_title_without_words = search_title
-                                if len(all_results) > 0:
-                                    break
-                                for word in pair:
-                                    search_title_without_words = search_title_without_words.replace(word, '').replace('++',
-                                                                                                                      '+').strip(
-                                        '+')
-                                all_results += swagger_find(search_title_without_words, search_authors, year, title,
-                                                           rejected_titles,
-                                                           possible_host_items, lang, authors, additional_physical_form_entrys, publication_dict, all_results)[0]
-                        else:
-                            for word in search_title.split("+"):
-                                search_title_without_words = search_title
-                                if len(all_results) > 0:
-                                    break
-                                search_title_without_words = search_title_without_words.replace(word, '').replace('++',
-                                                                                                                  '+').strip(
-                                    '+')
-                                all_results += swagger_find(search_title_without_words, search_authors, year, title,
-                                                           rejected_titles,
-                                                           possible_host_items, lang, authors, additional_physical_form_entrys, publication_dict, all_results)[0]
-                        # Suche unter Ausschluss von einem oder zwei Suchbegriffen je nach Länge des Titels
-        else:
-            for title in create_response_titles_for_response_search(publication_dict['response_list']):
-                title = unidecode.unidecode(title)
-                lang = detect(title)
-                if lang not in stopwords_dict:
-                    lang = default_lang
-                search_title = ""
-                search_authors = ""
-                word_nr = 0
-                author_nr = 0
-                for author in authors:
-                    author = unidecode.unidecode(author)
-                    if author_nr < 2 and ('ß' not in author):
-                        search_authors = search_authors + "+" + author
-                    author_nr += 1
-                search_authors = search_authors.strip("+")
-                for word in RegexpTokenizer(r'\w+').tokenize(title):
-                    if ((not any(stopword in word for stopword in stopwords_for_search_in_zenon)) and (len(word) > 2) and (
-                            word not in stopwords_dict[lang]) and (re.findall(r'^\d{1,2}$', word) == []) and (
-                            re.findall(r'^[IVXLCDM]*$', word) == [])):
-                        word = urllib.parse.quote(word, safe='')
-                        search_title = search_title + "+" + word
-                        word_nr += 1
-                # Generierung eines bereinigten Suchtitels
-                search_title = search_title.strip("+")
-                if word_nr >= 1:
-                    all_results += swagger_find(search_title, search_authors, year, title, rejected_titles, possible_host_items,
-                                                lang, authors, additional_physical_form_entrys, publication_dict, all_results)[0]
-                    # Suche mit vollständigen Daten
-                    if len(all_results) == 0:
-                        search_authors = search_authors.split("+")[0]
-                        all_results += swagger_find(search_title, search_authors, year, title, rejected_titles,
-                                                    possible_host_items,
-                                                    lang, authors, additional_physical_form_entrys, publication_dict, all_results)[0]
-                        # Suche nur mit dem ersten Autoren
-                    if len(all_results) == 0:
-                        word_nr = 0
-                        search_title = ""
-                        for word in RegexpTokenizer(r'\w+').tokenize(title):
-                            if ((not any(stopword in word for stopword in stopwords_for_search_in_zenon)) and (
-                                    len(word) > 2) and (word not in stopwords_dict[lang]) and (
-                                    re.findall(r'^\d{1,2}$', word) == []) and (re.findall(r'^[IVXLCDM]*$', word) == [])):
-                                word = urllib.parse.quote(word, safe='')
-                                if '%' in word:
-                                    continue
-                                search_title = search_title + "+" + word
-                            if word_nr > 8:
-                                break
-                        search_title = search_title.strip("+")
-                        all_results += swagger_find(search_title, search_authors, year, title, rejected_titles,
-                                                    possible_host_items,
-                                                    lang, authors, additional_physical_form_entrys, publication_dict, all_results)[0]
-                        # Suche mit verkürztem Titel
-                    if len(all_results) == 0:
-                        search_authors = ""
-                        all_results += swagger_find(search_title, search_authors, year, title, rejected_titles,
-                                                    possible_host_items,
-                                                    lang, authors, additional_physical_form_entrys, publication_dict, all_results)[0]
-                        # Suche ohne Autorennamen
-                    if len(all_results) == 0:
-                        if len(search_title.split('+')) > 5:
-                            for pair in itertools.combinations(search_title.split("+"), 2):
-                                search_title_without_words = search_title
-                                if len(all_results) > 0:
-                                    break
-                                for word in pair:
-                                    search_title_without_words = search_title_without_words.replace(word, '').replace('++',
-                                                                                                                      '+').strip(
-                                        '+')
-                                all_results += swagger_find(search_title_without_words, search_authors, year, title,
-                                                            rejected_titles,
-                                                            possible_host_items, lang, authors, additional_physical_form_entrys, publication_dict, all_results)[0]
-                        else:
-                            for word in search_title.split("+"):
-                                search_title_without_words = search_title
-                                if len(all_results) > 0:
-                                    break
-                                search_title_without_words = search_title_without_words.replace(word, '').replace('++',
-                                                                                                                  '+').strip(
-                                    '+')
-                                all_results += swagger_find(search_title_without_words, search_authors, year, title,
-                                                            rejected_titles,
-                                                            possible_host_items, lang, authors, additional_physical_form_entrys, publication_dict, all_results)[0]
-                        # Suche unter Ausschluss von einem oder zwei Suchbegriffen je nach Länge des Titels
-                if all_results:
-                    break
         return all_results, additional_physical_form_entrys
     except Exception as e:
         write_error_to_logfile.write(e)
