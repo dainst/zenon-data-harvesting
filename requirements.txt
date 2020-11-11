@@ -11,3 +11,4 @@ scipy
 unidecode
 sickle
 click
+webdavclient3
