@@ -373,11 +373,11 @@ def create_773(recent_record, publication_dict, volume, review, response):
             location_in_host_item = publication_dict['publication_year']
         if publication_dict['host_item_is_volume']:
             recent_record.add_field(Field(tag='773', indicators=['0', '8'],
-                                          subfields=['w', '(DE-2553)' + publication_dict['host_item']['sysnumber'],
+                                          subfields=['w', publication_dict['host_item']['sysnumber'],
                                                      't', publication_dict['host_item']['name'] + ', ' + location_in_host_item]))
         else:
             recent_record.add_field(Field(tag='773', indicators=['0', '8'],
-                                          subfields=['w', '(DE-2553)' + publication_dict['host_item']['sysnumber'],
+                                          subfields=['w', publication_dict['host_item']['sysnumber'],
                                                      't', publication_dict['host_item']['name'], 'g', location_in_host_item]))
         if publication_dict['host_item']['issn']:
             recent_record['773'].add_subfield('x', publication_dict['host_item']['issn'])
@@ -896,7 +896,7 @@ def create_new_record(out, publication_dict):
                             # print(publication_dict['review_list'])
                             # print(reviewed_title_ids)
                             recent_record.add_field(Field(tag='787', indicators=['0', '8'],
-                                                          subfields=['w', '(DE-2553)' + reviewed_title_id,
+                                                          subfields=['w', reviewed_title_id,
                                                                      't', review_titles[reviewed_title_ids.index(reviewed_title_id)][0]]))
             if publication_dict['response']:
                 for reviewed_title in publication_dict['response_list']:
@@ -904,7 +904,7 @@ def create_new_record(out, publication_dict):
                         reviewed_title_ids, review_titles = find_reviewed_title.find(reviewed_title, publication_dict['publication_year'], 'en')
                         for reviewed_title_id in reviewed_title_ids:
                             recent_record.add_field(Field(tag='787', indicators=['0', '8'],
-                                                         subfields=['w', '(DE-2553)' + reviewed_title_id,
+                                                         subfields=['w', reviewed_title_id,
                                                                     't', publication_dict['title_dict']['main_title'][0]]))
 
             if additional_physical_form_entrys:
