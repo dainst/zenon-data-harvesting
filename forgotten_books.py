@@ -2,11 +2,11 @@ import urllib.parse, urllib.request
 import urllib.parse, urllib.request
 from bs4 import BeautifulSoup
 import json
-import re
 import write_error_to_logfile
 from harvest_records import harvest_records
 import os
 import gzip
+from pymarc import MARCReader
 
 
 def create_publication_dicts(last_item_harvested_in_last_session, *other):
@@ -14,7 +14,10 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
     items_harvested = []
     try:
         start_harvesting = False
+        nr = 0
         for publication_file in os.listdir('gai_metadata'):
+            if nr == 25:
+                break
             try:
                 with open('publication_dict.json', 'r') as publication_dict_template:
                     publication_dict = json.load(publication_dict_template)
@@ -32,7 +35,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                 publication_dict['field_007'] = 'cr uuu|||uuuuu'
                 publication_dict['field_008_18-34'] = '||||fom||||||| 0|'
                 publication_dict['field_006'] = 'm||||fom||||||| 0|'
-                publication_dict['fields_590'] = ['Online publication', '2020xhnxfb', 'ebookoa0920']
+                publication_dict['fields_590'] = ['Online publication', '2021xhnxfb', 'ebookoa0920']
                 publication_dict['isbn'] = [tag.find('idvalue').text for tag in publication_soup.find_all('productidentifier')
                                             if tag.find('productidtype').text == '03'][0]
                 publication_dict['original_cataloging_agency'] = 'Forgotten Books'
@@ -46,6 +49,15 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                 publication_ids = [tag.find('idvalue').text for tag in publication_soup.find_all('productidentifier') if tag.find('productidtype').text == '01']
                 publication_dict['html_links'] = ['https://www.forgottenbooks.com/en/books/' + id for id in publication_ids]
                 publication_dict['pdf_links'] = ['https://www.forgottenbooks.com/en/download/' + id + '.pdf' for id in publication_ids]
+                previously_harvested = []
+                for filestring in os.listdir('fobo'):
+                    with open('fobo/' + filestring, 'rb') as file:
+                        new_reader = MARCReader(file)
+                        for record in new_reader:
+                            previously_harvested.append(record['856']['u'])
+                            print('previously harvested:', record['856']['u'])
+                if publication_dict['pdf_links'][0] in previously_harvested:
+                    continue
                 publication_dict['terms_of_use_and_reproduction'] = \
                     {'terms_note':
                          'The e-books may be copied or printed for personal or educational use only. '
@@ -67,6 +79,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                 publication_dict['publication_etc_statement']['publication'] = {'place': 'London', 'responsible': 'Forgotten Books', 'country_code': 'enk'}
                 publication_dict['publication_year'] = publication_soup.find('publicationdate').text[:4]
                 publication_dicts.append(publication_dict)
+                nr += 1
             except Exception as e:
                 write_error_to_logfile.write(e)
                 write_error_to_logfile.comment('Fehler bei der Datei: ' + publication_file)
