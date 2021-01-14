@@ -19,8 +19,6 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
             row_nr = 0
             for row in reader:
                 row_nr += 1
-                if row_nr>25:
-                    break
                 if row_nr > 1:
                     print(row)
                     url = row[9]
