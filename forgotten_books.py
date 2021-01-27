@@ -15,8 +15,15 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
     try:
         start_harvesting = False
         nr = 0
+        previously_harvested = []
+        for filestring in os.listdir('fobo'):
+            with open('fobo/' + filestring, 'rb') as file:
+                new_reader = MARCReader(file)
+                for record in new_reader:
+                    previously_harvested.append(record['856']['u'])
+                    print('previously harvested:', record['856']['u'])
         for publication_file in os.listdir('gai_metadata'):
-            if nr == 25:
+            if nr == 500:
                 break
             try:
                 with open('publication_dict.json', 'r') as publication_dict_template:
@@ -49,13 +56,6 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                 publication_ids = [tag.find('idvalue').text for tag in publication_soup.find_all('productidentifier') if tag.find('productidtype').text == '01']
                 publication_dict['html_links'] = ['https://www.forgottenbooks.com/en/books/' + id for id in publication_ids]
                 publication_dict['pdf_links'] = ['https://www.forgottenbooks.com/en/download/' + id + '.pdf' for id in publication_ids]
-                previously_harvested = []
-                for filestring in os.listdir('fobo'):
-                    with open('fobo/' + filestring, 'rb') as file:
-                        new_reader = MARCReader(file)
-                        for record in new_reader:
-                            previously_harvested.append(record['856']['u'])
-                            print('previously harvested:', record['856']['u'])
                 if publication_dict['pdf_links'][0] in previously_harvested:
                     continue
                 publication_dict['terms_of_use_and_reproduction'] = \
