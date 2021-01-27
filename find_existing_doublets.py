@@ -14,6 +14,7 @@ import write_error_to_logfile
 from weighted_levenshtein import dam_lev
 import numpy as np
 import ssl
+import time
 ssl._create_default_https_context = ssl._create_unverified_context
 
 rda_codes = {'rdacarrier': {'sg': 'audio cartridge', 'sb': 'audio belt', 'se': 'audio cylinder', 'sd': 'audio disc',
@@ -185,10 +186,15 @@ def create_response_titles_for_response_search(review_list):
 def swagger_find(search_title, year, title, rejected_titles, possible_host_items, lang, authors,
                  additional_physical_form_entrys, publication_dict, all_results):
     try:
+        tic = time.perf_counter()
+        year = year.replace('[', '').replace(']', '')
         page_nr = 0
         empty_page = False
         while not empty_page:
             page_nr += 1
+            if len(search_title) == 0:
+                print('skipped_no_search_title')
+                break
             url = u'https://zenon.dainst.org/api/v1/search?join=AND&lookfor0%5B%5D=' + search_title + '&type0%5B%5D=Title&lookfor0%5B%5D=' \
                   '&type0%5B%5D=Author&lookfor0%5B%5D=&type0%5B%5D=year&bool0%5B%5D=AND&illustration=-1&page=' + str(page_nr)
             req = urllib.request.Request(url)
@@ -223,6 +229,11 @@ def swagger_find(search_title, year, title, rejected_titles, possible_host_items
                 empty_page = True
                 continue
             for found_record in json_response['records']:
+                toc = time.perf_counter()
+                if toc-tic > 120:
+                    print('lasted_too_long:', url)
+                    empty_page = True
+                    break
                 if "title" not in found_record:
                     continue
                 title_found = found_record["title"]
@@ -261,7 +272,7 @@ def swagger_find(search_title, year, title, rejected_titles, possible_host_items
                                             if right_author:
                                                 break
                                             if [dam_lev(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author), substitute_costs=substitute_costs, transpose_costs=transpose_costs) for x in authors for splitted_author in x.split()]:
-                                                print({found_author + '+' + splitted_author: dam_lev(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author), substitute_costs=substitute_costs, transpose_costs=transpose_costs) for x in authors for splitted_author in x.split()})
+                                                # print({found_author + '+' + splitted_author: dam_lev(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author), substitute_costs=substitute_costs, transpose_costs=transpose_costs) for x in authors for splitted_author in x.split()})
                                                 if min([dam_lev(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author), substitute_costs=substitute_costs, transpose_costs=transpose_costs) for x in authors for splitted_author in x.split()]) <= (len(found_author)/3):
                                                     # Vorsicht vor impliziten Typkonvertierungen von Zahlen zu bool
                                                     right_author = True
