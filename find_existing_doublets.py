@@ -2,6 +2,8 @@ import urllib.parse
 import urllib.request
 from langdetect import detect
 from nltk.tokenize import RegexpTokenizer
+import nltk
+nltk.download('stopwords')
 import json
 import re
 from nltk.corpus import stopwords
