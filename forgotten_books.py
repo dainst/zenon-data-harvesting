@@ -16,14 +16,14 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
         start_harvesting = False
         nr = 0
         previously_harvested = []
-        for filestring in os.listdir('fobo'):
+        '''for filestring in os.listdir('fobo'):
             with open('fobo/' + filestring, 'rb') as file:
                 new_reader = MARCReader(file)
                 for record in new_reader:
                     previously_harvested.append(record['856']['u'])
-                    print('previously harvested:', record['856']['u'])
+                    print('previously harvested:', record['856']['u'])'''
         for publication_file in os.listdir('gai_metadata'):
-            if nr == 500:
+            if nr == 1800:
                 break
             try:
                 with open('publication_dict.json', 'r') as publication_dict_template:
