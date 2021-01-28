@@ -539,7 +539,8 @@ def check_publication_dict_for_completeness_and_validity(publication_dict):
                 write_error_to_logfile.comment('publication_year has to be of type string but is' + type(publication_dict['publication_year']).__name__ + '.')
                 print('publication_year has to be of type string but is', type(publication_dict['publication_year']).__name__ + '.')
                 validity = False
-            if not (re.findall(r'\d{4}', publication_dict['publication_year']) and (len(publication_dict['publication_year']) == 4)):
+            if not (re.findall(r'\d{4}', publication_dict['publication_year']) and (len(publication_dict['publication_year']) in [4, 6])):
+                print(publication_dict)
                 write_error_to_logfile.comment('publication_year has to consist of four digits.')
                 print('publication_year has to consist of four digits.')
                 validity = False
@@ -663,7 +664,7 @@ def create_new_record(out, publication_dict):
         else:
             all_doublets, additional_physical_form_entrys = [], []
         if all_doublets:
-            print('doublet found:', list(set(all_doublets)))
+            print('doublet found:', list(set(all_doublets)), publication_dict['pdf_links'], publication_dict['html_links'], publication_dict['title_dict']['main_title'])
         elif additional_physical_form_entrys:
             print('additional physical form entry', additional_physical_form_entrys)
             print(publication_dict['title_dict'])
@@ -726,6 +727,7 @@ def create_new_record(out, publication_dict):
             data_008 = time + publication_dict['field_008_06'] + first_date + second_date + \
                 country_code + publication_dict['field_008_18-34'] + language + ' d'
             recent_record.add_field(Field(tag='008', indicators=None, subfields=None, data=data_008))
+            recent_record.add_field(Field(tag='003', indicators=None, subfields=None, data='DE-2553'))
             if publication_dict['isbn']:
                 recent_record.add_field(Field(tag='020', indicators=[' ', ' '],
                                               subfields=['a', publication_dict['isbn']]))
@@ -874,7 +876,7 @@ def create_new_record(out, publication_dict):
             for additional_physical_form_entry in additional_physical_form_entrys:
                 recent_record.add_field(Field(tag='776', indicators=['0', '8'],
                                               subfields=['i', additional_physical_form_entry['subfield_i'], 't', recent_record['245']['a'].strip(' / ').strip(' : '), 'w',
-                                                         '(DE-2553)' + additional_physical_form_entry['zenon_id']]))
+                                                         additional_physical_form_entry['zenon_id']]))
             for field in publication_dict['additional_fields']:
                 if field['data']:
                     recent_record.add_field(Field(tag=field['tag'], data=field['data']))
