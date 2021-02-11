@@ -50,9 +50,9 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                 publication_dict['authors_list'] = [author_tag.find('keynames').text + ', ' + author_tag.find('namesbeforekey').text for author_tag in publication_soup.find_all('contributor') if author_tag.find('contributorrole').text == 'A01']
                 publication_dict['editors_list'] = [author_tag.find('keynames').text + ', ' + author_tag.find('namesbeforekey').text for author_tag in publication_soup.find_all('contributor') if author_tag.find('contributorrole').text != 'A01']
                 if publication_soup.find_all('illustrations'):
-                    publication_dict['additional_fields'].append({'tag': '300', 'indicators': ['', ''], 'subfields': ['a', '1 online ressource , ' + publication_soup.find('numberofpages').text + ' pp.', 'b', 'illustrations'], 'data': ''})
+                    publication_dict['additional_fields'].append({'tag': '300', 'indicators': [' ', ' '], 'subfields': ['a', '1 online ressource , ' + publication_soup.find('numberofpages').text + ' pp.', 'b', 'illustrations'], 'data': ''})
                 else:
-                    publication_dict['additional_fields'].append({'tag': '300', 'indicators': ['', ''], 'subfields': ['a', '1 online ressource , ' + publication_soup.find('numberofpages').text + ' pp.'], 'data': ''})
+                    publication_dict['additional_fields'].append({'tag': '300', 'indicators': [' ', ' '], 'subfields': ['a', '1 online ressource , ' + publication_soup.find('numberofpages').text + ' pp.'], 'data': ''})
                 publication_ids = [tag.find('idvalue').text for tag in publication_soup.find_all('productidentifier') if tag.find('productidtype').text == '01']
                 publication_dict['html_links'] = ['https://www.forgottenbooks.com/en/books/' + id for id in publication_ids]
                 publication_dict['pdf_links'] = ['https://www.forgottenbooks.com/en/download/' + id + '.pdf' for id in publication_ids]
@@ -63,7 +63,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                          'The e-books may be copied or printed for personal or educational use only. '
                          'None of the e-books or any part of our content may be sold individually or as part of a package, modified in any way or reverse engineered.',
                      'use_and_reproduction_rights': '', 'terms_link': 'https://www.forgottenbooks.com/de/terms'}
-                publication_dict['additional_fields'].append({'tag': '650', 'indicators': ['', '7'], 'subfields': ['a', publication_soup.find('basicmainsubject').text, '2', 'bisacsh'], 'data': ''})
+                publication_dict['additional_fields'].append({'tag': '650', 'indicators': [' ', '7'], 'subfields': ['a', publication_soup.find('basicmainsubject').text, '2', 'bisacsh'], 'data': ''})
                 # https://bisg.org/page/History
                 try:
                     with urllib.request.urlopen(publication_dict['html_links'][0]) as f:
