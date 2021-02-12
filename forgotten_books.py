@@ -15,7 +15,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
     try:
         nr = 0
         for publication_file in os.listdir('gai_metadata'):
-            if nr == 1800:
+            if nr == 400:
                 break
             try:
                 with open('publication_dict.json', 'r') as publication_dict_template:
@@ -65,7 +65,6 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                     # publication_dict['additional_fields'].append({'tag': '698', 'indicators': [' ', ' '], 'subfields': ['a', publication_dict['html_links'][0]], 'data': ''})
                     write_error_to_logfile.write(e)
                     print(publication_dict['html_links'])
-                    continue
                 publication_dict['publication_etc_statement']['publication'] = {'place': 'London', 'responsible': 'Forgotten Books', 'country_code': 'enk'}
                 publication_dict['publication_year'] = publication_soup.find('publicationdate').text[:4]
                 publication_dicts.append(publication_dict)
