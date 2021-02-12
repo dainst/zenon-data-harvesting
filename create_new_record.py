@@ -646,6 +646,7 @@ def check_publication_dict_for_completeness_and_validity(publication_dict):
         return validity
     except Exception as e:
         write_error_to_logfile.write(e)
+        write_error_to_logfile.comment('Problem beim folgenden publication_dict:')
         write_error_to_logfile.comment(publication_dict)
 
 
