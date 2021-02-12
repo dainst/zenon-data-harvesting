@@ -12,7 +12,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
     try:
         nr = 0
         for publication_file in os.listdir('gai_metadata'):
-            if nr == 400:
+            if nr == 500:
                 break
             try:
                 with open('publication_dict.json', 'r') as publication_dict_template:
