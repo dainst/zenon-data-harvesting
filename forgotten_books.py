@@ -13,15 +13,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
     publication_dicts = []
     items_harvested = []
     try:
-        start_harvesting = False
         nr = 0
-        previously_harvested = []
-        '''for filestring in os.listdir('fobo'):
-            with open('fobo/' + filestring, 'rb') as file:
-                new_reader = MARCReader(file)
-                for record in new_reader:
-                    previously_harvested.append(record['856']['u'])
-                    print('previously harvested:', record['856']['u'])'''
         for publication_file in os.listdir('gai_metadata'):
             if nr == 1800:
                 break
@@ -56,8 +48,6 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                 publication_ids = [tag.find('idvalue').text for tag in publication_soup.find_all('productidentifier') if tag.find('productidtype').text == '01']
                 publication_dict['html_links'] = ['https://www.forgottenbooks.com/en/books/' + id for id in publication_ids]
                 publication_dict['pdf_links'] = ['https://www.forgottenbooks.com/en/download/' + id + '.pdf' for id in publication_ids]
-                if publication_dict['pdf_links'][0] in previously_harvested:
-                    continue
                 publication_dict['terms_of_use_and_reproduction'] = \
                     {'terms_note':
                          'The e-books may be copied or printed for personal or educational use only. '
@@ -70,15 +60,16 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                         html = gzip.open(f)
                         webpage_soup = BeautifulSoup(html.read(), 'html.parser')
                         info = webpage_soup.find('meta', attrs={'name':'description'})['content']
-                        publication_dict['additional_fields'].append({'tag': '698', 'indicators': [' ', ' '], 'subfields': ['a', info], 'data': ''})
+                        # publication_dict['additional_fields'].append({'tag': '698', 'indicators': [' ', ' '], 'subfields': ['a', info], 'data': ''})
                 except Exception as e:
-                    publication_dict['additional_fields'].append({'tag': '698', 'indicators': [' ', ' '], 'subfields': ['a', publication_dict['html_links'][0]], 'data': ''})
+                    # publication_dict['additional_fields'].append({'tag': '698', 'indicators': [' ', ' '], 'subfields': ['a', publication_dict['html_links'][0]], 'data': ''})
                     write_error_to_logfile.write(e)
                     print(publication_dict['html_links'])
                     continue
                 publication_dict['publication_etc_statement']['publication'] = {'place': 'London', 'responsible': 'Forgotten Books', 'country_code': 'enk'}
                 publication_dict['publication_year'] = publication_soup.find('publicationdate').text[:4]
                 publication_dicts.append(publication_dict)
+                print('harvested gai_metadata/' + publication_file)
                 nr += 1
             except Exception as e:
                 write_error_to_logfile.write(e)
