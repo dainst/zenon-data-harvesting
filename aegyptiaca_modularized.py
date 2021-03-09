@@ -56,8 +56,8 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                     issue_page = response.read().decode('utf-8')
                 issue_soup = BeautifulSoup(issue_page, 'html.parser')
                 volume_name = issue_soup.find('title').text.split('): ')[1].split('| ')[0].strip()
-                for article in issue_soup.find_all('div', class_='obj_article_summary'):
-                    article_url = article.find('div', class_='title').find('a')['href']
+                for article in [article_tag.find('a') for article_tag in issue_soup.find_all('h2', class_='title')]:
+                    article_url = article['href']
                     req = urllib.request.Request(article_url, data, headers)
                     with urllib.request.urlopen(req) as response:
                         issue_page = response.read().decode('utf-8')
@@ -98,7 +98,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                             publication_dict['field_006'] = 'm     o  d |      '
                             publication_dict['field_007'] = 'cr uuu   uuuuu'
                             publication_dict['field_008_18-34'] = 'gr poo||||||   b|'
-                            publication_dict['fields_590'] = ['arom', '2020xhnxaegypk', 'Online publication']
+                            publication_dict['fields_590'] = ['arom', '2021xhnxaegypk', 'Online publication']
                             publication_dict['original_cataloging_agency'] = 'DE-16'
                             publication_dict['publication_etc_statement']['publication'] = {'place': 'Heidelberg',
                                                                                             'responsible': 'Propylaeum',

@@ -2,7 +2,6 @@ import urllib.parse
 import urllib.request
 from bs4 import BeautifulSoup
 import re
-import find_reviewed_title
 import create_new_record
 import json
 import write_error_to_logfile
@@ -12,10 +11,8 @@ from langdetect import detect
 import language_codes
 import find_sysnumbers_of_volumes
 from harvest_records import harvest_records
+import find_reviewed_title
 
-
-# Dubletten werden nicht gefunden. Warum?
-# wg LDR != nab, ist naa
 
 
 def fill_up():
@@ -38,7 +35,7 @@ def fill_up():
                         pub_nr += 1
                     else:
                         all_doublets, additional_physical_form_entrys = \
-                                find_existing_doublets.find_review([person.split(', ')[0] for person in (publication_dict['authors_list'] + publication_dict['editors_list'])],
+                                find_existing_doublets.find([person.split(', ')[0] for person in (publication_dict['authors_list'] + publication_dict['editors_list'])],
                                                                    publication_dict['publication_year'], 'en', [publication_dict['host_item']['sysnumber']], publication_dict)
                         if not all_doublets:
                             new_reserve.append(publication_dict)
@@ -112,7 +109,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                 publication_dict['rdacontent'] = 'txt'
                 publication_dict['rdamedia'] = 'c'
                 publication_dict['rdacarrier'] = 'cr'
-                publication_dict['fields_590'] = ['arom', 'Online publication', '2020xhnxhsozk']
+                publication_dict['fields_590'] = ['arom', 'Online publication', '2021xhnxhsozk']
                 publication_dict['volume'] = ''
                 publication_dict['volume_year'] = ''
                 publication_dict['issue'] = ''
@@ -193,7 +190,8 @@ def harvest(path):
 
 
 if __name__ == '__main__':
-    harvest_records('records/hsozkult/', 'hsozkult', 'HSozKult', create_publication_dicts)
+    # harvest_records('records/hsozkult/', 'hsozkult', 'HSozKult', create_publication_dicts)
+    fill_up()
 
 # nur 3 Jahre speichern, also nichts, was älter ist als 2017.
 # Zeitstempelvergleich einführen, sodass alle Reviews, die älter als drei Jahre sind, gelöscht werden!

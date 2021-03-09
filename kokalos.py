@@ -55,14 +55,16 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                 if current_item > last_item_harvested_in_last_session:
                     with open('publication_dict.json', 'r') as publication_dict_template:
                         publication_dict = json.load(publication_dict_template)
-                    title = title_and_author_info.find('em').text
+                    print(title_and_author_info)
+                    title = title_and_author_info.find('em').text if title_and_author_info.find('em') else None
+                    if not title:
+                        continue
                     authors = [author.split('/')[0] for author in title_and_author_info.text.replace(title, '').replace('\n', '').split(', ')]
                     authors = [author for author in authors if author]
                     publication_dict['authors_list'] = [HumanName(author).last + ', ' + HumanName(author).first if not gnd_request_for_cor.check_gnd_for_name(author)
                                                         else author for author in authors ]
                     pages = re.findall(r'\d{1,3}-\d{1,3}', article_info.text.split('Pagine:')[1].split('Prezzo:')[0])[0]
                     publication_dict['volume'] = volume_name
-
                     publication_dict['host_item']['name'] = 'Kókalos'
                     publication_dict['host_item']['sysnumber'] = volumes_sysnumbers[volume_year]
                     publication_dict['host_item_is_volume'] = True
@@ -79,7 +81,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                     publication_dict['field_006'] = 'm     o  d |      '
                     publication_dict['field_007'] = 'cr uuu   uuuuu'
                     publication_dict['field_008_18-34'] = 'ar p|o||||||   b|'
-                    publication_dict['fields_590'] = ['arom', '2020xhnxkokalosk', 'Online publication']
+                    publication_dict['fields_590'] = ['arom', '2021xhnxkokalosk', 'Online publication']
                     publication_dict['original_cataloging_agency'] = ''
                     publication_dict['publication_etc_statement']['publication'] = {'place': 'Roma',
                                                                                     'responsible': ' Fabrizio Serra Editore',

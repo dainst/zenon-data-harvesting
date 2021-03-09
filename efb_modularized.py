@@ -69,7 +69,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                         publication_dict['publication_etc_statement']['publication'] = {'place': 'Berlin',
                                                                                         'responsible': 'Deutsches Archäologisches Institut',
                                                                                         'country_code': 'gw '}
-                        publication_dict['fields_590'] = ['arom', '2020xhnxefbk', 'aeforsch', 'daiauf8', 'Online publication']
+                        publication_dict['fields_590'] = ['arom', '2021xhnxefbk', 'aeforsch', 'daiauf8', 'Online publication']
                         publication_dict['table_of_contents_link'] = issue_url
                         publication_dict['abstract_link'] = article_soup.find('meta', attrs={'name': 'citation_abstract_html_url'})['content'] \
                             if article_soup.find('meta', attrs={'name': 'citation_abstract_html_url'}) else ''

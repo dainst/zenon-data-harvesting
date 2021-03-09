@@ -103,7 +103,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                     publication_dict['default_language'] = item.find('mods:language').find('mods:languageTerm').text if item.find('mods:language') else 'ger'
                     publication_dict['original_cataloging_agency'] = 'DE-16'
                     publication_dict['retro_digitization_info'] = {'place_of_publisher': '', 'publisher': '', 'date_published_online': ''}
-                    publication_dict['fields_590'] = ['arom', '2020xhnxamk']
+                    publication_dict['fields_590'] = ['arom', '2021xhnxamk']
                     publication_dict['volume'] = volume
                     publication_dict['volume_year'] = volume_year
                     if current_item < 1886:

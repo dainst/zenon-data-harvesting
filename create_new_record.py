@@ -889,6 +889,7 @@ def create_new_record(out, publication_dict):
             if publication_dict['review']:
                 print(publication_dict['review_list'])
                 for reviewed_title in publication_dict['review_list']:
+                    print(reviewed_title['reviewed_title'])
                     if reviewed_title['reviewed_title']:
                         reviewed_title_ids, review_titles = find_reviewed_title.find(reviewed_title, publication_dict['publication_year'], 'en')
                         if reviewed_title_ids:

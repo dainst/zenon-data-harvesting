@@ -1,17 +1,20 @@
 from pymarc import MARCReader
 import os
 
-page_range = '300-400'
 
-dir_name = 'records/hsozkult/hsozkult_' + page_range + '/'
-filestring = 'records/hsozkult/all_' + page_range + '.mrc'
+seen = []
+dir_name = 'records/sidestone/'
+filestring = 'sidestone_03_09.mrc'
 count = 0
 out = open(filestring, 'wb')
 for file in os.listdir(dir_name):
     with open(dir_name + file, 'rb') as marc_file:
-        print(marc_file)
-        new_reader = MARCReader(marc_file)
+        new_reader = MARCReader(marc_file, force_utf8=True)
         for record in new_reader:
-            out.write(record.as_marc21())
-            count += 1
+            if record['245']['a'] not in seen:
+                seen.append(record['245']['a'])
+                out.write(record.as_marc21())
+                count += 1
+            else:
+                print(record['245']['a'])
 print(count, 'Records wurden in der Datei gespeichert.')

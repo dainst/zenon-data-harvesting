@@ -52,7 +52,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, journal_pid_un
                 publication_dict['doi'] = content_list[14][1][2][4:]
                 publication_dict['default_language'] = default_language
                 publication_dict['do_detect_lang'] = True
-                publication_dict['fields_590'] = ['Online publication', 'arom', '2020xhnx' + journal_pid.replace('-', '')]
+                publication_dict['fields_590'] = ['Online publication', 'arom', '2021xhnx' + journal_pid.replace('-', '')]
                 publication_dict['original_cataloging_agency'] = 'eperiodica'
                 publication_dict['publication_year'] = year
                 publication_dict['publication_etc_statement']['publication'] = {'place': publication_place, 'responsible': publisher, 'country_code': 'sz '}

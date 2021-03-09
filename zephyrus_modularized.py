@@ -38,12 +38,15 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                     break
                 current_item = int(year_of_publication + volume.zfill(3) + issue.zfill(2))
                 if current_item > last_item_harvested_in_last_session:
+                    if 'start_page' not in item['bibjson']:
+                        continue
                     if item['bibjson']['title'] not in ['Zephyrus', 'Créditos', 'Índice', 'Index', 'Índice analítico']:
                         with open('publication_dict.json', 'r') as publication_dict_template:
                             publication_dict = json.load(publication_dict_template)
                         publication_dict['title_dict']['main_title'] = item['bibjson']['title']
+                        print(item['bibjson'])
                         publication_dict['authors_list'] = [HumanName(author['name']).last.capitalize() + ', ' + HumanName(author['name']).first
-                                                            if not gnd_request_for_cor.check_gnd_for_name(author) else author for author in item['bibjson']['author']]
+                                                            if not gnd_request_for_cor.check_gnd_for_name(author['name']) else author['name'] for author in item['bibjson']['author']]
                         publication_dict['html_links'] = ([link['url'] for link in item['bibjson']['link'] if link['content_type'] == 'html'])
                         publication_dict['issue'] = issue
                         if [identifier['id'] for identifier in item['bibjson']['identifier'] if identifier == 'doi']:
@@ -51,14 +54,14 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                         publication_dict['LDR_06_07'] = 'ab'
                         publication_dict['do_detect_lang'] = True
                         publication_dict['default_language'] = 'spa'
-                        publication_dict['fields_590'] = ['arom', '2020xhnxzephk']
+                        publication_dict['fields_590'] = ['arom', '2021xhnxzephk']
                         publication_dict['original_cataloging_agency'] = 'DOAJ'
                         publication_dict['publication_year'] = year_of_publication
                         publication_dict['publication_etc_statement']['publication'] = {'place': 'Salamanca', 'responsible': 'Ediciones Universidad de Salamanca', 'country_code': 'sp '}
                         publication_dict['rdacontent'] = 'txt'
                         publication_dict['rdamedia'] = 'c'
                         publication_dict['rdacarrier'] = 'cr'
-                        publication_dict['host_item'] = {'name': " Zephyrus: revista de prehistoria y arqueología", 'sysnumber': volumes_sysnumbers[year_of_publication]}
+                        publication_dict['host_item'] = {'name': "Zephyrus: revista de prehistoria y arqueología", 'sysnumber': volumes_sysnumbers[year_of_publication]}
                         publication_dict['host_item']['issn'] = '2386-3943'
                         publication_dict['volume'] = volume
                         publication_dict['field_006'] = 'm     o  d |      '

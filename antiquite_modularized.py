@@ -18,8 +18,8 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
     items_harvested = []
     try:
         current_year = int(dateTimeObj.strftime("%Y"))
-        basic_url = 'https://api.crossref.org/journals/1724-2134/works?filter=type%3Ajournal-article,from-print-pub-date%3A' \
-                    + str(current_year - 1) + '&cursor='
+        basic_url = 'https://api.crossref.org/journals/1724-2134/works?filter=type%3Ajournal-article,from-online-pub-date%3A' \
+                    + str(current_year - 3) + '&cursor='
         next_cursor = '*'
         request_nr = 0
         while True:
@@ -55,7 +55,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                         publication_dict['LDR_06_07'] = 'ab'
                         publication_dict['do_detect_lang'] = True
                         publication_dict['default_language'] = 'fre'
-                        publication_dict['fields_590'] = ['arom', '2020xhnxmefrak']
+                        publication_dict['fields_590'] = ['arom', '2021xhnxmefrak']
                         publication_dict['original_cataloging_agency'] = 'Crossref'
                         publication_dict['publication_year'] = year_of_publication
                         publication_dict['publication_etc_statement']['publication'] = {'place': 'Rome', 'responsible': 'École Française de Rome', 'country_code': 'it '}

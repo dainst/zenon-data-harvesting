@@ -56,7 +56,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                         publication_dict['LDR_06_07'] = 'ab'
                         publication_dict['do_detect_lang'] = True
                         publication_dict['default_language'] = 'spa'
-                        publication_dict['fields_590'] = ['arom', '2020xhnxluck']
+                        publication_dict['fields_590'] = ['arom', '2021xhnxluck']
                         publication_dict['original_cataloging_agency'] = 'DOAJ'
                         publication_dict['publication_year'] = year_of_publication
                         publication_dict['publication_etc_statement']['publication'] = {'place':  'Alicante', 'responsible': 'Servicio de Publicaciones de la Universidad', 'country_code': 'sp '}

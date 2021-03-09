@@ -35,7 +35,9 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                 remaining_article_links.append('http://bmcr.brynmawr.edu/' + str(item_to_append)[:4] + '/' + '.'.join(re.findall(r'^(\d{4})(\d{2})(\d{2})$', str(item_to_append))[0]))
             article_links = remaining_article_links + article_links
         for article_link in article_links:
-            current_item = int(re.findall(r'[\d|.]{10,11}', article_link)[0].replace('.', ''))
+            current_item = int(re.findall(r'[\d|.]{10,11}', article_link)[0].replace('.', '')) if re.findall(r'[\d|.]{10,11}', article_link) else None
+            if not current_item:
+                continue
             if current_item <= last_item_harvested_in_last_session:
                 break
             else:
@@ -101,7 +103,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                     publication_dict['rdacontent'] = 'txt'
                     publication_dict['rdamedia'] = 'c'
                     publication_dict['rdacarrier'] = 'cr'
-                    publication_dict['fields_590'] = ['arom', 'Online publication', '2020xhnxbmcrk']
+                    publication_dict['fields_590'] = ['arom', 'Online publication', '2021xhnxbmcrk']
                     publication_dict['html_links'].append(article_link)
                     publication_dict['host_item'] = {'name': 'Bryn Mawr Classical Review', 'sysnumber': '000810352', 'issn': ''}
                     publication_dict['default_language'] = 'en'

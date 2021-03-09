@@ -1,15 +1,22 @@
 from pymarc import MARCReader
+import os
+import re
 
-filestring = 'records/world_prehistory/world_prehistory_06-Mar-2020'
-count = 0
-out = open('records/world_prehistory/world_prehistory_06-Mar-2020' + '_' + str(count) + '.mrc', 'wb')
-print(filestring + '.mrc')
-with open(filestring + '.mrc', 'rb') as file:
-    new_reader = MARCReader(file)
-    print(new_reader)
-    print()
-    for record in new_reader:
-        if count % 25 == 0:
-            out = open(filestring + '_' + str(count) + '.mrc', 'wb')
-        out.write(record.as_marc21())
-        count += 1
+filestring = 'all_lotti'
+
+
+for filestring in os.listdir('gelehrtenbriefe_marc'):
+    count = 0
+    lotto_nr = re.findall('\d{2}', filestring)[0]
+    out = open('g_splitted/gelehrtenbriefe_' + str(count) + '.mrc', 'wb')
+    print(filestring + '.mrc')
+    with open('gelehrtenbriefe_marc/' + filestring, 'rb') as file:
+        new_reader = MARCReader(file)
+        print(new_reader)
+        print()
+        for record in new_reader:
+            print(record)
+            if count % 50 == 0:
+                out = open('g_splitted/gelehrtenbriefe_' + lotto_nr + '_' + str(count) + '.mrc', 'wb')
+            out.write(record.as_marc21())
+            count += 1

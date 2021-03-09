@@ -54,9 +54,9 @@ for harvesting_script in [aegyptiaca_modularized, antiquite_modularized, berrgk_
                           kokalos,
                           world_prehistory,
                           germania_modularized,
-                          # athener_mitteilungen,
                           zephyrus_modularized
                           ]:  # bjb_modularized
+                            # athener_mitteilungen,
     try:
         print(harvesting_script)
         new_return_string = harvesting_script.harvest(path)
