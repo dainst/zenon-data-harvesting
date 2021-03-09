@@ -36,3 +36,4 @@ def check_gnd_for_name(name_to_check: str):
             print('Error occured:', search_url)
             write_error_to_logfile.write(e)
             trials += 1
+    return False
