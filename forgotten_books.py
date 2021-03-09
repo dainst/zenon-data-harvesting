@@ -12,6 +12,8 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
     try:
         nr = 0
         for publication_file in os.listdir('gai_metadata'):
+            if nr == 1000:
+                break
             try:
                 with open('publication_dict.json', 'r') as publication_dict_template:
                     publication_dict = json.load(publication_dict_template)
