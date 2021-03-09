@@ -7,9 +7,8 @@ from nltk import RegexpTokenizer
 
 
 def check_gnd_for_name(name_to_check: str):
-    name_to_check = name_to_check.replace(' ', '+')
     name_to_check = unidecode.unidecode(name_to_check)
-    name_to_check = ' '.join(RegexpTokenizer(r'\w+').tokenize(name_to_check)).replace('OR', '')
+    name_to_check = '+'.join(RegexpTokenizer(r'\w+').tokenize(name_to_check)).replace('OR', '')
     search_url = 'https://lobid.org/gnd/search?q=%28preferredName%3A' + name_to_check + '+OR+variantName%3A' + name_to_check + '%29&size=1000&format=json'
     success = False
     trials = 0
