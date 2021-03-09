@@ -153,6 +153,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                                                          'reviewed_editors': editors_reviewed,
                                                          'year_of_publication': publication_year,
                                                          }, year_of_publication, 'en')[0]
+                    publication_dict['check_for_doublets_and_pars'] = False
                 if reviews:
                     pub_nr += 1
                     publication_dicts.append(publication_dict)
