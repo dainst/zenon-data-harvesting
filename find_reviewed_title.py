@@ -157,56 +157,61 @@ def find(review, year, default_lang):
                 word_nr += 1
         # Generierung eines bereinigten Suchtitels
         search_title = search_title.strip("+")
-        if word_nr >= 1:
-            all_results = swagger_find(search_title, search_authors, year, year_of_review, title, rejected_titles, lang, authors, all_results)
+        if not search_title:
+            return all_results, review_titles
+        all_results = swagger_find(search_title, search_authors, year, year_of_review, title, rejected_titles, lang, authors, all_results)
             # Suche mit vollständigen Daten
-            if len(all_results) == 0:
-                search_authors = search_authors.split("+")[0]
-                all_results = swagger_find(search_title, search_authors, year, year_of_review, title, rejected_titles, lang, authors, all_results)
-                # Suche nur mit dem ersten Autoren
-            if len(all_results) == 0:
-                search_title = ""
-                adjusted_title = title.split(".")[0].split(":")[0].split(".")[0]
-                adjusted_title = adjusted_title.replace("...", " ")
-                for word in RegexpTokenizer(r'\w+').tokenize(adjusted_title):
-                    if ((not any(stopword in word for stopword in stopwords_for_search_in_zenon)) and (
-                            len(word) > 2) and (word not in stopwords_dict[lang]) and (
-                            re.findall(r'^\d{1,2}$', word) == []) and (re.findall(r'^[IVXLCDM]*$', word) == [])):
-                        word = urllib.parse.quote(word, safe='')
-                        if '%' in word:
-                            continue
-                        search_title = search_title + "+" + word
-                search_title = search_title.strip("+")
-                all_results = swagger_find(search_title, search_authors, year, year_of_review, title, rejected_titles, lang, authors, all_results)
-                # Suche mit verkürztem Titel
-            if len(all_results) == 0:
-                search_authors = ""
-                all_results = swagger_find(search_title, search_authors, year, year_of_review, title, rejected_titles, lang, authors, all_results)
-                # Suche ohne Autorennamen
-            if len(all_results) == 0:
-                if len(search_title.split('+')) > 5:
-                    for pair in itertools.combinations(search_title.split("+"), 2):
-                        search_title_without_words = search_title
-                        if len(all_results) > 0:
-                            break
-                        for word in pair:
-                            search_title_without_words = search_title_without_words.replace(word, '').replace('++',
-                                                                                                              '+').strip(
-                                '+')
-                        all_results = swagger_find(search_title_without_words, search_authors, year, year_of_review, title, rejected_titles, lang, authors, all_results)
-                else:
-                    for word in search_title.split("+"):
-                        search_title_without_words = search_title
-                        if len(all_results) > 0:
-                            break
+        if len(all_results) == 0:
+            search_authors = search_authors.split("+")[0]
+            all_results = swagger_find(search_title, search_authors, year, year_of_review, title, rejected_titles, lang, authors, all_results)
+            # Suche nur mit dem ersten Autoren
+        if len(all_results) == 0:
+            search_title = ""
+            adjusted_title = title.split(".")[0].split(":")[0].split(".")[0]
+            adjusted_title = adjusted_title.replace("...", " ")
+            for word in RegexpTokenizer(r'\w+').tokenize(adjusted_title):
+                if ((not any(stopword in word for stopword in stopwords_for_search_in_zenon)) and (
+                        len(word) > 2) and (word not in stopwords_dict[lang]) and (
+                        re.findall(r'^\d{1,2}$', word) == []) and (re.findall(r'^[IVXLCDM]*$', word) == [])):
+                    word = urllib.parse.quote(word, safe='')
+                    if '%' in word:
+                        continue
+                    search_title = search_title + "+" + word
+            search_title = search_title.strip("+")
+            if not search_title:
+                return all_results, review_titles
+            all_results = swagger_find(search_title, search_authors, year, year_of_review, title, rejected_titles, lang, authors, all_results)
+            # Suche mit verkürztem Titel
+        if len(all_results) == 0:
+            search_authors = ""
+            if not search_title:
+                return all_results, review_titles
+            all_results = swagger_find(search_title, search_authors, year, year_of_review, title, rejected_titles, lang, authors, all_results)
+            # Suche ohne Autorennamen
+        if len(all_results) == 0:
+            if len(search_title.split('+')) > 5:
+                for pair in itertools.combinations(search_title.split("+"), 2):
+                    search_title_without_words = search_title
+                    if len(all_results) > 0:
+                        break
+                    for word in pair:
                         search_title_without_words = search_title_without_words.replace(word, '').replace('++',
                                                                                                           '+').strip(
                             '+')
-                        all_results = swagger_find(search_title_without_words, search_authors, year, year_of_review, title, rejected_titles, lang, authors, all_results)
-                # Suche unter Ausschluss von einem oder zwei Suchbegriffen je nach Länge des Titels
-            for i in range(len(all_results)):
-                review_titles.append(find_existing_doublets.create_review_titles_for_review_search(review))
-            return all_results, review_titles
+                    all_results = swagger_find(search_title_without_words, search_authors, year, year_of_review, title, rejected_titles, lang, authors, all_results)
+            else:
+                for word in search_title.split("+"):
+                    search_title_without_words = search_title
+                    if len(all_results) > 0:
+                        break
+                    search_title_without_words = search_title_without_words.replace(word, '').replace('++',
+                                                                                                      '+').strip(
+                        '+')
+                    all_results = swagger_find(search_title_without_words, search_authors, year, year_of_review, title, rejected_titles, lang, authors, all_results)
+            # Suche unter Ausschluss von einem oder zwei Suchbegriffen je nach Länge des Titels
+        for i in range(len(all_results)):
+            review_titles.append(find_existing_doublets.create_review_titles_for_review_search(review))
+        return all_results, review_titles
 
     except Exception as e:
         write_error_to_logfile.write(e)
