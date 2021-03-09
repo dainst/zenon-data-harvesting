@@ -14,7 +14,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
     items_harvested = []
     try:
         current_item = 1
-        for file in ['sidestonepress_1.csv', 'sidestonepress_2.csv', 'sidestonepress_3.csv']:
+        for file in ['sidestonepress_1.csv', 'sidestonepress_2.csv']:
             with open(file, "r") as link_table:
                 reader = csv.reader(link_table, delimiter=';')
                 row_nr = 0
