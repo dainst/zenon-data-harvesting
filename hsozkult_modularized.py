@@ -15,31 +15,32 @@ import find_reviewed_title
 
 
 
-def fill_up():
+def fill_up(*other):
     try:
         with open('records/hsozkult/hsozkult_as_reserve.json', 'r') as hsozkult_as_reserve:
             as_reserve = json.load(hsozkult_as_reserve)
         dateTimeObj = datetime.now()
         timestampStr = dateTimeObj.strftime("%d-%b-%Y")
-        out = open('records/hsozkult/hsozkult_' + timestampStr + '_fill_up.mrc', 'wb')
         pub_nr = 0
         saved_pub_nr = 1
         new_reserve = []
+        publication_dicts = []
         for publication_dict in as_reserve:
+            publication_dict['check_for_doublets_and_pars'] = True
             reviews = []
             for reviewed_pub in publication_dict['review_list']:
                 if reviewed_pub['reviewed_title']:
                     reviews += find_reviewed_title.find(reviewed_pub, publication_dict['publication_year'], 'en')[0]
                     if reviews:
-                        create_new_record.create_new_record(out, publication_dict)
+                        publication_dicts.append(publication_dict)
+                        print(publication_dict)
                         pub_nr += 1
                     else:
-                        all_doublets, additional_physical_form_entrys = \
-                                find_existing_doublets.find([person.split(', ')[0] for person in (publication_dict['authors_list'] + publication_dict['editors_list'])],
-                                                                   publication_dict['publication_year'], 'en', [publication_dict['host_item']['sysnumber']], publication_dict)
-                        if not all_doublets:
+                        if int(publication_dict['publication_year']) >= (int(timestampStr[-4:]) - 3):
                             new_reserve.append(publication_dict)
                         saved_pub_nr += 1
+        with open('records/hsozkult/hsozkult_as_reserve.json', 'w') as hsozkult_as_reserve:
+            json.dump(new_reserve, hsozkult_as_reserve)
         print('Es wurden', pub_nr, 'neue Records für HSozKult erstellt.')
     except Exception as e:
         write_error_to_logfile.write(e)
@@ -191,8 +192,4 @@ def harvest(path):
 
 
 if __name__ == '__main__':
-    # harvest_records('records/hsozkult/', 'hsozkult', 'HSozKult', create_publication_dicts)
-    fill_up()
-
-# nur 3 Jahre speichern, also nichts, was älter ist als 2017.
-# Zeitstempelvergleich einführen, sodass alle Reviews, die älter als drei Jahre sind, gelöscht werden!
+    harvest_records('records/hsozkult/hsozkult_from_reserve/', 'hsozkult', 'HSozKult', fill_up)

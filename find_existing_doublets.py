@@ -190,13 +190,15 @@ def swagger_find(search_title, year, title, rejected_titles, possible_host_items
     try:
         tic = time.perf_counter()
         year = year.replace('[', '').replace(']', '')
+        if len(search_title) < 3:
+            print('skipped_no_search_title')
+            return all_results, rejected_titles, additional_physical_form_entrys
+        if search_title == 'Rez':
+            return all_results, rejected_titles, additional_physical_form_entrys
         page_nr = 0
         empty_page = False
         while not empty_page:
             page_nr += 1
-            if len(search_title) == 0:
-                print('skipped_no_search_title')
-                break
             url = u'https://zenon.dainst.org/api/v1/search?join=AND&lookfor0%5B%5D=' + search_title + '&type0%5B%5D=Title&lookfor0%5B%5D=' \
                   '&type0%5B%5D=Author&lookfor0%5B%5D=&type0%5B%5D=year&bool0%5B%5D=AND&illustration=-1&page=' + str(page_nr)
             req = urllib.request.Request(url)
@@ -289,7 +291,6 @@ def swagger_find(search_title, year, title, rejected_titles, possible_host_items
                                 [possible_host_items.remove(item) for item in possible_host_items if not item]
                                 if possible_host_items:
                                     right_host_item = False
-                                    print('found host items:', [field['w'].replace('(DE-2553)', '') for field in file.get_fields('773') if field['w']])
                                     if [field['w'].replace('(DE-2553)', '') for field in file.get_fields('773') if field['w']]:
                                         if any([field['w'].replace('(DE-2553)', '') in possible_host_items for field in file.get_fields('773') if field['w']]):
                                             right_host_item = True
@@ -301,8 +302,6 @@ def swagger_find(search_title, year, title, rejected_titles, possible_host_items
                                                 new_reader = MARCReader(parent_webfile)
                                                 # öffnet übergeordnete Aufnahme
                                                 for parent_file in new_reader:
-                                                    print('parent_file:', parent_file['001'])
-                                                    print([field['w'].replace('(DE-2553)', '') for field in parent_file.get_fields('773') if field['w']])
                                                     if [field['w'].replace('(DE-2553)', '') for field in parent_file.get_fields('773') if field['w']]:
                                                         if any([field['w'].replace('(DE-2553)', '') in upper_host_items for field in parent_file.get_fields('773') if field['w']]):
                                                             right_host_item = True
@@ -317,7 +316,6 @@ def swagger_find(search_title, year, title, rejected_titles, possible_host_items
                                                             new_reader = MARCReader(upper_parent_webfile)
                                                             for upper_parent_file in new_reader:
                                                                 upper_parent_file_pars = [field['w'].replace('(DE-2553)', '') for field in upper_parent_file.get_fields('776') if field['w']]
-                                                                print('upper_parent_file_pars', upper_parent_file_pars)
                                                                 if any([upper_parent_file_par in upper_host_items_pars for upper_parent_file_par in upper_parent_file_pars]):
                                                                     right_host_item = True
                                             except:

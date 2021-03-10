@@ -7,6 +7,14 @@ from harvest_records import harvest_records
 import write_error_to_logfile
 from create_new_record import link_is_valid
 
+
+invalid_links = ['https://doi.org/10.11588/propylaeum.121.148', 'https://doi.org/10.11588/propylaeum.47.40', 'https://doi.org/10.11588/propylaeum.46.39',
+                 'https://doi.org/10.11588/propylaeum.44.38', 'https://doi.org/10.11588/propylaeum.40.31', 'https://doi.org/10.11588/propylaeum.39.30',
+                 'https://doi.org/10.11588/propylaeum.37.29', 'https://doi.org/10.11588/propylaeum.36.28', 'https://doi.org/10.11588/propylaeum.35.27',
+                 'https://doi.org/10.11588/propylaeum.34.26', 'https://doi.org/10.11588/propylaeum.33.25', 'https://doi.org/10.11588/propylaeum.23.16',
+                 'https://doi.org/10.11588/propylaeum.21.14', 'https://doi.org/10.11588/propylaeum.20.12', 'https://doi.org/10.11588/propylaeum.19.11',
+                 'https://doi.org/10.11588/propylaeum.18.9', 'https://doi.org/10.11588/propylaeum.17.8', 'https://doi.org/10.11588/propylaeum.1.1']
+
 def create_publication_dicts(last_item_harvested_in_last_session, *other):
     publication_dicts = []
     items_harvested = []
@@ -40,10 +48,24 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                     isbn_pdf = isbn_pdf_list[0]
                     publication_date = re.findall(r'(\d{2})\.(\d{2})\.(\d{4})', ebook_soup.find('p',  style="margin-top: 1.2em;").text)[0]
                     current_item = int(publication_date[2] + publication_date[1] + publication_date[0])
+                    print(current_item)
                     publication_date = publication_date[2]
                     if current_item > last_item_harvested_in_last_session:
                         current_item = current_item - 1
                         if isbn_pdf:
+                            doi_links = [link for link in [a['href'] for a in ebook_soup.find_all('a') if 'href' in a.attrs] if 'https://doi.org/' in link]
+                            doi_links = [link for link in doi_links if link_is_valid(link)]
+
+                            if not doi_links:
+                                print('no doi', ebook_soup)
+                                continue
+                            if doi_links[0] in invalid_links:
+                                print(ebook_soup)
+                            else:
+                                continue
+                            publication_dict['doi'] = doi_links[0].replace('https://doi.org/', '') if doi_links else ''
+                            if publication_dict['doi']:
+                                publication_dict['html_links'].append(doi_links[0])
                             url = u'http://swb.bsz-bw.de/sru/DB=2.1/username=/password=/?query=pica.isb+%3D+"' + isbn_pdf + '"&version=1.1&operation=searchRetrieve&stylesheet=http%3A%2F%2Fswb.bsz-bw.de%2Fsru%2FDB%3D2.1%2F%3Fxsl%3DsearchRetrieveResponse&recordSchema=marc21&maximumRecords=1&startRecord=1&recordPacking=&sortKeys=none&x-info-5-mg-requestGroupings=none'
                             req = urllib.request.Request(url)
                             with urllib.request.urlopen(req) as response:
@@ -71,14 +93,6 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                                                                         if 'a' in field and field['4'] == 'edt']
                                     publication_dict['abstract_link'] = link
                                     publication_dict['table_of_contents_link'] = link
-                                    doi_links = [link for link in [a['href'] for a in ebook_soup.find_all('a') if 'href' in a.attrs] if 'https://doi.org/' in link]
-                                    doi_links = [link for link in doi_links if link_is_valid(link)]
-                                    if not doi_links:
-                                        continue
-                                    publication_dict['doi'] = doi_links[0].replace('https://doi.org/', '') if doi_links else ''
-                                    if publication_dict['doi']:
-                                        publication_dict['html_links'].append(doi_links[0])
-
                                     publication_dict['isbn'] = isbn_pdf
                                     publication_dict['default_language'] = record['041']['a'] if record['041'] else ''
                                     publication_dict['fields_590'] = ['2021xhnxpro', 'Online publication', 'ebookoa0321']
@@ -145,3 +159,5 @@ def get_series_names():
 if __name__ == '__main__':
     # get_series_names()
     harvest_records('records/propylaeum_ebooks/', 'propylaeum_ebooks', 'Propylaeum Ebooks', create_publication_dicts)
+
+
