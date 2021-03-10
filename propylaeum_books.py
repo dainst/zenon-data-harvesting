@@ -76,9 +76,13 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                                         publication_dict['html_links'].append(doi_links[0])
                                     publication_dict['isbn'] = isbn_pdf
                                     publication_dict['default_language'] = record['041']['a'] if record['041'] else ''
-                                    publication_dict['fields_590'] = ['2021xhnxpro', 'Online publication', 'ebookoa0121']
+                                    publication_dict['fields_590'] = ['2021xhnxpro', 'Online publication', 'ebookoa0321']
                                     publication_dict['original_cataloging_agency'] = record['003'].data
-                                    publication_dict['publication_year'] = record['264']['c']
+                                    for field in record.get_fields('264', '260'):
+                                        if field['b'] == 'Propylaeum':
+                                            publication_dict['publication_year'] = re.findall(r'\d{4}', field['c'])[0]
+                                        elif not publication_dict['publication_year']:
+                                            publication_dict['publication_year'] = re.findall(r'\d{4}', field['c'])[0]
                                     publication_dict['field_300'] = record['300']['a'] if record['300'] else ''
                                     if publication_date != record['264']['c']:
                                         publication_dict['publication_etc_statement']['publication'] = {'place': record['264']['a'], 'responsible': record['264']['b'], 'country_code': 'gw '}
@@ -102,7 +106,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                                     publication_dicts.append(publication_dict)
                                     items_harvested.append(current_item)
                             else:
-                                print(link)
+                                print('not in swb', link)
     except Exception as e:
         write_error_to_logfile.write(e)
         write_error_to_logfile.comment('Es konnten keine Ebooks geharvested werden.')
