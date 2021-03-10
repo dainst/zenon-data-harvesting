@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 import json
 from harvest_records import harvest_records
 import write_error_to_logfile
+from create_new_record import link_is_valid
 
 def create_publication_dicts(last_item_harvested_in_last_session, *other):
     publication_dicts = []
@@ -71,9 +72,13 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                                     publication_dict['abstract_link'] = link
                                     publication_dict['table_of_contents_link'] = link
                                     doi_links = [link for link in [a['href'] for a in ebook_soup.find_all('a') if 'href' in a.attrs] if 'https://doi.org/' in link]
+                                    doi_links = [link for link in doi_links if link_is_valid(link)]
+                                    if not doi_links:
+                                        continue
                                     publication_dict['doi'] = doi_links[0].replace('https://doi.org/', '') if doi_links else ''
                                     if publication_dict['doi']:
                                         publication_dict['html_links'].append(doi_links[0])
+
                                     publication_dict['isbn'] = isbn_pdf
                                     publication_dict['default_language'] = record['041']['a'] if record['041'] else ''
                                     publication_dict['fields_590'] = ['2021xhnxpro', 'Online publication', 'ebookoa0321']
