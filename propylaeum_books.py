@@ -78,17 +78,8 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                                     publication_dict['default_language'] = record['041']['a'] if record['041'] else ''
                                     publication_dict['fields_590'] = ['2021xhnxpro', 'Online publication', 'ebookoa0321']
                                     publication_dict['original_cataloging_agency'] = record['003'].data
-                                    for field in record.get_fields('264', '260'):
-                                        if field['b'] == 'Propylaeum':
-                                            publication_dict['publication_year'] = re.findall(r'\d{4}', field['c'])[0]
-                                        elif not publication_dict['publication_year']:
-                                            publication_dict['publication_year'] = re.findall(r'\d{4}', field['c'])[0]
-                                    publication_dict['field_300'] = record['300']['a'] if record['300'] else ''
-                                    if publication_date != record['264']['c']:
-                                        publication_dict['publication_etc_statement']['publication'] = {'place': record['264']['a'], 'responsible': record['264']['b'], 'country_code': 'gw '}
-                                        publication_dict['retro_digitization_info'] = {'place_of_publisher': 'Heidelberg', 'publisher': 'Propylaeum', 'date_published_online': publication_date}
-                                    else:
-                                        publication_dict['publication_etc_statement']['publication'] = {'place': 'Heidelberg', 'responsible': 'Propylaeum', 'country_code': 'gw '}
+                                    publication_dict['publication_year'] = publication_date
+                                    publication_dict['publication_etc_statement']['publication'] = {'place': 'Heidelberg', 'responsible': 'Propylaeum', 'country_code': 'gw '}
                                     publication_dict['rdacontent'] = 'txt'
                                     publication_dict['rdamedia'] = 'c'
                                     publication_dict['rdacarrier'] = 'cr'
