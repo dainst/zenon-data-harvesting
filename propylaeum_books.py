@@ -8,13 +8,6 @@ import write_error_to_logfile
 from create_new_record import link_is_valid
 
 
-invalid_links = ['https://doi.org/10.11588/propylaeum.121.148', 'https://doi.org/10.11588/propylaeum.47.40', 'https://doi.org/10.11588/propylaeum.46.39',
-                 'https://doi.org/10.11588/propylaeum.44.38', 'https://doi.org/10.11588/propylaeum.40.31', 'https://doi.org/10.11588/propylaeum.39.30',
-                 'https://doi.org/10.11588/propylaeum.37.29', 'https://doi.org/10.11588/propylaeum.36.28', 'https://doi.org/10.11588/propylaeum.35.27',
-                 'https://doi.org/10.11588/propylaeum.34.26', 'https://doi.org/10.11588/propylaeum.33.25', 'https://doi.org/10.11588/propylaeum.23.16',
-                 'https://doi.org/10.11588/propylaeum.21.14', 'https://doi.org/10.11588/propylaeum.20.12', 'https://doi.org/10.11588/propylaeum.19.11',
-                 'https://doi.org/10.11588/propylaeum.18.9', 'https://doi.org/10.11588/propylaeum.17.8', 'https://doi.org/10.11588/propylaeum.1.1']
-
 def create_publication_dicts(last_item_harvested_in_last_session, *other):
     publication_dicts = []
     items_harvested = []
@@ -55,17 +48,6 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                         if isbn_pdf:
                             doi_links = [link for link in [a['href'] for a in ebook_soup.find_all('a') if 'href' in a.attrs] if 'https://doi.org/' in link]
                             doi_links = [link for link in doi_links if link_is_valid(link)]
-
-                            if not doi_links:
-                                print('no doi', ebook_soup)
-                                continue
-                            if doi_links[0] in invalid_links:
-                                print(ebook_soup)
-                            else:
-                                continue
-                            publication_dict['doi'] = doi_links[0].replace('https://doi.org/', '') if doi_links else ''
-                            if publication_dict['doi']:
-                                publication_dict['html_links'].append(doi_links[0])
                             url = u'http://swb.bsz-bw.de/sru/DB=2.1/username=/password=/?query=pica.isb+%3D+"' + isbn_pdf + '"&version=1.1&operation=searchRetrieve&stylesheet=http%3A%2F%2Fswb.bsz-bw.de%2Fsru%2FDB%3D2.1%2F%3Fxsl%3DsearchRetrieveResponse&recordSchema=marc21&maximumRecords=1&startRecord=1&recordPacking=&sortKeys=none&x-info-5-mg-requestGroupings=none'
                             req = urllib.request.Request(url)
                             with urllib.request.urlopen(req) as response:
@@ -79,11 +61,16 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                                     "https://unapi.k10plus.de/?id=gvk:ppn:" + ppn + "&format=marc21")
                                 new_reader = MARCReader(webfile)
                                 for record in new_reader:
-                                    # übernehmen: 003 = original..., 024 (ISBN), 041 (Sprache), 100 teilweise, 245, 264, 300, 490, 830, 502, 689???
                                     delete_fields = [field for field in record.get_fields() if field.tag not in ['003','024', '041', '100', '700', '245', '264', '300', '490', '830', '502', '689']]
                                     [record.remove_field(field) for field in delete_fields]
                                     with open('publication_dict.json', 'r') as publication_dict_template:
                                         publication_dict = json.load(publication_dict_template)
+                                    if doi_links:
+                                        publication_dict['doi'] = doi_links[0].replace('https://doi.org/', '') if doi_links else ''
+                                    if publication_dict['doi']:
+                                        publication_dict['html_links'].append(doi_links[0])
+                                    else:
+                                        publication_dict['html_links'].append(link)
                                     publication_dict['title_dict']['main_title'] = record['245']['a'] if record['245'] and 'a' in record['245'] else ''
                                     publication_dict['title_dict']['sub_title'] = record['245']['b'] if record['245'] and 'b' in record['245'] else ''
                                     publication_dict['title_dict']['responsibility_statement'] = record['245']['c'] if record['245'] and 'c' in record['245'] else ''
@@ -113,6 +100,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                                     publication_dict['field_006'] = 'm     o  d |      '
                                     publication_dict['field_007'] = 'cr uuu   uu|uu'
                                     publication_dict['field_008_18-34'] = '|||||o    |||| 0 '
+
                                     publication_dicts.append(publication_dict)
                                     items_harvested.append(current_item)
                             else:
@@ -127,34 +115,6 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
 def harvest(path):
     return_string = harvest_records(path, 'propylaeum_ebooks', 'Propylaeum Ebooks', create_publication_dicts)
     return return_string
-
-def get_series_names():
-    url = 'https://books.ub.uni-heidelberg.de/propylaeum/series'
-    req = urllib.request.Request(url)
-    with urllib.request.urlopen(req) as response:
-        series_page = response.read()
-    series_page = series_page.decode('utf-8')
-    series_soup = BeautifulSoup(series_page, 'html.parser')
-    for item in [article for article in series_soup.find_all('article') if not article.find_all('div', class_='post-image')]:
-        error = False
-        if item.find('h3') and item.find('h4').string:
-            print(item.find('h3').string.strip() + ':', item.find('h4').string)
-        elif item.find('h3'):
-            print(item.find('h3').string.strip())
-        else:
-            error = True
-        print()
-        if item.find('span'):
-            print('Beschreibung:', item.find('span').string)
-        elif item.find('p'):
-            print('Beschreibung:', item.find('p').text.strip())
-        else:
-            error = True
-        url = [url for url in item.find_all('a') if 'propylaeum/catalog/series' in url['href']][0]
-        print(url)
-        print('----')
-
-
 
 if __name__ == '__main__':
     # get_series_names()
