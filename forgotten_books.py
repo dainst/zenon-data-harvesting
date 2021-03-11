@@ -12,6 +12,8 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
     try:
         nr = 0
         for publication_file in os.listdir('gai_metadata'):
+            print(publication_file)
+            continue
             if nr < 800:
                 nr += 1
                 continue
