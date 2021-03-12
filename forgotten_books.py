@@ -17,11 +17,8 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
     items_harvested = []
     try:
         nr = 0
-        for publication_file in gai_list:
-            if nr < 800:
-                nr += 1
-                continue
-            if nr == 1250:
+        for publication_file in gai_list: # läuft auf Server: 0-400
+            if nr == 400:
                 break
             try:
                 with open('publication_dict.json', 'r') as publication_dict_template:
