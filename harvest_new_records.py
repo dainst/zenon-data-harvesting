@@ -27,18 +27,19 @@ import kokalos
 import sardinia_corsica_baleares_modularized
 import gerion_modularized
 import zephyrus_modularized
+import propylaeum_books
 
 dateTimeObj = datetime.now()
 timestampStr = dateTimeObj.strftime("%d-%b-%Y")
 
 return_string = ''
 new_dir = 'harvest_' + timestampStr
-path = '/home/hnebel/Programmierung/zenon-data-harvesting/records/'
-error_path = '/home/hnebel/Programmierung/zenon-data-harvesting/logfiles_debugging/'
+path = 'records/'
+error_path = 'logfiles_debugging/'
 if new_dir not in os.listdir(path):
     os.mkdir(path + new_dir)
-path_for_cumulus = '/home/hnebel/Programmierung/zenon-data-harvesting/records/' + new_dir
-path = '/home/hnebel/Programmierung/zenon-data-harvesting/records/' + new_dir + '/'
+path_for_cumulus = 'records/' + new_dir
+path = 'records/' + new_dir + '/'
 for harvesting_script in [aegyptiaca_modularized, antiquite_modularized, berrgk_modularized, BMCR_modularized,
                           cipeg_modularized,
                           lucentum_modularized,
@@ -54,6 +55,7 @@ for harvesting_script in [aegyptiaca_modularized, antiquite_modularized, berrgk_
                           kokalos,
                           world_prehistory,
                           germania_modularized,
+                          propylaeum_books,
                           zephyrus_modularized
                           ]:  # bjb_modularized
                             # athener_mitteilungen,
@@ -89,7 +91,7 @@ client.upload(remote_path='Periodicals_continuously_harvested/harvest_' + timest
 client.mkdir('Periodicals_continuously_harvested/harvest_' + timestampStr + '_logfiles_debugging')
 # Directory mit Datum auf Cumulus erstellen
 client.upload(remote_path='Periodicals_continuously_harvested/harvest_' + timestampStr + '_logfiles_debugging',
-              local_path='/home/hnebel/Programmierung/zenon-data-harvesting/logfiles_debugging/')
+              local_path=error_path)
 
 # lokales Directory mit den erstellten Files hochladen
 
