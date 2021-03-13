@@ -17,11 +17,11 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
     items_harvested = []
     try:
         nr = 0
-        for publication_file in gai_list: # läuft auf Server: 1350-1800, läuft auf PC: 1250-1350
-            if nr < 1350:
+        for publication_file in gai_list: # läuft auf Server: 1350-1800, läuft auf PC: 0-100
+            if nr < 1800:
                 nr += 1
                 continue
-            if nr == 1800:
+            if nr == 2250:
                 break
             try:
                 with open('publication_dict.json', 'r') as publication_dict_template:
