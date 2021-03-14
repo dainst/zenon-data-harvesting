@@ -3,14 +3,15 @@ import json
 from pymarc import MARCReader, Field
 
 
-starting_page_nr = 3900 # hier immer ändern! erledigt: 0, 300, 600, 900, 1200, 1500, 1800, 2500
+starting_page_nr = 6600 # hier immer ändern! erledigt: 0, 300, 600, 900, 1200, 1500, 1800, 2500
+# 6600 - 10000 auf dem Server.
 nr = 0
 out = open('records/add_zeros/substitution_records.mrc', 'wb')
 page_nr = 0
 empty_page = False
 while not empty_page:
     print(page_nr)
-    if page_nr == 2000:
+    if page_nr == 700:
         break
     url = u'https://zenon.dainst.org/api/v1/search?join=AND&lookfor0%5B%5D=*&illustration=-1&page=' + str(starting_page_nr + page_nr)
     page_nr += 1
