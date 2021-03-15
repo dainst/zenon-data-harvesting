@@ -76,7 +76,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, journal_pid_un
                 items_harvested.append(current_item)
     except Exception as e:
         write_error_to_logfile.write(e)
-        write_error_to_logfile.comment('Es konnten keine Artikel für Aegyptiaca geharvested werden.')
+        write_error_to_logfile.comment('Es konnten keine Artikel für ' + host_item_name + ' geharvested werden.')
         items_harvested, publication_dicts = [], []
     return publication_dicts, items_harvested
 
