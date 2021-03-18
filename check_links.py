@@ -25,8 +25,6 @@ with open('856-reportresults.csv', "r") as record_table:
                             webfile = urllib.request.urlopen("https://zenon.dainst.org/Record/" + record_id + "/Export?style=MARC")
                             new_reader = MARCReader(webfile, force_utf8=True)
                             for file in new_reader:
-                                if nr % 250 == 0:
-                                    out = open('records/check_links/records_to_check' + str(nr) + '.mrc', 'wb')
                                 out.write(file.as_marc21())
                                 nr += 1
                     except Exception as e:
