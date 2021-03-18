@@ -5,7 +5,7 @@ from datetime import datetime
 import json
 import aegyptiaca_modularized
 import antiquite_modularized
-# import athener_mitteilungen
+import athener_mitteilungen
 import berrgk_modularized
 # import bjb_modularized
 import BMCR_modularized
@@ -60,9 +60,9 @@ for harvesting_script in [aegyptiaca_modularized, antiquite_modularized, berrgk_
                           world_prehistory,
                           germania_modularized,
                           propylaeum_books,
-                          zephyrus_modularized
+                          zephyrus_modularized,
+                          athener_mitteilungen
                           ]:  # bjb_modularized
-                            # athener_mitteilungen,
     try:
         print(harvesting_script)
         new_return_string = harvesting_script.harvest(path)
