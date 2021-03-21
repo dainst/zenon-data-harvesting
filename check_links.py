@@ -17,6 +17,7 @@ with open('856-reportresults.csv', "r") as record_table:
             invalid_link = False
             for identifier in row[2].split():
                 if identifier[0] in ['h', 'w']:
+                    write_error_to_logfile.write(record_id)
                     if identifier[0:3] == 'www':
                         identifier = 'http://' + identifier
                     try:
