@@ -31,9 +31,9 @@ with open('856-reportresults.csv', "r") as record_table:
                                 nr += 1
                     except Exception as e:
                         write_error_to_logfile.write(e)
-                        write_error_to_logfile.comment('invalid but not 404' + identifier)
+                        write_error_to_logfile.comment('invalid but not 404 ' + identifier)
                         other_problems.append(record_id)
 
-write_error_to_logfile.write(other_problems)
+write_error_to_logfile.comment(other_problems)
 print(row_nr)
 print(nr)
