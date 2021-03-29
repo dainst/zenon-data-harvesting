@@ -5,29 +5,26 @@ from nameparser import HumanName
 from langdetect import detect
 import language_codes
 import spacy
-from datetime import datetime
 import json
 import re
 import write_error_to_logfile
 from harvest_records import harvest_records
+import gnd_request_for_cor
+import find_sysnumbers_of_volumes
+from datetime import datetime
 
-nlp_de = spacy.load('de_core_news_sm')
-nlp_en = spacy.load('en_core_web_sm')
-nlp_fr = spacy.load('fr_core_news_sm')
-nlp_es = spacy.load('es_core_news_sm')
-nlp_it = spacy.load('it_core_news_sm')
-nlp_nl = spacy.load('nl_core_news_sm')
-nlp_xx = spacy.load('xx_ent_wiki_sm')
+nlp_dict = {'de': 'de_core_news_sm', 'en': 'en_core_web_sm', 'fr': 'fr_core_news_sm',
+            'es': 'es_core_news_sm', 'it': 'it_core_news_sm', 'nl': 'nl_core_news_sm', 'xx': 'xx_ent_wiki_sm'}
 
-dateTimeObj = datetime.now()
-timestampStr = dateTimeObj.strftime("%d-%b-%Y")
 
-print('lala')
-def create_publication_dicts(last_item_harvested_in_last_session):
+# https://journals.ub.uni-heidelberg.de/index.php/ak/issue/archive
+def create_publication_dicts(last_item_harvested_in_last_session, *other):
     publication_dicts = []
-    issues_harvested = []
+    items_harvested = []
     try:
-        basic_url = 'https://journals.ub.uni-heidelberg.de/index.php/aegyp/issue/archive/'
+
+        volumes_sysnumbers =  find_sysnumbers_of_volumes.find_sysnumbers('000099473')
+        basic_url = 'https://journals.ub.uni-heidelberg.de/index.php/ak/issue/archive/'
         empty_page = False
         page = 0
         while not empty_page:
@@ -64,8 +61,8 @@ def create_publication_dicts(last_item_harvested_in_last_session):
                     issue_page = response.read().decode('utf-8')
                 issue_soup = BeautifulSoup(issue_page, 'html.parser')
                 volume_name = issue_soup.find('title').text.split('): ')[1].split('| ')[0].strip()
-                for article in issue_soup.find_all('div', class_='obj_article_summary'):
-                    article_url = article.find('div', class_='title').find('a')['href']
+                for article in [article_tag.find('a') for article_tag in issue_soup.find_all('h2', class_='title') if article_tag.find('a')]:
+                    article_url = article['href']
                     req = urllib.request.Request(article_url, data, headers)
                     with urllib.request.urlopen(req) as response:
                         issue_page = response.read().decode('utf-8')
@@ -80,16 +77,17 @@ def create_publication_dicts(last_item_harvested_in_last_session):
                                     "Neuerscheinungen", "Besprechungen"]) and category not in ["Sonstiges", "Literatur", "Editorial"]:
                             with open('publication_dict.json', 'r') as publication_dict_template:
                                 publication_dict = json.load(publication_dict_template)
-                            publication_dict['volume'] = volume
-                            publication_dict['rdacontent'] = 'txt'
-                            publication_dict['rdamedia'] = 'c'
-                            publication_dict['rdacarrier'] = 'cr'
                             publication_dict['authors_list'] = [HumanName(author_tag['content']).last + ', ' + HumanName(author_tag['content']).first
-                                                                for author_tag in article_soup.find_all('meta', attrs={'name': 'citation_author'})]
+                                                                if not gnd_request_for_cor.check_gnd_for_name(author_tag['content']) else author_tag['content'] for author_tag in article_soup.find_all('meta', attrs={'name': 'citation_author'})]
                             publication_dict['host_item']['name'] = volume_name
-                            publication_dict['host_item']['sysnumber'] = '001527029'
+
                             publication_dict['title_dict']['main_title'] = article_soup.find('meta', attrs={'name': 'citation_title'})['content']
                             publication_dict['publication_year'] = article_soup.find('meta', attrs={'name': 'citation_date'})['content'].split('/')[0]
+                            if publication_dict['publication_year'] not in volumes_sysnumbers:
+                                write_error_to_logfile.comment('Reviews von Gnomon konnten teilweise nicht geharvestet werden, da keine übergeordnete Aufnahme für das Jahr ' + publication_dict['publication_year'] + ' existiert.')
+                                write_error_to_logfile.comment('Bitte erstellen Sie eine neue übergeordnete Aufnahme für das Jahr ' + publication_dict['publication_year'] + '.')
+                                continue
+                            publication_dict['host_item']['sysnumber'] = volumes_sysnumbers[publication_dict['publication_year']]
                             if article_soup.find('meta', attrs={'name': 'citation_doi'}):
                                 publication_dict['doi'] = article_soup.find('meta', attrs={'name': 'citation_doi'})['content']
                             publication_dict['abstract_link'] = article_soup.find('meta', attrs={'name': 'citation_abstract_html_url'})['content']
@@ -98,24 +96,26 @@ def create_publication_dicts(last_item_harvested_in_last_session):
                             if article_soup.find('meta', attrs={'name': 'DC.Identifier.pageNumber'}):
                                 publication_dict['pages'] = 'p. ' + article_soup.find('meta', attrs={'name': 'DC.Identifier.pageNumber'})['content']
                             # publication_dict['retro_digitization_info'] = {'place_of_publisher': 'Heidelberg', 'publisher': 'Heidelberg UB',
-                            # 'date_published_online': re.findall(r'\d{4}', article_soup.find('div', class_='published').find('div', class_='value').text.strip())[0]}
+                                # 'date_published_online': re.findall(r'\d{4}', article_soup.find('div', class_='published').find('div', class_='value').text.strip())[0]}
                             publication_dict['rdacarrier'] = 'cr'
                             publication_dict['rdamedia'] = 'c'
                             publication_dict['rdacontent'] = 'txt'
                             publication_dict['LDR_06_07'] = 'ab'
                             publication_dict['field_006'] = 'm     o  d |      '
                             publication_dict['field_007'] = 'cr uuu   uuuuu'
-                            publication_dict['field_008_18-34'] = 'gr poo||||||   b|'
-                            publication_dict['fields_590'] = ['arom', '2020xhnxaegyp', 'Online publication']
+                            publication_dict['field_008_18-34'] = 'qr poo||||||   b|'
+                            publication_dict['fields_590'] = ['argk', '2021xhnxarkor', 'Online publication']
                             publication_dict['original_cataloging_agency'] = 'DE-16'
                             publication_dict['publication_etc_statement']['publication'] = {'place': 'Heidelberg',
                                                                                             'responsible': 'Propylaeum',
                                                                                             'country_code': 'gw '}
                             publication_dict['table_of_contents_link'] = issue_url
                             publication_dict['abstract_link'] = article_url
-                            publication_dict['field_300'] = '1 online resource'
+                            publication_dict['field_300'] = '1 online resource, ' + publication_dict['pages']
+                            publication_dict['force_300'] = True
                             publication_dict['default_language'] = language_codes.resolve(article_soup.find('meta', attrs={'name': 'DC.Language'})['content'])
                             publication_dict['do_detect_lang'] = False
+                            publication_dict['check_for_doublets_and_pars'] = True
                             if category == "Reviews":
                                 rev_authors = ''
                                 rev_editors = ''
@@ -126,20 +126,8 @@ def create_publication_dicts(last_item_harvested_in_last_session):
                                             rev_editors = title.split(editorship_word)[1]
                                     title = title.strip()
                                     lang = detect(title)
-                                    nlp = None
                                     if lang in ["de", "en", "fr", "it", "es", "nl"]:
-                                        if lang == "de":
-                                            nlp = nlp_de
-                                        elif lang == "en":
-                                            nlp = nlp_en
-                                        elif lang == "fr":
-                                            nlp = nlp_fr
-                                        elif lang == "it":
-                                            nlp = nlp_it
-                                        elif lang == "es":
-                                            nlp = nlp_es
-                                        elif lang == "nl":
-                                            nlp = nlp_nl
+                                        nlp = spacy.load(nlp_dict[lang])
                                         tagged_sentence = nlp(title)
                                         propn = False
                                         punct = False
@@ -166,7 +154,7 @@ def create_publication_dicts(last_item_harvested_in_last_session):
                                                             rev_authors = ent.text
                                                 break
                                     else:
-                                        nlp = nlp_xx
+                                        nlp = spacy.load(nlp_dict['xx'])
                                         tagged_sentence = nlp(title)
                                         for ent in tagged_sentence.ents:
                                             if ent.label_ == "PER":
@@ -177,11 +165,11 @@ def create_publication_dicts(last_item_harvested_in_last_session):
                                     if rev_editors:
                                         title = title.split(editorship_word)[0]
                                         title.strip()
-                                        rev_editors = [HumanName(edit).last + ', ' + HumanName(edit).first for edit in rev_editors.split(" und ")]
+                                        rev_editors = [HumanName(edit).last + ', ' + HumanName(edit).first if not gnd_request_for_cor.check_gnd_for_name(edit) else edit for edit in rev_editors.split(" und ")]
                                         rev_authors = ''
                                     if rev_authors:
                                         title = title.replace(rev_authors + ", ", "")
-                                        rev_authors = [HumanName(auth).last + ', ' + HumanName(auth).first for auth in rev_authors.split(" und ")]
+                                        rev_authors = [HumanName(auth).last + ', ' + HumanName(auth).first if not gnd_request_for_cor.check_gnd_for_name(auth) else auth for auth in rev_authors.split(" und ")]
                                     publication_dict['review_list'].append({'reviewed_title': title,
                                                                             'reviewed_authors': rev_authors,
                                                                             'reviewed_editors': rev_editors,
@@ -189,15 +177,18 @@ def create_publication_dicts(last_item_harvested_in_last_session):
                                                                             })
                                     publication_dict['review'] = True
                             publication_dicts.append(publication_dict)
+                            items_harvested.append(current_item)
     except Exception as e:
-        write_error_to_logfile.write(e)
-        publication_dicts = []
-        issues_harvested = []
-    return publication_dicts, issues_harvested
+            write_error_to_logfile.write(e)
+            write_error_to_logfile.comment('Es konnten keine Artikel für Archäologisches Korrespondenzblatt geharvested werden.')
+            items_harvested, publication_dicts = [], []
+    return publication_dicts, items_harvested
 
 
-if __name__ == 'main':
-    dateTimeObj = datetime.now()
-    timestampStr = dateTimeObj.strftime("%d-%b-%Y")
-    print('harvest')
-    harvest_records('records/aegyptiaca/aegyptiaca' + timestampStr + '.mrc', 'aegyptiaca', 'Aegyptiaca', create_publication_dicts)
+def harvest(path):
+    return_string = harvest_records(path, 'ak', 'Archäologisches Korrespondenzblatt', create_publication_dicts)
+    return return_string
+
+
+if __name__ == '__main__':
+    harvest_records('records/ak/', 'ak', 'Archäologisches Korrespondenzblatt', create_publication_dicts)
