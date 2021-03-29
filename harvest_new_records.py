@@ -4,6 +4,7 @@ import write_error_to_logfile
 from datetime import datetime
 import json
 import aegyptiaca_modularized
+import archaeologisches_korrespondenzblatt_modularized
 import antiquite_modularized
 import athener_mitteilungen
 import berrgk_modularized
@@ -14,7 +15,6 @@ import efb_modularized
 import eperiodica_akb_002_modularized
 import eperiodica_bat_001_modularized
 import eperiodica_snr_003_modularized
-import germania_modularized
 import gnomon_modularized
 import hsozkult_modularized
 import lucentum_modularized
@@ -44,7 +44,9 @@ if new_dir not in os.listdir(path):
     os.mkdir(path + new_dir)
 path_for_cumulus = 'records/' + new_dir
 path = 'records/' + new_dir + '/'
-for harvesting_script in [aegyptiaca_modularized, antiquite_modularized, berrgk_modularized, BMCR_modularized,
+for harvesting_script in [aegyptiaca_modularized, antiquite_modularized,
+                          archaeologisches_korrespondenzblatt_modularized,
+                          berrgk_modularized, BMCR_modularized,
                           cipeg_modularized,
                           lucentum_modularized,
                           efb_modularized,
@@ -58,13 +60,11 @@ for harvesting_script in [aegyptiaca_modularized, antiquite_modularized, berrgk_
                           sardinia_corsica_baleares_modularized,
                           kokalos,
                           world_prehistory,
-                          germania_modularized,
                           propylaeum_books,
                           zephyrus_modularized,
                           athener_mitteilungen
-                          ]:  # bjb_modularized
+                          ]:
     try:
-        print(harvesting_script)
         new_return_string = harvesting_script.harvest(path)
         return_string += new_return_string
         write_error_to_logfile.comment(new_return_string)
