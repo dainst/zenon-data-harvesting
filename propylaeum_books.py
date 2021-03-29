@@ -15,6 +15,8 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
         empty_page = False
         page_nr = 1
         while not empty_page:
+            if page_nr > 2:
+                break
             url = 'https://books.ub.uni-heidelberg.de/propylaeum/catalog/index?page_nr=' + str(page_nr)
             page_nr += 1
             req = urllib.request.Request(url)
@@ -44,7 +46,6 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                     print(current_item)
                     publication_date = publication_date[2]
                     if current_item > last_item_harvested_in_last_session:
-                        current_item = current_item - 1
                         if isbn_pdf:
                             doi_links = [link for link in [a['href'] for a in ebook_soup.find_all('a') if 'href' in a.attrs] if 'https://doi.org/' in link]
                             doi_links = [link for link in doi_links if link_is_valid(link)]
