@@ -86,7 +86,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                             if publication_dict['publication_year'] not in volumes_sysnumbers:
                                 write_error_to_logfile.comment('Reviews von Gnomon konnten teilweise nicht geharvestet werden, da keine übergeordnete Aufnahme für das Jahr ' + publication_dict['publication_year'] + ' existiert.')
                                 write_error_to_logfile.comment('Bitte erstellen Sie eine neue übergeordnete Aufnahme für das Jahr ' + publication_dict['publication_year'] + '.')
-                                continue
+                                break
                             publication_dict['host_item']['sysnumber'] = volumes_sysnumbers[publication_dict['publication_year']]
                             if article_soup.find('meta', attrs={'name': 'citation_doi'}):
                                 publication_dict['doi'] = article_soup.find('meta', attrs={'name': 'citation_doi'})['content']
