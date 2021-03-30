@@ -2,46 +2,65 @@ import urllib.parse
 import urllib.request
 from bs4 import BeautifulSoup
 import re
-import create_new_record
 import json
 import write_error_to_logfile
 from datetime import datetime, timedelta
-import find_existing_doublets
 from langdetect import detect
 import language_codes
 import find_sysnumbers_of_volumes
 from harvest_records import harvest_records
 import find_reviewed_title
+import os
 
 
 
 def fill_up(*other):
     try:
-        with open('records/hsozkult/hsozkult_as_reserve.json', 'r') as hsozkult_as_reserve:
-            as_reserve = json.load(hsozkult_as_reserve)
+
+            # with open('records/hsozkult/hsozkult_as_reserve.json', 'r') as hsozkult_as_reserve:
+                # as_reserve = json.load(hsozkult_as_reserve)
         dateTimeObj = datetime.now()
         timestampStr = dateTimeObj.strftime("%d-%b-%Y")
         pub_nr = 0
         saved_pub_nr = 1
         new_reserve = []
         publication_dicts = []
-        for publication_dict in as_reserve:
-            publication_dict['check_for_doublets_and_pars'] = True
-            reviews = []
-            for reviewed_pub in publication_dict['review_list']:
-                if reviewed_pub['reviewed_title']:
-                    reviews += find_reviewed_title.find(reviewed_pub, publication_dict['publication_year'], 'en')[0]
-                    if reviews:
-                        publication_dicts.append(publication_dict)
-                        print(publication_dict)
-                        pub_nr += 1
-                    else:
-                        if int(publication_dict['publication_year']) >= (int(timestampStr[-4:]) - 3):
-                            new_reserve.append(publication_dict)
-                        saved_pub_nr += 1
-        with open('records/hsozkult/hsozkult_as_reserve.json', 'w') as hsozkult_as_reserve:
+        seen = []
+        file_nr = 0
+        for reserve_file in os.listdir('records/hsozkult'):
+            if file_nr >= 5:
+                break
+            print(reserve_file)
+            if 'hsozkult_as_reserve_' not in reserve_file:
+                continue
+            file_nr += 1
+            with open('records/hsozkult/' + reserve_file, 'r') as hsozkult_as_reserve:
+                as_reserve = json.load(hsozkult_as_reserve)
+            for publication_dict in as_reserve:
+                if publication_dict['html_links'][0] in seen:
+                    print('seen: ', publication_dict['html_links'][0])
+                    continue
+                seen.append(publication_dict['html_links'][0])
+                publication_dict['check_for_doublets_and_pars'] = True
+                reviews = []
+                for reviewed_pub in publication_dict['review_list']:
+                    if reviewed_pub['reviewed_title']:
+                        reviews += find_reviewed_title.find(reviewed_pub, publication_dict['publication_year'], 'en')[0]
+                        if reviews:
+                            publication_dict["force_epub"] = False
+                            publication_dict["edit_names"] = False
+                            publication_dict["host_item_is_volume"] = True
+                            publication_dicts.append(publication_dict)
+                            print(publication_dict)
+                            pub_nr += 1
+                        else:
+                            if int(publication_dict['publication_year']) >= (int(timestampStr[-4:]) - 2):
+                                new_reserve.append(publication_dict)
+                            saved_pub_nr += 1
+        with open('records/hsozkult/hsozkult_as_reserve_new.json', 'w') as hsozkult_as_reserve:
             json.dump(new_reserve, hsozkult_as_reserve)
         print('Es wurden', pub_nr, 'neue Records für HSozKult erstellt.')
+        return publication_dicts, []
     except Exception as e:
         write_error_to_logfile.write(e)
 
@@ -52,14 +71,10 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
     try:
         dateTimeObj = datetime.now()
         volumes_sysnumbers = find_sysnumbers_of_volumes.find_sysnumbers('000810356')
-        year_to_save_from = int(dateTimeObj.strftime("%Y")) - 3
         page = 1
         harvest_until = int((datetime.now() - timedelta(days=7)).strftime('%Y%m%d'))
         empty_review_page = False
         pub_nr = 0
-        saved_pub_nr = 0
-        with open('records/hsozkult/hsozkult_as_reserve.json', 'r') as hsozkult_as_reserve:
-            as_reserve = json.load(hsozkult_as_reserve)
         basic_url = 'https://www.hsozkult.de/publicationreview/page?page='
         while not empty_review_page:
             if dateTimeObj.strftime("%Y") not in volumes_sysnumbers:
@@ -158,27 +173,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                 if reviews:
                     pub_nr += 1
                     publication_dicts.append(publication_dict)
-                else:
-                    if int(year_of_publication) >= year_to_save_from:
-                        language = publication_dict['default_language']
-                        if len(re.findall(r'\w', publication_dict['text_body_for_lang_detection'])) >= 50:
-                            try:
-                                language = \
-                                    language_codes.resolve(detect(publication_dict['text_body_for_lang_detection']))
-                            except:
-                                language = publication_dict['default_language']
-                            publication_dict['default_language'] = language
-                        else:
-                            publication_dict['default_language'] = language
-                            publication_dict['do_detect_lang'] = False
-                            publication_dict['text_body_for_lang_detection'] = ''
-                            publication_dict['check_for_doublets_and_pars'] = False
-                        as_reserve.append(publication_dict)
-                        saved_pub_nr += 1
-                        with open('records/hsozkult/hsozkult_as_reserve.json', 'w') as hsozkult_as_reserve:
-                            json.dump(as_reserve, hsozkult_as_reserve)
-                            write_error_to_logfile.comment('Es wurden ' + str(saved_pub_nr) + ' Rezensionen für die spätere Verwendung gespeichert.')
-                items_harvested.append(current_item)
+                    items_harvested.append(current_item)
     except Exception as e:
         write_error_to_logfile.write(e)
         write_error_to_logfile.comment('Es konnten keine Artikel für HSozKult geharvested werden.')
@@ -192,4 +187,4 @@ def harvest(path):
 
 
 if __name__ == '__main__':
-    harvest_records('records/hsozkult/hsozkult_from_reserve/', 'hsozkult', 'HSozKult', fill_up)
+    harvest_records('records/hsozkult/hsozkult_from_reserve/', 'hsozkult', 'HSozKult', create_publication_dicts)
