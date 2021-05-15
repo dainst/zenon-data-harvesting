@@ -35,10 +35,11 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
         journal_soup = BeautifulSoup(journal_page, 'html.parser')
         issues = journal_soup.find_all('div', class_='wifeo_pagesousmenu')
         for issue in issues:
-            print(issues)
+            if issue.find('a')['href'] == '#':
+                continue
             issue_url = basic_url+issue.find('a')['href']+'#mw999'
             year = re.findall(r'\d{4}', issue.find('a')['href'])[0]
-            if dateTimeObj.strftime("%Y") not in volumes_sysnumbers:
+            if year not in volumes_sysnumbers:
                 print('Artikel von Mediterranean Archaeology and Archaeometry (MAA) konnten teilweise nicht geharvestet werden, da keine übergeordnete Aufnahme für das Jahr',
                       year, 'existiert.')
                 print('Bitte erstellen Sie eine neue übergeordnete Aufnahme für das Jahr', year, '.')
