@@ -256,6 +256,8 @@ def link_is_valid(link):
                 link_page = response.read()
             return True
         except Exception as e:
+            if str(e) == 'HTTP Error 403: Forbidden':
+                return True
             if request_nr == 4:
                 write_error_to_logfile.write(e)
                 write_error_to_logfile.comment(link)
@@ -400,7 +402,7 @@ def add_subject_from_additional_physical_form_entry(additional_physical_form_ent
                 all_par_subjects += [json.dumps(field) for field in file.as_dict()['fields'] if any(tag in field for tag in ['600', '610', '611', '630', '647', '648', '650', '651'])]
         for subject_field in all_par_subjects:
             subject_field = json.loads(subject_field)
-            subfield_list = [ entry for subfield in subject_field[list(subject_field.keys())[0]]['subfields']
+            subfield_list = [entry for subfield in subject_field[list(subject_field.keys())[0]]['subfields']
                     for entry in [list(subfield.keys())[0], subfield[list(subfield.keys())[0]]]]
             recent_record.add_field(Field(tag=list(subject_field.keys())[0], indicators=[subject_field[list(subject_field.keys())[0]]['ind1'], subject_field[list(subject_field.keys())[0]]['ind2']],
                                           subfields=subfield_list))
@@ -874,6 +876,11 @@ def create_new_record(out, publication_dict):
                                                   subfields=['z', link['public_note'], 'u', link['url']]))
             if publication_dict['host_item']['sysnumber']:
                 create_773(recent_record, publication_dict, publication_dict['volume'], publication_dict['review'], publication_dict['response'])
+                recent_record.add_field(Field(tag='942', indicators=[' ', ' '],
+                                              subfields=['2', 'z', 'c', 'AN']))
+            else:
+                recent_record.add_field(Field(tag='942', indicators=[' ', ' '],
+                                              subfields=['2', 'z', 'c', 'BK']))
             for additional_physical_form_entry in additional_physical_form_entrys:
                 recent_record.add_field(Field(tag='776', indicators=['0', '8'],
                                               subfields=['i', additional_physical_form_entry['subfield_i'], 't', recent_record['245']['a'].strip(' / ').strip(' : '), 'w',
