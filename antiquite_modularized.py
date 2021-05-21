@@ -25,7 +25,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
         while True:
             request_nr += 1
             req = urllib.request.Request(basic_url + next_cursor)
-            print(basic_url + next_cursor)
+            #print(basic_url + next_cursor)
             with urllib.request.urlopen(req) as response:
                 response = response.read()
             response = response.decode('utf-8')

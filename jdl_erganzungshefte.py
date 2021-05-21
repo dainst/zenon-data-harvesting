@@ -21,7 +21,7 @@ def create_245_and_246(recent_record, title, nonfiling_characters, author_nr):
     recent_record.add_field(Field(tag='245', indicators=[str(author_nr), nonfiling_characters], subfields=['a', title]))
 
 def determine_nonfiling_characters(recent_record, title, date_of_publication, language):
-    print(date_of_publication, language)
+    #print(date_of_publication, language)
     nonfiling_characters = 0
     recent_record.add_field(Field(tag='041', indicators=['1', ' '], subfields=['a', language]))
     if language in language_articles.keys():
@@ -90,7 +90,7 @@ def create_new_record(item, out, volume_url, volume_year, date_published_online,
     recent_record.add_field(Field(tag='590', indicators=[' ', ' '], subfields=['a', 'arom']))
     recent_record.add_field(Field(tag='590', indicators=[' ', ' '], subfields=['a', '2019xhnxjdi']))
     recent_record.add_field(Field(tag='590', indicators=[' ', ' '], subfields=['a', 'online publication']))
-    print(title)
+    #print(title)
     nonfiling_characters = determine_nonfiling_characters(recent_record, title, date_of_publication, language)
     create_245_and_246(recent_record, title, nonfiling_characters, author_nr)
     if doi != None:
@@ -128,7 +128,7 @@ def create_new_record(item, out, volume_url, volume_year, date_published_online,
             topic_authority = topic['authority']
             recent_record.add_field(Field(tag='650', indicators=[' ', '7'],
                                           subfields=['a', topic_name, '2', topic_authority]))
-    print(volume, volume_year, volume_url)
+    #print(volume, volume_year, volume_url)
     if int(date_of_publication)<1919:
         recent_record.add_field(Field(tag='264', indicators=[' ', '1'],
                                       subfields=['a', 'Berlin', 'b', 'Georg Reimer', 'c', date_of_publication]))
@@ -170,7 +170,7 @@ volume_years = [item.text for item in yearbook_page.find('table', class_='tabell
 volume_urls = [item['href'] for item in yearbook_page.find('table', class_='tabelle-baendeliste').find_all('a')]
 volumes_already_processed = []
 for volume_url in volume_urls:
-    print(volume_url)
+    #print(volume_url)
     user_agent = 'Mozilla/5.0 (X11; Linux x86_64; rv:66.0)'
     values = {'name': 'Helena Nebel',
               'location': 'Berlin',
@@ -184,7 +184,7 @@ for volume_url in volume_urls:
     volume_page = volume_page.decode('utf-8')
     volume_soup = BeautifulSoup(volume_page, 'html.parser')
     date_published_online = volume_soup.find('div', id='publikationsdatum').text.strip().split()[-1]
-    print(date_published_online)
+    #print(date_published_online)
     volume_year=volume_years[record_nr].split('(')[0].split(', ')[-1]
     mets_url=volume_url.split("?")[0]+'/mets'
     webFile = urllib.request.urlopen(mets_url)

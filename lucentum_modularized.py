@@ -22,7 +22,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
         year = 2020
         while year > (current_year - 2):
             basic_url = 'https://doaj.org/api/v1/search/articles/bibjson.year:' + str(year) + '%20eissn:1989-9904?page=1&pageSize=100'
-            print(basic_url)
+            #print(basic_url)
             year -= 1
             req = urllib.request.Request(basic_url)
             with urllib.request.urlopen(req) as response:
@@ -40,7 +40,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                     write_error_to_logfile.comment('Bitte erstellen Sie eine neue übergeordnete Aufnahme für das Jahr ' + year_of_publication + '.')
                     break
                 current_item = int(year_of_publication + volume.zfill(3) + issue.zfill(2))
-                print(current_item)
+                #print(current_item)
                 if current_item > last_item_harvested_in_last_session:
                     if item['bibjson']['title'] not in ['Lucentum', 'Créditos', 'Índice', 'Index', 'Índice analítico']:
                         with open('publication_dict.json', 'r') as publication_dict_template:
@@ -79,7 +79,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                             response = response.read()
                         response = response.decode('utf-8')
                         volume_soup = BeautifulSoup(response, 'html.parser')
-                        print(basic_url)
+                        #print(basic_url)
                         if [pages.text.replace('\n', '').replace('\t', '') for pages in volume_soup.find('div', id='content').find_all('div', class_='tocPages') if pages.text.replace('\n', '').replace('\t', '').find(item['bibjson']['start_page']) == 0]:
                             pages = [pages.text.replace('\n', '').replace('\t', '') for pages in volume_soup.find('div', id='content').find_all('div', class_='tocPages') if pages.text.replace('\n', '').replace('\t', '').split('-')[0] == item['bibjson']['start_page']][0]
                             publication_dict['field_300'] = '1 online resource, pp. ' + pages

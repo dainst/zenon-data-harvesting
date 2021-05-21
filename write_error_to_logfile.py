@@ -17,7 +17,7 @@ logger = logging.getLogger()
 # logger default setzen?
 
 def write(e):
-    exc_type, exc_obj, exc_tb = sys.exc_info()
+    exc_type, _exc_obj, exc_tb = sys.exc_info()
     fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
     error_message = 'Error! Code: {c}, Message, {m}, Type, {t}, File, {f}, Line {line}'.format(c=type(e).__name__, m=str(e), t=exc_type, f=fname, line=exc_tb.tb_lineno)
     logger.debug(error_message)

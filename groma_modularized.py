@@ -18,7 +18,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
     try:
         dateTimeObj = datetime.now()
         volumes_sysnumbers = find_sysnumbers_of_volumes.find_sysnumbers('001597435')
-        print(volumes_sysnumbers)
+        #print(volumes_sysnumbers)
         url = 'http://groma.unibo.it/issue.all'
         issue_req = urllib.request.Request(url)
         with urllib.request.urlopen(issue_req) as issue_response:
@@ -42,7 +42,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                         article = article_response.read()
                     article = article.decode('utf-8')
                     article_soup = BeautifulSoup(article, 'html.parser')
-                    # print(article_soup)
+                    # #print(article_soup)
                     with open('publication_dict.json', 'r') as publication_dict_template:
                         publication_dict = json.load(publication_dict_template)
                     publication_dict['title_dict']['main_title'] = article_soup.find('meta', attrs={'name': 'DC.Title'})['content']

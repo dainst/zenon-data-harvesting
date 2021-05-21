@@ -137,7 +137,7 @@ def create_new_record(adjusted_parts_of_title, out, toc, pdf, pages, issue, year
                                       subfields=['a', 'ANA', 'b', volumes_sysnumbers[year], 'l', 'DAI01',
                                                  'm', title, 'n', 'Mediterranean Archaeology & Archaeometry, ' +volume+" ("+year+")", 'x', '2241-8121']))
         recent_record.add_field(Field(tag='300', indicators=[' ', ' '], subfields=['a', 'Fasc.'+issue_nr]))
-        print(recent_record)
+        #print(recent_record)
         out.write(recent_record.as_marc21())
     return titles_processed
 

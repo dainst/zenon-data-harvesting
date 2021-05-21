@@ -55,7 +55,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                 if current_item > last_item_harvested_in_last_session:
                     with open('publication_dict.json', 'r') as publication_dict_template:
                         publication_dict = json.load(publication_dict_template)
-                    print(title_and_author_info)
+                    #print(title_and_author_info)
                     title = title_and_author_info.find('em').text if title_and_author_info.find('em') else None
                     if not title:
                         continue

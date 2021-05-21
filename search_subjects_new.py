@@ -117,22 +117,22 @@ def check_similarity_and_create_hierarchy(possible_loc, possible_loc_before_pars
                     all_ancestors_for_comparing.append(id_of_ancestor)
                 if 'ancestors' in result:
                     if all_ancestors_for_comparing[1:]!=result['ancestors']:
-                        print('Fehlerhafte Hierachie:', result['@id'])
-                        print('In den Daten:', result['ancestors'])
-                        print('Ermittelt:', all_ancestors_for_comparing)
+                        #print('Fehlerhafte Hierachie:', result['@id'])
+                        #print('In den Daten:', result['ancestors'])
+                        #print('Ermittelt:', all_ancestors_for_comparing)
                 if ('ancestors' not in result) and (result['parent']!="https://gazetteer.dainst.org/place/2042600"):
-                    print(result['@id'], 'has no ancestors')
+                    #print(result['@id'], 'has no ancestors')
             else:
-                print(result['@id'], 'has no parent')
+                #print(result['@id'], 'has no parent')
             if coordinates is None:
-                print('keine Koordinaten gefunden.', result['@id'])
+                #print('keine Koordinaten gefunden.', result['@id'])
             ids[result['@id']]={'count':str(text_to_process.count(possible_loc_before_parsing)), 'possible_loc':possible_loc_before_parsing, 'coordinates':coordinates, 'ancestors':all_ancestors}
         return ids, locs
     except Exception as e:
-        print('Error! Code: {c}, Message, {m}'.format(c = type(e).__name__, m = str(e)))
+        #print('Error! Code: {c}, Message, {m}'.format(c = type(e).__name__, m = str(e)))
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print(exc_type, fname, exc_tb.tb_lineno)
+        #print(exc_type, fname, exc_tb.tb_lineno)
 
 def check_locs(list_of_possible_locs, ids, locs):
     for possible_loc in list_of_possible_locs:
@@ -177,13 +177,13 @@ def check_locs(list_of_possible_locs, ids, locs):
                                             break
 
         except Exception as e:
-            print(search_url)
-            print('Error! Code: {c}, Message, {m}'.format(c = type(e).__name__, m = str(e)))
+            #print(search_url)
+            #print('Error! Code: {c}, Message, {m}'.format(c = type(e).__name__, m = str(e)))
             exc_type, exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            print(exc_type, fname, exc_tb.tb_lineno)
+            #print(exc_type, fname, exc_tb.tb_lineno)
         #if found_items>1:
-            #print(found_items, search_url)
+            ##print(found_items, search_url)
     return locs, ids
 
 xml=open('hierarchy.rdf', 'r')
@@ -193,7 +193,7 @@ subject_dict={}
 #Wikipedia überprüfen, ob der Ortsname 1. eindeutig vergeben ist und Koordinaten vorhanden sind.
 #for subject in subjects:
     #if subject.find('skos:narrower')!=None:
-        #print(subject)
+        ##print(subject)
         #xml erstellen, das hierarchische Verhältnisse abbildet!!!
             #translator= Translator(to_lang="en", from_lang="de")
             #stemmed_subject_eng=stemmer.stem(RegexpTokenizer(r'\w+').tokenize(subject.find('skos:prefLabel').text)[0])
@@ -203,14 +203,14 @@ tf_dict={}
 file_nr=0
 #for file in os.listdir("eperiodica_text_files"):
 for file in os.listdir('efb_text_files'):
-    print(file)
+    #print(file)
     possible_locs=[]
     locs={}
     ids={}
     if file_nr>1:
         break
     file_nr+=1
-    #print(file)
+    ##print(file)
     tf_dict[file]={}
     text_to_process=(open('efb_text_files/'+file, 'r')).read()
     text_to_process=text_to_process.replace("-\n", "")
@@ -265,7 +265,7 @@ for file in os.listdir('efb_text_files'):
     for noun in nouns:
         if noun not in nouns_dict:
             nouns_dict[noun]=nouns.count(noun)
-    #print(sorted(nouns_dict.items(), key=lambda x:x[1], reverse=True))
+    ##print(sorted(nouns_dict.items(), key=lambda x:x[1], reverse=True))
     lemmata ={}
     doc = nlp(text_to_process)
     for token in doc:
@@ -312,10 +312,10 @@ for file in os.listdir('efb_text_files'):
         median_x = mean([all_points_median_and_stdev[item][0] for item in all_points_median_and_stdev])
         median_y = mean([all_points_median_and_stdev[item][1] for item in all_points_median_and_stdev])
         median_tuple = (median_x, median_y)
-    print(median_tuple)
-    [print(item, get_distance_of_coordinates(all_points_median_and_stdev[item], median_tuple)) for item in all_points_median_and_stdev]
+    #print(median_tuple)
+    [#print(item, get_distance_of_coordinates(all_points_median_and_stdev[item], median_tuple)) for item in all_points_median_and_stdev]
     dist = mean([get_distance_of_coordinates(all_points_median_and_stdev[item], median_tuple) for item in all_points_median_and_stdev])
-    print(dist)
+    #print(dist)
     #hier jetzt aus den einzelnen Items alle rausnehmen, die zu weit entfernt sind, dann wieder mitteln, nochmal rausnehmen, dann alle items rausnehmen, die zu weit weg sind.
 
 
@@ -353,14 +353,14 @@ for file in os.listdir('efb_text_files'):
                     dist = math.sqrt((point[0]-median_tuple[0])**2+(point[1]-median_tuple[1])**2)
                     ...
                 #all_distances=[get_distance_of_point_from_center(ids_sorted_by_possible_locs[item][loc]['coordinates'], center) for loc in ids_sorted_by_possible_locs[item]]
-                #print(harmonic_mean((all_distances)))
+                ##print(harmonic_mean((all_distances)))
                 #alle nehmen, die weniger als die Standardabweichung vom bereinigten Mittelwert entfernt sind.
                 #hier überprüfen, ob selber Ahne!
                 #alle rauswerfen, die weiter als Standardabweichung vom Mittelpunkt entfernt sind.
-            #print(provisional_new_ids)
-    #print()
+            ##print(provisional_new_ids)
+    ##print()
     #for item in new_ids:
-        #print(item, new_ids[item])
+        ##print(item, new_ids[item])
     #für jeden Ort die möglichen Treffer vergleichen und den besten auswählen (z.B. durch Ausschluss von weiter entfernten?)
 
 '''
@@ -368,7 +368,7 @@ for file in os.listdir('efb_text_files'):
     for loc in locs:
         if loc not in locs_dict:
             locs_dict[loc]=text_to_process.count(loc)
-    #print(sorted(locs_dict.items(), key=lambda x:x[1], reverse=True))
+    ##print(sorted(locs_dict.items(), key=lambda x:x[1], reverse=True))
     for loc in locs_dict:
         tf=(locs_dict[loc]/text_length)
         tf_dict[file][loc]=tf
@@ -388,5 +388,5 @@ for file in os.listdir('efb_text_files'):
         #tf_idf_max=max(tf_idf[file].values())
         #avg_tf_idf=sum(tf_idf[file].values())/len(tf_idf[file].values())
         for term in tf_dict[file]:
-            print(file, term, tf_idf[file][term], idf[term], tf_dict[file][term])
+            #print(file, term, tf_idf[file][term], idf[term], tf_dict[file][term])
 '''

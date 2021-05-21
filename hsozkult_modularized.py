@@ -30,7 +30,7 @@ def fill_up(*other):
         for reserve_file in os.listdir('records/hsozkult'):
             if file_nr >= 5:
                 break
-            print(reserve_file)
+            #print(reserve_file)
             if 'hsozkult_as_reserve_' not in reserve_file:
                 continue
             file_nr += 1
@@ -38,7 +38,7 @@ def fill_up(*other):
                 as_reserve = json.load(hsozkult_as_reserve)
             for publication_dict in as_reserve:
                 if publication_dict['html_links'][0] in seen:
-                    print('seen: ', publication_dict['html_links'][0])
+                    #print('seen: ', publication_dict['html_links'][0])
                     continue
                 seen.append(publication_dict['html_links'][0])
                 publication_dict['check_for_doublets_and_pars'] = True
@@ -51,7 +51,7 @@ def fill_up(*other):
                             publication_dict["edit_names"] = False
                             publication_dict["host_item_is_volume"] = True
                             publication_dicts.append(publication_dict)
-                            print(publication_dict)
+                            #print(publication_dict)
                             pub_nr += 1
                         else:
                             if int(publication_dict['publication_year']) >= (int(timestampStr[-4:]) - 2):
@@ -59,7 +59,7 @@ def fill_up(*other):
                             saved_pub_nr += 1
         with open('records/hsozkult/hsozkult_as_reserve_new.json', 'w') as hsozkult_as_reserve:
             json.dump(new_reserve, hsozkult_as_reserve)
-        print('Es wurden', pub_nr, 'neue Records für HSozKult erstellt.')
+        #print('Es wurden', pub_nr, 'neue Records für HSozKult erstellt.')
         return publication_dicts, []
     except Exception as e:
         write_error_to_logfile.write(e)

@@ -416,41 +416,41 @@ def check_publication_dict_for_completeness_and_validity(publication_dict):
         for key in publication_dict_template:
             if key not in publication_dict:
                 write_error_to_logfile.comment('Statement ' + key + ' missing in publication dict.')
-                print('Statement ' + key + ' missing in publication dict.')
+                #print('Statement ' + key + ' missing in publication dict.')
                 validity = False
         for key in publication_dict:
             if key not in publication_dict_template:
                 write_error_to_logfile.comment('Statement' + key + 'may not appear in publication dict.')
-                print('Statement' + key + 'may not appear in publication dict.')
+                #print('Statement' + key + 'may not appear in publication dict.')
                 validity = False
         if not publication_dict['title_dict']['main_title'] and not publication_dict['review'] and not publication_dict['response']:
             write_error_to_logfile.comment('Main title has to be specified.')
-            print('Main title has to be specified.')
+            #print('Main title has to be specified.')
             validity = False
         for key in publication_dict['title_dict']:
             if type(publication_dict['title_dict'][key]).__name__ != 'str' and key != 'parallel_titles':
                 write_error_to_logfile.comment(key.capitalize() + 'has to be of type string but is' + type(publication_dict['title_dict'][key]).__name__ + '.')
-                print(key.capitalize() + 'has to be of type string but is' + type(publication_dict['title_dict'][key]).__name__ + '.')
+                #print(key.capitalize() + 'has to be of type string but is' + type(publication_dict['title_dict'][key]).__name__ + '.')
                 validity = False
             if key == 'parallel_titles' and type(publication_dict['title_dict'][key]).__name__ != 'list':
                 write_error_to_logfile.comment(key.capitalize() + 'has to be of type list but is' + type(publication_dict['title_dict'][key]).__name__ + '.')
-                print(key.capitalize() + 'has to be of type list but is' + type(publication_dict['title_dict'][key]).__name__ + '.')
+                #print(key.capitalize() + 'has to be of type list but is' + type(publication_dict['title_dict'][key]).__name__ + '.')
                 validity = False
         for responsible_persons_list in ['authors_list', 'editors_list']:
             if type(publication_dict[responsible_persons_list]).__name__ != 'list':
                 write_error_to_logfile.comment(responsible_persons_list.capitalize() + 'has to be of type list but is' + type(publication_dict[responsible_persons_list]).__name__ + '.')
-                print(responsible_persons_list.capitalize() + 'has to be of type list but is' + type(publication_dict[responsible_persons_list]).__name__ + '.')
+                #print(responsible_persons_list.capitalize() + 'has to be of type list but is' + type(publication_dict[responsible_persons_list]).__name__ + '.')
                 validity = False
         for link in ['abstract_link', 'table_of_contents_link']:
             if publication_dict[link]:
                 if type(publication_dict[link]).__name__ != 'str':
                     write_error_to_logfile.comment(link.capitalize() + 'has to be of type string but is' + type(publication_dict[link]).__name__ + '.')
-                    print(link.capitalize() + 'has to be of type string but is' + type(publication_dict[link]).__name__ + '.')
+                    #print(link.capitalize() + 'has to be of type string but is' + type(publication_dict[link]).__name__ + '.')
                     validity = False
                 else:
                     if not link_is_valid(publication_dict[link]):
                         write_error_to_logfile.comment('Link' + publication_dict[link] + 'is not valid.')
-                        print('Link' + publication_dict[link] + 'is not valid.')
+                        #print('Link' + publication_dict[link] + 'is not valid.')
                         validity = False
         if not publication_dict['pdf_links'] + publication_dict['html_links']:
             if publication_dict['field_007']:
@@ -459,190 +459,190 @@ def check_publication_dict_for_completeness_and_validity(publication_dict):
                         validity = True
                     else:
                         write_error_to_logfile.comment('Records of online resources have to have a link to the online resource.')
-                        print('Records of online resources have to have a link to the online resource.')
+                        #print('Records of online resources have to have a link to the online resource.')
                         validity = False
         for link in publication_dict['pdf_links'] + publication_dict['html_links']:
             if type(link).__name__ != 'str':
                 write_error_to_logfile.comment('Link has to be of type string but is' + type(link).__name__ + '.')
-                print('Link has to be of type string but is' + type(link).__name__ + '.')
+                #print('Link has to be of type string but is' + type(link).__name__ + '.')
                 validity = False
             else:
                 if not link_is_valid(link):
                     write_error_to_logfile.comment('Link' + link + 'is not valid')
-                    print('Link' + link + 'is not valid')
+                    #print('Link' + link + 'is not valid')
                     validity = False
         for link in publication_dict['other_links_with_public_note']:
             if link['url']:
                 if type(link['url']).__name__ != 'str':
                     write_error_to_logfile.comment('Link has to be of type string but is' + type(link['url']).__name__ + '.')
-                    print('Link has to be of type string but is' + type(link['url']).__name__ + '.')
+                    #print('Link has to be of type string but is' + type(link['url']).__name__ + '.')
                     validity = False
                 else:
                     if not link_is_valid(link['url']):
                         write_error_to_logfile.comment('Link' + link + 'is not valid')
-                        print('Link' + link + 'is not valid')
+                        #print('Link' + link + 'is not valid')
                         validity = False
                 if type(link['public_note']).__name__ != 'str':
                     write_error_to_logfile.comment('Public note has to be of type string but is' + type(link['public_note']).__name__ + '.')
-                    print('Public note has to be of type string but is' + type(link['public_note']).__name__ + '.')
+                    #print('Public note has to be of type string but is' + type(link['public_note']).__name__ + '.')
                     validity = False
         if publication_dict['doi']:
             if type(publication_dict['doi']).__name__ != 'str':
                 write_error_to_logfile.comment('DOI has to be of type string but is' + type(publication_dict['doi']).__name__ + '.')
-                print('DOI has to be of type string but is' + type(publication_dict['doi']).__name__ + '.')
+                #print('DOI has to be of type string but is' + type(publication_dict['doi']).__name__ + '.')
                 validity = False
             #if not doi_is_valid(publication_dict['doi']):
                 #write_error_to_logfile.comment('DOI' + publication_dict['doi'] + 'is not valid')
-                #print('DOI' + publication_dict['doi'] + 'is not valid')
+                ##print('DOI' + publication_dict['doi'] + 'is not valid')
                 #validity = False
         if publication_dict['urn']:
             if type(publication_dict['urn']).__name__ != 'str':
                 write_error_to_logfile.comment('URN has to be of type string but is' + type(publication_dict['doi']).__name__ + '.')
-                print('URN has to be of type string but is' + type(publication_dict['urn']).__name__ + '.')
+                #print('URN has to be of type string but is' + type(publication_dict['urn']).__name__ + '.')
                 validity = False
         if publication_dict['isbn']:
             if publication_dict['LDR_06_07'] != 'am':
                 write_error_to_logfile.comment('ISBN is only necessary for records of monographs.')
-                print('ISBN is only necessary for records of monographs.')
+                #print('ISBN is only necessary for records of monographs.')
                 validity = False
             else:
                 if type(publication_dict['isbn']).__name__ != 'str':
                     write_error_to_logfile.comment('ISBN has to be of type string but is' + type(publication_dict['isbn']).__name__ + '.')
-                    print('ISBN has to be of type string but is' + type(publication_dict['isbn']).__name__ + '.')
+                    #print('ISBN has to be of type string but is' + type(publication_dict['isbn']).__name__ + '.')
                     validity = False
                 else:
                     isbn = publication_dict['isbn'].replace('-', '').replace(' ', '')
                     if re.findall(r'[^\d]', isbn):
                         write_error_to_logfile.comment('ISBN has to contain nothing but digits and separators.')
-                        print('ISBN has to contain nothing but digits and separators.')
+                        #print('ISBN has to contain nothing but digits and separators.')
                         validity = False
                     if len(isbn) not in [10, 13]:
                         write_error_to_logfile.comment('ISBN without seperators has to consist of either 10 or 13 digits.')
-                        print('ISBN without seperators has to consist of either 10 or 13 digits.')
+                        #print('ISBN without seperators has to consist of either 10 or 13 digits.')
                         validity = False
         if publication_dict['fields_590']:
             if type(publication_dict['fields_590']).__name__ != 'list':
                 write_error_to_logfile.comment('fields_590 has to be of type list but is' + type(publication_dict['fields_590']).__name__ + '.')
-                print('fields_590 has to be of type list but is', type(publication_dict['fields_590']).__name__ + '.')
+                #print('fields_590 has to be of type list but is', type(publication_dict['fields_590']).__name__ + '.')
                 validity = False
             else:
                 for field in publication_dict['fields_590']:
                     if type(field).__name__ != 'str':
                         write_error_to_logfile.write('field_590 has to be of type string but is' + type(field).__name__ + '.')
-                        print('field_590 has to be of type string but is', type(field).__name__ + '.')
+                        #print('field_590 has to be of type string but is', type(field).__name__ + '.')
                         validity = False
         if publication_dict['original_cataloging_agency']:
             if type(publication_dict['original_cataloging_agency']).__name__ != 'str':
                 write_error_to_logfile.comment('Original_cataloging_agency has to be of type string but is' + type(publication_dict['original_cataloging_agency']).__name__ + '.')
-                print('Original_cataloging_agency has to be of type string but is', type(publication_dict['original_cataloging_agency']).__name__ + '.')
+                #print('Original_cataloging_agency has to be of type string but is', type(publication_dict['original_cataloging_agency']).__name__ + '.')
                 validity = False
         if publication_dict['publication_year']:
             if type(publication_dict['publication_year']).__name__ != 'str':
                 write_error_to_logfile.comment('publication_year has to be of type string but is' + type(publication_dict['publication_year']).__name__ + '.')
-                print('publication_year has to be of type string but is', type(publication_dict['publication_year']).__name__ + '.')
+                #print('publication_year has to be of type string but is', type(publication_dict['publication_year']).__name__ + '.')
                 validity = False
             if not (re.findall(r'\d{4}', publication_dict['publication_year']) and (len(publication_dict['publication_year']) in [4, 6])):
-                print(publication_dict)
+                #print(publication_dict)
                 write_error_to_logfile.comment('publication_year has to consist of four digits.')
-                print('publication_year has to consist of four digits.')
+                #print('publication_year has to consist of four digits.')
                 validity = False
         if publication_dict['field_300']:
             if type(publication_dict['field_300']).__name__ != 'str':
                 write_error_to_logfile.comment('field_300 has to be of type string but is' + type(publication_dict['publication_year']).__name__ + '.')
-                print('field_300 has to be of type string but is', type(publication_dict['publication_year']).__name__ + '.')
+                #print('field_300 has to be of type string but is', type(publication_dict['publication_year']).__name__ + '.')
                 validity = False
         for statement in publication_dict['publication_etc_statement']:
             if publication_dict['publication_etc_statement'][statement]['country_code']:
                 if len(publication_dict['publication_etc_statement'][statement]['country_code']) != 3:
-                    print('Country_code has to consist of three characters including whitespaces.')
+                    #print('Country_code has to consist of three characters including whitespaces.')
                     write_error_to_logfile.comment('Country_code has to consist of three characters including whitespaces.')
                     validity = False
         if publication_dict['copyright_year']:
             if type(publication_dict['copyright_year']).__name__ != 'str':
-                print('copyright_year has to be of type string but is', type(publication_dict['copyright_year']).__name__ + '.')
+                #print('copyright_year has to be of type string but is', type(publication_dict['copyright_year']).__name__ + '.')
                 write_error_to_logfile.comment('copyright_year has to be of type string but is' + type(publication_dict['copyright_year']).__name__ + '.')
                 validity = False
             if not re.findall(r'\d{4}', publication_dict['copyright_year']):
-                print('copyright_year has to consist of four digits.')
+                #print('copyright_year has to consist of four digits.')
                 write_error_to_logfile.comment('copyright_year has to consist of four digits.')
                 validity = False
         if not publication_dict['rdacontent']:
-            print('rdacontent has to be specified.')
+            #print('rdacontent has to be specified.')
             write_error_to_logfile.comment('rdacontent has to be specified.')
             validity = False
         else:
             if publication_dict['rdacarrier'] not in rda_codes['rdacarrier']:
-                print('Code for rdacarrier is not valid.')
+                #print('Code for rdacarrier is not valid.')
                 write_error_to_logfile.comment('Code for rdacarrier is not valid.')
                 validity = False
             elif publication_dict['rdacarrier'] == 'cr':
                 if publication_dict['rdamedia'] != 'c':
-                    print('If rdacarrier is "cr", rdamedia has to be "c".')
+                    #print('If rdacarrier is "cr", rdamedia has to be "c".')
                     write_error_to_logfile.comment('If rdacarrier is "cr", rdamedia has to be "c".')
                     validity = False
                 if publication_dict['field_007'][0:2] != 'cr':
-                    print('If rdacarrier is "cr", field_007 has to be "cr".')
+                    #print('If rdacarrier is "cr", field_007 has to be "cr".')
                     write_error_to_logfile.comment('If rdacarrier is "cr", field_007 has to be "cr".')
                     validity = False
                 if publication_dict['LDR_06_07'][0] != 'm':
                     if not publication_dict['field_006']:
-                        print('If rdacarrier is "cr" and LDR_06_07 is not "m", field_006 has to be specified.')
+                        #print('If rdacarrier is "cr" and LDR_06_07 is not "m", field_006 has to be specified.')
                         write_error_to_logfile.comment('If rdacarrier is "cr" and LDR_06_07 is not "m", field_006 has to be specified.')
                         validity = False
             elif publication_dict['rdacarrier'] == 'nc':
                 if publication_dict['rdamedia'] != 'n':
-                    print('If rdacarrier is "nc", rdamedia has to be "n".')
+                    #print('If rdacarrier is "nc", rdamedia has to be "n".')
                     write_error_to_logfile.comment('If rdacarrier is "nc", rdamedia has to be "n".')
                     validity = False
                 if publication_dict['field_007'][0:2] != 'ta':
-                    print('If rdacarrier is "nc", field_007 has to be "ta".')
+                    #print('If rdacarrier is "nc", field_007 has to be "ta".')
                     write_error_to_logfile.comment('If rdacarrier is "nc", field_007 has to be "ta".')
                     validity = False
             elif not publication_dict['rdamedia']:
-                print('rdamedia has to be specified.')
+                #print('rdamedia has to be specified.')
                 write_error_to_logfile.comment('rdamedia has to be specified.')
                 validity = False
         if not publication_dict['rdacarrier']:
-            print('rdacarrier has to be specified.')
+            #print('rdacarrier has to be specified.')
             write_error_to_logfile.comment('rdacarrier has to be specified.')
             validity = False
         if publication_dict['rdacontent'] == 'txt':
             if publication_dict['LDR_06_07'][0] != 'a':
-                print('If rdacontent ist "txt", first letter of "LDR_06_07" has to be "a".')
+                #print('If rdacontent ist "txt", first letter of "LDR_06_07" has to be "a".')
                 write_error_to_logfile.comment('If rdacontent ist "txt", first letter of "LDR_06_07" has to be "a".')
                 validity = False
         if publication_dict['LDR_06_07'][1] in ['a', 'b']:
             if not (publication_dict['host_item']['sysnumber'] or publication_dict['host_item']['name']):
-                print('If resource is monographic component part or serial component part, host_item has to be specified.')
+                #print('If resource is monographic component part or serial component part, host_item has to be specified.')
                 write_error_to_logfile.comment('If resource is monographic component part or serial component part, host_item has to be specified.')
                 validity = False
         if len(publication_dict['LDR_06_07']) != 2:
-            print('LDR_06_07 has to consist of two characters.')
+            #print('LDR_06_07 has to consist of two characters.')
             write_error_to_logfile.comment('LDR_06_07 has to consist of two characters.')
             validity = False
         if len(publication_dict['field_008_18-34']) != 17:
-            print('field_008_18-34 has to consist of 17 characters.')
+            #print('field_008_18-34 has to consist of 17 characters.')
             write_error_to_logfile.comment('field_008_18-34 has to consist of 17 characters.')
             validity = False
         if publication_dict['language_field']["language_of_resource"] and publication_dict['language_field']["language_of_original_item"]:
             if len(publication_dict['language_field']["language_of_resource"]) != 3:
-                print('Language of resource has to consist of three characters.')
+                #print('Language of resource has to consist of three characters.')
                 write_error_to_logfile.comment('Language of resource has to consist of three characters.')
                 validity = False
             if len(publication_dict['language_field']["language_of_original_item"]) != 3:
-                print('Language of original item has to consist of three characters.')
+                #print('Language of original item has to consist of three characters.')
                 write_error_to_logfile.comment('Language of original item has to consist of three characters.')
                 validity = False
         if publication_dict['part_of_series']:
             if publication_dict['part_of_series']['series_title']:
                 if publication_dict['LDR_06_07'][1] != 'm':
-                    print('Specification of information about series is only permitted if resource is monograph.')
+                    #print('Specification of information about series is only permitted if resource is monograph.')
                     write_error_to_logfile.comment('Specification of information about series is only permitted if resource is monograph.')
                     validity = False
         if publication_dict['additional_content']:
             if publication_dict['additional_content']['type']:
                 if publication_dict['additional_content']['type'] not in ['Summary', 'Subject', 'Review', 'Scope and content', 'Abstract']:
-                    print('Type of additional content has to be in [Summary, Subject, Review, Scope and content, Abstract].')
+                    #print('Type of additional content has to be in [Summary, Subject, Review, Scope and content, Abstract].')
                     write_error_to_logfile.comment('Type of additional content has to be in [Summary, Subject, Review, Scope and content, Abstract].')
                     validity = False
         return validity
@@ -863,7 +863,7 @@ def create_new_record(out, publication_dict):
             if publication_dict['table_of_contents_link']:
                 recent_record.add_field(Field(tag='856', indicators=['4', '2'],
                                               subfields=['z', 'Table of Contents', 'u', publication_dict['table_of_contents_link']]))
-            print(publication_dict['pdf_links'] + publication_dict['html_links'])
+            #print(publication_dict['pdf_links'] + publication_dict['html_links'])
             for link in publication_dict['pdf_links']:
                 recent_record.add_field(Field(tag='856', indicators=['4', '0'],
                                               subfields=['z', 'Available online', 'u', link]))
@@ -894,18 +894,18 @@ def create_new_record(out, publication_dict):
                     recent_record.add_field(Field(tag=field['tag'], indicators=field['indicators'],
                                                   subfields=field['subfields']))
             if publication_dict['review']:
-                print(publication_dict['review_list'])
+                #print(publication_dict['review_list'])
                 for reviewed_title in publication_dict['review_list']:
-                    print(reviewed_title['reviewed_title'])
+                    #print(reviewed_title['reviewed_title'])
                     if reviewed_title['reviewed_title']:
                         reviewed_title_ids, review_titles = find_reviewed_title.find(reviewed_title, publication_dict['publication_year'], 'en')
-                        if reviewed_title_ids:
-                            print(reviewed_title_ids)
-                        else:
-                            print('no lkr generated')
+                        #if not reviewed_title_ids:
+                            #print('no lkr generated')
+                        #else:
+                            #print(reviewed_title_ids)
                         for reviewed_title_id in reviewed_title_ids:
-                            # print(publication_dict['review_list'])
-                            # print(reviewed_title_ids)
+                            # #print(publication_dict['review_list'])
+                            # #print(reviewed_title_ids)
                             recent_record.add_field(Field(tag='787', indicators=['0', '8'],
                                                           subfields=['w', reviewed_title_id,
                                                                      't', review_titles[reviewed_title_ids.index(reviewed_title_id)][0]]))
@@ -920,7 +920,7 @@ def create_new_record(out, publication_dict):
 
             if additional_physical_form_entrys:
                 add_subject_from_additional_physical_form_entry(additional_physical_form_entrys, recent_record, publication_dict)
-            # print(recent_record)
+            # #print(recent_record)
             out.write(recent_record.as_marc21())
             created = 1
         return created

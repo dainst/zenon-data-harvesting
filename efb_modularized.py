@@ -39,7 +39,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
             if current_item > last_item_harvested_in_last_session:
                 for article in issue_soup.find_all('table', class_='tocArticle')[1:]:
                     article_url = article.find('div', class_='tocTitle').find('a')['href'].strip()
-                    print('Artikel:', article_url)
+                    #print('Artikel:', article_url)
                     req = urllib.request.Request(article_url, data, headers)
                     with urllib.request.urlopen(req) as response:
                         article_page = response.read().decode('utf-8')

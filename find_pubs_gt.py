@@ -100,7 +100,7 @@ def check_cosine_similarity(title, found_title, found_record, rejected_titles, l
         [title_list, found_title_list] = [a[:length] for a in [title_list, found_title_list]]
         title_list_count = [title_list.count(word) for word in title_list if (word not in stopwords_dict[lang])]
         found_title_list_count = [found_title_list.count(word) for word in title_list if (word not in stopwords_dict[lang])]
-        # print(title_list, found_title_list)
+        # #print(title_list, found_title_list)
         # hier muss irgendwie iterative levensthein rein!!!
         # mehr Worte skippen und danach die Similarität und übriggebliebene Wortlänge vergleichen.
         if list(set(title_list_count)) == [0] or list(set(found_title_list_count)) == [0]:
@@ -113,10 +113,10 @@ def check_cosine_similarity(title, found_title, found_record, rejected_titles, l
                 for word in title_list:
                     for found_word in found_title_list:
                         if (iterative_levenshtein(word, found_word)) < (len(word)/4) and iterative_levenshtein(word, found_word) > 0:
-                            print('levenshtein_title_test')
-                            print(word, found_word, iterative_levenshtein(word, found_word))
-                            print(title)
-                            print(found_title)'''
+                            #print('levenshtein_title_test')
+                            #print(word, found_word, iterative_levenshtein(word, found_word))
+                            #print(title)
+                            #print(found_title)'''
             if similarity > 0.65:
                 skipped_word_nr = 0
                 mismatches_nr = 0
@@ -131,25 +131,25 @@ def check_cosine_similarity(title, found_title, found_record, rejected_titles, l
                             mismatches_nr += 1
                             skipped_word_nr += 1
                             if word in unskippable_words and title_list.index(word) in [0, 1]:
-                                print(title_list)
+                                #print(title_list)
                                 return 0, False
                     else:
                         skipped_word_nr += 1
                         if word in unskippable_words and title_list.index(word) in [0, 1]:
-                            print(title_list)
+                            #print(title_list)
                             return 0, False
                 if skipped_word_nr >= (len(title_list) / 3):
                     return 0, False
                 if matches_nr > mismatches_nr * 2:
                     if similarity > 0.79:
-                        print(title_list, found_title_list)
-                        print('similarity:', similarity)
+                        #print(title_list, found_title_list)
+                        #print('similarity:', similarity)
                         return similarity, True
                     else:
-                        print(lang)
-                        print(title_list)
-                        print(found_title_list)
-                        print(similarity)
+                        #print(lang)
+                        #print(title_list)
+                        #print(found_title_list)
+                        #print(similarity)
                         if found_title == found_record['title']:
                             if input("Handelt es sich tatsächlich um eine Dublette? ") == "":
                                 return similarity, True
@@ -193,15 +193,15 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                     right_author = False
                     right_year = False
                     if similarity:
-                        print(found_record['id'])
+                        #print(found_record['id'])
                         try:
-                            print('title is similar')
+                            #print('title is similar')
                             webfile = urllib.request.urlopen(
                                 "https://zenon.dainst.org/Record/" + found_record['id'] + "/Export?style=MARC")
                             new_reader = MARCReader(webfile)
                             for file in new_reader:
                                 par = False
-                                print(found_record)
+                                #print(found_record)
                                 if 'authors' in found_record:
                                     found_authors = []
                                     if 'primary' in found_record['authors']:
@@ -213,16 +213,16 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                                     if 'corporate' in found_record['authors']:
                                         for primary_author in found_record['authors']['secondary']:
                                             found_authors.append(primary_author.split(', ')[0])
-                                    print('authors', authors)
+                                    #print('authors', authors)
                                     if authors:
                                         for found_author in [aut for found_author in found_authors for aut in found_author.split()]:
                                             if found_author in authors:
-                                                print('found in authors')
+                                                #print('found in authors')
                                                 right_author = True
                                             if right_author:
                                                 break
                                             if [iterative_levenshtein(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author)) for x in authors for splitted_author in x.split()]:
-                                                print([iterative_levenshtein(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author)) for x in authors for splitted_author in x.split()])
+                                                #print([iterative_levenshtein(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author)) for x in authors for splitted_author in x.split()])
                                                 if min([iterative_levenshtein(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author)) for x in authors for splitted_author in x.split()]) <= (len(found_author)/3):
                                                     # Vorsicht vor impliziten Typkonvertierungen von Zahlen zu bool
                                                     right_author = True
@@ -230,14 +230,14 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
                                         if not found_authors:
                                             right_author = True
                                 found_year = [min([int(year) for year in re.findall(r'\d{4}', field)]) for field in [field['c'] for field in file.get_fields('260', '264') if field['c']] if '©' not in field and re.findall(r'\d{4}', field)]
-                                print(found_year, year)
+                                #print(found_year, year)
                                 if found_year and year:
                                     if found_year[0] in [int(year)-1, int(year), int(year)+1]:
                                         right_year = True
                                 if not found_year and not year:
                                     right_year = True
                                 all_child_records = find_sysnumbers_of_volumes.find_sysnumbers(found_record['id'])
-                                print(all_child_records)
+                                #print(all_child_records)
                                 parent_webfile = urllib.request.urlopen(
                                     "https://zenon.dainst.org/Record/" + found_record['id'] + "/Export?style=MARC")
                                 new_reader = MARCReader(parent_webfile)
@@ -268,7 +268,7 @@ def swagger_find(search_title, search_authors, year, title, rejected_titles, pos
 
 def find(title, authors, year, default_lang, possible_host_items, is_host_item = False):
     try:
-        print(possible_host_items)
+        #print(possible_host_items)
         all_sims = []
         all_results = []
         title = unidecode.unidecode(title)
@@ -370,7 +370,7 @@ def get_articles_zenon_ids():
         row_nr = 0
         for row in lkr_reader:
             row_nr += 1
-            print('searching new record: row_nr', row_nr, row)
+            #print('searching new record: row_nr', row_nr, row)
             authors_string = row[0]
             splitted = [a.strip() for author in authors_string.split(' and ') for auth in author.split(' und ') for aut in auth.split('; ') for a in aut.split(' – ')]
             splitted_by_komma = list(set([a if aut.count(' ') > aut.count(', ') else aut for aut in splitted for a in aut.split(', ')]))
@@ -397,10 +397,10 @@ def get_articles_zenon_ids():
                 title_string = title_string_splitted_list[0]
             all_resutls, adds, all_sims = find(title_string, authors, year, 'de', [])  # title, authors, year, default_lang, possible_host_items
             if all_resutls:
-                print('found matching record: ', all_resutls)
+                #print('found matching record: ', all_resutls)
                 all_found_records[str(row_nr)] = [all_resutls, all_sims]
             else:
-                print('no matching record found')
+                #print('no matching record found')
                 # Suche nach host items:
                 title_string = row[1].replace('\n', '')
                 for string in pages:
@@ -413,14 +413,14 @@ def get_articles_zenon_ids():
                 if host_item:
                     if re.findall(r'\([^\d]+?\)', host_item):
                         va, host_item = host_item.split(re.findall(r'\([^\d]+?\)', host_item)[0])
-                        # print(va)
+                        # #print(va)
                         host_item = host_item.strip(',').strip()
-                        # print(host_item)
+                        # #print(host_item)
                 else:
                     splitted = title_string.rsplit(',', 1)
                     splitted.reverse()
                     for entry in splitted:
-                        # print(re.findall(r'\d', entry))
+                        # #print(re.findall(r'\d', entry))
                         if len(re.findall(r'\d', entry)) > len(entry)/3:
                             splitted.reverse()
                             splitted = splitted[:-1]
@@ -440,14 +440,14 @@ def get_articles_zenon_ids():
                         splitted = title_string.rsplit(',', 1)
                         splitted.reverse()
                         for entry in splitted:
-                            # print(re.findall(r'\d', entry))
+                            # #print(re.findall(r'\d', entry))
                             if len(re.findall(r'\d', entry)) > len(entry)/3:
                                 splitted.reverse()
                                 splitted = splitted[:-1]
                                 title_string = ','.join(splitted)
 
                         splitted = title_string.rsplit(',')
-                        # print(splitted)
+                        # #print(splitted)
                         if [word for word in months_and_seasons if word in splitted[-1] and word]:
                             splitted = splitted[:-1]
                             if [word for word in months_and_seasons if word in splitted[-1] and word]:
@@ -465,14 +465,14 @@ def get_articles_zenon_ids():
                     splitted.reverse()
 
                     for entry in splitted:
-                        # print(re.findall(r'\d', entry))
+                        # #print(re.findall(r'\d', entry))
                         if len(re.findall(r'\d', entry)) > len(entry)/3:
                             title_string = title_string.replace(',' + entry, '')
                     host_item = title_string.rsplit(', ', 1)[-1].rsplit('. ')[-1]
                 host_item = host_item.strip()
-                print('host item name:', host_item)
+                #print('host item name:', host_item)
                 all_resutls, adds, all_sims =  find(host_item, [], year, 'de', [], is_host_item=True)
-                print('host_item:', all_resutls)
+                #print('host_item:', all_resutls)
     return all_found_records
 
 
@@ -500,7 +500,7 @@ def get_host_items_zenon_ids():
                                 if [field['b'] for field in parent_file.get_fields('995') if field['b'] and field['a'] == 'ANA'][0] in possible_host_items:
                                     right_host_item = True
                     except:
-                        print('Das Host-Item von', found_record['id'], 'hat ein ungültiges Host-Item bzw. es gibt ein Problem mit der Weiterleitung.')
+                        #print('Das Host-Item von', found_record['id'], 'hat ein ungültiges Host-Item bzw. es gibt ein Problem mit der Weiterleitung.')
             if right_host_item is False:
                 rejected_titles.append(found_record["id"] + title_found)
                 continue'''

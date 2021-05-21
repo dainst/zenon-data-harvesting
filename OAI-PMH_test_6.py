@@ -43,8 +43,8 @@ def update_journal_titles(doi_list, eperiodica_journals):
                 output_per_journal+="PID: " + doi[13:20] + \
                         "\nInformationen zum Journal finden Sie auf der folgenden Seite unter dem Reiter \"Detailed Information\":\n"\
                         + 'https://doi.org/'+content_list[14][1][2][4:]+"\n\n"
-                print(output, output_per_journal)
-                print("Bitte geben Sie folgende Informationen zum Journal mit der PID "+ doi[13:20] + " an:\n")
+                #print(output, output_per_journal)
+                #print("Bitte geben Sie folgende Informationen zum Journal mit der PID "+ doi[13:20] + " an:\n")
                 eperiodica_journals[doi[13:20]]={"SYS":input("Bitte geben Sie die Systemnummer des Journals an: "),
                                 "TIT":input("\nBitte geben Sie den Titel des Journals an: ")}
     #hier Checks einbauen! (z.B. Kriterien für Systemnummern. Sind diese numerisch oder alphanumerisch? immer gleiche Länge?
@@ -120,7 +120,7 @@ def create_records(doi_list, time):
             if parallel_title_nr==0:
                 recent_record.add_field(Field(tag='245', indicators = [str(creator_number), nonfiling_characters], subfields = parallel_title))
             else:
-                print(titles)
+                #print(titles)
                 recent_record.add_field(Field(tag='246', indicators = [str(creator_number), nonfiling_characters], subfields = parallel_title))
             parallel_title_nr+=1
         if content_list[4][1][0] not in [None,'[s.n.]'] and content_list:
@@ -145,8 +145,8 @@ def create_records(doi_list, time):
                                                        'm', titles[0][1], 'n', eperiodica_journals[journal_pid]['TIT']+', '+year_of_volume]))
         out.write(recent_record.as_marc21())
         article_number+=1
-    print("Alle Records wurden erfolgreich erstellt.")
-    print("Die Zeit des letzten Harvestings wurde auf ", last_harvesting_time, " aktualisiert")
+    #print("Alle Records wurden erfolgreich erstellt.")
+    #print("Die Zeit des letzten Harvestings wurde auf ", last_harvesting_time, " aktualisiert")
 time=arrow.now().format('YYMMDD')
 create_records(identify_dois(), time)
 

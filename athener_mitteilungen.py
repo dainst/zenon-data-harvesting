@@ -52,11 +52,11 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
         volume_years = [item.text for item in yearbook_page.find('table', class_='tabelle-baendeliste').find_all('span', class_='publ-daten-schwarz')]
         volume_urls = [item['href'] for item in yearbook_page.find('table', class_='tabelle-baendeliste').find_all('a')]
         for volume_url in volume_urls:
-            print(volume_url)
+            #print(volume_url)
             volume_year=volume_years[record_nr].split('(')[0].split(', ')[-1]
             record_nr+=1
             mets_url=volume_url.split("?")[0]+'/mets'
-            print(mets_url)
+            #print(mets_url)
             webFile = urllib.request.urlopen(mets_url)
             xml_soup=BeautifulSoup(webFile, 'xml')
             date_of_publication = xml_soup.find_all('mods:mods')[0].find('mods:originInfo').find('mods:dateIssued', keyDate='yes').text

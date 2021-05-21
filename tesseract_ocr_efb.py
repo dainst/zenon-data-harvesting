@@ -71,23 +71,23 @@ for list_element in list_elements:
                 #pdf = pdftotext.PDF(f, "secret")
 
                 # How many pages?
-                print(len(pdf))
+                #print(len(pdf))
 
                 # Iterate over all the pages
                 for page in pdf:
-                    print(page)
+                    #print(page)
 
                 # Read some individual pages
-                print(pdf[0])
-                print(pdf[1])
+                #print(pdf[0])
+                #print(pdf[1])
 
                 # Read all the text into one string
-                print("\n\n".join(pdf))
+                #print("\n\n".join(pdf))
 
 
 '''
 for dirname in os.listdir('pages_jpg_efb'):
-    print(dirname)
+    #print(dirname)
     lang_code=None
     txt=open("efb_text_files/"+dirname+".txt", mode='w+', encoding='utf-8')
     lang = language_codes.resolve(detect(dirname[4:]))
@@ -101,7 +101,7 @@ for dirname in os.listdir('pages_jpg_efb'):
         lang_code='spa'
     else:
         lang_code='deu'
-    print(lang_code)
+    #print(lang_code)
     jpg_nr=0
 
     for filename in sorted(os.listdir('pages_jpg_efb/'+dirname)):
@@ -110,7 +110,7 @@ for dirname in os.listdir('pages_jpg_efb'):
             text = str(pytesseract.image_to_string(Image.open('pages_jpg_efb/'+dirname+'/'+filename),lang=lang_code))
             txt.write(text)
         except:
-            print('Umwandlung gescheitert')
+            #print('Umwandlung gescheitert')
             continue
     txt.close()
     

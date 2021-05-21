@@ -75,9 +75,9 @@ def create_jpgs(pdf, record_nr, title):
                 page_nr+=1
                 if page_nr!=1:
                     page.save(newpath+"/"+str(page_nr)+'.jpg', 'JPEG')
-            print(year+issue.replace(".", "_")+str(record_nr), "wurde erstellt.")
+            #print(year+issue.replace(".", "_")+str(record_nr), "wurde erstellt.")
         except:
-            print(year+issue.replace(".", "_")+str(record_nr), "konnte nicht erstellt werden.")
+            #print(year+issue.replace(".", "_")+str(record_nr), "konnte nicht erstellt werden.")
 
 def doi_is_valid(doi):
     try:
@@ -189,16 +189,16 @@ def create_new_record(adjusted_parts_of_title, out, toc, pdf, pages, issue_nr, y
                 recent_record.add_field(Field(tag='300', indicators=[' ', ' '], subfields=['a', 'Fasc.'+issue_nr]))
             resultcount=find_existing_doublets.find(title, authors_for_search, year, 'en', ['000724049'])
             if resultcount>0:
-                print('found:', year, issue_nr, title, authors, 'results:', resultcount)
+                #print('found:', year, issue_nr, title, authors, 'results:', resultcount)
             else:
-                print('not found:', year, issue_nr, title, authors)
+                #print('not found:', year, issue_nr, title, authors)
             out.write(recent_record.as_marc21())
         return titles_processed
     except Exception as e:
-        print('Error! Code: {c}, Message, {m}'.format(c=type(e).__name__, m=str(e)))
+        #print('Error! Code: {c}, Message, {m}'.format(c=type(e).__name__, m=str(e)))
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print(exc_type, fname, exc_tb.tb_lineno)
+        #print(exc_type, fname, exc_tb.tb_lineno)
 
 titles_processed=[]
 issue_data={}
@@ -302,4 +302,4 @@ for issue in issues:
                         adjusted_parts_of_title[0]=adjusted_parts_of_title[0].replace(pages[0], "").strip()
                         pages=pages[0].replace('(', '').replace(')', '').replace('pp.', '').strip()
                     create_new_record(adjusted_parts_of_title, out, toc, pdf, pages, issue_nr, year, titles_processed)
-    print(year, article_nr)
+    #print(year, article_nr)

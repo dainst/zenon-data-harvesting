@@ -47,8 +47,8 @@ def update_journal_titles(doi_list, eperiodica_journals):
                 output_per_journal+="PID: " + doi[13:20] + \
                         "\nInformationen zum Journal finden Sie auf der folgenden Seite unter dem Reiter \"Detailed Information\":\n"\
                         + 'https://doi.org/'+content_list[14][1][2][4:]+"\n\n"
-                print(output, output_per_journal)
-                print("Bitte geben Sie folgende Informationen zum Journal mit der PID "+ doi[13:20] + " an:\n")
+                #print(output, output_per_journal)
+                #print("Bitte geben Sie folgende Informationen zum Journal mit der PID "+ doi[13:20] + " an:\n")
                 eperiodica_journals[doi[13:20]]={"SYS":input("Bitte geben Sie die Systemnummer des Journals an: "),
                                 "TIT":input("\nBitte geben Sie den Titel des Journals an: ")}
     #hier Checks einbauen! (z.B. Kriterien für Systemnummern. Sind diese numerisch oder alphanumerisch? immer gleiche Länge?
@@ -65,18 +65,18 @@ def swagger_find_article(search_title, search_authors, year, content_list, erkan
     journal_page=journal_page.decode('utf-8')
     resultcount=str(ast.literal_eval(str(journal_page))["resultCount"])
     '''if resultcount=='0':
-        print(year)
-        print(search_title)
-        print(search_authors)
-        print(str(ast.literal_eval(str(journal_page))["records"][0]["title"]))
-        print(str(ast.literal_eval(str(journal_page))["records"][0]["authors"]))
-        print(str(ast.literal_eval(str(journal_page))["records"][0]["id"]))'''
+        #print(year)
+        #print(search_title)
+        #print(search_authors)
+        #print(str(ast.literal_eval(str(journal_page))["records"][0]["title"]))
+        #print(str(ast.literal_eval(str(journal_page))["records"][0]["authors"]))
+        #print(str(ast.literal_eval(str(journal_page))["records"][0]["id"]))'''
     if resultcount=='1':
         erkannte_dubletten+=1
-        print("Titel: ", str(ast.literal_eval(str(journal_page))["records"][0]["title"]))
-        print("Autor: ", str(ast.literal_eval(str(journal_page))["records"][0]["authors"]["primary"]))
-        print("Systemnummer: ", str(ast.literal_eval(str(journal_page))["records"][0]["id"]))
-        print()
+        #print("Titel: ", str(ast.literal_eval(str(journal_page))["records"][0]["title"]))
+        #print("Autor: ", str(ast.literal_eval(str(journal_page))["records"][0]["authors"]["primary"]))
+        #print("Systemnummer: ", str(ast.literal_eval(str(journal_page))["records"][0]["id"]))
+        #print()
     return resultcount, erkannte_dubletten
 
 def create_records(doi_list, time, eperiodica_journals, erkannte_dubletten):
@@ -232,9 +232,9 @@ def create_records(doi_list, time, eperiodica_journals, erkannte_dubletten):
                                                        'm', titles[0][1], 'n', eperiodica_journals[journal_pid]['TIT']+', '+year_of_volume]))
         out.write(recent_record.as_marc21())
         article_number+=1
-    print("Alle Records wurden erfolgreich erstellt.")
-    print(erkannte_dubletten)
-    #print("Die Zeit des letzten Harvestings wurde auf ", last_harvesting_time, " aktualisiert")
+    #print("Alle Records wurden erfolgreich erstellt.")
+    #print(erkannte_dubletten)
+    ##print("Die Zeit des letzten Harvestings wurde auf ", last_harvesting_time, " aktualisiert")
 time=arrow.now().format('YYMMDD')
 create_records(identify_dois(), time, eperiodica_journals, erkannte_dubletten)
 #from-parameter einbauen!!!

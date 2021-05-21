@@ -16,5 +16,5 @@ for file in os.listdir(dir_name):
                 out.write(record.as_marc21())
                 count += 1
             else:
-                print(record['245']['a'])
-print(count, 'Records wurden in der Datei gespeichert.')
+                #print(record['245']['a'])
+#print(count, 'Records wurden in der Datei gespeichert.')

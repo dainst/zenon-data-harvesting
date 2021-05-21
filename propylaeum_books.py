@@ -43,7 +43,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                     isbn_pdf = isbn_pdf_list[0]
                     publication_date = re.findall(r'(\d{2})\.(\d{2})\.(\d{4})', ebook_soup.find('p',  style="margin-top: 1.2em;").text)[0]
                     current_item = int(publication_date[2] + publication_date[1] + publication_date[0])
-                    print(current_item)
+                    #print(current_item)
                     publication_date = publication_date[2]
                     if current_item > last_item_harvested_in_last_session:
                         if isbn_pdf:

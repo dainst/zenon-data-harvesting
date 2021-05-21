@@ -13,7 +13,7 @@ empty_page = False
 while not empty_page:
     page += 1
     try:
-        print(page)
+        #print(page)
         url = u'https://zenon.dainst.org/api/v1/search?type=AllFields&sort=relevance&page='+str(page)+'&limit=100&prettyPrint=false&lng=de'
         req = urllib.request.Request(url)
         with urllib.request.urlopen(req) as response:
@@ -76,13 +76,13 @@ while not empty_page:
                     if year:
                         all_results, additional_physical_form_entrys = find_existing_doublets.find(title, authors, year[0], default_lang, possible_host_items, publication_dict)
                         # if result['id'] not in all_results:
-                            # print('eigener Datensatz nicht gefunden', result['id'], all_results)
+                            # #print('eigener Datensatz nicht gefunden', result['id'], all_results)
                         while result['id'] in all_results:
                             all_results.remove(result['id'])
                         if len(all_results)>=1:
-                            print(result['id'], all_results)
+                            #print(result['id'], all_results)
                     # else:
-                        # print('Jahreszahl fehlt:', result['id'])
+                        # #print('Jahreszahl fehlt:', result['id'])
 
             except Exception as e:
                 write_error_to_logfile.write(e)

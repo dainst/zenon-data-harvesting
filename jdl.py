@@ -65,7 +65,7 @@ def calculate_cosine_similarity(title, found_title):
         title_list_count=[title_list.count(word) for word in found_title_list if (word not in stopwords_de)]
         found_title_list_count=[found_title_list.count(word) for word in found_title_list if (word not in stopwords_de)]
     similarity = 1 - spatial.distance.cosine(title_list_count, found_title_list_count)
-    #print(similarity)
+    ##print(similarity)
     if similarity>0.9:
         return True
     elif similarity>0.68:
@@ -85,7 +85,7 @@ def calculate_cosine_similarity(title, found_title):
                         mismatches_nr+=1
             else:
                 skipped_word_nr+=1
-        #print(matches_nr, mismatches_nr)
+        ##print(matches_nr, mismatches_nr)
         if (matches_nr > mismatches_nr*2):
             return True
     return False
@@ -95,7 +95,7 @@ def swagger_find_article(search_title, search_authors, year, title):
         url=u'https://zenon.dainst.org/api/v1/search?lookfor=title%3A'+search_title+'%20AND%20author%3A'+search_authors+'%20AND%20publishDate%3A'+year+'&type=AllFields&sort=relevance&page=1&limit=20&prettyPrint=false&lng=de'
     else:
         url=u'https://zenon.dainst.org/api/v1/search?lookfor=title%3A'+search_title+'%20AND%20publishDate%3A'+year+'&type=AllFields&sort=relevance&page=1&limit=20&prettyPrint=false&lng=de'
-    #print(url)
+    ##print(url)
     req = urllib.request.Request(url)
     with urllib.request.urlopen(req) as response:
         journal_page = response.read()
@@ -120,9 +120,9 @@ def swagger_find_article(search_title, search_authors, year, title):
                         parent_reader = MARCReader(webFile)
                         for parent_file in parent_reader:
                             if parent_file['995']!=None:
-                                print('ancestor:', parent_file['995']['n'])
+                                #print('ancestor:', parent_file['995']['n'])
                                 ancestorid = parent_file['995']['b']
-                                print('ancestorid:', ancestorid)
+                                #print('ancestorid:', ancestorid)
             if ancestorid == '000035916':
                 resultcount = '1'
             else:
@@ -252,7 +252,7 @@ def create_new_record(item, out, volume_url, volume_year, date_published_online,
                 author_nr = author_nr
     resultcount = find_article(title, authors, date_of_publication)
     if resultcount == '1':
-        print(title)
+        #print(title)
     if resultcount == '0':
         physical_info = item.find('mods:physicalDescription')
         recent_record.add_field(Field(tag='006', indicators=None, data='m        d        '))
@@ -336,7 +336,7 @@ def create_new_record(item, out, volume_url, volume_year, date_published_online,
                                                          'm', title, 'n', 'Jahrbuch des Deutschen Archäologischen Instituts : JdI' + ', ' +
                                                          volume + ' (' + volume_year + ')']))
         #Angaben anpassen!
-        #print(recent_record)
+        ##print(recent_record)
         out.write(recent_record.as_marc21())
 
 out=None

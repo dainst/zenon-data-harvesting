@@ -18,4 +18,4 @@ with open('Rezensionen-reportresults.csv', "r") as record_table:
                     out.write(file.as_marc21())
                     nr += 1
             except Exception as e:
-                print(e)
+                #print(e)

@@ -45,7 +45,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                 volume_soup = BeautifulSoup(volume_page, 'html.parser')
                 issue_urls = ['https://elibrary.chbeck.de' + issue_link['href'] for issue_link in volume_soup.find('div', class_='journal').find_all('a')]
                 for issue_url in issue_urls:
-                    print(issue_url)
+                    #print(issue_url)
                     issue_req = urllib.request.Request(issue_url)
                     with urllib.request.urlopen(issue_req) as issue_response:
                         issue_page = issue_response.read()
@@ -60,7 +60,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                         titles_urls = [div.find('a')['href'] for div in issue_soup.find('div', id="toc-panel-body").find_all('div') if div.find('a')]
                         titles_urls = ['https://elibrary.chbeck.de' + title_url for title_url in titles_urls if re.findall(r'-\d+-\d+?/', title_url)]
                         for title_url in titles_urls:
-                            print(title_url)
+                            #print(title_url)
                             if '/vorlagen-und-nachrichten-jahrgang-' in title_url \
                                     or '/bibliographische-beilage' in title_url or 'titelei-jahrgang' in title_url:
                                 continue

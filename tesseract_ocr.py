@@ -14,7 +14,7 @@ for dirname in os.listdir('pages_jpg'):
         text = str(((pytesseract.image_to_string(Image.open('pages_jpg/'+dirname+'/'+filename),lang="deu"))))
         try:
             language=language_codes.resolve(detect(text))
-            print(language)
+            #print(language)
             if language!='ger':
                 if language=='fre':
                     lang_code='fra'

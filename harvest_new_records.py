@@ -78,7 +78,7 @@ for harvesting_script in [
     except Exception as e:
         write_error_to_logfile.write(e)
 
-print(return_string)
+#print(return_string)
 write_error_to_logfile.comment(return_string)
 # alle Dateien mit size 0 Bytes löschen:
 for file in os.listdir(path_for_cumulus):

@@ -145,8 +145,8 @@ def search_subject(year, search_subject_title, search_subject_person, title):
             subject_soup = BeautifulSoup(subject_page, 'html.parser')
         if subject_soup.find_all('datafield', tag="689") != None:
             if len(subject_soup.find_all('datafield', tag="689")) != 0:
-                print('689')
-                print(sysnumber)
+                #print('689')
+                #print(sysnumber)
                 row = [sysnumber]
                 for subject in subject_soup.find_all('datafield', tag="689"):
                     if subject.find('subfield', code="D") != None:
@@ -278,7 +278,7 @@ def create_new_record(article_soup, out, category, url):
                 propn = False
                 punct = False
                 for word in tagged_sentence:
-                    print(word.pos_)
+                    #print(word.pos_)
                     if propn == True and word.text == "und":
                         continue
                     if punct == True:

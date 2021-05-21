@@ -73,7 +73,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                     continue
                 volume, volume_year = issue_information.strip().strip("Bd. ").split("(")[0].split(" ")
                 current_item = int(publication_year + str(max([int(vol) for vol in re.findall(r'\d+', volume)])).zfill(3))
-                print(current_item, last_item_harvested_in_last_session)
+                #print(current_item, last_item_harvested_in_last_session)
                 if current_item > last_item_harvested_in_last_session:
                     if publication_year not in volumes_sysnumbers:
                         write_error_to_logfile.comment('Artikel von Germania konnten teilweise nicht geharvestet werden, da keine übergeordnete Aufnahme für das Jahr '

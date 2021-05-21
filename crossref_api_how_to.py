@@ -9,7 +9,7 @@ works.agency('10.1590/0102-311x00133115')
  # 'agency': {'id': 'crossref', 'label': 'CrossRef'}}
 
 for item in works.sample(2):
-    print(item['title'])
+    #print(item['title'])
 
 # ['On the Origin of the Color-Magnitude Relation in the Virgo Cluster']
 # ['Biopsychosocial Wellbeing among Women with Gynaecological Cancer']
@@ -19,7 +19,7 @@ for item in works.sample(2):
 w1 = works.query(bibliographic='zika', author='johannes', publisher_name='Wiley-Blackwell')
 
 for item in w1:
-    print(item['title'])
+    #print(item['title'])
 
 # ['Inactivation and removal of Zika virus during manufacture of plasma-derived medicinal products']
 # ['Harmonization of nucleic acid testing for Zika virus: development of the 1st\n World Health Organization International Standard']
@@ -73,7 +73,7 @@ works.doi('10.1590/0102-311x00133115')
 
 
 for i in works.filter(has_funder='true', has_license='true').sample(5).select('DOI, prefix'):
-    print(i)
+    #print(i)
 '''
 {'DOI': '10.1111/str.12144', 'member': 'http://id.crossref.org/member/311', 'prefix': '10.1111'}
 {'DOI': '10.1002/admi.201400154', 'member': 'http://id.crossref.org/member/311', 'prefix': '10.1002'}
@@ -275,7 +275,7 @@ journals.works('0102-311X').query('zika').count()
 # For the works endpoint, the library will make use of the cursor to paginate through API until it is totally consumed.
 
 for item in journals.all():
-    print(item['title'])
+    #print(item['title'])
 
 # Support for Polite Requests (Etiquette)
 
@@ -295,4 +295,4 @@ str(my_etiquette)
 works = Works(etiquette=my_etiquette)
 
 for i in works.sample(5).select('DOI'):
-    print(i)
+    #print(i)

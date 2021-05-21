@@ -260,20 +260,20 @@ while not empty_page:
                             if json_response["resultCount"] == 1:
                                 correct_sysnumber = True
                         except:
-                            print('Diese Systemnummer ist nicht korrekt.')
+                            #print('Diese Systemnummer ist nicht korrekt.')
                     publication_dict['host_item']['sysnumber'] = id
                 create_new_record.create_new_record(out, publication_dict)
                 record_nr += 1
             except Exception as e:
-                print('Error! Code: {c}, Message, {m}'.format(c = type(e).__name__, m = str(e)))
+                #print('Error! Code: {c}, Message, {m}'.format(c = type(e).__name__, m = str(e)))
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                print(exc_type, fname, exc_tb.tb_lineno)
+                #print(exc_type, fname, exc_tb.tb_lineno)
 
 
     except Exception as e:
-        print('Error! Code: {c}, Message, {m}'.format(c = type(e).__name__, m = str(e)))
+        #print('Error! Code: {c}, Message, {m}'.format(c = type(e).__name__, m = str(e)))
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print(exc_type, fname, exc_tb.tb_lineno)
+        #print(exc_type, fname, exc_tb.tb_lineno)
         record_nr += 1

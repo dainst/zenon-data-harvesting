@@ -21,9 +21,9 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                 for row in reader:
                     row_nr += 1
                     if row_nr > 1:
-                        print(row)
+                        #print(row)
                         url = row[9]
-                        print(url)
+                        #print(url)
                         req = urllib.request.Request(url)
                         with urllib.request.urlopen(req) as response:
                             book_page = response.read()
@@ -33,7 +33,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                             publication_dict = json.load(publication_dict_template)
                         title = book_soup.find('meta', attrs={'name':'citation_title'})['content'].strip()
                         if 'Leiden Journal' in title:
-                            print(title)
+                            #print(title)
                             continue
                         responisibility_statement = book_soup.find('meta', attrs={'name':'citation_author'})['content']
                         publication_dict['text_body_for_lang_detection'] = book_soup.find('meta', attrs={'name':'description'})['content']
@@ -80,7 +80,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                         publication_dict['do_detect_lang'] = True
                         publication_dict['isbn'] = book_soup.find('meta', attrs={'name':'citation_isbn'})['content']
                         if len(publication_dict['isbn']) not in [10,13]:
-                            print('journal', url)
+                            #print('journal', url)
                             continue
                         if book_soup.find('a', class_='expanded small hollow buy button blacklabel'):
                             publication_dict['pdf_links'].append('https://www.sidestone.com' + book_soup.find('a', class_='expanded small hollow buy button blacklabel')['href'])

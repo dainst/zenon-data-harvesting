@@ -24,7 +24,7 @@ timestampStr = dateTimeObj.strftime("%d-%b-%Y")
 with open('records/bjb/bjb_logfile.json', 'r') as log_file:
     log_dict = json.load(log_file)
     last_item_harvested_in_last_session = log_dict['last_issue_harvested']
-    print('Letztes geharvestetes Heft von Bonner Jahrbücher:', last_item_harvested_in_last_session)
+    #print('Letztes geharvestetes Heft von Bonner Jahrbücher:', last_item_harvested_in_last_session)
 
 nlp_de = spacy.load('de_core_news_sm')
 nlp_en = spacy.load('en_core_web_sm')
@@ -481,4 +481,4 @@ while not empty_page:
 # Lücke zwischen 1933 und 1986 beachten!!!
 # bis wann harvesten?
 # zurückgestellt, weil erst 3 Jahre nach Erscheinung open access zugänglich; nur für ältere Volumes oder wie Vorgehen?
-print(record_nr)
+#print(record_nr)

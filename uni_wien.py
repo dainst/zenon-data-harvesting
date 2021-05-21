@@ -24,18 +24,18 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
             subject_soup = BeautifulSoup(subject_page, 'html.parser')
             for link in [link for link in [tag['href'] for tag in subject_soup.find_all('a') if 'href' in tag.attrs] if re.findall(r'http://othes\.univie\.ac\.at/\d{1,7}/', link)]:
                 all_publication_urls.append(link)
-        print(len(all_publication_urls))
+        #print(len(all_publication_urls))
         publication_urls = list(set(all_publication_urls))
-        print(len(publication_urls))
+        #print(len(publication_urls))
         for publication_url in publication_urls:
-            print(publication_url)
+            #print(publication_url)
             req = urllib.request.Request(publication_url)
             with urllib.request.urlopen(req) as response:
                 publication_page = response.read()
             publication_page = publication_page.decode('utf-8')
             publication_soup = BeautifulSoup(publication_page, 'html.parser')
             if publication_soup.find('meta', attrs={'name': 'eprints.full_text_status'})['content'] != 'public':
-                print(publication_soup.find('meta', attrs={'name': 'eprints.full_text_status'}))
+                #print(publication_soup.find('meta', attrs={'name': 'eprints.full_text_status'}))
                 continue
             with open('publication_dict.json', 'r') as publication_dict_template:
                 publication_dict = json.load(publication_dict_template)
@@ -75,7 +75,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
         write_error_to_logfile.write(e)
         write_error_to_logfile.comment('Es konnten keine Artikel für Uni Wien geharvested werden.')
         items_harvested, publication_dicts = [], []
-    print(all_thesis_types)
+    #print(all_thesis_types)
     return publication_dicts, items_harvested
 
 

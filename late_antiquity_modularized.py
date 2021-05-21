@@ -67,8 +67,8 @@ def harvest():
             volume_name = volume_names[urls.index(issue_url)]
             volume, issue, year_of_publication = re.findall(r'Volume (\d{1,2}), Number (\d), \w+ (\d{4})', volume_name)[0]
             if year_of_publication not in volumes_sysnumbers:
-                print('Artikel von Journal of Late Antiquity konnten teilweise nicht geharvestet werden, da keine übergeordnete Aufnahme für das Jahr', year_of_publication, 'existiert.')
-                print('Bitte erstellen Sie eine neue übergeordnete Aufnahme für das Jahr', year_of_publication, '.')
+                #print('Artikel von Journal of Late Antiquity konnten teilweise nicht geharvestet werden, da keine übergeordnete Aufnahme für das Jahr', year_of_publication, 'existiert.')
+                #print('Bitte erstellen Sie eine neue übergeordnete Aufnahme für das Jahr', year_of_publication, '.')
                 break
             current_item = int(year_of_publication + volume.zfill(2) + issue.zfill(2))
             if current_item > last_issue_harvested_in_last_session:

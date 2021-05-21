@@ -136,7 +136,7 @@ def check_cosine_similarity(title, found_title, found_record, rejected_titles, l
                         mismatches_nr += 1
                         skipped_word_nr += 1
                         if word in unskippable_words and title_list.index(word) in [0, 1]:
-                            print(title_list)
+                            #print(title_list)
                             return False
                     word_nr += 1
                 if skipped_word_nr >= math.ceil(len(title_list) / 4):
@@ -191,7 +191,7 @@ def swagger_find(search_title, year, title, rejected_titles, possible_host_items
         tic = time.perf_counter()
         year = year.replace('[', '').replace(']', '')
         if len(search_title) < 3:
-            print('skipped_no_search_title')
+            #print('skipped_no_search_title')
             return all_results, rejected_titles, additional_physical_form_entrys
         if search_title == 'Rez':
             return all_results, rejected_titles, additional_physical_form_entrys
@@ -235,7 +235,7 @@ def swagger_find(search_title, year, title, rejected_titles, possible_host_items
             for found_record in json_response['records']:
                 toc = time.perf_counter()
                 if toc-tic > 120:
-                    print('lasted_too_long:', url)
+                    #print('lasted_too_long:', url)
                     empty_page = True
                     break
                 if "title" not in found_record:
@@ -276,7 +276,7 @@ def swagger_find(search_title, year, title, rejected_titles, possible_host_items
                                             if right_author:
                                                 break
                                             if [dam_lev(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author), substitute_costs=substitute_costs, transpose_costs=transpose_costs) for x in authors for splitted_author in x.split()]:
-                                                # print({found_author + '+' + splitted_author: dam_lev(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author), substitute_costs=substitute_costs, transpose_costs=transpose_costs) for x in authors for splitted_author in x.split()})
+                                                # #print({found_author + '+' + splitted_author: dam_lev(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author), substitute_costs=substitute_costs, transpose_costs=transpose_costs) for x in authors for splitted_author in x.split()})
                                                 if min([dam_lev(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author), substitute_costs=substitute_costs, transpose_costs=transpose_costs) for x in authors for splitted_author in x.split()]) <= (len(found_author)/3):
                                                     # Vorsicht vor impliziten Typkonvertierungen von Zahlen zu bool
                                                     right_author = True
@@ -391,11 +391,11 @@ def swagger_find(search_title, year, title, rejected_titles, possible_host_items
                                                 subfield_i = 'Print version'
                                             additional_physical_form_entrys.append({'zenon_id': found_record['id'],
                                                                                     'subfield_i': subfield_i})
-                                            print('additional entry:', found_record['id'])
+                                            #print('additional entry:', found_record['id'])
                                         elif right_year:
                                             if found_record['id'] not in all_results:
                                                 all_results.append(found_record['id'])
-                                                print('doublet:', found_record['id'])
+                                                #print('doublet:', found_record['id'])
                                         else:
                                             rejected_titles.append(found_record["id"] + title_found)
                         except Exception as e:

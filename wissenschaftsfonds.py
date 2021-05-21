@@ -87,7 +87,7 @@ def create_publication_dicts(last_item_harvested_in_last_session, *other):
                          "uniform_title": book_soup.find('ns12:reihentitel').text}
                 publication_dicts.append(publication_dict)
                 items_harvested.append(current_item)
-        print(list(set(all_subjects)))
+        #print(list(set(all_subjects)))
     except Exception as e:
         write_error_to_logfile.write(e)
         write_error_to_logfile.comment('Es konnten keine Artikel für Wissenschaftsfonds geharvested werden.')
@@ -118,8 +118,8 @@ def filter_subjects(subject_list):
                     out.write(record.as_marc21())
                     no_subjects += 1
         num += 25
-    print(found)
-    print(no_subjects)
+    #print(found)
+    #print(no_subjects)
 
 
 if __name__ == '__main__':

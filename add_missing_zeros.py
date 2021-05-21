@@ -9,7 +9,7 @@ out = open('records/add_zeros/substitution_records.mrc', 'wb')
 page_nr = 0
 empty_page = False
 while not empty_page:
-    print(page_nr)
+    #print(page_nr)
     if page_nr == 7200:
         break
     url = u'https://zenon.dainst.org/api/v1/search?join=AND&lookfor0%5B%5D=*&illustration=-1&page=' + str(starting_page_nr + page_nr)
@@ -21,7 +21,7 @@ while not empty_page:
     json_response = json.loads(response)
     if 'records' not in json_response:
         empty_page = True
-        print('empty page')
+        #print('empty page')
         continue
     for record in json_response['records']:
         try:
@@ -37,19 +37,19 @@ while not empty_page:
                         if len(field['w']) != 9:
                             field['w'] = field['w'].zfill(9)
                             substitute = True
-                            print(file)
+                            #print(file)
                 for field in file.get_fields('776'):
                     if field['w']:
                         if len(field['w']) != 9:
                             field['w'] = field['w'].zfill(9)
                             substitute = True
-                            print(file)
+                            #print(file)
                 for field in file.get_fields('787'):
                     if field['w']:
                         if len(field['w']) != 9:
                             field['w'] = field['w'].zfill(9)
                             substitute = True
-                            print(file)
+                            #print(file)
                 if substitute:
                     file.add_field(Field(tag='590', indicators=[' ', ' '], subfields=['a', '2021xhnxupdated']))
                     out.write(file.as_marc21())

@@ -107,7 +107,7 @@ def swagger_find(search_title, search_authors, year, year_of_review, title, reje
                                     if right_author:
                                         break
                                     if [dam_lev(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author)) for x in authors for splitted_author in x.split()]:
-                                        print({found_author + '+' + splitted_author: dam_lev(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author)) for x in authors for splitted_author in x.split()})
+                                        #print({found_author + '+' + splitted_author: dam_lev(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author)) for x in authors for splitted_author in x.split()})
                                         if min([dam_lev(unidecode.unidecode(found_author), unidecode.unidecode(splitted_author)) for x in authors for splitted_author in x.split()]) <= (len(found_author)/3):
                                             # Vorsicht vor impliziten Typkonvertierungen von Zahlen zu bool
                                             right_author = True

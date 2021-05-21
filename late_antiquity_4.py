@@ -105,7 +105,7 @@ for list_element in list_elements:
                 search_title=""
                 word_nr=0
                 adjusted_title=title.split(".")[0].split(":")[0]
-                #print(adjusted_title)
+                ##print(adjusted_title)
                 adjusted_title=adjusted_title.split(" by ")[0]
                 adjusted_title=adjusted_title.replace("ed.", "").replace("(review)", "")
                 for word in RegexpTokenizer(r'\w+').tokenize(adjusted_title):

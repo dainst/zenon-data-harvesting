@@ -47,7 +47,7 @@ def harvest():
         with open('records/bjb/bjb_logfile.json', 'r') as log_file:
             log_dict = json.load(log_file)
             last_item_harvested_in_last_session = log_dict['last_issue_harvested']
-            print('Letztes geharvestetes Heft von Bonner Jahrbücher:', last_item_harvested_in_last_session)
+            #print('Letztes geharvestetes Heft von Bonner Jahrbücher:', last_item_harvested_in_last_session)
 
         producers = {'138': ['Darmstadt', "L.C. Wittich'sche Hofbuchdruckerei"],
                      '106': ['Bonn', "A. Marcus und E. Weber's"],
@@ -282,8 +282,8 @@ def harvest():
 
 
                             if create_new_record.check_publication_dict_for_completeness_and_validity(publication_dict) and len(additional_physical_form_entrys) == 1:
-                                print(publication_dict['title_dict']['main_title'])
-                                print(additional_physical_form_entrys)
+                                #print(publication_dict['title_dict']['main_title'])
+                                #print(additional_physical_form_entrys)
                                 webfile = urllib.request.urlopen("https://zenon.dainst.org/Record/"+additional_physical_form_entrys[0]['zenon_id']+"/Export?style=MARC")
                                 new_reader = MARCReader(webfile)
                                 for recent_record in new_reader:
@@ -333,15 +333,15 @@ def harvest():
                                         recent_record.remove_fields(tag)
                                     if not [field['a'] for field in recent_record.get_fields('590') if field['a'] == '2020xhnxupdated']:
                                         recent_record.add_field(Field(tag='590', indicators=[' ', ' '], subfields=['a', '2020xhnxupdated']))
-                                    # print(recent_record)
+                                    # #print(recent_record)
                                     out.write(recent_record.as_marc21())
                                     pub_nr += 1
                             else:
-                                print('title not found', publication_dict['title_dict']['main_title'])
-                                print(publication_dict['review_list'][0])
-                                print(publication_dict['authors_list'], publication_dict['editors_list'], publication_dict['publication_year'])
+                                #print('title not found', publication_dict['title_dict']['main_title'])
+                                #print(publication_dict['review_list'][0])
+                                #print(publication_dict['authors_list'], publication_dict['editors_list'], publication_dict['publication_year'])
 
-        print('Es wurden', pub_nr, 'Ersatzrecords für Bonner Jahrbücher erstellt.')
+        #print('Es wurden', pub_nr, 'Ersatzrecords für Bonner Jahrbücher erstellt.')
 
     except Exception as e:
         write_error_to_logfile.write(e)

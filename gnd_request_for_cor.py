@@ -33,7 +33,7 @@ def check_gnd_for_name(name_to_check: str):
             success=True
             return False
         except Exception as e:
-            print('Error occured:', search_url)
+            #print('Error occured:', search_url)
             write_error_to_logfile.write(e)
             trials += 1
     return False

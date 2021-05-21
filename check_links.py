@@ -35,5 +35,5 @@ with open('856-reportresults.csv', "r") as record_table:
                         other_problems.append(record_id)
 
 write_error_to_logfile.comment(other_problems)
-print(row_nr)
-print(nr)
+#print(row_nr)
+#print(nr)

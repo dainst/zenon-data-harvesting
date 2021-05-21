@@ -17,10 +17,10 @@ for file in ['bm.html', 'bm2.html']:
                 journal_page = response.read()
             journal_page = journal_page.decode('utf-8')
             journal_soup = BeautifulSoup(journal_page, 'html.parser')
-            print([re.findall(r'\d+$', url)[0] for url in [tag['href'] for tag in journal_soup.find_all('a', class_='title') if 'biblionumber' in tag['href']]])
+            #print([re.findall(r'\d+$', url)[0] for url in [tag['href'] for tag in journal_soup.find_all('a', class_='title') if 'biblionumber' in tag['href']]])
             for new_number in [re.findall(r'\d+$', url)[0] for url in [tag['href'] for tag in journal_soup.find_all('a', class_='title') if 'biblionumber' in tag['href']]]:
                 download_url += new_number + '/'
 
 
-print(volumes_url)
-print(download_url)
+#print(volumes_url)
+#print(download_url)

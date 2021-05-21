@@ -79,15 +79,15 @@ def check_similarity_and_create_hierarchy(possible_loc, result, ids, locs):
             ids[result['@id']]+=all_ancestors
             if 'ancestors' in result:
                 if all_ancestors[1:]!=result['ancestors']:
-                    print('Fehlerhafte Hierachie:', result['@id'])
-                    print('In den Daten:', result['ancestors'])
-                    print('Ermittelt:', result['ancestors'])
+                    #print('Fehlerhafte Hierachie:', result['@id'])
+                    #print('In den Daten:', result['ancestors'])
+                    #print('Ermittelt:', result['ancestors'])
             if ('ancestors' not in result) and (result['parent']!="https://gazetteer.dainst.org/place/2042600"):
-                print(result['@id'], 'has no ancestors')
+                #print(result['@id'], 'has no ancestors')
         else:
-            print(result['@id'], 'has no parent')
+            #print(result['@id'], 'has no parent')
         if coordinates == []:
-            print('keine Koordinaten gefunden.', result['@id'])
+            #print('keine Koordinaten gefunden.', result['@id'])
 
     return ids, locs
 
@@ -108,7 +108,7 @@ def check_locs(list_of_possible_locs, ids, locs):
                     if remove_parentheses(remove_accents(result['prefName']['title']).split(',')[0].split('/')[0].strip())==remove_accents(possible_loc):
                         if 'types' in result:
                             ...
-                            #print(result['types'])
+                            ##print(result['types'])
                         if 'types' not in result:
                             ...
 
@@ -133,10 +133,10 @@ def check_locs(list_of_possible_locs, ids, locs):
                             if remove_parentheses(remove_accents(item['prefName']['title']).split(',')[0].split('/')[0].strip())==remove_accents(possible_loc_before_parsing):
                                 check_similarity_and_create_hierarchy(possible_loc, result, ids, locs)
         except Exception as e:
-            print(search_url)
-            print('Error! Code: {c}, Message, {m}'.format(c = type(e).__name__, m = str(e)))
+            #print(search_url)
+            #print('Error! Code: {c}, Message, {m}'.format(c = type(e).__name__, m = str(e)))
         #if found_items>1:
-            #print(found_items, search_url)
+            ##print(found_items, search_url)
     return locs, ids
 
 xml=open('hierarchy.rdf', 'r')
@@ -146,7 +146,7 @@ subject_dict={}
 #Wikipedia überprüfen, ob der Ortsname 1. eindeutig vergeben ist und Koordinaten vorhanden sind.
 #for subject in subjects:
     #if subject.find('skos:narrower')!=None:
-        #print(subject)
+        ##print(subject)
         #xml erstellen, das hierarchische Verhältnisse abbildet!!!
             #translator= Translator(to_lang="en", from_lang="de")
             #stemmed_subject_eng=stemmer.stem(RegexpTokenizer(r'\w+').tokenize(subject.find('skos:prefLabel').text)[0])
@@ -162,7 +162,7 @@ for file in os.listdir('efb_text_files'):
     #if file_nr>10:
         #continue
     file_nr+=1
-    #print(file)
+    ##print(file)
     tf_dict[file]={}
     text_to_process=(open('efb_text_files/'+file, 'r')).read()
     text_to_process=text_to_process.replace("-\n", "")
@@ -217,7 +217,7 @@ for file in os.listdir('efb_text_files'):
     for noun in nouns:
         if noun not in nouns_dict:
             nouns_dict[noun]=nouns.count(noun)
-    #print(sorted(nouns_dict.items(), key=lambda x:x[1], reverse=True))
+    ##print(sorted(nouns_dict.items(), key=lambda x:x[1], reverse=True))
     lemmata ={}
     doc = nlp(text_to_process)
     for token in doc:
@@ -243,7 +243,7 @@ for file in os.listdir('efb_text_files'):
     for loc in locs:
         if loc not in locs_dict:
             locs_dict[loc]=text_to_process.count(loc)
-    #print(sorted(locs_dict.items(), key=lambda x:x[1], reverse=True))
+    ##print(sorted(locs_dict.items(), key=lambda x:x[1], reverse=True))
     for loc in locs_dict:
         tf=(locs_dict[loc]/text_length)
         tf_dict[file][loc]=tf
@@ -251,8 +251,8 @@ for file in os.listdir('efb_text_files'):
             df[loc]=1
         else:
             df[loc]+=1
-    #print(sorted(tf_dict[file].items(), key=lambda x:x[1], reverse=True))
-    #print(df)
+    ##print(sorted(tf_dict[file].items(), key=lambda x:x[1], reverse=True))
+    ##print(df)
     root = ET.Element('loc2042600')
     tree = ET.ElementTree(root)
     all_tags=['loc2042600']
@@ -285,7 +285,7 @@ for file in tf_dict:
     #tf_idf_max=max(tf_idf[file].values())
     #avg_tf_idf=sum(tf_idf[file].values())/len(tf_idf[file].values())
     for term in tf_dict[file]:
-        print(file, term, tf_idf[file][term], idf[term], tf_dict[file][term])
+        #print(file, term, tf_idf[file][term], idf[term], tf_dict[file][term])
 '''
 
 # Germania bis 1955 verschlagworten, Abgleich mit vorhandenen Schlagworten im Katalog!!!
