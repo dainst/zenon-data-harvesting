@@ -1,0 +1,5 @@
+records/
+scripts_not_ready/
+.idea/
+.vscode/
+.venv/

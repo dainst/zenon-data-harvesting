@@ -1,0 +1,9 @@
+version: "3.9"
+services:
+  harvesting_app:
+    build: .
+    volumes: 
+      - .:/usr/src/app
+    environment: 
+      - WEBDAV_USER=${WEBDAV_USER}
+      - WEBDAV_PASSWORD=${WEBDAV_PASSWORD}

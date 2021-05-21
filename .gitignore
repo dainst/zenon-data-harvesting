@@ -40,3 +40,5 @@ scripts_not_currently_used/
 scripts_not_ready/
 
 
+# Docker
+.env
