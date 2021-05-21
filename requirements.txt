@@ -12,3 +12,4 @@ unidecode
 sickle
 click
 webdavclient3
+weighted-levenshtein
