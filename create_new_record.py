@@ -920,7 +920,7 @@ def create_new_record(out, publication_dict):
 
             if additional_physical_form_entrys:
                 add_subject_from_additional_physical_form_entry(additional_physical_form_entrys, recent_record, publication_dict)
-            print(recent_record)
+            # print(recent_record)
             out.write(recent_record.as_marc21())
             created = 1
         return created
