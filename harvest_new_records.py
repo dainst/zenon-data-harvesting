@@ -44,26 +44,27 @@ if new_dir not in os.listdir(path):
     os.mkdir(path + new_dir)
 path_for_cumulus = 'records/' + new_dir
 path = 'records/' + new_dir + '/'
-for harvesting_script in [aegyptiaca_modularized, antiquite_modularized,
-                          archaeologisches_korrespondenzblatt_modularized,
-                          berrgk_modularized, BMCR_modularized,
-                          cipeg_modularized,
-                          lucentum_modularized,
-                          efb_modularized,
-                          eperiodica_akb_002_modularized, eperiodica_bat_001_modularized, eperiodica_snr_003_modularized,
-                          gerion_modularized,
-                          gnomon_modularized,
-                          groma_modularized,
-                          hsozkult_modularized,
-                          late_antiquity_modularized_new,
-                          maa_journal_current_modularized,
-                          sardinia_corsica_baleares_modularized,
-                          kokalos,
-                          world_prehistory,
-                          propylaeum_books,
-                          zephyrus_modularized,
-                          athener_mitteilungen
-                          ]:
+for harvesting_script in [
+    aegyptiaca_modularized, antiquite_modularized,
+    archaeologisches_korrespondenzblatt_modularized,
+    berrgk_modularized, BMCR_modularized,
+    cipeg_modularized,
+    lucentum_modularized,
+    efb_modularized,
+    eperiodica_akb_002_modularized, eperiodica_bat_001_modularized, eperiodica_snr_003_modularized,
+    gerion_modularized,
+    gnomon_modularized,
+    groma_modularized,
+    hsozkult_modularized,
+    late_antiquity_modularized_new,
+    maa_journal_current_modularized,
+    sardinia_corsica_baleares_modularized,
+    kokalos,
+    world_prehistory,
+    propylaeum_books,
+    zephyrus_modularized,
+    athener_mitteilungen
+]:
     try:
         new_return_string = harvesting_script.harvest(path)
         return_string += new_return_string
@@ -80,18 +81,19 @@ for file in os.listdir(path_for_cumulus):
         os.remove(path + file)
 
 # falls alles erfolgreich war, log_backup überschreiben!
-
 options = {
     'webdav_hostname': 'https://cumulus.dainst.org/remote.php/webdav',
-    'webdav_login':    'hnebel',
-    'webdav_password': '9J_m3na'
+    'webdav_login':    os.environ['WEBDAV_USER'],
+    'webdav_password': os.environ['WEBDAV_PASSWORD']
 }
 client = Client(options)
 client.Verify = False
 client.mkdir('Periodicals_continuously_harvested/harvest_' + timestampStr)
 # Directory mit Datum auf Cumulus erstellen
-client.upload(remote_path='Periodicals_continuously_harvested/harvest_' + timestampStr, local_path=path)
-client.mkdir('Periodicals_continuously_harvested/harvest_' + timestampStr + '_logfiles_debugging')
+client.upload(remote_path='Periodicals_continuously_harvested/harvest_' +
+              timestampStr, local_path=path)
+client.mkdir('Periodicals_continuously_harvested/harvest_' +
+             timestampStr + '_logfiles_debugging')
 # Directory mit Datum auf Cumulus erstellen
 client.upload(remote_path='Periodicals_continuously_harvested/harvest_' + timestampStr + '_logfiles_debugging',
               local_path=error_path)
