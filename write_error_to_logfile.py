@@ -1,6 +1,6 @@
 import sys
 import os
-from source import main
+#from source import main
 import logging
 from datetime import datetime
 
@@ -11,7 +11,7 @@ timestampStr = dateTimeObj.strftime("%d-%b-%Y")
 
 logfile = 'logfiles_debugging/logfile_' + timestampStr
 
-main.initialize_logger(logfile, 'debug', 'debug', allow_override=True)
+#main.initialize_logger(logfile, 'debug', 'debug', allow_override=True)
 logger = logging.getLogger()
 
 # logger default setzen?
