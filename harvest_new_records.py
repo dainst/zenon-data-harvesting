@@ -36,6 +36,12 @@ new_dir = 'harvest_' + timestampStr
 path = 'records/'
 error_path = 'logfiles_debugging/'
 
+if not os.path.exists(path):
+    os.mkdir(path)
+
+if not os.path.exists(error_path):
+    os.mkdir(error_path)
+
 for file in os.listdir(error_path):
     if file != 'logfile_' + timestampStr:
         os.remove(error_path + '/' + file)
@@ -88,14 +94,18 @@ options = {
 }
 client = Client(options)
 client.Verify = False
-client.mkdir('Periodicals_continuously_harvested/harvest_' + timestampStr)
+
+main_remote_dir = "periodicals_continuously_harvested"
+
+client.mkdir(main_remote_dir)
+client.mkdir(main_remote_dir + timestampStr)
 # Directory mit Datum auf Cumulus erstellen
-client.upload(remote_path='Periodicals_continuously_harvested/harvest_' +
-              timestampStr, local_path=path)
-client.mkdir('Periodicals_continuously_harvested/harvest_' +
+client.upload(remote_path=main_remote_dir +
+              '/harvest_' + timestampStr, local_path=path)
+client.mkdir(main_remote_dir + '/harvest_' +
              timestampStr + '_logfiles_debugging')
 # Directory mit Datum auf Cumulus erstellen
-client.upload(remote_path='Periodicals_continuously_harvested/harvest_' + timestampStr + '_logfiles_debugging',
+client.upload(remote_path=main_remote_dir + '/harvest_' + timestampStr + '_logfiles_debugging',
               local_path=error_path)
 
 with open('log_backup.json', 'w') as backup_logfile:
