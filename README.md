@@ -4,7 +4,7 @@ Contains scripts for harvesting external bibliographic title data. The main scri
 ## Dockerized run
 Because the python dependencies are quite complex and this project is not actively maintained, we created a [Dockerfile](Dockerfile) and [docker-compose.yml](docker-compose.yml) that let's you create a docker image with the correct dependencies installed.
 
-Give that you have both Docker and docker-compose installed, run from the main directory:
+Given that you have both Docker and docker-compose installed, run from the main directory:
 ```bash
 docker-compose up
 ```
