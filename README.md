@@ -2,7 +2,7 @@
 Contains scripts for harvesting external bibliographic title data. The main script creates a log.json where it saves harvesting state information for the last succesful run. Successive script runs will always check the log.json created by the previous run and start harvest everything up to the logged state. This makes it necessary to retain a "master" log by committing the current log to the repository.
 
 ## Dockerized run
-Because the Üython dependencies are quite complex and this project is not actively maintained, we created a [Dockerfile](Dockerfile) and [docker-compose.yml](docker-compose.yml) that let's you create a docker image with the correct dependencies installed.
+Because the python dependencies are quite complex and this project is not actively maintained, we created a [Dockerfile](Dockerfile) and [docker-compose.yml](docker-compose.yml) that let's you create a docker image with the correct dependencies installed.
 
 Give that you have both Docker and docker-compose installed, run from the main directory:
 ```bash
