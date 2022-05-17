@@ -4,10 +4,18 @@ Contains scripts for harvesting external bibliographic title data. The main scri
 ## Dockerized run
 Because the python dependencies are quite complex and this project is not actively maintained, we created a [Dockerfile](Dockerfile) and [docker-compose.yml](docker-compose.yml) that let's you create a docker image with the correct dependencies installed.
 
-Given that you have both Docker and docker-compose installed, run from the main directory:
+Given that you have both Docker and docker-compose installed, first create an .env file from the template and set your webdav (cumulus) credentials:
+
+```bash
+cp .env_template .env
+```
+
+Then run script from the main directory:
 ```bash
 docker-compose up
 ```
+
+The scripts will create a new directory in your cumulus home directory.
 
 ## Main scripts
 
